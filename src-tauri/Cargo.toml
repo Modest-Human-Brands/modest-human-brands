@@ -1,9 +1,9 @@
 [package]
-name = "nuxtemplate"
-description = "Nuxt + Typescript + Tailwind + Tauri Template"
+name = "modest-human-brands"
+description = "Autonomous Next-Gen Media Operating System"
 authors = ["Shirsendu Bairagi <shirsendu2001@gmail.com>"]
-license = "LGPL-3.0-or-later"
-repository = "https://github.com/shba007/nuxtemplate.git"
+license = "GPL-3.0-only"
+repository = "https://github.com/Modest-Human-Brands/modest-human-brands.git"
 edition = "2021"
 rust-version = "1.77.2"
 
@@ -14,11 +14,11 @@ name = "app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.5.3", features = [] }
+tauri-build = { version = "2.5.4", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
-tauri = { version = "2.9.5", features = [] }
+tauri = { version = "2.10.0", features = [] }
 tauri-plugin-log = "2"

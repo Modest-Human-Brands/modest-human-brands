@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "NuxTemplate",
+  "productName": "Modest Human Brands",
   "version": "../package.json",
-  "identifier": "dev.shirsendu-bairagi.nuxtemplate",
+  "identifier": "com.modesthumanbrands.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:3000",
@@ -15,7 +15,7 @@
         "label": "main",
         "visible": true,
         "url": "/",
-        "title": "NuxTemplate",
+        "title": "Modest Human Brands",
         "width": 1400,
         "height": 720,
         "resizable": true,

@@ -23,11 +23,3 @@ logs
 .env.*
 !.env.example
 !.env.native
-
-# Prisma files
-prisma/*.db
-prisma/*.db-*
-prisma/generated
-/app/generated/prisma
-
-/app/generated/prisma

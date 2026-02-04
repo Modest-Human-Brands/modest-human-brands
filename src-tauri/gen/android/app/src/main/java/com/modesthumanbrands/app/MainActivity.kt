@@ -1,4 +1,4 @@
-package dev.shirsendu_bairagi.nuxtemplate
+package com.modesthumanbrands.app
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

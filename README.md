@@ -12,7 +12,7 @@
 
 ![Landing](public/previews/landing.webp)
 
-> Nuxt + Typescript + Tailwind + Tauri Template
+> Autonomous Next-Gen Media Operating System
 
 - 📦 SSR
 - 🖼️ OG Tags

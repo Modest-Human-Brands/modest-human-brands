@@ -1,11 +1,11 @@
 version: '3.9'
 services:
   app:
-    image: ghcr.io/shba007/nuxtemplate:latest
+    image: ghcr.io/Modest-Human-Brands/modest-human-brands:latest
     env_file:
       - .env
     volumes:
-      - nuxtemplate_data:/app/.data
+      - modest-human-brands_data:/app/.data
     expose:
       - 3000
     networks:
@@ -17,12 +17,12 @@ services:
         max_attempts: 3
 
 volumes:
-  nuxtemplate_data:
+  modest-human-brands_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/nuxtemplate/.data
+      device: /root/modest-human-brands/.data
 
 networks:
   internal:

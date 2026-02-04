@@ -28,8 +28,3 @@ logs
 
 # Tauri files
 src-tauri
-
-# Prisma files
-prisma/*.db
-prisma/*.db-*
-prisma/generated

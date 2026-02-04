@@ -1,4 +1,4 @@
-name: 'nuxtemplate-dev'
+name: 'modest-human-brands-dev'
 services:
   app:
     build: .
@@ -6,4 +6,4 @@ services:
     env_file:
       - .env.prod
     ports:
-      - 4000:3000
+      - 4300:3000

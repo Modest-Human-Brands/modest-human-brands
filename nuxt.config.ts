@@ -41,7 +41,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: [
-    '@hannoeru/nuxt-otel',
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/icon',
@@ -57,7 +56,6 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@vueuse/nuxt',
     'nuxt-auth-utils',
-    'nuxt-nodemailer',
   ],
   nitro: {
     compressPublicAssets: true,
@@ -140,7 +138,7 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
   site: {
-    name: 'NuxTemplate',
+    name: 'Modest Human Brands',
     url: process.env.NUXT_PUBLIC_SITE_URL,
   },
   sitemap: {
@@ -158,9 +156,9 @@ export default defineNuxtConfig({
     registerType: 'autoUpdate',
     includeManifestIcons: false,
     manifest: {
-      name: 'NuxTemplate',
-      short_name: 'NuxTemplate',
-      description: 'Nuxt + Typescript + Tailwind + Tauri Template',
+      name: 'Modest Human Brands',
+      short_name: 'MHB',
+      description: 'Autonomous Next-Gen Media Operating System',
       theme_color: '#FFFFFF',
       background_color: '#FFFFFF',
       display: 'fullscreen',

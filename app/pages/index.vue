@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const title = `NuxTemplate`
-const description = `Nuxt + Typescript + Tailwind + Tauri Template`
+const title = `Modest Human Brands`
+const description = `Autonomous Next-Gen Media Operating System`
 
 const {
   public: { siteUrl },
