@@ -39,7 +39,7 @@ const { user, session } = useUserSession()
         </div>
         <div v-else>
           <h1>Not logged in</h1>
-          <NuxtLink to="/auth/google" external>Login with Google</NuxtLink>
+          <NuxtLink to="/auth/signin" external>Login</NuxtLink>
         </div>
       </template>
       <template #placeholder>

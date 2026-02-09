@@ -30,14 +30,14 @@ export default <Partial<Config>>{
       transparent: 'transparent',
       white: '#FFFFFF',
       light: {
-        400: '',
+        400: '#8D8D8D',
         500: '',
         600: '',
       },
       black: '#000000',
       dark: {
-        400: '',
-        500: '',
+        400: '#191919',
+        500: '#2B2B2B',
         600: '',
       },
       primary: {
@@ -47,7 +47,7 @@ export default <Partial<Config>>{
       },
       success: {
         400: '',
-        500: '',
+        500: '#48FEA7',
         600: '',
       },
       warning: {
