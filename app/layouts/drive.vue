@@ -1,18 +1,20 @@
 <script setup lang="ts">
 // const route = useRoute()
 // const showFooter = computed(() => route.path === '/')
-
-const collaborators: DriveCollaborator[] = [
+const editedAt = 'Jan 17'
+const collaborators: Collaborator[] = [
   { id: 'c1', name: 'A', avatarUrl: 'https://picsum.photos/seed/collab1/64/64' },
   { id: 'c2', name: 'B', avatarUrl: 'https://picsum.photos/seed/collab2/64/64' },
   { id: 'c3', name: 'C', avatarUrl: 'https://picsum.photos/seed/collab3/64/64' },
+  { id: 'c4', name: 'D', avatarUrl: 'https://picsum.photos/seed/collab4/64/64' },
+  { id: 'c5', name: 'E', avatarUrl: 'https://picsum.photos/seed/collab5/64/64' },
 ]
 </script>
 
 <template>
-  <div class="flex min-h-screen w-screen items-start justify-start">
+  <div class="flex h-screen w-screen items-start justify-start">
     <LazyAppNavbar brand="Modest Human Brands" active-key="drive" hydrate-on-idle />
-    <main class="relative isolate mx-auto w-full flex-1 grow gap-4 overflow-hidden px-2 py-6 md:mb-8 md:px-4">
+    <main class="relative isolate mx-auto flex h-screen w-full grow flex-col gap-4 overflow-hidden px-2 py-6 md:mb-8 md:px-4">
       <div class="flex items-start justify-between gap-6">
         <div class="min-w-0">
           <div class="flex items-center gap-3">
@@ -22,7 +24,7 @@ const collaborators: DriveCollaborator[] = [
           <p class="mt-2 text-sm text-white/60">Manage all your assets here</p>
         </div>
         <div class="flex shrink-0 flex-col items-end gap-3">
-          <AppActivitybar edited-label="Jan 17" :collaborators="collaborators" :extra-count="4" />
+          <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
           <AppActionbar />
         </div>
       </div>

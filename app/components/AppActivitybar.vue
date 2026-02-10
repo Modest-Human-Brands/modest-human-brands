@@ -1,46 +1,35 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    editedLabel: string
-    collaborators: DriveCollaborator[]
+    editedAt: string
+    collaborators: Collaborator[]
     maxVisible?: number
-    extraCount?: number
   }>(),
   {
     maxVisible: 3,
-    extraCount: 4,
   }
 )
 
-const visible = computed(() => props.collaborators.slice(0, props.maxVisible))
+const visibleCollaborators = computed(() => props.collaborators.slice(0, props.maxVisible))
+const extraCollaborators = computed(() => props.collaborators.length - visibleCollaborators.value.length)
 </script>
 
 <template>
-  <div class="flex items-center justify-end gap-3 text-white/70">
-    <div class="hidden items-center gap-2 text-xs sm:flex">
-      <span class="text-white/50">Edited</span>
-      <span class="text-white/80">{{ editedLabel }}</span>
+  <div class="flex items-center justify-end gap-0 text-white/70">
+    <div class="hidden items-center gap-2 px-4 text-sm sm:flex">
+      <span class="">Edited</span>
+      <NuxtTime :datetime="editedAt" day="numeric" month="short" />
     </div>
-
-    <div class="flex items-center">
-      <div class="flex -space-x-2">
-        <NuxtImg v-for="c in visible" :key="c.id" :src="c.avatarUrl" :alt="c.name" class="h-7 w-7 rounded-full border border-black/60 object-cover" />
-      </div>
-
-      <div v-if="extraCount > 0" class="ml-2 rounded-full bg-white/10 px-2 py-1 text-xs text-white/70">+{{ extraCount }}</div>
+    <div class="-space-x-3">
+      <NuxtImg v-for="{ id, avatarUrl, name } in visibleCollaborators" :key="id" :src="avatarUrl" :alt="name" class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
     </div>
-
-    <button type="button" class="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs text-white/80 hover:bg-white/15 sm:flex">
-      <NuxtIcon name="mdi:share-variant-outline" class="text-base" />
-      Share
+    <span v-if="extraCollaborators > 0" class="px-2 py-2 text-xs text-white"> +{{ extraCollaborators }} </span>
+    <button type="button" class="hidden px-2 py-2 sm:block">Share</button>
+    <button type="button" class="rounded-full bg-white/0 p-2 text-white hover:bg-white/10" aria-label="Star">
+      <NuxtIcon name="local:star" class="text-[24px]" />
     </button>
-
-    <button type="button" class="grid h-8 w-8 place-items-center rounded-full bg-white/0 text-white/70 hover:bg-white/10 hover:text-white" aria-label="Star">
-      <NuxtIcon name="mdi:star-outline" class="text-lg" />
-    </button>
-
-    <button type="button" class="grid h-8 w-8 place-items-center rounded-full bg-white/0 text-white/70 hover:bg-white/10 hover:text-white" aria-label="More">
-      <NuxtIcon name="mdi:dots-horizontal" class="text-lg" />
+    <button type="button" class="rounded-full bg-white/0 p-2 text-white hover:bg-white/10" aria-label="More">
+      <NuxtIcon name="local:dots" class="text-[24px]" />
     </button>
   </div>
 </template>

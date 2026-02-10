@@ -4,10 +4,10 @@
 </script>
 
 <template>
-  <div class="flex min-h-screen w-screen flex-col items-center justify-start">
+  <div class="flex h-screen w-screen items-center justify-start">
     <!-- <LazyAppHeader  /> -->
     <LazyAppNavbar brand="Modest Human Brands" active-key="drive" hydrate-on-idle />
-    <main class="relative isolate mx-auto flex w-full grow flex-col gap-4 overflow-hidden px-2 md:mb-8 md:px-4">
+    <main class="relative isolate mx-auto w-full grow gap-4 overflow-hidden px-2 md:mb-8 md:px-4">
       <slot />
     </main>
     <!-- <LazyAppFooter v-if="showFooter" hydrate-on-visible /> -->

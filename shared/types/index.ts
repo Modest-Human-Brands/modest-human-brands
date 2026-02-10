@@ -4,3 +4,14 @@ export type NavItem = {
   icon: string
   to?: string
 }
+
+export type Collaborator = {
+  id: string
+  name: string
+  avatarUrl: string
+}
+
+export interface ProjectClient {
+  name: string
+  avatarUrl: string
+}

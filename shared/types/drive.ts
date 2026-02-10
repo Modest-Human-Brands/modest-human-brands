@@ -1,10 +1,6 @@
-export type DriveCollaborator = {
-  id: string
-  name: string
-  avatarUrl: string
-}
+// import type { ProjectClient } from "./index";
 
-export type DriveClient = {
+interface ProjectClient {
   name: string
   avatarUrl: string
 }
@@ -13,10 +9,12 @@ export type DriveFolder = {
   id: string
   title: string
   dateLabel: string
-  statusLabel: string
-  delivered: boolean
+  status: {
+    label: string
+    delivered: boolean
+  }
   photosCount: number
   videosCount: number
-  client: DriveClient
+  client: ProjectClient
   previewImages: string[]
 }

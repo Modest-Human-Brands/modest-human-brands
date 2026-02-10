@@ -29,7 +29,7 @@ const { user, session } = useUserSession()
 </script>
 
 <template>
-  <main class="flex h-screen w-screen items-center justify-center">
+  <section class="flex items-center justify-center">
     <AuthState>
       <template #default="{ loggedIn, clear }">
         <div v-if="loggedIn && user">
@@ -46,5 +46,5 @@ const { user, session } = useUserSession()
         <button disabled>Loading...</button>
       </template>
     </AuthState>
-  </main>
+  </section>
 </template>
