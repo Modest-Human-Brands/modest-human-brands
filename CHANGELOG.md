@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.0.1...v0.1.0)
+
+### 🚀 Enhancements
+
+- ⚠️ Added new media page ([bdda675](https://github.com/Modest-Human-Brands/modest-human-brands/commit/bdda675))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Added new media page ([bdda675](https://github.com/Modest-Human-Brands/modest-human-brands/commit/bdda675))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.0.1
 
 ### 🚀 Enhancements
