@@ -6,33 +6,33 @@ const props = withDefaults(
   }>(),
   {
     brand: 'Modest Human Brands',
-    activeKey: 'dashboard',
+    activeid: 'dashboard',
   }
 )
 
-const itemClass = (key: string) => {
-  const isActive = key === props.activeKey
+function itemClass(id: string) {
+  const isActive = id === props.activeKey
 
   return isActive ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
 }
 
 const primary: NavItem[] = [
-  { key: 'dashboard', label: 'Dashboard', icon: 'local:grid', to: '/' },
-  { key: 'website', label: 'Website/App', icon: 'local:app', to: '/website' },
-  { key: 'connect', label: 'Connect', icon: 'local:network', to: '/connect' },
-  { key: 'doc', label: 'Doc', icon: 'local:document', to: '/doc' },
-  { key: 'coordinate', label: 'Coordinate', icon: 'local:node', to: '/coordinate' },
-  { key: 'sync', label: 'Sync', icon: 'local:stream', to: '/sync' },
-  { key: 'drive', label: 'Drive', icon: 'local:hard-drive', to: '/drive' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'local:grid', to: '/' },
+  { id: 'website', label: 'Website/App', icon: 'local:app', to: '/website-app' },
+  { id: 'connect', label: 'Connect', icon: 'local:network', to: '/connect' },
+  { id: 'doc', label: 'Doc', icon: 'local:document', to: '/doc' },
+  { id: 'coordinate', label: 'Coordinate', icon: 'local:node', to: '/coordinate' },
+  { id: 'sync', label: 'Sync', icon: 'local:stream', to: '/sync' },
+  { id: 'drive', label: 'Drive', icon: 'local:hard-drive', to: '/drive' },
 ]
 
 const secondary: NavItem[] = [
-  { key: 'client', label: 'Client', icon: 'local:briefcase', to: '/client' },
-  { key: 'project', label: 'Project', icon: 'local:target-fill', to: '/project' },
-  { key: 'content', label: 'Content', icon: 'local:book', to: '/content' },
+  { id: 'client', label: 'Client', icon: 'local:briefcase', to: '/client' },
+  { id: 'project', label: 'Project', icon: 'local:target-fill', to: '/project' },
+  { id: 'content', label: 'Content', icon: 'local:book', to: '/content' },
 ]
 
-const isActive = (key: string) => key === props.activeKey
+const isActive = (id: string) => id === props.activeKey
 </script>
 
 <template>
@@ -49,18 +49,18 @@ const isActive = (key: string) => key === props.activeKey
     </div>
     <nav class="px-3">
       <div class="space-y-1">
-        <NuxtLink v-for="item in primary" :key="item.key" :to="item.to || '#'" :class="itemClass(item.key)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
+        <NuxtLink v-for="item in primary" :key="item.id" :to="item.to || '#'" :class="itemClass(item.id)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
           <NuxtIcon :name="item.icon" class="text-[2rem]" />
           <span class="truncate">{{ item.label }}</span>
-          <span v-if="isActive(item.key)" class="ml-auto h-5 w-[3px] rounded-full bg-white/70" />
+          <span v-if="isActive(item.id)" class="ml-auto h-5 w-[3px] rounded-full bg-white/70" />
         </NuxtLink>
       </div>
       <div class="mt-6 border-t border-white/10 pt-4">
         <div class="space-y-1">
-          <NuxtLink v-for="item in secondary" :key="item.key" :to="item.to || '#'" :class="itemClass(item.key)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
+          <NuxtLink v-for="item in secondary" :key="item.id" :to="item.to || '#'" :class="itemClass(item.id)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
             <NuxtIcon :name="item.icon" class="text-[2rem]" />
             <span class="truncate">{{ item.label }}</span>
-            <span v-if="isActive(item.key)" class="ml-auto h-5 w-[3px] rounded-full bg-white/70" />
+            <span v-if="isActive(item.id)" class="ml-auto h-5 w-[3px] rounded-full bg-white/70" />
           </NuxtLink>
         </div>
       </div>

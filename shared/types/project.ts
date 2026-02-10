@@ -15,10 +15,9 @@ export type MediaMetadata = {
 }
 
 export type MediaItem = {
-  id: string
+  slug: string
   type: MediaType
   title: string
-  fileCode: string
   thumbnailUrl: string
   metadata: MediaMetadata
 }

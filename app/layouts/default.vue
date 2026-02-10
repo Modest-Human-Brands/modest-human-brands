@@ -1,7 +1,4 @@
-<script setup lang="ts">
-// const route = useRoute()
-// const showFooter = computed(() => route.path === '/')
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="flex h-screen w-screen items-center justify-start">

@@ -6,7 +6,7 @@ interface ProjectClient {
 }
 
 export type DriveFolder = {
-  id: string
+  slug: string
   title: string
   dateLabel: string
   status: {

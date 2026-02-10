@@ -1,6 +1,6 @@
 <script setup lang="ts">
 type DriveFolder = {
-  id: string
+  slug: string
   title: string
   dateLabel: string
   status: {
@@ -19,7 +19,7 @@ const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
 </script>
 
 <template>
-  <NuxtLink :to="`/drive/${id}`" class="group flex items-start gap-4 rounded-2xl bg-dark-500 p-4 text-white">
+  <NuxtLink :to="`/drive/${slug}`" class="group flex items-start gap-4 rounded-2xl bg-dark-500 p-4 text-white">
     <div class="relative shrink-0 -space-x-11">
       <NuxtImg
         v-for="(src, idx) in previewImagesShown"

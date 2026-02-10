@@ -1,5 +1,5 @@
 export type NavItem = {
-  key: string
+  id: string
   label: string
   icon: string
   to?: string
