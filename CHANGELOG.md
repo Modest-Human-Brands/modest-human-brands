@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.1.0...v0.1.1)
+
+### 🚀 Enhancements
+
+- Update navigation and authentication flow ([596b319](https://github.com/Modest-Human-Brands/modest-human-brands/commit/596b319))
+
+### 🩹 Fixes
+
+- Update navigation structure and component props for consistency ([1ea8fa2](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1ea8fa2))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.1.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.0.1...v0.1.0)
