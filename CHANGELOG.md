@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.2.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.1.1...v0.2.0)
+
+### 🚀 Enhancements
+
+- ⚠️ Add landing page components and sync tasks for media and resources ([4d47ecd](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4d47ecd))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Add landing page components and sync tasks for media and resources ([4d47ecd](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4d47ecd))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.1.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.1.0...v0.1.1)
