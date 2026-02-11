@@ -1,20 +1,14 @@
-// import type { ProjectClient } from "./index";
-
-interface ProjectClient {
-  name: string
-  avatarUrl: string
-}
+import type { ProjectClient, ProjectStatus } from './index'
 
 export type DriveFolder = {
   slug: string
   title: string
-  dateLabel: string
-  status: {
-    label: string
-    delivered: boolean
-  }
-  photosCount: number
-  videosCount: number
+  date: string
+  status: ProjectStatus
   client: ProjectClient
+  mediaCount: {
+    photo: number
+    video: number
+  }
   previewImages: string[]
 }

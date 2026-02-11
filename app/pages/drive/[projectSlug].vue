@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'navigation',
+  // middleware: ['auth'],
 })
 
 const route = useRoute()
@@ -17,19 +18,19 @@ const { data: project } = await useFetch(`/api/project/${slug}`)
     <template v-else>
       <!-- ProjectHeader -->
       <div class="mt-8 grid grid-flow-col grid-cols-2 grid-rows-2 gap-3 text-base">
-        <span class="text-xl">True Mens New Wallet</span>
-        <span>Dec 22, 2025</span>
+        <span class="text-xl">{{ project.title }}</span>
+        <NuxtTime :datetime="project.date" class="text-base text-white" day="numeric" month="short" year="numeric" />
         <div class="flex items-center gap-2 justify-self-end">
           <NuxtImg :src="project.client.avatarUrl" :alt="project.client.name" :width="32" :height="32" class="size-8 rounded-full border border-black/50 object-cover" />
           <span class="truncate">{{ project.client.name }}</span>
         </div>
         <div class="flex flex-wrap items-center gap-2 justify-self-end text-white/70">
           <div class="inline-flex items-center gap-2">
-            <span class="size-3 rounded-full" :class="project.status.delivered ? 'bg-success-500' : 'bg-white/40'" />
-            <span class="text-white/75">{{ project.status.label }}</span>
+            <span class="size-3 rounded-full" :class="project.status === 'Delivered' ? 'bg-success-500' : 'bg-white/40'" />
+            <span class="text-white/75">{{ project.status }}</span>
           </div>
           <span>·</span>
-          <span>{{ project.photosCount }} Photos {{ project.videosCount }} Videos</span>
+          <span>{{ project.mediaCount.photo }} Photos {{ project.mediaCount.video }} Videos</span>
         </div>
       </div>
       <!-- MediaGrid -->

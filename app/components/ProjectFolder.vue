@@ -2,14 +2,13 @@
 type DriveFolder = {
   slug: string
   title: string
-  dateLabel: string
-  status: {
-    label: string
-    delivered: boolean
-  }
-  photosCount: number
-  videosCount: number
+  date: string
+  status: 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'
   client: ProjectClient
+  mediaCount: {
+    photo: number
+    video: number
+  }
   previewImages: string[]
 }
 
@@ -26,28 +25,28 @@ const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
         :key="src"
         :src="src"
         :alt="title"
-        :width="70"
-        :height="105"
+        :width="72"
+        :height="128"
         fit="cover"
-        class="relative inline-block aspect-[9/16] h-full rounded-lg object-cover"
+        class="relative inline-block aspect-[9/16] rounded-lg object-cover"
         :style="{
           zIndex: idx,
         }" />
     </div>
-    <div class="min-w-0 flex-1">
+    <div class="flex min-w-0 flex-1 flex-col gap-1">
       <div class="font-semibold truncate text-xl text-white">
         {{ title }}
       </div>
-      <NuxtTime :datetime="dateLabel" class="mt-1 text-base text-white" day="numeric" month="short" year="numeric" />
-      <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-white/70">
+      <NuxtTime :datetime="date" class="mt-1 text-base text-white" day="numeric" month="short" year="numeric" />
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-white/70">
         <div class="inline-flex items-center gap-2">
-          <span class="size-3 rounded-full" :class="status.delivered ? 'bg-success-500' : 'bg-white/40'" />
-          <span class="text-white/75">{{ status.label }}</span>
+          <span class="size-3 rounded-full" :class="status === 'Delivered' ? 'bg-success-500' : 'bg-white/40'" />
+          <span class="text-white/75">{{ status }}</span>
         </div>
         <div class="text-white/40">·</div>
-        <div class="text-white/60">{{ photosCount }} Photos {{ videosCount }} Videos</div>
+        <div class="text-white/60">{{ mediaCount.photo }} Photos {{ mediaCount.video }} Videos</div>
       </div>
-      <div class="mt-2 flex items-center gap-2">
+      <div class="flex items-center gap-2">
         <NuxtImg :src="client.avatarUrl" :alt="client.name" :width="32" :height="32" class="size-8 rounded-full object-cover" />
         <span class="truncate text-base text-white/75">{{ client.name }}</span>
       </div>

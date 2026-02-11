@@ -17,7 +17,7 @@ function itemClass(id: string) {
 }
 
 const primary: NavItem[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'local:grid', to: '/' },
+  { id: 'dashboard', label: 'Dashboard', icon: 'local:grid', to: '/dashboard' },
   { id: 'website', label: 'Website/App', icon: 'local:app', to: '/website-app' },
   { id: 'connect', label: 'Connect', icon: 'local:network', to: '/connect' },
   { id: 'doc', label: 'Doc', icon: 'local:document', to: '/doc' },

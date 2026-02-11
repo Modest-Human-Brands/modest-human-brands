@@ -1,27 +1,36 @@
-function makeFolder(slug: string): DriveFolder {
-  return {
-    slug,
-    title: 'Anime Garment',
-    dateLabel: 'Oct 13, 2025',
-    status: {
-      label: 'Delivered',
-      delivered: true,
-    },
-    photosCount: 16,
-    videosCount: 1,
-    client: {
-      name: 'True Mens',
-      avatarUrl: 'https://picsum.photos/seed/dfas/72/72',
-    },
-    previewImages: [
-      `https://picsum.photos/seed/${slug}-1/240/320`,
-      `https://picsum.photos/seed/${slug}-2/240/320`,
-      `https://picsum.photos/seed/${slug}-3/240/320`,
-      `https://picsum.photos/seed/${slug}-4/240/320`,
-    ],
-  }
-}
+export default defineCachedEventHandler<Promise<DriveFolder[]>>(
+  async () => {
+    const config = useRuntimeConfig()
+    const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-export default defineEventHandler<DriveFolder[]>(() => {
-  return [makeFolder('f1'), makeFolder('f2'), makeFolder('f3'), makeFolder('f4')]
-})
+    const asset = (await notionQueryDb<NotionAsset>(notion, notionDbId.asset)).filter((a) => !!a)
+    const project = (await notionQueryDb<NotionProject>(notion, notionDbId.project)).filter((a) => !!a)
+
+    // return [makeFolder('f1'), makeFolder('f2'), makeFolder('f3'), makeFolder('f4')]
+
+    return project
+      .map(({ properties }) => {
+        const projectAssets = asset.filter((asset) => asset.properties['Project Slug'].rollup.array[0]?.formula.string === properties.Slug.formula.string)
+
+        const photoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Photo')
+        const videoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Video')
+        return {
+          slug: properties.Slug.formula.string,
+          title: notionTextStringify(properties.Name.title),
+          date: properties.Date.date.start,
+          status: properties.Status.status.name,
+          client: {
+            name: 'True Mens',
+            avatarUrl: 'https://picsum.photos/seed/dfas/72/72',
+          },
+          mediaCount: {
+            photo: photoAsset.length,
+            video: videoAsset.length,
+          },
+          previewImages: projectAssets.map(({ cover }) => (cover?.type === 'external' ? cover.external.url : undefined)),
+        } as DriveFolder
+      })
+      .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  },
+  { maxAge: 60 * 1, swr: true }
+)

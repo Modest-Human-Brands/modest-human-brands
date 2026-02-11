@@ -6,5 +6,5 @@ definePageMeta({
 </script>
 
 <template>
-  <section>Website/App</section>
+  <section>Dashboard</section>
 </template>

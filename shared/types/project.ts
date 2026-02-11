@@ -1,9 +1,4 @@
-// import type { ProjectClient } from "./index";
-
-interface ProjectClient {
-  name: string
-  avatarUrl: string
-}
+import type { ProjectClient, ProjectStatus } from './index'
 
 export type MediaType = 'photo' | 'video'
 
@@ -22,18 +17,15 @@ export type MediaItem = {
   metadata: MediaMetadata
 }
 
-export type ProjectStatus = {
-  label: string
-  delivered: boolean
-}
-
 export type ProjectDetail = {
-  id: string
   slug: string
   title: string
-  client: ProjectClient
+  date: string
   status: ProjectStatus
-  photosCount: number
-  videosCount: number
+  client: ProjectClient
+  mediaCount: {
+    photo: number
+    video: number
+  }
   mediaItems: MediaItem[]
 }
