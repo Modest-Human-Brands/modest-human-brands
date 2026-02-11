@@ -76,6 +76,12 @@ export default defineNuxtConfig({
          region: '',
        }, */
     },
+    experimental: {
+      tasks: true,
+    },
+    scheduledTasks: {
+      '*/3 * * * *': ['sync:asset'],
+    },
   },
   routeRules: {
     '/': { ssr: true },

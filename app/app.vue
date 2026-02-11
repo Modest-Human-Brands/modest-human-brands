@@ -95,7 +95,7 @@ watch(permissionGranted, async (value) => {
 }
 
 *::-webkit-scrollbar-thumb {
-  @apply rounded-md bg-light-600 dark:bg-dark-600;
+  @apply rounded-none bg-dark-600 dark:bg-light-600;
 }
 
 html {

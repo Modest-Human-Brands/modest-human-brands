@@ -2,7 +2,6 @@
 import type * as z from 'zod'
 
 definePageMeta({
-  layout: false,
   middleware: ['guest'],
 })
 
