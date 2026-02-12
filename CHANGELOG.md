@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.2.2
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.1...v0.2.2)
+
+### 🚀 Enhancements
+
+- Enhance navigation and asset synchronization with new utilities and Docker configurations ([d8c3a22](https://github.com/Modest-Human-Brands/modest-human-brands/commit/d8c3a22))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.2.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.0...v0.2.1)
