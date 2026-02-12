@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.2.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.0...v0.2.1)
+
+### 🏡 Chore
+
+- Enhance sync:asset task to associate assets with projects ([43cd1f8](https://github.com/Modest-Human-Brands/modest-human-brands/commit/43cd1f8))
+
+### 🎨 Styles
+
+- Update AppNavbar and Landing components for improved UI ([c31b3a0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/c31b3a0))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.2.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.1.1...v0.2.0)
