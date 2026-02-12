@@ -9,7 +9,7 @@ export default defineCachedEventHandler<Promise<ProjectDetail | undefined>>(
     const project = (await notionQueryDb<NotionProject>(notion, notionDbId.project)).filter((a) => !!a)
 
     const mediaItems = await $fetch<MediaItem[]>('/api/media', {
-      baseURL: 'http://localhost:3045',
+      baseURL: 'http://localhost:4345',
     })
 
     const filteredProject = project.filter(({ properties }) => properties.Slug.formula.string === slug)[0]

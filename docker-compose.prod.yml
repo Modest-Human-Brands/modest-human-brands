@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   app:
-    image: ghcr.io/Modest-Human-Brands/modest-human-brands:latest
+    image: ghcr.io/modest-human-brands/modest-human-brands:latest
     env_file:
       - .env
     volumes:
@@ -16,6 +16,30 @@ services:
         condition: on-failure
         max_attempts: 3
 
+  drive:
+    image: ghcr.io/modest-human-brands/mdrive:latest
+    env_file:
+      - .env
+    volumes:
+      - mdrive-data:/app/.data
+      - mdrive-static:/app/static
+    expose:
+      - 3000
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2048M
+        reservations:
+          cpus: '0.4'
+          memory: 1024M
+
 volumes:
   modest-human-brands_data:
     driver: local
@@ -23,7 +47,19 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/.data
+  mdrive-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdrive/.data
+  mdrive-static:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdrive/static
 
 networks:
   internal:
-    driver: overlay
+    driver: bridge

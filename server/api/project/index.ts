@@ -6,8 +6,6 @@ export default defineCachedEventHandler<Promise<DriveFolder[]>>(
     const asset = (await notionQueryDb<NotionAsset>(notion, notionDbId.asset)).filter((a) => !!a)
     const project = (await notionQueryDb<NotionProject>(notion, notionDbId.project)).filter((a) => !!a)
 
-    // return [makeFolder('f1'), makeFolder('f2'), makeFolder('f3'), makeFolder('f4')]
-
     return project
       .map(({ properties }) => {
         const projectAssets = asset.filter((asset) => asset.properties['Project Slug'].rollup.array[0]?.formula.string === properties.Slug.formula.string)

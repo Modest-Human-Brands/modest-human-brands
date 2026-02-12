@@ -49,7 +49,7 @@ const isActive = (id: string) => id === props.activeKey
     </div>
     <nav class="px-3">
       <div class="space-y-1">
-        <NuxtLink v-for="item in primary" :key="item.id" :to="item.to || '#'" :class="itemClass(item.id)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
+        <NuxtLink v-for="item in primary" :key="item.id" :to="item.to" :class="itemClass(item.id)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
           <NuxtIcon :name="item.icon" class="text-[2rem]" />
           <span class="truncate">{{ item.label }}</span>
           <span v-if="isActive(item.id)" class="ml-auto h-5 w-[3px] rounded-full bg-white/70" />
@@ -57,7 +57,7 @@ const isActive = (id: string) => id === props.activeKey
       </div>
       <div class="mt-6 border-t border-white/10 pt-4">
         <div class="space-y-1">
-          <NuxtLink v-for="item in secondary" :key="item.id" :to="item.to || '#'" :class="itemClass(item.id)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
+          <NuxtLink v-for="item in secondary" :key="item.id" :to="item.to" :class="itemClass(item.id)" class="group flex items-center gap-3 rounded-xl px-3 py-2 text-base transition">
             <NuxtIcon :name="item.icon" class="text-[2rem]" />
             <span class="truncate">{{ item.label }}</span>
             <span v-if="isActive(item.id)" class="ml-auto h-5 w-[3px] rounded-full bg-white/70" />

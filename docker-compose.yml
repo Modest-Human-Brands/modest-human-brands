@@ -7,3 +7,30 @@ services:
       - .env.prod
     ports:
       - 4300:3000
+
+  drive:
+    build: ../code-media
+    restart: on-failure:3
+    env_file:
+      - ../code-media/.env.prod.redcatpictures
+      # - ../code-media/.env.prod.goldfishtalents
+    ports:
+      - 4345:3000
+    volumes:
+      - static:/app/static
+      - data:/app/.data
+
+volumes:
+  static:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../code-media/static/red-cat-pictures
+      # device: ../code-media/static/gold-fish-talents
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./.data

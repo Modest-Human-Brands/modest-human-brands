@@ -51,6 +51,8 @@ const tabs = [
 ]
 
 const activeTab = computed(() => tabs.findIndex(({ id }) => route.path === '/' + id))
+
+console.log({ activeTab: activeTab.value })
 </script>
 
 <template>
