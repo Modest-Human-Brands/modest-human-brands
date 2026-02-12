@@ -6,7 +6,7 @@ const props = withDefaults(
   }>(),
   {
     brand: 'Modest Human Brands',
-    activeid: 'dashboard',
+    activeKey: 'dashboard',
   }
 )
 
@@ -39,7 +39,7 @@ const isActive = (id: string) => id === props.activeKey
   <aside class="relative h-screen w-[260px] shrink-0 border-r border-white/10 bg-dark-400 text-white">
     <div class="flex items-center gap-3 px-5 py-5">
       <div class="grid h-9 w-9 place-items-center rounded-full bg-white/10">
-        <NuxtIcon name="mdi:yin-yang" class="text-lg" />
+        <NuxtIcon name="local:logo" class="text-lg" />
       </div>
       <div class="min-w-0">
         <div class="font-semibold truncate text-sm">

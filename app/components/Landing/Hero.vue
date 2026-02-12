@@ -51,10 +51,10 @@ const particles = Array.from({ length: 30 }, (_, i) => ({
         <NuxtLink
           v-if="!loggedIn"
           to="/auth/signin"
-          class="group relative overflow-hidden rounded-xl bg-white px-8 py-4 text-base font-semi-bold text-black shadow-lg shadow-white/20 transition hover:shadow-white/40">
+          class="group relative overflow-hidden rounded-xl bg-white fill-black px-8 py-4 text-base font-semi-bold text-black shadow-lg shadow-white/20 transition hover:shadow-white/40">
           <span class="relative z-10 flex items-center gap-2">
             Get Started
-            <NuxtIcon name="mdi:arrow-right" class="text-lg transition-transform group-hover:translate-x-1" />
+            <NuxtIcon name="local:chevron-bold" class="-scale-x-100 transform text-lg transition-transform group-hover:translate-x-1" />
           </span>
           <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
         </NuxtLink>
@@ -65,7 +65,7 @@ const particles = Array.from({ length: 30 }, (_, i) => ({
 
         <NuxtLink to="/#features" class="group rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-base font-semi-bold backdrop-blur-sm transition hover:border-white/20 hover:bg-white/10">
           Explore Platform
-          <NuxtIcon name="mdi:arrow-down" class="ml-2 inline-block transition-transform group-hover:translate-y-1" />
+          <NuxtIcon name="local:chevron-bold" class="ml-2 inline-block -scale-x-100 transform transition-transform group-hover:translate-x-1" />
         </NuxtLink>
       </div>
     </div>

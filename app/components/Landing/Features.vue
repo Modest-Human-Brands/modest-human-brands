@@ -1,45 +1,45 @@
 <script setup lang="ts">
 const features = [
   {
-    key: 'mdrive',
-    icon: 'mdi:harddisk',
-    title: 'MDrive',
-    description: 'Organize Media • Access Controlled Distribute • Unlimited Store Media',
-    background: 'https://viteplus.dev/feature-dev-background-nostats.jpg',
-  },
-  {
     key: 'mwap',
-    icon: 'mdi:application-outline',
+    icon: 'local:app',
     title: 'MWap',
     description: 'Website/App Builder • Service Deck Builder',
     background: 'https://viteplus.dev/feature-ui-background.jpg',
   },
   {
-    key: 'massist',
-    icon: 'mdi:robot-outline',
-    title: 'MAssist',
-    description: 'Gives Insights • Suggest Pipeline Upgrade • Automates tasks',
-    background: 'https://viteplus.dev/feature-lint-background.jpg',
-  },
-  {
     key: 'mconnect',
-    icon: 'mdi:share-variant-outline',
+    icon: 'local:network',
     title: 'MConnect',
     description: 'Message/Mail/Popup Template • Client Outreach/In-reach Tracking',
     background: 'https://viteplus.dev/feature-lib-background.jpg',
   },
   {
+    key: 'mdoc',
+    icon: 'local:document',
+    title: 'MDoc',
+    description: 'Document',
+    background: 'https://viteplus.dev/feature-lib-background.jpg',
+  },
+  {
     key: 'mcoordinate',
-    icon: 'mdi:refresh-circle',
+    icon: 'local:node',
     title: 'MCoordinate',
     description: 'Internal Team Chat/Call • Project Channelled Chat/Call',
     background: 'https://viteplus.dev/feature-test-background-nostats.jpg',
   },
   {
     key: 'msync',
-    icon: 'mdi:sync',
+    icon: 'local:stream',
     title: 'MSync',
     description: 'Stream to MMedia • Sync Media with MDrive',
+    background: 'https://viteplus.dev/feature-dev-background-nostats.jpg',
+  },
+  {
+    key: 'mdrive',
+    icon: 'local:hard-drive',
+    title: 'MDrive',
+    description: 'Organize Media • Access Controlled Distribute • Unlimited Store Media',
     background: 'https://viteplus.dev/feature-dev-background-nostats.jpg',
   },
 ]
@@ -82,7 +82,7 @@ const features = [
 
           <div class="mt-4 flex items-center gap-2 text-white opacity-0 transition-opacity group-hover:opacity-100">
             <span class="text-sm font-semi-bold">Explore</span>
-            <NuxtIcon name="mdi:arrow-right" class="text-lg transition-transform group-hover:translate-x-1" />
+            <NuxtIcon name="local:chevron-bold" class="-scale-x-100 transform text-lg transition-transform group-hover:translate-x-1" />
           </div>
         </div>
       </div>

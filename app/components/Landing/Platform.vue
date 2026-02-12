@@ -1,13 +1,13 @@
 <script setup lang="ts">
 const capabilities = [
-  { text: 'Styling/Branding Management', icon: 'mdi:palette-outline' },
-  { text: 'Project Management', icon: 'mdi:folder-outline' },
-  { text: 'Media Management', icon: 'mdi:image-multiple-outline' },
-  { text: 'Website/App Content Management', icon: 'mdi:web' },
-  { text: 'Team Management', icon: 'mdi:account-group-outline' },
-  { text: 'Client Management', icon: 'mdi:briefcase-outline' },
-  { text: 'Communication Management', icon: 'mdi:chat-outline' },
-  { text: 'Finance Management', icon: 'mdi:cash-multiple' },
+  { text: 'Styling/Branding Management', icon: 'local:style' },
+  { text: 'Project Management', icon: 'local:folder' },
+  { text: 'Media Management', icon: 'local:mountain' },
+  { text: 'Website/App Content Management', icon: 'local:web' },
+  { text: 'Team Management', icon: 'local:person' },
+  { text: 'Client Management', icon: 'local:briefcase' },
+  { text: 'Communication Management', icon: 'local:chat' },
+  { text: 'Finance Management', icon: 'local:wallet' },
 ]
 </script>
 
@@ -26,7 +26,6 @@ const capabilities = [
 
             <h2 class="mb-6 text-3xl font-bold leading-tight md:text-5xl">
               Everything you need to
-              <br />
               <span class="bg-gradient-to-r from-white via-white/80 to-white/60 bg-clip-text text-transparent"> run your creative business </span>
             </h2>
 
@@ -34,7 +33,7 @@ const capabilities = [
 
             <NuxtLink to="/about" class="group inline-flex items-center gap-2 text-lg text-white transition-all hover:gap-3">
               <span class="font-semi-bold">Learn more about the platform</span>
-              <NuxtIcon name="mdi:arrow-right" class="text-2xl" />
+              <NuxtIcon name="local:chevron-bold" class="ml-4 -scale-x-100 transform" />
             </NuxtLink>
           </div>
 
@@ -48,7 +47,7 @@ const capabilities = [
 
               <div class="relative flex items-center gap-4 p-4">
                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20 transition-all group-hover:scale-110 group-hover:bg-white/30">
-                  <NuxtIcon :name="capability.icon" class="text-xl text-white" />
+                  <NuxtIcon :name="capability.icon" class="text-2xl text-white" />
                 </div>
                 <span class="font-semi-bold">{{ capability.text }}</span>
               </div>

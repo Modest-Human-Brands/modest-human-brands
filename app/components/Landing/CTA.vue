@@ -32,10 +32,10 @@ defineProps<{
           <NuxtLink
             v-if="!loggedIn"
             to="/auth/signin"
-            class="group relative overflow-hidden rounded-xl bg-white px-10 py-5 text-lg font-semi-bold text-black shadow-2xl shadow-white/30 transition-all hover:scale-105 hover:shadow-white/50">
+            class="group relative overflow-hidden rounded-xl bg-white fill-black px-10 py-5 text-lg font-semi-bold text-black shadow-2xl shadow-white/30 transition-all hover:scale-105 hover:shadow-white/50">
             <span class="relative z-10 flex items-center justify-center gap-2">
               Start Free Trial
-              <NuxtIcon name="mdi:arrow-right" class="text-xl transition-transform group-hover:translate-x-1" />
+              <NuxtIcon name="local:chevron-bold" class="-scale-x-100 transform text-xl transition-transform group-hover:translate-x-1" />
             </span>
             <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
           </NuxtLink>
@@ -48,7 +48,7 @@ defineProps<{
             to="/pricing"
             class="group rounded-xl border border-white/20 bg-white/5 px-10 py-5 text-lg font-semi-bold backdrop-blur-sm transition-all hover:scale-105 hover:border-white/30 hover:bg-white/10">
             View Pricing
-            <NuxtIcon name="mdi:arrow-right" class="ml-2 inline-block transition-transform group-hover:translate-x-1" />
+            <NuxtIcon name="local:chevron-bold" class="ml-2 inline-block -scale-x-100 transform transition-transform group-hover:translate-x-1" />
           </NuxtLink>
         </div>
       </div>

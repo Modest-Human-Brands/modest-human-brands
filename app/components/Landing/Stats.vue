@@ -2,10 +2,10 @@
 import { ref, onMounted } from 'vue'
 
 const stats = [
-  { label: 'Projects Delivered', value: 1200, suffix: '+', icon: 'mdi:rocket-launch-outline' },
-  { label: 'Active Teams', value: 150, suffix: '+', icon: 'mdi:account-group' },
-  { label: 'Media Files Managed', value: 500, suffix: 'k+', icon: 'mdi:image-multiple' },
-  { label: 'Hours Saved Monthly', value: 10000, suffix: '+', icon: 'mdi:clock-fast' },
+  { label: 'Projects Delivered', value: 70, suffix: '+', icon: 'local:target-fill' },
+  { label: 'Active Teams', value: 2, suffix: '+', icon: 'local:person' },
+  { label: 'Media Files Managed', value: 1200, suffix: '+', icon: 'local:mountain' },
+  { label: 'Hours Saved Monthly', value: 336, suffix: '+', icon: 'local:hour' },
 ]
 
 const isVisible = ref(false)
@@ -27,8 +27,6 @@ onMounted(() => {
 
 <template>
   <section id="stats" class="relative mx-auto max-w-7xl px-6 py-24">
-    <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_70%_50%,rgba(72,254,167,0.05),transparent_60%)]" />
-
     <div class="mb-16 text-center">
       <h2 class="mb-4 text-3xl font-bold md:text-5xl">
         Trusted by creative teams
