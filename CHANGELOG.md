@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.2.3
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.2...v0.2.3)
+
+### 🩹 Fixes
+
+- **api:** Remove unnecessary media fetch and restructure project media items ([1ec00e7](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1ec00e7))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.2.2
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.1...v0.2.2)
