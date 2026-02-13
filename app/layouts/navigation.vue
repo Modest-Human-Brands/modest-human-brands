@@ -50,22 +50,20 @@ const tabs = [
   },
 ]
 
-const activeTab = computed(() => tabs.findIndex(({ id }) => route.path === '/' + id))
-
-console.log({ activeTab: activeTab.value })
+const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) ?? tabs[0]!)
 </script>
 
 <template>
   <div class="flex h-screen w-screen items-start justify-start">
-    <LazyAppNavbar brand="Modest Human Brands" :active-key="tabs[activeTab].id" hydrate-on-idle />
+    <LazyAppNavbar brand="Modest Human Brands" :active-key="activeTab.id" hydrate-on-idle />
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col gap-4 overflow-hidden px-2 py-6 md:mb-8 md:px-4">
       <div class="flex items-start justify-between gap-6">
         <div class="min-w-0">
           <div class="flex items-center gap-3">
-            <NuxtIcon :name="tabs[activeTab].icon" class="text-[64px]" />
-            <h1 class="font-semibold truncate text-3xl">{{ tabs[activeTab].title }}</h1>
+            <NuxtIcon :name="activeTab.icon" class="text-[64px]" />
+            <h1 class="font-semibold truncate text-3xl">{{ activeTab.title }}</h1>
           </div>
-          <p class="mt-2 text-sm text-white/60">{{ tabs[activeTab].description }}</p>
+          <p class="mt-2 text-sm text-white/60">{{ activeTab.description }}</p>
         </div>
         <div class="flex shrink-0 flex-col items-end gap-3">
           <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />

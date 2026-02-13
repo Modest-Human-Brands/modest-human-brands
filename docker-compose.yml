@@ -9,11 +9,11 @@ services:
       - 4300:3000
 
   drive:
-    build: ../code-media
+    build: ../code-drive
     restart: on-failure:3
     env_file:
-      - ../code-media/.env.prod.redcatpictures
-      # - ../code-media/.env.prod.goldfishtalents
+      - ../code-drive/.env.prod.redcatpictures
+      # - ../code-drive/.env.prod.goldfishtalents
     ports:
       - 4345:3000
     volumes:
@@ -26,8 +26,8 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../code-media/static/red-cat-pictures
-      # device: ../code-media/static/gold-fish-talents
+      device: ../code-drive/static/red-cat-pictures
+      # device: ../code-drive/static/gold-fish-talents
   data:
     driver: local
     driver_opts:

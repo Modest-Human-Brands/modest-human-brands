@@ -70,7 +70,7 @@ export default defineTask({
       // current cover -> https://ucarecdn.com/17dc5f16-3961-47c2-9ea2-996b4fac0d19/-/preview/1620x1080/
       // update cover -> https://cdn.redcatpictures.com/media/w_1620&h_1080/product-photo-033-033
 
-      // if (!slug.includes('-0054-')) continue
+      if (!slug.includes('-0049-')) continue
 
       try {
         const metaData = await $fetch<MetaPhoto | MetaVideo>(`/api/media/${slug}`, {

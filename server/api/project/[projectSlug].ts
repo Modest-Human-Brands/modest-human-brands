@@ -8,10 +8,6 @@ export default defineCachedEventHandler<Promise<ProjectDetail | undefined>>(
     const asset = (await notionQueryDb<NotionAsset>(notion, notionDbId.asset)).filter((a) => !!a)
     const project = (await notionQueryDb<NotionProject>(notion, notionDbId.project)).filter((a) => !!a)
 
-    const mediaItems = await $fetch<MediaItem[]>('/api/media', {
-      baseURL: 'http://localhost:4345',
-    })
-
     const filteredProject = project.filter(({ properties }) => properties.Slug.formula.string === slug)[0]
 
     if (!filteredProject) return
@@ -21,7 +17,20 @@ export default defineCachedEventHandler<Promise<ProjectDetail | undefined>>(
     const photoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Photo')
     const videoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Video')
 
-    const projectMediaItems = mediaItems.filter(({ slug }) => projectAssets.findIndex(({ properties }) => properties.Slug.formula.string === slug) !== -1)
+    const projectMediaItems = projectAssets
+      .map<MediaItem>(({ properties, cover }) => ({
+        slug: properties.Slug.formula.string,
+        title: notionTextStringify(properties.Name.title),
+        type: properties.Type.select.name.toLowerCase() as 'photo' | 'video',
+        thumbnailUrl: cover?.type === 'external' ? cover.external.url : undefined,
+        metadata: {
+          size: 22,
+          bitDepth: '10 bit',
+          resolution: '1080p',
+          fps: properties.Type.select.name.toLowerCase() === 'video' ? 30 : undefined,
+        },
+      }))
+      .toSorted((a, b) => a.slug.localeCompare(b.slug))
 
     return {
       slug: filteredProject.properties.Slug.formula.string,
