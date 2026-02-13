@@ -10,8 +10,8 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-  const query = await notion.databases.query({
-    database_id: notionDbId.user,
+  const query = await notion.dataSources.query({
+    data_source_id: notionDbId.user,
     filter: {
       property: 'Email',
       email: { equals: authUser.email },
@@ -34,7 +34,7 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: any = await notion.pages.create({
-    parent: { database_id: notionDbId.user },
+    parent: { data_source_id: notionDbId.user },
     ...(authUser.picture && {
       cover: {
         type: 'external',
@@ -85,7 +85,7 @@ export default defineOAuthGoogleEventHandler({
       { maxAge: 30 * 24 * 60 * 60 * 1000 }
     )
 
-    return sendRedirect(event, user.isProfileComplete ? '/event' : '/auth/signup')
+    return sendRedirect(event, user.isProfileComplete ? '/dashboard' : '/auth/signup')
   },
   onError(event, error) {
     console.error('Google OAuth error:', error)

@@ -74,7 +74,7 @@ export interface VideoDetails extends Video {
 }
 
 /* Server Only */
-export const resourceTypes = ['client', 'project', 'asset'] as const
+export const resourceTypes = ['organization', 'user', 'client', 'project', 'asset'] as const
 
 export type ResourceType = (typeof resourceTypes)[number]
 
@@ -95,6 +95,51 @@ type NotionImage =
       }
     }
   | null
+
+export interface NotionUser {
+  id: string
+  created_time: string
+  last_edited_time: string
+  cover: NotionImage
+  icon: NotionImage
+  properties: {
+    // Index
+    Status: {
+      type: 'status'
+      status: {
+        name: 'Unfilled' | 'Filled' | 'Verified' | 'Active' | 'Inactive'
+      }
+    }
+    Name: {
+      type: 'title'
+      title: { plain_text: string }[]
+    }
+    Profession: {
+      type: 'rich_text'
+      rich_text: { text: { content: string } }[]
+    }
+    Gender: {
+      type: 'select'
+      select: {
+        name: 'Male' | 'Female' | 'Other'
+      }
+    }
+    DOB: {
+      type: 'date'
+      date: {
+        start: string
+      }
+    }
+    Email: {
+      type: 'email'
+      email: string
+    }
+    Phone: {
+      type: 'phone_number'
+      phone_number: string
+    }
+  }
+}
 
 export interface NotionProjectClient {
   id: string

@@ -52,7 +52,7 @@ const particles = Array.from({ length: 30 }, (_, i) => ({
           v-if="!loggedIn"
           to="/auth/signin"
           class="group relative overflow-hidden rounded-xl bg-white fill-black px-8 py-4 text-base font-semi-bold text-black shadow-lg shadow-white/20 transition hover:shadow-white/40">
-          <span class="relative z-10 flex items-center gap-2">
+          <span class="relative z-10 flex items-center justify-center gap-2">
             Get Started
             <NuxtIcon name="local:chevron-bold" class="-scale-x-100 transform text-lg transition-transform group-hover:translate-x-1" />
           </span>

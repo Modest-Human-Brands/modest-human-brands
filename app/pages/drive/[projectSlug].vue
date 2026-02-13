@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'navigation',
-  // middleware: ['auth'],
+  middleware: ['auth'],
 })
 
 const route = useRoute()

@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-  const query = await notion.databases.query({
-    database_id: notionDbId.user,
+  const query = await notion.dataSources.query({
+    data_source_id: notionDbId.user,
     filter: {
       property: 'Email',
       email: { equals: user.email },
