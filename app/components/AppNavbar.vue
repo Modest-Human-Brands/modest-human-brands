@@ -44,22 +44,20 @@ const isActive = (id: string) => id === props.activeKey
 </script>
 
 <template>
-  <aside class="z-50 h-screen shrink-0 overflow-hidden border-r border-white/10 bg-dark-400 text-white transition-all duration-300">
+  <aside class="z-50 flex h-screen shrink-0 flex-col gap-4 overflow-hidden border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
     <!-- Brand -->
-    <div class="flex items-center gap-3 p-4">
+    <div class="flex items-center gap-3">
       <div class="grid shrink-0 place-items-center rounded-full transition-transform hover:scale-110">
-        <NuxtIcon name="local:logo" class="text-[28px] text-white md:text-[32px]" />
+        <NuxtIcon name="local:logo" class="text-[32px] text-white md:text-[36px]" />
       </div>
       <Transition name="fade-slide">
-        <div v-if="isDesktop" class="min-w-0 overflow-hidden">
-          <div class="font-semibold truncate text-sm">
-            {{ brand }}
-          </div>
+        <div v-if="isDesktop" class="font-semibold min-w-0 overflow-hidden truncate text-sm">
+          {{ brand }}
         </div>
       </Transition>
     </div>
     <!-- Navigation -->
-    <nav class="px-2">
+    <nav class="grow">
       <!-- Primary -->
       <div class="space-y-2 border-t border-white/10 pt-3 md:space-y-3">
         <NuxtLink v-for="item in primary" :key="item.id" :to="item.to" :class="itemClass(item.id)" class="group relative flex items-center gap-3 rounded-xl p-2 text-base transition-all">
@@ -97,15 +95,22 @@ const isActive = (id: string) => id === props.activeKey
       </div>
     </nav>
     <!-- Settings -->
-    <div class="absolute bottom-0 left-0 p-2">
-      <button type="button" class="group relative flex items-center gap-3 rounded-xl p-2 text-left text-sm text-white/80 transition hover:bg-white/5 hover:text-white">
+    <div class="">
+      <NuxtLink to="/settings" :class="itemClass('settings')" class="group relative flex items-center gap-3 rounded-xl p-2 text-base transition-all">
         <div class="grid shrink-0 place-items-center">
-          <NuxtIcon name="local:gear" class="text-[28px] transition-transform group-hover:rotate-90 md:text-[32px]" />
+          <NuxtIcon name="local:gear" class="text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />
         </div>
         <Transition name="fade-slide">
-          <span v-if="isDesktop" class="truncate">Settings</span>
+          <span v-if="isDesktop" class="truncate"> Settings </span>
         </Transition>
-      </button>
+        <span v-if="isActive('settings') && isDesktop" class="animate-slide-in ml-auto h-4 w-[3px] rounded-full bg-primary-500" />
+        <div v-if="isActive('settings') && !isDesktop" class="absolute -right-1 top-1/2 h-4 w-1 -translate-y-1/2 rounded-full bg-primary-500" />
+        <div
+          v-if="!isDesktop"
+          class="pointer-events-none absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-dark-500 px-3 py-2 text-sm opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+          Settings
+        </div>
+      </NuxtLink>
     </div>
   </aside>
 </template>

@@ -1,9 +1,14 @@
 <script setup lang="ts">
 const links = {
   company: [
-    { label: 'About', to: '/about' },
-    { label: 'Blog', to: '/blog' },
-    { label: 'Careers', to: '/careers' },
+    { label: 'about', to: '/about' },
+    { label: 'blog', to: '/blog' },
+    { label: 'careers', to: '/careers' },
+  ],
+  complience: [
+    { label: 'terms', to: '/terms' },
+    { label: 'privacy', to: '/privacy' },
+    { label: 'cancellation', to: '/cancellation' },
   ],
   social: [
     { label: 'whatsapp', icon: 'local:whatsapp', to: 'https://wa.me/c/918910489578' },
@@ -39,7 +44,15 @@ const links = {
         <div>
           <div class="mb-4 text-sm font-semi-bold text-white/80">Company</div>
           <div class="space-y-3">
-            <NuxtLink v-for="link in links.company" :key="link.label" :to="link.to" class="block text-sm text-white/60 transition hover:text-white">
+            <NuxtLink v-for="link in links.company" :key="link.label" :to="link.to" class="block text-sm capitalize text-white/60 transition hover:text-white">
+              {{ link.label }}
+            </NuxtLink>
+          </div>
+        </div>
+        <div>
+          <div class="mb-4 text-sm font-semi-bold text-white/80">Complience</div>
+          <div class="space-y-3">
+            <NuxtLink v-for="link in links.complience" :key="link.label" :to="link.to" class="block text-sm capitalize text-white/60 transition hover:text-white">
               {{ link.label }}
             </NuxtLink>
           </div>

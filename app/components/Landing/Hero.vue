@@ -59,7 +59,7 @@ const particles = Array.from({ length: 30 }, (_, i) => ({
           <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
         </NuxtLink>
 
-        <NuxtLink v-else to="/drive" class="group relative overflow-hidden rounded-xl bg-white px-8 py-4 text-base font-semi-bold text-black shadow-lg shadow-white/20">
+        <NuxtLink v-else to="/dashboard" class="group relative overflow-hidden rounded-xl bg-white px-8 py-4 text-base font-semi-bold text-black shadow-lg shadow-white/20">
           <span class="relative z-10">Go to Dashboard</span>
         </NuxtLink>
 

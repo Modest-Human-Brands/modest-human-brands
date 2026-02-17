@@ -40,13 +40,13 @@ defineProps<{
             <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
           </NuxtLink>
 
-          <NuxtLink v-else to="/drive" class="group relative overflow-hidden rounded-xl bg-white px-10 py-5 text-lg font-semi-bold text-black shadow-2xl shadow-white/30">
+          <NuxtLink v-else to="/dashboard" class="group relative overflow-hidden rounded-xl bg-white px-10 py-5 text-base font-semi-bold text-black shadow-2xl shadow-white/30">
             <span class="relative z-10">Go to Dashboard</span>
           </NuxtLink>
 
           <NuxtLink
-            to="/pricing"
-            class="group rounded-xl border border-white/20 bg-white/5 px-10 py-5 text-lg font-semi-bold backdrop-blur-sm transition-all hover:scale-105 hover:border-white/30 hover:bg-white/10">
+            to="/#pricing"
+            class="group rounded-xl border border-white/20 bg-white/5 px-10 py-5 text-base font-semi-bold backdrop-blur-sm transition-all hover:scale-105 hover:border-white/30 hover:bg-white/10">
             View Pricing
             <NuxtIcon name="local:chevron-bold" class="ml-2 inline-block -scale-x-100 transform transition-transform group-hover:translate-x-1" />
           </NuxtLink>
