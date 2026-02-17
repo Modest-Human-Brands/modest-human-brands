@@ -6,6 +6,7 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
   createdAt: string
   updatedAt: string
   isProfileComplete: boolean
+  organizations: string[]
 }> {
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
@@ -29,6 +30,7 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
       createdAt: data.created_time || new Date().toISOString(),
       updatedAt: data.last_edited_time || new Date().toISOString(),
       isProfileComplete: data.properties.Status.status.name !== 'Unfilled',
+      organizations: data.properties.Organization.relation.map((o) => o.id),
     }
   }
 
@@ -60,6 +62,7 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
     createdAt: data.created_time || new Date().toISOString(),
     updatedAt: data.last_edited_time || new Date().toISOString(),
     isProfileComplete: false,
+    organizations: [],
   }
 }
 
@@ -79,8 +82,9 @@ export default defineOAuthGoogleEventHandler({
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
           isProfileComplete: user.isProfileComplete,
+          organizations: user.organizations,
         },
-        logged_at: new Date().toISOString(),
+        loggedInAt: new Date().toISOString(),
       },
       { maxAge: 30 * 24 * 60 * 60 * 1000 }
     )

@@ -3,13 +3,7 @@ const route = useRoute()
 // const showFooter = computed(() => route.path === '/')
 
 const editedAt = 'Jan 17'
-const collaborators: Collaborator[] = [
-  { id: 'c1', name: 'A', avatarUrl: 'https://picsum.photos/seed/collab1/64/64' },
-  { id: 'c2', name: 'B', avatarUrl: 'https://picsum.photos/seed/collab2/64/64' },
-  { id: 'c3', name: 'C', avatarUrl: 'https://picsum.photos/seed/collab3/64/64' },
-  { id: 'c4', name: 'D', avatarUrl: 'https://picsum.photos/seed/collab4/64/64' },
-  { id: 'c5', name: 'E', avatarUrl: 'https://picsum.photos/seed/collab5/64/64' },
-]
+const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 
 const tabs = [
   {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type DriveFolder = {
+type Project = {
   slug: string
   title: string
   date: string
@@ -12,7 +12,7 @@ type DriveFolder = {
   previewImages: string[]
 }
 
-const props = defineProps<DriveFolder>()
+const props = defineProps<Project>()
 
 const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
 </script>

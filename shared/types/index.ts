@@ -5,10 +5,11 @@ export type NavItem = {
   to?: string
 }
 
-export type Collaborator = {
+export interface User {
   id: string
   name: string
-  avatarUrl: string
+  email: string
+  avatar: string | undefined
 }
 
 export interface ProjectClient {
@@ -96,6 +97,24 @@ type NotionImage =
     }
   | null
 
+export interface NotionOrganization {
+  id: string
+  created_time: string
+  last_edited_time: string
+  cover: NotionImage
+  icon: NotionImage
+  properties: {
+    Name: {
+      type: 'title'
+      title: { plain_text: string }[]
+    }
+    'Founded Year': {
+      type: 'number'
+      number: number
+    }
+  }
+}
+
 export interface NotionUser {
   id: string
   created_time: string
@@ -103,20 +122,25 @@ export interface NotionUser {
   cover: NotionImage
   icon: NotionImage
   properties: {
-    // Index
+    Name: {
+      type: 'title'
+      title: { plain_text: string }[]
+    }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Role: {
+      type: 'select'
+      select: {
+        name: 'Admin' | 'Editor' | 'Viewer'
+      }
+    }
     Status: {
       type: 'status'
       status: {
         name: 'Unfilled' | 'Filled' | 'Verified' | 'Active' | 'Inactive'
       }
-    }
-    Name: {
-      type: 'title'
-      title: { plain_text: string }[]
-    }
-    Profession: {
-      type: 'rich_text'
-      rich_text: { text: { content: string } }[]
     }
     Gender: {
       type: 'select'

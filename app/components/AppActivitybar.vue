@@ -2,7 +2,7 @@
 const props = withDefaults(
   defineProps<{
     editedAt: string
-    collaborators: Collaborator[]
+    collaborators: User[]
     maxVisible?: number
   }>(),
   {
@@ -21,7 +21,7 @@ const extraCollaborators = computed(() => props.collaborators.length - visibleCo
       <NuxtTime :datetime="editedAt" day="numeric" month="short" />
     </div>
     <div class="-space-x-3">
-      <NuxtImg v-for="{ id, avatarUrl, name } in visibleCollaborators" :key="id" :src="avatarUrl" :alt="name" class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
+      <img v-for="{ id, avatar, name } in visibleCollaborators" :key="id" :src="avatar" :alt="name" class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
     </div>
     <span v-if="extraCollaborators > 0" class="px-2 py-2 text-xs text-white"> +{{ extraCollaborators }} </span>
     <button type="button" class="hidden px-2 py-2 sm:block">Share</button>

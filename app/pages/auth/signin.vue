@@ -17,7 +17,7 @@ function onOauthSignIn() {
   console.log('Google sign in requested')
 }
 
-const { status, data, error, execute } = useFetch('/auth/email', {
+const { status, data, error, execute } = useAPI('/auth/email', {
   method: 'POST',
   body: r$.$value,
   immediate: false,
@@ -40,7 +40,7 @@ async function onEmailSignIn() {
   <main class="flex min-h-screen w-full items-center justify-center p-5">
     <section class="flex w-full max-w-md flex-col gap-5 rounded-2xl bg-dark-500 p-5 shadow-xl ring-1 ring-dark-600" aria-labelledby="login-heading">
       <header>
-        <h1 id="login-heading" class="text-lg text-white">Welcome to Offlimate</h1>
+        <h1 id="login-heading" class="text-lg text-white">Welcome to Modest Human Brands</h1>
         <p class="mt-1 text-light-600 opacity-70">Log in to your account</p>
       </header>
       <!-- Google sign-in -->

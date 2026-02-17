@@ -17,6 +17,19 @@ export type MediaItem = {
   metadata: MediaMetadata
 }
 
+export type Project = {
+  slug: string
+  title: string
+  date: string
+  status: ProjectStatus
+  client: ProjectClient
+  mediaCount: {
+    photo: number
+    video: number
+  }
+  previewImages: string[]
+}
+
 export type ProjectDetail = {
   slug: string
   title: string

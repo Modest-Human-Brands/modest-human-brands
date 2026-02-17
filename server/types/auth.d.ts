@@ -4,18 +4,19 @@ declare module '#auth-utils' {
     name: string
     avatar?: string
     email: string
+    organizations: string[]
     createdAt: string
     updatedAt: string
     isProfileComplete: boolean
   }
 
-  /*  interface UserSession {
-     // Add your own fields
-   }
- 
-   interface SecureSessionData {
-     // Add your own fields
-   } */
+  interface UserSession {
+    loggedInAt: string
+  }
+
+  /* interface SecureSessionData {
+    // Add your own fields
+  } */
 }
 
 export {}

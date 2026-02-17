@@ -7,7 +7,7 @@ definePageMeta({
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: project } = await useFetch(`/api/project/${slug}`)
+const { data: project } = await useAPI(`/api/project/${slug}`)
 </script>
 
 <template>
