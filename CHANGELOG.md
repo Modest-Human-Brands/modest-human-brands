@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.2.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.3...v0.2.4)
+
+### 🚀 Enhancements
+
+- Auth flow added ([b777502](https://github.com/Modest-Human-Brands/modest-human-brands/commit/b777502))
+- Refactor project and user management ([180d106](https://github.com/Modest-Human-Brands/modest-human-brands/commit/180d106))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.2.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.2...v0.2.3)
