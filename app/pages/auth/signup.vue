@@ -31,7 +31,7 @@ const { r$: orgR$ } = useRegleSchema(
 const isCreatingOrg = computed(() => r$.$value.organizationId === 'create-new')
 const inviteEmail = ref('')
 
-const { data: organizations } = useAPI('/api/organization', {
+const { data: organizations } = useFetch('/api/organization', {
   method: 'GET',
 })
 
@@ -54,7 +54,7 @@ function removeInvite(index: number) {
   orgR$.$value.invites = orgR$.$value.invites?.filter((_, i) => i !== index)
 }
 
-const { status, execute } = useAPI('/api/user', {
+const { status, execute } = useFetch('/api/user', {
   method: 'POST',
   body: computed(() => ({
     ...r$.$value,

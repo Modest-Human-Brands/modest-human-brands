@@ -3,8 +3,8 @@ type Project = {
   slug: string
   title: string
   date: string
-  status: 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'
-  client: ProjectClient
+  status: ProjectStatus
+  client?: ProjectClient
   mediaCount: {
     photo: number
     video: number
@@ -46,8 +46,8 @@ const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
         <div class="text-white/40">·</div>
         <div class="text-white/60">{{ mediaCount.photo }} Photos {{ mediaCount.video }} Videos</div>
       </div>
-      <div class="flex items-center gap-2">
-        <NuxtImg :src="client.avatarUrl" :alt="client.name" :width="32" :height="32" class="size-8 rounded-full object-cover" />
+      <div v-if="client" class="flex items-center gap-2">
+        <NuxtImg v-if="client.avatar" :src="client.avatar" :alt="client.name" :width="32" :height="32" class="size-8 rounded-full object-cover" />
         <span class="truncate text-base text-white/75">{{ client.name }}</span>
       </div>
     </div>

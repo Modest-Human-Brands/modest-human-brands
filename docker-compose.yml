@@ -8,6 +8,27 @@ services:
     ports:
       - 4300:3000
 
+  stream:
+    build: ../code-stream
+    restart: on-failure:3
+    env_file:
+      - ../code-stream/.env.prod
+    ports:
+      - 4400:3000
+
+  stream-redis:
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   drive:
     build: ../code-drive
     restart: on-failure:3
@@ -34,3 +55,4 @@ volumes:
       type: none
       o: bind
       device: ./.data
+  redis_data:

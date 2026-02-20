@@ -7,7 +7,7 @@ definePageMeta({
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: project } = await useAPI(`/api/project/${slug}`)
+const { data: project } = await useFetch(`/api/project/${slug}`)
 </script>
 
 <template>
@@ -20,8 +20,8 @@ const { data: project } = await useAPI(`/api/project/${slug}`)
       <div class="mt-8 grid grid-flow-col grid-cols-2 grid-rows-2 gap-3 text-base">
         <span class="text-xl">{{ project.title }}</span>
         <NuxtTime :datetime="project.date" class="text-base text-white" day="numeric" month="short" year="numeric" />
-        <div class="flex items-center gap-2 justify-self-end">
-          <NuxtImg :src="project.client.avatarUrl" :alt="project.client.name" :width="32" :height="32" class="size-8 rounded-full border border-black/50 object-cover" />
+        <div v-if="project.client" class="flex items-center gap-2 justify-self-end">
+          <NuxtImg v-if="project.client.avatar" :src="project.client.avatar" :alt="project.client.name" :width="32" :height="32" class="size-8 rounded-full border border-black/50 object-cover" />
           <span class="truncate">{{ project.client.name }}</span>
         </div>
         <div class="flex flex-wrap items-center gap-2 justify-self-end text-white/70">

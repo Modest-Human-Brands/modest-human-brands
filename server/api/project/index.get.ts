@@ -3,6 +3,8 @@ export default defineEventHandler<Promise<Project[]>>(async (event) => {
 
   const activeOrg = user.organizations[0]
 
+  console.log({ user, activeOrg })
+
   if (!activeOrg) return []
 
   const config = useRuntimeConfig()
@@ -28,6 +30,16 @@ export default defineEventHandler<Promise<Project[]>>(async (event) => {
       },
     })
   ).filter((a) => !!a)
+  const client = (
+    await notionQueryDb<NotionProjectClient>(notion, notionDbId.client, {
+      filter: {
+        property: 'Organization',
+        relation: {
+          contains: activeOrg,
+        },
+      },
+    })
+  ).filter((a) => !!a)
 
   return project
     .map(({ properties }) => {
@@ -35,15 +47,19 @@ export default defineEventHandler<Promise<Project[]>>(async (event) => {
 
       const photoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Photo')
       const videoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Video')
+      const projectClient = client.find((c) => c.id === properties.Client.relation[0]?.id)
+
       return {
         slug: properties.Slug.formula.string,
         title: notionTextStringify(properties.Name.title),
         date: properties.Date.date.start,
         status: properties.Status.status.name,
-        client: {
-          name: 'True Mens',
-          avatarUrl: 'https://picsum.photos/seed/dfas/72/72',
-        },
+        client: projectClient
+          ? {
+              name: notionTextStringify(projectClient.properties.Name.title),
+              avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+            }
+          : undefined,
         mediaCount: {
           photo: photoAsset.length,
           video: videoAsset.length,

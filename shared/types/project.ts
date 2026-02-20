@@ -22,7 +22,7 @@ export type Project = {
   title: string
   date: string
   status: ProjectStatus
-  client: ProjectClient
+  client?: ProjectClient
   mediaCount: {
     photo: number
     video: number

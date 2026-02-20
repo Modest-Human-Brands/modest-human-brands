@@ -14,7 +14,7 @@ export interface User {
 
 export interface ProjectClient {
   name: string
-  avatarUrl: string
+  avatar: string
 }
 
 export type ProjectStatus = 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'

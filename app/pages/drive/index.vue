@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: projects } = await useAPI(`/api/project`)
+const { data: projects } = await useFetch(`/api/project`)
 </script>
 
 <template>
