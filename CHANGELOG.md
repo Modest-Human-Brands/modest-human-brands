@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.2.5
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.4...v0.2.5)
+
+### 💅 Refactors
+
+- UseAPI to useFetch ([0c26057](https://github.com/Modest-Human-Brands/modest-human-brands/commit/0c26057))
+
+### 🏡 Chore
+
+- Update dependencies and assets ([ce84e06](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ce84e06))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.2.4
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.3...v0.2.4)
