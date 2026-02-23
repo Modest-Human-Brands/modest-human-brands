@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.3.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.5...v0.3.0)
+
+### 🚀 Enhancements
+
+- ⚠️ Added sync streaming ([505f415](https://github.com/Modest-Human-Brands/modest-human-brands/commit/505f415))
+- Refactor API endpoints and improve resource handling ([807a388](https://github.com/Modest-Human-Brands/modest-human-brands/commit/807a388))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Added sync streaming ([505f415](https://github.com/Modest-Human-Brands/modest-human-brands/commit/505f415))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.2.5
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.4...v0.2.5)
