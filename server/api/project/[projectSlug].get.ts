@@ -62,7 +62,7 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
     status: filteredProject.properties.Status.status.name,
     client: {
       name: 'True Mens',
-      avatarUrl: 'https://picsum.photos/seed/dfas/72/72',
+      avatar: 'https://picsum.photos/seed/dfas/72/72',
     },
     mediaCount: {
       photo: photoAsset.length,

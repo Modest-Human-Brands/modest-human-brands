@@ -5,7 +5,7 @@ type MediaItem = {
   slug: string
   type: MediaType
   title: string
-  thumbnailUrl: string
+  thumbnailUrl?: string
   metadata: MediaMetadata
 }
 

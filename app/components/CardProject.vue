@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type Project = {
+type ProjectMediaCollection = {
   slug: string
   title: string
   date: string
@@ -12,7 +12,7 @@ type Project = {
   previewImages: string[]
 }
 
-const props = defineProps<Project>()
+const props = defineProps<ProjectMediaCollection>()
 
 const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
 </script>

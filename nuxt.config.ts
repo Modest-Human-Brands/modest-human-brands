@@ -97,6 +97,7 @@ export default defineNuxtConfig({
     },
     public: {
       siteUrl: '',
+      cdnUrl: '',
       scripts: {
         googleAnalytics: {
           id: '',

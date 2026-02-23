@@ -3,8 +3,6 @@ export default defineEventHandler<Promise<Project[]>>(async (event) => {
 
   const activeOrg = user.organizations[0]
 
-  console.log({ user, activeOrg })
-
   if (!activeOrg) return []
 
   const config = useRuntimeConfig()

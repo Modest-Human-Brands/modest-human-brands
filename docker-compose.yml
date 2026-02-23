@@ -6,40 +6,51 @@ services:
     env_file:
       - .env.prod
     ports:
-      - 4300:3000
-
-  stream:
-    build: ../code-stream
-    restart: on-failure:3
-    env_file:
-      - ../code-stream/.env.prod
-    ports:
-      - 4400:3000
-
-  stream-redis:
-    image: redis:alpine
-    restart: unless-stopped
-    ports:
-      - '6379:6379'
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - 4000:3000
+    networks:
+      - internal
 
   drive:
     build: ../code-drive
     restart: on-failure:3
     env_file:
-      - ../code-drive/.env.prod.redcatpictures
+      - ../code-drive/.env.prod
       # - ../code-drive/.env.prod.goldfishtalents
     ports:
-      - 4345:3000
+      - 4600:3111 # REST API
+      - 4601:3112 # Stream
+      - 4602:49134 # WebSocket bridge
+      - 4610:1935 # RTMP
     volumes:
       - static:/app/static
-      - data:/app/.data
+      - data:/app/data
+    networks:
+      - internal
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    # drive-redis:
+    #   image: redis:alpine
+    #   restart: unless-stopped
+    #   ports:
+    #     - '6379:6379'
+    #   volumes:
+    #     - redis-data:/data
+    #   healthcheck:
+    #     test: [ 'CMD', 'redis-cli', 'ping' ]
+    #     interval: 10s
+    #     timeout: 5s
+    #     retries: 5
+
+  caddy:
+    image: caddy:alpine
+    restart: on-failure:3
+    ports:
+      - '4620:8080'
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile
+      - static:/srv/static
+    networks:
+      - internal
 
 volumes:
   static:
@@ -47,12 +58,17 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../code-drive/static/red-cat-pictures
+      device: ../code-drive/static
+      # device: ../code-drive/static/red-cat-pictures
       # device: ../code-drive/static/gold-fish-talents
   data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ./.data
-  redis_data:
+      device: ../code-drive/data
+  redis-data:
+
+networks:
+  internal:
+    driver: bridge

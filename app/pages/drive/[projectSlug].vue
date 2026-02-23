@@ -36,7 +36,7 @@ const { data: project } = await useFetch(`/api/project/${slug}`)
       <!-- MediaGrid -->
       <div class="mt-8 flex-1 overflow-y-auto">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <MediaCard v-for="item in project.mediaItems" :key="item.slug" v-bind="item" />
+          <CardMedia v-for="item in project.mediaItems" :key="item.slug" v-bind="item" />
         </div>
       </div>
     </template>
