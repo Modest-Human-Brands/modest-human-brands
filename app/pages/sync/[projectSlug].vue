@@ -24,7 +24,6 @@ const cover = stream.value?.poster ? extractCdnId(stream.value?.poster) : ''
       :muted="true"
       :playsinline="true"
       preload="metadata"
-      class="aspect-video h-fit max-h-full w-full min-w-fit max-w-7xl cursor-pointer object-contain"
-      base-url="http://localhost:4620" />
+      class="aspect-video h-fit max-h-full w-full min-w-fit max-w-7xl cursor-pointer object-contain" />
   </section>
 </template>

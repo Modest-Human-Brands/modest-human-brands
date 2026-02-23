@@ -12,17 +12,17 @@ export default defineEventHandler<Promise<Stream | undefined>>(async (event) => 
 
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
-  // const project = (
-  //   await notionQueryDb<NotionProject>(notion, notionDbId.project, {
-  //     filter: {
-  //       property: 'Organization',
-  //       relation: {
-  //         contains: activeOrg,
-  //       },
-  //     },
-  //   })
-  // ).filter((a) => !!a)
+  /*   const project = (
+      await notionQueryDb<NotionProject>(notion, notionDbId.project, {
+        filter: {
+          property: 'Organization',
+          relation: {
+            contains: activeOrg,
+          },
+        },
+      })
+    ).filter((a) => !!a) */
 
-  const streams = await $fetch<Stream[]>('http://localhost:3111/stream/status')
+  const streams = await $fetch<Stream[]>(`${config.public.driveUrl}/stream/status`)
   return streams.find((v) => v.slug === slug)!
 })

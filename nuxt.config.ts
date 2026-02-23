@@ -80,7 +80,7 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '*/3 * * * *': [],
+      '*/3 * * * *': ['sync:resource'],
     },
   },
   routeRules: {
@@ -97,6 +97,7 @@ export default defineNuxtConfig({
     },
     public: {
       siteUrl: '',
+      driveUrl: '',
       cdnUrl: '',
       scripts: {
         googleAnalytics: {
@@ -309,19 +310,6 @@ export default defineNuxtConfig({
       type: 'module',
       enabled: false,
       suppressWarnings: false,
-    },
-  },
-  nodemailer: {
-    from: '',
-    host: '',
-    port: '',
-    secure: true,
-    auth: {
-      user: '',
-      pass: '',
-    },
-    tls: {
-      rejectUnauthorized: false,
     },
   },
   ...nativeConfig,

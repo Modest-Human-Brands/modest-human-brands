@@ -81,6 +81,22 @@ export type ResourceType = (typeof resourceTypes)[number]
 
 export type NotionDB = { [K in ResourceType]: string }
 
+export interface ResourceRecordMap {
+  client: NotionProjectClient
+  project: NotionProject
+  asset: NotionAsset
+  terms: string
+  privacy: string
+  cancellation: string
+  license: string
+}
+
+export interface Resource<T extends ResourceType = ResourceType> {
+  type: T
+  notificationStatus: boolean
+  record: ResourceRecordMap[T]
+}
+
 type NotionImage =
   | {
       type: 'file'
@@ -238,6 +254,10 @@ export interface NotionProjectClient {
         function: string
       }
     }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
   }
   url: string
   public_url: null
@@ -301,6 +321,10 @@ export interface NotionProject {
       type: 'relation'
       relation: { id: string }[]
       has_more: boolean
+    }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
     }
   }
   url: string
@@ -404,6 +428,10 @@ export interface NotionAsset {
           content: string
         }
       }[]
+    }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
     }
   }
 }

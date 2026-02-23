@@ -53,6 +53,12 @@ services:
       - internal
 
 volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../code-drive/data
   static:
     driver: local
     driver_opts:
@@ -61,12 +67,6 @@ volumes:
       device: ../code-drive/static
       # device: ../code-drive/static/red-cat-pictures
       # device: ../code-drive/static/gold-fish-talents
-  data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ../code-drive/data
   redis-data:
 
 networks:

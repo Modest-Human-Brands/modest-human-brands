@@ -24,7 +24,10 @@ services:
       - mdrive-data:/app/.data
       - mdrive-static:/app/static
     expose:
-      - 3000
+      - 3111 # REST API
+      - 3112 # Stream
+      - 49134 # WebSocket bridge
+      - 1935 # RTMP
     networks:
       - internal
     deploy:
@@ -40,6 +43,17 @@ services:
           cpus: '0.4'
           memory: 1024M
 
+  caddy:
+    image: caddy:alpine
+    restart: on-failure:3
+    ports:
+      - 8080
+    volumes:
+      - /root/modest-human-brands/mdrive/Caddyfile:/etc/caddy/Caddyfile
+      - static:/srv/static
+    networks:
+      - internal
+
 volumes:
   modest-human-brands_data:
     driver: local
@@ -47,12 +61,6 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/.data
-  mdrive-data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /root/modest-human-brands/mdrive/.data
   mdrive-static:
     driver: local
     driver_opts:

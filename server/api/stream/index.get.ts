@@ -10,16 +10,16 @@ export default defineEventHandler<Promise<Stream[]>>(async (event) => {
 
   console.log({ notionDbId })
 
-  // const project = (
-  //   await notionQueryDb<NotionProject>(notion, notionDbId.project, {
-  //     filter: {
-  //       property: 'Organization',
-  //       relation: {
-  //         contains: activeOrg,
-  //       },
-  //     },
-  //   })
-  // ).filter((a) => !!a)
+  /*   const project = (
+      await notionQueryDb<NotionProject>(notion, notionDbId.project, {
+        filter: {
+          property: 'Organization',
+          relation: {
+            contains: activeOrg,
+          },
+        },
+      })
+    ).filter((a) => !!a) */
 
-  return await $fetch<Stream[]>('http://localhost:3111/stream/status')
+  return await $fetch<Stream[]>(`${config.public.driveUrl}/stream/status`)
 })
