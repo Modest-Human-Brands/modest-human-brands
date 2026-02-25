@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.2
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.1...v0.3.2)
+
+### 🩹 Fixes
+
+- Update stream URL format and media path in API responses ([c5d0ec9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/c5d0ec9))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.0...v0.3.1)
