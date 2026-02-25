@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.0...v0.3.1)
+
+### 💅 Refactors
+
+- Update component styles and improve layout consistency ([95d92f9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/95d92f9))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.2.5...v0.3.0)
