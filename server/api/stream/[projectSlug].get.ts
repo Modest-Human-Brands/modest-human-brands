@@ -1,17 +1,9 @@
 export default defineEventHandler<Promise<Stream | undefined>>(async (event) => {
-  const { user } = await requireUserSession(event)
-
-  const activeOrg = user.organizations[0]
-
-  if (!activeOrg) return
-
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
 
-  const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
-    .flatMap(({ value }) => value.record)
-    .filter((p) => p?.properties && p.properties?.Organization.relation.some(({ id }) => id === activeOrg))
+  const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
 
   const project = projects.find((p) => p.properties.Slug.formula.string === slug)
 
