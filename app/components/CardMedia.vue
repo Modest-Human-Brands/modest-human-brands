@@ -34,6 +34,19 @@ const metadataItems = computed(() => {
 
   return items
 })
+
+async function onDownload(e: MouseEvent) {
+  e.preventDefault()
+  if (!props.thumbnailUrl) return
+
+  const blob = await $fetch<Blob>(props.thumbnailUrl, { responseType: 'blob' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${props.slug}.${props.type === 'video' ? 'mp4' : 'jpg'}`
+  a.click()
+  URL.revokeObjectURL(url)
+}
 </script>
 
 <template>
@@ -45,7 +58,7 @@ const metadataItems = computed(() => {
           {{ type }}
         </span>
       </div>
-      <button type="button" class="absolute bottom-2 right-2 grid rounded-full bg-white/10 p-1 text-white backdrop-blur-sm" aria-label="Download">
+      <button type="button" class="absolute bottom-2 right-2 grid rounded-full bg-white/10 p-1 text-white backdrop-blur-sm" aria-label="Download" @click="onDownload">
         <NuxtIcon name="local:download" class="text-[16px]" />
       </button>
     </div>

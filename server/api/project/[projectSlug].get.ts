@@ -25,7 +25,7 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
 
   if (!filteredProject) return
 
-  const projectClient = clients.filter(({ properties }) => properties.Project.relation.findIndex(({ id }) => id === filteredProject.id))[0]
+  const projectClient = clients.filter(({ properties }) => properties.Project.relation.some(({ id }) => id === filteredProject.id))[0]
   const projectAssets = assets.filter((a) => a.properties['Project Slug'].rollup.array[0]?.formula.string === filteredProject.properties.Slug.formula.string)
 
   const photoAsset = projectAssets.filter((a) => a.properties.Type.select.name === 'Photo')

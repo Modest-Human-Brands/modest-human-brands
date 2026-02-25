@@ -21,10 +21,10 @@ const actions: ActionItem[] = [
       class="grid place-items-center rounded-full bg-white/0 p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
       :aria-label="action.label"
       :title="action.label">
-      <NuxtIcon :name="action.icon" class="text-[20px]" />
+      <NuxtIcon :name="action.icon" class="text-[18px] md:text-[20px]" />
     </button>
-    <button type="button" class="font-semibold ml-1.5 inline-flex items-center gap-2 rounded-full bg-white fill-black px-3 py-1 text-sm text-black hover:bg-white/90">
-      <NuxtIcon name="local:plus" class="text-[20px]" />
+    <button type="button" class="font-semibold ml-1.5 inline-flex items-center gap-1 rounded-full bg-white fill-black px-2 py-1 text-2xs text-black hover:bg-white/90 md:gap-2 md:px-3 md:text-sm">
+      <NuxtIcon name="local:plus" class="text-[18px] md:text-[20px]" />
       New
     </button>
   </div>

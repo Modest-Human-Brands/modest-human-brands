@@ -18,27 +18,26 @@ const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
 </script>
 
 <template>
-  <NuxtLink :to="`/drive/${slug}`" class="group flex items-start gap-4 rounded-2xl bg-dark-500 p-4 text-white">
-    <div class="relative shrink-0 -space-x-11">
+  <NuxtLink :to="`/drive/${slug}`" class="group flex items-start gap-2 rounded bg-dark-500 p-2 text-white md:gap-4 md:rounded-2xl md:p-4">
+    <div class="relative -space-x-10">
       <NuxtImg
         v-for="(src, idx) in previewImagesShown"
         :key="src"
         :src="src"
         :alt="title"
-        :width="72"
-        :height="128"
+        :width="128"
+        :height="171"
         fit="cover"
-        class="relative inline-block aspect-[9/16] rounded-lg object-cover"
-        :style="{
-          zIndex: idx,
-        }" />
+        class="relative inline-block aspect-[3/4] w-[3.125rem] rounded-lg object-cover md:w-20"
+        :style="{ zIndex: idx }" />
     </div>
+
     <div class="flex min-w-0 flex-1 flex-col gap-1">
-      <div class="font-semibold truncate text-xl text-white">
-        {{ title }}
-      </div>
-      <NuxtTime :datetime="date" class="mt-1 text-base text-white" day="numeric" month="short" year="numeric" />
-      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-white/70">
+      <div class="font-semibold truncate text-sm text-white md:text-xl">{{ title }}</div>
+
+      <NuxtTime :datetime="date" class="text-2xs text-white md:text-base" day="numeric" month="short" year="numeric" />
+
+      <div class="flex items-center gap-2 text-2xs text-white/70 md:gap-3 md:text-base">
         <div class="inline-flex items-center gap-2">
           <span class="size-3 rounded-full" :class="status === 'Delivered' ? 'bg-success-500' : 'bg-white/40'" />
           <span class="text-white/75">{{ status }}</span>
@@ -46,12 +45,21 @@ const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
         <div class="text-white/40">·</div>
         <div class="text-white/60">{{ mediaCount.photo }} Photos {{ mediaCount.video }} Videos</div>
       </div>
-      <div v-if="client" class="flex items-center gap-2">
-        <NuxtImg v-if="client.avatar" :src="client.avatar" :alt="client.name" :width="32" :height="32" class="size-8 rounded-full object-cover" />
-        <span class="truncate text-base text-white/75">{{ client.name }}</span>
+
+      <div class="flex w-full justify-between">
+        <div v-if="client" class="flex min-w-0 items-center gap-2">
+          <NuxtImg v-if="client.avatar" :src="client.avatar" :alt="client.name" :width="32" :height="32" class="size-5 shrink-0 rounded-full object-cover md:size-8" />
+          <span class="truncate text-2xs text-white/75 md:text-base">{{ client.name }}</span>
+        </div>
+        <!-- Share button -->
+        <button type="button" class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-2xs text-white/80 hover:bg-dark-400/15 md:hidden">
+          <NuxtIcon name="local:link" class="text-[16px]" />
+          Share
+        </button>
       </div>
     </div>
-    <button type="button" class="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-dark-400 px-4 py-2 text-xs text-white/80 hover:bg-dark-400/15">
+    <!-- Share button -->
+    <button type="button" class="hidden shrink-0 items-center gap-2 self-start rounded-full bg-dark-400 px-4 py-2 text-sm text-white/80 hover:bg-dark-400/15 md:inline-flex">
       <NuxtIcon name="local:link" class="text-[24px]" />
       Share
     </button>

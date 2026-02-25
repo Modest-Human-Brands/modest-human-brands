@@ -80,7 +80,7 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '*/3 * * * *': ['sync:resource'],
+      '*/5 * * * *': ['sync:resource'],
     },
   },
   routeRules: {

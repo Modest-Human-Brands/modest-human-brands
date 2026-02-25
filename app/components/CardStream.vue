@@ -2,22 +2,25 @@
 interface ProjectStream {
   slug: string
   title: string
-  rtmpUrl: string
+  streamUrl: string
   media: string
   poster: string
-  streamKey: string
+  slug: string
   deviceId: string
   isLive: boolean
   client?: ProjectClient
 }
 
 defineProps<ProjectStream>()
+
+const views = '100k'
+const duration = '10 min'
 </script>
 
 <template>
   <NuxtLink
     :to="`/sync/${slug}`"
-    class="bg-neutral-800/60 hover:bg-neutral-800 group flex cursor-pointer overflow-hidden rounded-xl border border-white/5 transition-all duration-200 hover:border-white/15">
+    class="bg-neutral-800/60 hover:bg-neutral-800 group flex min-h-24 cursor-pointer overflow-hidden rounded-xl border border-white/5 transition-all duration-200 hover:border-white/15">
     <div class="relative shrink-0 overflow-hidden">
       <NuxtImg :src="poster" :alt="title" class="aspect-video h-44 object-cover transition-transform duration-300 group-hover:scale-105" />
       <span v-if="isLive" class="font-medium absolute left-2.5 top-2.5 rounded-full border border-white/20 bg-black/60 px-2 py-0.5 text-xs text-white backdrop-blur-sm"> Live </span>
@@ -37,13 +40,11 @@ defineProps<ProjectStream>()
       <div class="text-neutral-500 mt-4 flex items-center gap-4 text-sm">
         <span class="flex items-center gap-1.5">
           <NuxtIcon name="local:eye" class="text-[16px]" />
-          100
-          <!-- {{ views }} -->
+          {{ views }}
         </span>
         <span class="flex items-center gap-1.5">
           <NuxtIcon name="local:hour" class="text-[16px]" />
-          01:00
-          <!-- {{ duration }} -->
+          {{ duration }}
         </span>
       </div>
     </div>

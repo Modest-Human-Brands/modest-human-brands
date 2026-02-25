@@ -5,21 +5,28 @@ export default defineEventHandler<Promise<Stream[]>>(async (event) => {
 
   if (!activeOrg) return []
 
-  const config = useRuntimeConfig()
-  const notionDbId = config.private.notionDbId as unknown as NotionDB
+  const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
 
-  console.log({ notionDbId })
+  // const config = useRuntimeConfig()
+  // const streams = await $fetch<Stream[]>(`${config.public.driveUrl}/stream`)
+  const deviceId = 'front-camera'
 
-  /*   const project = (
-      await notionQueryDb<NotionProject>(notion, notionDbId.project, {
-        filter: {
-          property: 'Organization',
-          relation: {
-            contains: activeOrg,
-          },
-        },
-      })
-    ).filter((a) => !!a) */
+  const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
+    .flatMap(({ value }) => value.record)
+    .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
 
-  return await $fetch<Stream[]>(`${config.public.driveUrl}/stream/status`)
+  return projects.map<Stream>(({ properties, cover }) => {
+    const slug = properties.Slug.formula.string
+    const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
+
+    return {
+      slug,
+      title: notionTextStringify(properties.Name.title),
+      deviceId,
+      streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}/live/${slug}/${deviceId}`,
+      media: coverUrl,
+      poster: coverUrl,
+      isLive: properties.Status.status.name === 'Shoot',
+    }
+  })
 })

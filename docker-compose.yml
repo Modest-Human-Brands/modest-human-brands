@@ -22,8 +22,8 @@ services:
       - 4602:49134 # WebSocket bridge
       - 4610:1935 # RTMP
     volumes:
-      - static:/app/static
       - data:/app/data
+      - static:/app/static
     networks:
       - internal
     # extra_hosts:
