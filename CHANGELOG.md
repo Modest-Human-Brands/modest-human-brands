@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.3
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.2...v0.3.3)
+
+### 💅 Refactors
+
+- Remove user session and organization filtering from project retrieval ([804465d](https://github.com/Modest-Human-Brands/modest-human-brands/commit/804465d))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.2
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.1...v0.3.2)
