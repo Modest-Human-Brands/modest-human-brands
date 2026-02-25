@@ -28,8 +28,8 @@ export default defineEventHandler<Promise<Stream | undefined>>(async (event) => 
     slug,
     title: notionTextStringify(properties.Name.title),
     deviceId,
-    streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}/live/${slug}/${deviceId}`,
-    media: coverUrl,
+    streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
+    media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
     poster: coverUrl,
     isLive: properties.Status.status.name === 'Shoot',
   }

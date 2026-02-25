@@ -28,7 +28,8 @@ services:
       - 3111 # REST API
       - 3112 # Stream
       - 49134 # WebSocket bridge
-      - 1935 # RTMP
+    ports:
+      - '9000:9000/udp'
     networks:
       - internal
     deploy:
