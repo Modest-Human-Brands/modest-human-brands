@@ -13,8 +13,6 @@ export default defineEventHandler<Promise<ProjectStream | undefined>>(async (eve
   const deviceId = 'front-camera'
   const stream = await $fetch<ProjectStream>(`${config.public.driveUrl}/stream/${slug}/${deviceId}`)
 
-  console.log({ stream })
-
   const { properties, cover } = project
   const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
 

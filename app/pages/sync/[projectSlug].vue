@@ -21,7 +21,6 @@ async function startStream() {
 
 <template>
   <section class="relative size-full overflow-hidden">
-    {{ stream?.status }}
     <template v-if="stream?.status === StreamStatus.Starting">
       <div class="flex size-full flex-col items-center justify-center gap-4">
         <div class="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
