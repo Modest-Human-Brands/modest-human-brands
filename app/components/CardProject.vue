@@ -15,6 +15,19 @@ type ProjectMediaCollection = {
 const props = defineProps<ProjectMediaCollection>()
 
 const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
+
+const { share, isSupported } = useShare()
+
+function shareMedia(e: Event) {
+  e.preventDefault()
+  e.stopPropagation()
+  const url = `${window.location.origin}/public/sync/${props.slug}`
+  if (isSupported.value) {
+    share({ title: props.title, url })
+  } else {
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+}
 </script>
 
 <template>
@@ -52,14 +65,17 @@ const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
           <span class="truncate text-2xs text-white/75 md:text-base">{{ client.name }}</span>
         </div>
         <!-- Share button -->
-        <button type="button" class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-2xs text-white/80 hover:bg-dark-400/15 md:hidden">
+        <button type="button" class="bg-neutral-700 hover:bg-neutral-600 ml-auto inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs text-white/80 md:hidden" @click="shareMedia">
           <NuxtIcon name="local:link" class="text-[16px]" />
           Share
         </button>
       </div>
     </div>
     <!-- Share button -->
-    <button type="button" class="hidden shrink-0 items-center gap-2 self-start rounded-full bg-dark-400 px-4 py-2 text-sm text-white/80 hover:bg-dark-400/15 md:inline-flex">
+    <button
+      type="button"
+      class="bg-neutral-700 hover:bg-neutral-600 mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full px-4 py-2 text-sm text-white/80 md:inline-flex"
+      @click="shareMedia">
       <NuxtIcon name="local:link" class="text-[24px]" />
       Share
     </button>

@@ -1,4 +1,4 @@
-export default defineEventHandler<Promise<Stream[]>>(async (event) => {
+export default defineEventHandler<Promise<ProjectStream[]>>(async (event) => {
   const { user } = await requireUserSession(event)
 
   const activeOrg = user.organizations[0]
@@ -7,17 +7,20 @@ export default defineEventHandler<Promise<Stream[]>>(async (event) => {
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
 
-  // const config = useRuntimeConfig()
-  // const streams = await $fetch<Stream[]>(`${config.public.driveUrl}/stream`)
+  const config = useRuntimeConfig()
+  const streams = await $fetch<ProjectStream[]>(`${config.public.driveUrl}/stream`)
   const deviceId = 'front-camera'
 
   const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
     .flatMap(({ value }) => value.record)
     .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
+    .toSorted((a, b) => new Date(b.properties.Date.date.start).getTime() - new Date(a.properties.Date.date.start).getTime())
 
-  return projects.map<Stream>(({ properties, cover }) => {
+  return projects.map<ProjectStream>(({ properties, cover }) => {
     const slug = properties.Slug.formula.string
     const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
+
+    const currentStream = streams.find((s) => s.slug === slug)
 
     return {
       slug,
@@ -26,7 +29,7 @@ export default defineEventHandler<Promise<Stream[]>>(async (event) => {
       streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
       media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
       poster: coverUrl,
-      isLive: properties.Status.status.name === 'Shoot',
+      status: currentStream?.status ?? StreamStatus.Idle,
     }
   })
 })

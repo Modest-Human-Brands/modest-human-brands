@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: streams } = await useFetch<Stream[]>('/api/stream')
+const { data: streams } = await useFetch('/api/stream')
 </script>
 
 <template>
