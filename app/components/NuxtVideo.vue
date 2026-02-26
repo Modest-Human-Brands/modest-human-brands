@@ -21,6 +21,7 @@ const props = withDefaults(
     playsinline?: boolean
     disablePictureInPicture?: boolean
     baseUrl?: string
+    live?: boolean
   }>(),
   {
     multiOrentation: false,
@@ -34,22 +35,33 @@ const props = withDefaults(
     playsinline: false,
     disablePictureInPicture: false,
     baseUrl: undefined,
+    live: false,
   }
 )
-
-const baseUrl = computed(() => props.baseUrl ?? cdnUrl)
 
 const emit = defineEmits<{
   started: []
   buffer: [value: number]
   progress: [value: number]
   ended: []
+  ready: []
+  atLive: [value: boolean]
 }>()
+
+const baseUrl = computed(() => props.baseUrl ?? cdnUrl)
+
+const LIVE_THRESHOLD = 8
 
 const videoRef = useTemplateRef<HTMLVideoElement>('videoRef')
 let player: Hls
 
-defineExpose({ videoRef })
+function seekToLive() {
+  if (!videoRef.value) return
+  const target = player?.liveSyncPosition ?? videoRef.value.duration
+  if (isFinite(target)) videoRef.value.currentTime = target
+}
+
+defineExpose({ videoRef, seekToLive })
 
 watch(
   () => props.state,
@@ -64,14 +76,11 @@ watch(
       case 'stop':
         videoRef.value?.pause()
         break
-      default:
-        break
     }
   }
 )
 
 const progress = ref(0)
-// const buffer = ref(0)
 const isVideoLoaded = ref(false)
 
 function handleError(e?: Error) {
@@ -96,11 +105,11 @@ function handleLoadedData() {
 
 function handleProgress() {
   if (!videoRef.value) return
-
   const { currentTime, duration } = videoRef.value
   if (duration > 0) {
     progress.value = currentTime / duration
     emit('progress', progress.value)
+    emit('atLive', !isFinite(duration) || duration === 0 || duration - currentTime <= LIVE_THRESHOLD)
   }
 }
 
@@ -110,14 +119,15 @@ function handleEnded() {
   emit('ended')
 }
 
+function handleLoadedMetadata() {
+  isVideoLoaded.value = true
+  emit('ready')
+  if (props.live) seekToLive()
+}
+
 const { width, height } = useElementSize(videoRef)
 
-const streamStats = ref({
-  bitrate: 0,
-  codec: '',
-  resolution: '',
-})
-
+const streamStats = ref({ bitrate: 0, codec: '', resolution: '' })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formattedBitrate = computed(() => {
   const bps = streamStats.value.bitrate || 0
@@ -125,14 +135,13 @@ const formattedBitrate = computed(() => {
 })
 
 const currentOrientation = computed<Orientation>(() => (width.value > height.value ? 'landscape' : 'portrait'))
-
 const activeSource = computed(() => (props.multiOrentation ? `${props.media}-${currentOrientation.value}` : props.media))
 
 onMounted(() => {
   const url = `${baseUrl.value}/${activeSource.value}`
 
   if (Hls.isSupported()) {
-    player = new Hls()
+    player = new Hls({ liveSyncDurationCount: 3 })
     player.loadSource(url)
     player.attachMedia(videoRef.value!)
 
@@ -153,7 +162,6 @@ onMounted(() => {
 
     if (props.autoplay) videoRef.value?.play()
   } else if (videoRef.value?.canPlayType('application/vnd.apple.mpegurl')) {
-    // Safari native HLS
     videoRef.value.src = url
     if (props.autoplay) videoRef.value.play()
   }
@@ -161,10 +169,8 @@ onMounted(() => {
 
 watch(activeSource, (newSource, oldSource) => {
   if (!player || newSource === oldSource) return
-
   const currentTime = videoRef.value?.currentTime || 0
   const wasPlaying = !videoRef.value?.paused
-
   player.loadSource(`${baseUrl.value}/${newSource}`)
   player.attachMedia(videoRef.value!)
   player.once(Hls.Events.MANIFEST_PARSED, () => {
@@ -177,7 +183,6 @@ onUnmounted(() => player?.destroy())
 </script>
 
 <template>
-  <!-- <div class="size-full bg-black"> -->
   <video
     ref="videoRef"
     class="size-full"
@@ -197,7 +202,7 @@ onUnmounted(() => player?.destroy())
     @timeupdate="handleProgress"
     @ended="handleEnded"
     @loadeddata="handleLoadedData"
-    @loadedmetadata="handleLoadedData"
+    @loadedmetadata="handleLoadedMetadata"
     @contextmenu.prevent>
     Your browser does not support the video tag.
   </video>

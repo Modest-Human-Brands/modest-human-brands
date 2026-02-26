@@ -35,7 +35,11 @@ function shareStream(e: Event) {
     class="bg-neutral-800/60 hover:bg-neutral-800 group flex h-24 cursor-pointer overflow-hidden rounded-xl border border-white/5 bg-dark-500 transition-all duration-200 hover:border-white/15">
     <div class="relative w-40 shrink-0">
       <NuxtImg :src="poster" :alt="title" width="160" height="96" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-      <span class="font-medium absolute left-2.5 top-2.5 rounded-full border border-white/20 bg-black/60 px-2 py-0.5 text-xs capitalize text-white backdrop-blur-sm"> {{ status }} </span>
+      <span
+        class="font-medium absolute left-2.5 top-2.5 rounded-full border border-white/20 px-2 py-0.5 text-xs capitalize text-white backdrop-blur-sm"
+        :class="{ 'bg-dark-500': status === 'idle', 'bg-primary-500': status === 'ready', 'bg-alert-500': status === 'live' }">
+        {{ status }}
+      </span>
     </div>
     <div class="flex min-w-0 flex-1 flex-col justify-between p-4">
       <div class="space-y-2.5">
@@ -57,7 +61,11 @@ function shareStream(e: Event) {
           {{ duration }}
         </span>
         <!-- Share button -->
-        <button type="button" class="bg-neutral-700 hover:bg-neutral-600 ml-auto inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs text-white/80 md:hidden" @click="shareStream">
+        <button
+          v-if="status === 'live'"
+          type="button"
+          class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:hidden"
+          @click="shareStream">
           <NuxtIcon name="local:link" class="text-[16px]" />
           Share
         </button>
@@ -65,8 +73,9 @@ function shareStream(e: Event) {
     </div>
     <!-- Share button -->
     <button
+      v-if="status === 'live'"
       type="button"
-      class="bg-neutral-700 hover:bg-neutral-600 mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full px-4 py-2 text-sm text-white/80 md:inline-flex"
+      class="mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full bg-dark-400 px-4 py-2 text-sm text-white/80 hover:bg-dark-600 md:inline-flex"
       @click="shareStream">
       <NuxtIcon name="local:link" class="text-[24px]" />
       Share

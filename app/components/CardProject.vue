@@ -65,17 +65,14 @@ function shareMedia(e: Event) {
           <span class="truncate text-2xs text-white/75 md:text-base">{{ client.name }}</span>
         </div>
         <!-- Share button -->
-        <button type="button" class="bg-neutral-700 hover:bg-neutral-600 ml-auto inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs text-white/80 md:hidden" @click="shareMedia">
+        <button type="button" class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:hidden" @click="shareMedia">
           <NuxtIcon name="local:link" class="text-[16px]" />
           Share
         </button>
       </div>
     </div>
     <!-- Share button -->
-    <button
-      type="button"
-      class="bg-neutral-700 hover:bg-neutral-600 mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full px-4 py-2 text-sm text-white/80 md:inline-flex"
-      @click="shareMedia">
+    <button type="button" class="mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full bg-dark-400 px-4 py-2 text-sm text-white/80 hover:bg-dark-600 md:inline-flex" @click="shareMedia">
       <NuxtIcon name="local:link" class="text-[24px]" />
       Share
     </button>
