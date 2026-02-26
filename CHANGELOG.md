@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.3.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.3...v0.3.4)
+
+### 💅 Refactors
+
+- Updated streaming flow ([b44e28e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/b44e28e))
+- Improve stream status handling and UI feedback ([543cf3e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/543cf3e))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.2...v0.3.3)
