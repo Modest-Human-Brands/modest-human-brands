@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.3.6
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.5...v0.3.6)
+
+### 🚀 Enhancements
+
+- Add media and stream components for improved media handling ([59f85b8](https://github.com/Modest-Human-Brands/modest-human-brands/commit/59f85b8))
+- Update organization details and improve media handling across components ([7a08e07](https://github.com/Modest-Human-Brands/modest-human-brands/commit/7a08e07))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.5
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.4...v0.3.5)
