@@ -56,15 +56,3 @@ export type EmailFormData = z.infer<typeof emailFormSchema>
 export type UserFormData = z.infer<typeof userFormSchema>
 export type OrganizationFormData = z.infer<typeof organizationFormSchema>
 export type CompleteUserFormData = z.infer<typeof completeUserFormSchema>
-
-// Export Organization type for auth.d.ts
-export type Organization = {
-  id: string
-  name: string
-  foundedYear: number
-  invites: string[]
-  ownerId?: string
-  memberCount?: number
-  createdAt?: string
-  updatedAt?: string
-}

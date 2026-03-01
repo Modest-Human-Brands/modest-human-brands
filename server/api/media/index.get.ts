@@ -1,11 +1,11 @@
-export default defineEventHandler<Promise<Project[]>>(async (event) => {
+export default defineEventHandler<Promise<ProjectMediaCollection[]>>(async (event) => {
   const { user } = await requireUserSession(event)
 
   const activeOrg = user.organizations[0]
 
   if (!activeOrg) return []
 
-  const assetStorage = useStorage<Resource<'asset'>>(`data:resource:asset`)
+  const assetStorage = useStorage<Resource<'media'>>(`data:resource:media`)
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
   const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
@@ -43,7 +43,7 @@ export default defineEventHandler<Promise<Project[]>>(async (event) => {
           video: videoAsset.length,
         },
         previewImages: projectAssets.map(({ cover }) => (cover?.type === 'external' ? cover.external.url : undefined)),
-      } as Project
+      } as ProjectMediaCollection
     })
     .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })

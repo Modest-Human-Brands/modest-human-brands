@@ -1,8 +1,27 @@
-export type NavItem = {
+export interface Organization {
   id: string
-  label: string
-  icon: string
-  to?: string
+  name: string
+  foundedYear: number
+  branding: {
+    logo: string
+    color: {
+      primary: string
+      accent: string
+    }
+    font: string
+  }
+  website?: string
+  phone?: string
+  whatsapp?: string
+  socials?: {
+    instagram?: string
+    facebook?: string
+    youtube?: string
+  }
+  invites: string[]
+  ownerId: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface User {
@@ -18,6 +37,13 @@ export interface ProjectClient {
 }
 
 export type ProjectStatus = 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'
+
+export type NavItem = {
+  id: string
+  label: string
+  icon: string
+  to?: string
+}
 
 export type Orientation = 'portrait' | 'landscape'
 
@@ -75,16 +101,19 @@ export interface VideoDetails extends Video {
 }
 
 /* Server Only */
-export const resourceTypes = ['organization', 'user', 'client', 'project', 'asset'] as const
+export const resourceTypes = ['organization', 'user', 'client', 'project', 'stream', 'media'] as const
 
 export type ResourceType = (typeof resourceTypes)[number]
 
 export type NotionDB = { [K in ResourceType]: string }
 
 export interface ResourceRecordMap {
+  organization: NotionOrganization
+  user: NotionUser
   client: NotionProjectClient
   project: NotionProject
-  asset: NotionAsset
+  stream: NotionStream
+  media: NotionMedia
   terms: string
   privacy: string
   cancellation: string
@@ -331,7 +360,7 @@ export interface NotionProject {
   public_url: null
 }
 
-export interface NotionAsset {
+export interface NotionMedia {
   id: string
   created_time: string
   last_edited_time: string

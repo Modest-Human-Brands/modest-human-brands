@@ -1,4 +1,4 @@
-export default defineEventHandler<Promise<ProjectStream[]>>(async (event) => {
+export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (event) => {
   const { user } = await requireUserSession(event)
 
   const activeOrg = user.organizations[0]
@@ -8,7 +8,7 @@ export default defineEventHandler<Promise<ProjectStream[]>>(async (event) => {
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
 
   const config = useRuntimeConfig()
-  const streams = await $fetch<ProjectStream[]>(`${config.public.driveUrl}/stream`)
+  const streams = await $fetch<ProjectStreamCollection[]>(`${config.public.driveUrl}/stream`)
   const deviceId = 'front-camera'
 
   const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
@@ -16,7 +16,7 @@ export default defineEventHandler<Promise<ProjectStream[]>>(async (event) => {
     .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
     .toSorted((a, b) => new Date(b.properties.Date.date.start).getTime() - new Date(a.properties.Date.date.start).getTime())
 
-  return projects.map<ProjectStream>(({ properties, cover }) => {
+  return projects.map<ProjectStreamCollection>(({ properties, cover }) => {
     const slug = properties.Slug.formula.string
     const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
 

@@ -1,13 +1,3 @@
-export interface Organization {
-  id: string
-  name: string
-  foundedYear: number
-  invites: string[]
-  ownerId: undefined
-  createdAt: string
-  updatedAt: string
-}
-
 export default defineEventHandler<Promise<Organization[]>>(async () => {
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
@@ -18,11 +8,27 @@ export default defineEventHandler<Promise<Organization[]>>(async () => {
     return {
       id: id,
       name: notionTextStringify(properties.Name.title),
-      foundedYear: properties['Founded Year'].number,
+      website: 'https://redcatpictures.com',
+      branding: {
+        logo: 'https://redcatpictures.com/logo-light.svg',
+        color: {
+          primary: '#CD2D2D',
+          accent: '',
+        },
+        font: '',
+      },
+      phone: '+912269711501',
+      whatsapp: 'https://wa.me/912269711501',
       invites: [],
-      ownerId: undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      foundedYear: properties['Founded Year'].number,
+      ownerId: '',
+      /* socials: {
+  instagram: 'https://www.instagram.com/redcatpictures',
+  facebook: 'https://www.facebook.com/redcatpictures',
+  youtube: "https://www.youtube.com/@red_cat_pictures",
+} */
     }
   })
 })

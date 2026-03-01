@@ -48,9 +48,9 @@ export default defineTask({
         baseURL: 'http://localhost:4345',
       })
     ).map(({ slug }) => slug)
-    const notionAssets = await notionQueryDb<NotionAsset>(notion, notionDbId.asset)
+    const notionMedia = await notionQueryDb<NotionMedia>(notion, notionDbId.media)
     const slugToId = new Map(
-      notionAssets
+      notionMedia
         .map((asset) => {
           const raw = asset.properties.Slug?.formula?.string
 

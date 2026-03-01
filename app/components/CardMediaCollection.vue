@@ -1,29 +1,16 @@
 <script setup lang="ts">
-type ProjectMediaCollection = {
-  slug: string
-  title: string
-  date: string
-  status: ProjectStatus
-  client?: ProjectClient
-  mediaCount: {
-    photo: number
-    video: number
-  }
-  previewImages: string[]
-}
+const props = defineProps<{ orgSlug: string; mediaCollection: ProjectMediaCollection }>()
 
-const props = defineProps<ProjectMediaCollection>()
-
-const previewImagesShown = computed(() => props.previewImages.slice(0, 4))
+const previewImagesShown = computed(() => props.mediaCollection.previewImages.slice(0, 4))
 
 const { share, isSupported } = useShare()
 
 function shareMedia(e: Event) {
   e.preventDefault()
   e.stopPropagation()
-  const url = `${window.location.origin}/public/sync/${props.slug}`
+  const url = `${window.location.origin}/drive/public/${props.orgSlug}/${props.mediaCollection.slug}`
   if (isSupported.value) {
-    share({ title: props.title, url })
+    share({ title: props.mediaCollection.title, url })
   } else {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
@@ -31,13 +18,13 @@ function shareMedia(e: Event) {
 </script>
 
 <template>
-  <NuxtLink :to="`/drive/${slug}`" class="group flex items-start gap-2 rounded bg-dark-500 p-2 text-white md:gap-4 md:rounded-2xl md:p-4">
+  <NuxtLink :to="`/drive/${mediaCollection.slug}`" class="group flex items-start gap-2 rounded bg-dark-500 p-2 text-white md:gap-4 md:rounded-2xl md:p-4">
     <div class="relative -space-x-10">
       <NuxtImg
         v-for="(src, idx) in previewImagesShown"
         :key="src"
         :src="src"
-        :alt="title"
+        :alt="mediaCollection.title"
         :width="128"
         :height="171"
         fit="cover"
@@ -46,23 +33,29 @@ function shareMedia(e: Event) {
     </div>
 
     <div class="flex min-w-0 flex-1 flex-col gap-1">
-      <div class="font-semibold truncate text-sm text-white md:text-xl">{{ title }}</div>
+      <div class="font-semibold truncate text-sm text-white md:text-xl">{{ mediaCollection.title }}</div>
 
-      <NuxtTime :datetime="date" class="text-2xs text-white md:text-base" day="numeric" month="short" year="numeric" />
+      <NuxtTime :datetime="mediaCollection.date" class="text-2xs text-white md:text-base" day="numeric" month="short" year="numeric" />
 
       <div class="flex items-center gap-2 text-2xs text-white/70 md:gap-3 md:text-base">
         <div class="inline-flex items-center gap-2">
-          <span class="size-3 rounded-full" :class="status === 'Delivered' ? 'bg-success-500' : 'bg-white/40'" />
-          <span class="text-white/75">{{ status }}</span>
+          <span class="size-3 rounded-full" :class="mediaCollection.status === 'Delivered' ? 'bg-success-500' : 'bg-white/40'" />
+          <span class="text-white/75">{{ mediaCollection.status }}</span>
         </div>
         <div class="text-white/40">·</div>
-        <div class="text-white/60">{{ mediaCount.photo }} Photos {{ mediaCount.video }} Videos</div>
+        <div class="text-white/60">{{ mediaCollection.mediaCount.photo }} Photos {{ mediaCollection.mediaCount.video }} Videos</div>
       </div>
 
       <div class="flex w-full justify-between">
-        <div v-if="client" class="flex min-w-0 items-center gap-2">
-          <NuxtImg v-if="client.avatar" :src="client.avatar" :alt="client.name" :width="32" :height="32" class="size-5 shrink-0 rounded-full object-cover md:size-8" />
-          <span class="truncate text-2xs text-white/75 md:text-base">{{ client.name }}</span>
+        <div v-if="mediaCollection.client" class="flex min-w-0 items-center gap-2">
+          <NuxtImg
+            v-if="mediaCollection.client.avatar"
+            :src="mediaCollection.client.avatar"
+            :alt="mediaCollection.client.name"
+            :width="32"
+            :height="32"
+            class="size-5 shrink-0 rounded-full object-cover md:size-8" />
+          <span class="truncate text-2xs text-white/75 md:text-base">{{ mediaCollection.client.name }}</span>
         </div>
         <!-- Share button -->
         <button type="button" class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:hidden" @click="shareMedia">

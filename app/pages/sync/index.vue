@@ -5,6 +5,7 @@ definePageMeta({
 })
 
 const { data: streams } = await useFetch('/api/stream')
+const orgSlug = 'red-cat-pictures'
 </script>
 
 <template>
@@ -12,7 +13,7 @@ const { data: streams } = await useFetch('/api/stream')
     <template v-if="!streams?.length"> No Streams Found </template>
     <template v-else>
       <div class="grid flex-1 grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2 md:gap-3">
-        <CardStream v-for="stream in streams" :key="stream.slug" v-bind="stream" />
+        <CardStreamCollection v-for="stream in streams" :key="stream.slug" :org-slug="orgSlug" :stream-collection="stream" />
       </div>
     </template>
   </section>

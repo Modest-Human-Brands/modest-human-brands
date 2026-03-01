@@ -1,16 +1,5 @@
 <script setup lang="ts">
-interface ProjectStream {
-  slug: string
-  deviceId: string
-  title: string
-  status: StreamStatus
-  poster: string
-  streamUrl: string
-  media: string
-  client?: ProjectClient
-}
-
-const props = defineProps<ProjectStream>()
+const props = defineProps<{ orgSlug: string; streamCollection: ProjectStreamCollection }>()
 
 const views = '100k'
 const duration = '10 min'
@@ -20,9 +9,9 @@ const { share, isSupported } = useShare()
 function shareStream(e: Event) {
   e.preventDefault()
   e.stopPropagation()
-  const url = `${window.location.origin}/public/sync/${props.slug}`
+  const url = `${window.location.origin}/sync/public/${props.orgSlug}/${props.streamCollection.slug}`
   if (isSupported.value) {
-    share({ title: props.title, url })
+    share({ title: props.streamCollection.title, url })
   } else {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
@@ -31,24 +20,24 @@ function shareStream(e: Event) {
 
 <template>
   <NuxtLink
-    :to="`/sync/${slug}`"
+    :to="`/sync/${streamCollection.slug}`"
     class="bg-neutral-800/60 hover:bg-neutral-800 group flex h-24 cursor-pointer overflow-hidden rounded-xl border border-white/5 bg-dark-500 transition-all duration-200 hover:border-white/15">
     <div class="relative w-40 shrink-0">
-      <NuxtImg :src="poster" :alt="title" width="160" height="96" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+      <NuxtImg :src="streamCollection.poster" :alt="streamCollection.title" width="160" height="96" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
       <span
         class="font-medium absolute left-2.5 top-2.5 rounded-full border border-white/20 px-2 py-0.5 text-xs capitalize text-white backdrop-blur-sm"
-        :class="{ 'bg-dark-500': status === 'idle', 'bg-primary-500': status === 'ready', 'bg-alert-500': status === 'live' }">
-        {{ status }}
+        :class="{ 'bg-dark-500': streamCollection.status === 'idle', 'bg-primary-500': streamCollection.status === 'ready', 'bg-alert-500': streamCollection.status === 'live' }">
+        {{ streamCollection.status }}
       </span>
     </div>
     <div class="flex min-w-0 flex-1 flex-col justify-between p-4">
       <div class="space-y-2.5">
         <h3 class="font-semibold line-clamp-2 text-[15px] leading-snug text-white">
-          {{ title }}
+          {{ streamCollection.title }}
         </h3>
-        <div v-if="client" class="flex items-center gap-2">
-          <NuxtImg :src="client.avatar" :alt="client.name" class="h-5 w-5 rounded-full object-cover" />
-          <span class="text-neutral-400 text-sm">{{ client.name }}</span>
+        <div v-if="streamCollection.client" class="flex items-center gap-2">
+          <NuxtImg :src="streamCollection.client.avatar" :alt="streamCollection.client.name" class="h-5 w-5 rounded-full object-cover" />
+          <span class="text-neutral-400 text-sm">{{ streamCollection.client.name }}</span>
         </div>
       </div>
       <div class="text-neutral-500 mt-4 flex items-center gap-4 text-sm">
@@ -62,7 +51,7 @@ function shareStream(e: Event) {
         </span>
         <!-- Share button -->
         <button
-          v-if="status === 'live'"
+          v-if="streamCollection.status === 'live'"
           type="button"
           class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:hidden"
           @click="shareStream">
@@ -73,7 +62,7 @@ function shareStream(e: Event) {
     </div>
     <!-- Share button -->
     <button
-      v-if="status === 'live'"
+      v-if="streamCollection.status === 'live'"
       type="button"
       class="mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full bg-dark-400 px-4 py-2 text-sm text-white/80 hover:bg-dark-600 md:inline-flex"
       @click="shareStream">
