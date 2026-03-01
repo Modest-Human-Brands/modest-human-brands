@@ -1,4 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+/* const slug = 'red-cat-pictures'
+const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
+
+const DEFAULT_ORG = {
+  name: 'Modest Human Brands',
+  website: 'https://modesthumanbrands.com',
+  branding: {
+    logo: 'https://modesthumanbrands.com/logo.svg',
+    color: { primary: '#4A85FF', accent: '' },
+    font: '',
+  },
+  phone: '+912269711501',
+  whatsapp: 'https://wa.me/912269711501',
+}
+const organization = computed(() => organizationData.value ?? DEFAULT_ORG as Organization) */
+</script>
 
 <template>
   <div class="relative flex min-h-screen w-screen items-center justify-start overflow-hidden">
@@ -15,7 +31,7 @@
       <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
       <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black" />
     </div>
-    <main class="relative isolate z-10 mx-auto w-full grow gap-4 overflow-hidden px-2 md:mb-8 md:px-4">
+    <main class="relative isolate z-10 mx-auto w-full grow gap-4 overflow-hidden px-2 md:px-4">
       <slot />
     </main>
   </div>

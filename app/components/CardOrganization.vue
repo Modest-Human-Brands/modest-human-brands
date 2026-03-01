@@ -33,7 +33,7 @@ const open = useElementHover(card, { delayLeave: 700 })
 
       <!-- Expanded panel -->
       <div class="flex flex-col gap-1 overflow-hidden transition-all duration-500 ease-in-out md:gap-2" :class="open ? 'max-w-sm opacity-100' : 'max-w-0 opacity-0'">
-        <p class="whitespace-nowrap text-xs font-bold uppercase tracking-wider text-white md:text-base">
+        <p class="whitespace-nowrap text-xs font-bold tracking-wider text-white md:text-base">
           {{ organization.name }}
         </p>
 

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: false,
-})
+definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()

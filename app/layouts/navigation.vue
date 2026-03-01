@@ -1,4 +1,20 @@
 <script setup lang="ts">
+const slug = 'red-cat-pictures'
+const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
+
+const DEFAULT_ORG = {
+  name: 'Modest Human Brands',
+  website: 'https://modesthumanbrands.com',
+  branding: {
+    logo: 'https://modesthumanbrands.com/logo.svg',
+    color: { primary: '#4A85FF', accent: '' },
+    font: '',
+  },
+  phone: '+912269711501',
+  whatsapp: 'https://wa.me/912269711501',
+}
+const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
+
 const route = useRoute()
 // const showFooter = computed(() => route.path === '/')
 
@@ -49,7 +65,7 @@ const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) 
 
 <template>
   <div class="flex h-screen w-screen items-start justify-start">
-    <LazyAppNavbar brand="Modest Human Brands" :active-key="activeTab.id" hydrate-on-idle />
+    <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col gap-4 overflow-hidden px-2 py-6 md:mb-8 md:px-4">
       <div class="flex items-start justify-between md:gap-6">
         <div>

@@ -8,11 +8,11 @@ type NavItem = {
 
 withDefaults(
   defineProps<{
-    brand?: string
+    organizationName: string
+    organizationLogo: string
     activeKey?: string
   }>(),
   {
-    brand: 'Modest Human Brands',
     activeKey: 'dashboard',
   }
 )
@@ -40,12 +40,12 @@ const settingsItem: NavItem = { id: 'settings', label: 'Settings', icon: 'local:
 <template>
   <aside class="z-50 flex h-screen shrink-0 flex-col gap-4 overflow-hidden border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
     <!-- Brand -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center justify-center gap-2">
       <div class="grid shrink-0 place-items-center rounded-full transition-transform hover:scale-110">
-        <NuxtIcon name="local:logo" class="text-[32px] text-white md:text-[36px]" />
+        <NuxtImg :src="organizationLogo" :alt="organizationName" class="relative size-[32px] object-contain" />
       </div>
       <div class="font-semibold hidden min-w-0 overflow-hidden truncate text-sm md:block">
-        {{ brand }}
+        {{ organizationName }}
       </div>
     </div>
 

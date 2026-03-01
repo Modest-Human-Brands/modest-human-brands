@@ -5,6 +5,7 @@ export type MediaType = 'photo' | 'video'
 export type MediaMetadata = {
   size: number
   resolution: string
+  aspectRatio: string
   bitDepth: string
   fps?: number
 }

@@ -7,7 +7,7 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
 
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
-  const assetStorage = useStorage<Resource<'asset'>>(`data:resource:asset`)
+  const assetStorage = useStorage<Resource<'media'>>(`data:resource:media`)
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
   const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
@@ -40,7 +40,8 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
       metadata: {
         size: 22,
         bitDepth: '10 bit',
-        resolution: '1080p',
+        resolution: properties.Resolution.select.name,
+        aspectRatio: properties['Aspect ratio'].select.name,
         fps: properties.Type.select.name.toLowerCase() === 'video' ? 30 : undefined,
       },
     }))

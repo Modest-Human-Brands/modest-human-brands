@@ -1,12 +1,25 @@
 <script setup lang="ts">
-definePageMeta({ layout: false })
+definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: media, status: projectStatus } = await useFetch<ProjectMediaCollection>(`/api/media/${slug}`)
-const { data: organization } = await useFetch(`/api/organization/${slug}`)
+const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
 
+const DEFAULT_ORG = {
+  name: 'Modest Human Brands',
+  website: 'https://modesthumanbrands.com',
+  branding: {
+    logo: 'https://modesthumanbrands.com/logo.svg',
+    color: { primary: '#4A85FF', accent: '' },
+    font: '',
+  },
+  phone: '+912269711501',
+  whatsapp: 'https://wa.me/912269711501',
+}
+const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
+
+const { data: media, status: projectStatus } = await useFetch<ProjectMediaCollection>(`/api/media/${slug}`)
 const isLoading = computed(() => projectStatus.value === 'pending')
 
 type ApprovalState = 'approved' | 'rejected'
@@ -87,11 +100,12 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
     </nav>
     <!-- Media Grid -->
     <main ref="scrollEl" class="flex-1 overflow-y-auto bg-dark-600 pb-16">
-      <div v-if="isLoading" class="columns-2 gap-0.5 p-0.5 sm:columns-3 lg:columns-4 xl:columns-6">
-        <div v-for="i in 12" :key="i" class="mb-0.5 animate-pulse break-inside-avoid rounded-sm bg-dark-500" :style="{ height: `${[140, 200, 160, 220, 180][i % 5]}px` }" />
+      <div v-if="isLoading" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm bg-dark-500" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
       </div>
-      <div v-else-if="filteredMedia.length" class="columns-2 gap-0.5 p-0.5 sm:columns-3 lg:columns-4 xl:columns-6">
-        <CardMediaPublic v-for="media in filteredMedia" :key="media.slug" :media="media" :status="approvals.get(media.slug)" @update="(value) => setApproval(media.slug, value)" />
+
+      <div v-else-if="filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <CardMediaPublic v-for="item in filteredMedia" :key="item.slug" :media="item" :status="approvals.get(item.slug)" @update="(value) => setApproval(item.slug, value)" />
       </div>
       <div v-else class="flex h-48 flex-col items-center justify-center gap-2 text-light-400/25">
         <NuxtIcon name="local:photo" class="size-10" />

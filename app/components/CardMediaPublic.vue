@@ -1,13 +1,14 @@
 <script setup lang="ts">
-defineProps<{ media: MediaItem; status?: 'approved' | 'rejected' }>()
-
+const props = defineProps<{ media: MediaItem; status?: 'approved' | 'rejected' }>()
 const emit = defineEmits<{ update: [value: 'approved' | 'rejected'] }>()
+
+const aspectRatio = computed(() => props.media.metadata.aspectRatio.replace(':', '/'))
 </script>
 
 <template>
   <!-- :class="{ 'ring-1 ring-success-500': status === 'approved', 'ring-1 ring-alert-500': status === 'rejected' }" -->
-  <div class="group relative mb-0.5 cursor-pointer break-inside-avoid overflow-hidden bg-dark-500">
-    <NuxtImg :src="media.thumbnailUrl" :alt="media.title" class="w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" fit="cover" />
+  <div class="group relative w-full cursor-pointer overflow-hidden bg-dark-500" :style="{ aspectRatio }">
+    <NuxtImg :src="media.thumbnailUrl" :alt="media.title" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" fit="cover" />
     <div class="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
     <!-- Persistent status badge (top-left) -->
