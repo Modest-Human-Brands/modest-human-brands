@@ -1,25 +1,15 @@
 export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (event) => {
-  const { user } = await requireUserSession(event)
-
-  const activeOrg = user.organizations[0]
-
-  if (!activeOrg) return
-
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
   const assetStorage = useStorage<Resource<'media'>>(`data:resource:media`)
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
   const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
-  const assets = (await assetStorage.getItems(await assetStorage.getKeys()))
-    .flatMap(({ value }) => value.record)
-    .filter((a) => a?.properties && a.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
-  const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
-    .flatMap(({ value }) => value.record)
-    .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
-  const clients = (await clientStorage.getItems(await clientStorage.getKeys()))
-    .flatMap(({ value }) => value.record)
-    .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
+  const assets = (await assetStorage.getItems(await assetStorage.getKeys())).flatMap(({ value }) => value.record)
+
+  const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
+
+  const clients = (await clientStorage.getItems(await clientStorage.getKeys())).flatMap(({ value }) => value.record)
 
   const filteredProject = projects.filter(({ properties }) => properties.Slug.formula.string === slug)[0]
 

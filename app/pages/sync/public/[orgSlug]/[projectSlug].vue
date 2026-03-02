@@ -4,7 +4,7 @@ definePageMeta({ layout: 'default' })
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: stream } = await useFetch<ProjectStream>(`/api/stream/${slug}`)
+const { data: stream } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
 
 const cover = computed(() => (stream.value?.poster ? extractCdnId(stream.value.poster) : ''))
 

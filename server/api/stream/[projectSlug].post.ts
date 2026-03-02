@@ -1,4 +1,4 @@
-export default defineEventHandler<Promise<ProjectStream | undefined>>(async (event) => {
+export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
   const { deviceId } = await readBody(event)
 
@@ -9,7 +9,7 @@ export default defineEventHandler<Promise<ProjectStream | undefined>>(async (eve
   if (!project) return
 
   const config = useRuntimeConfig()
-  const stream = await $fetch<ProjectStream>(`${config.public.driveUrl}/stream/start`, {
+  const stream = await $fetch<ProjectStreamCollection>(`${config.public.driveUrl}/stream/start`, {
     method: 'POST',
     body: { slug, deviceId },
   })

@@ -19,7 +19,7 @@ const DEFAULT_ORG = {
 }
 const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
 
-const { data: media, status: projectStatus } = await useFetch<ProjectMediaCollection>(`/api/media/${slug}`)
+const { data: media, status: projectStatus } = await useFetch<ProjectDetail>(`/api/media/${slug}`)
 const isLoading = computed(() => projectStatus.value === 'pending')
 
 type ApprovalState = 'approved' | 'rejected'
@@ -38,9 +38,9 @@ const allMedia = computed(() => ({
 }))
 
 const tabs = computed(() => [
-  { id: 'unset' as const, label: 'All', count: allMedia.value['unset'].length },
-  { id: 'approved' as const, label: 'Approved', count: allMedia.value['approved'].length },
-  { id: 'rejected' as const, label: 'Not Approved', count: allMedia.value['rejected'].length },
+  { id: 'unset' as const, label: 'All', count: allMedia.value.unset?.length },
+  { id: 'approved' as const, label: 'Approved', count: allMedia.value.approved?.length },
+  { id: 'rejected' as const, label: 'Not Approved', count: allMedia.value.rejected?.length },
 ])
 const activeTab = ref<'unset' | 'approved' | 'rejected'>('unset')
 
@@ -104,7 +104,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
         <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm bg-dark-500" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
       </div>
 
-      <div v-else-if="filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      <div v-else-if="filteredMedia && filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <CardMediaPublic v-for="item in filteredMedia" :key="item.slug" :media="item" :status="approvals.get(item.slug)" @update="(value) => setApproval(item.slug, value)" />
       </div>
       <div v-else class="flex h-48 flex-col items-center justify-center gap-2 text-light-400/25">

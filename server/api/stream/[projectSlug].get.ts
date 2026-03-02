@@ -1,4 +1,4 @@
-export default defineEventHandler<Promise<ProjectStream | undefined>>(async (event) => {
+export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
@@ -11,7 +11,7 @@ export default defineEventHandler<Promise<ProjectStream | undefined>>(async (eve
 
   const config = useRuntimeConfig()
   const deviceId = 'front-camera'
-  const stream = await $fetch<ProjectStream>(`${config.public.driveUrl}/stream/${slug}/${deviceId}`)
+  const stream = await $fetch<ProjectStreamCollection>(`${config.public.driveUrl}/stream/${slug}/${deviceId}`)
 
   const { properties, cover } = project
   const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
