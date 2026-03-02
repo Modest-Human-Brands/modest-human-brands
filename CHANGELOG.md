@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.7
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.6...v0.3.7)
+
+### 🩹 Fixes
+
+- Update media fetching logic and improve organization handling ([04eff05](https://github.com/Modest-Human-Brands/modest-human-brands/commit/04eff05))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.6
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.5...v0.3.6)
