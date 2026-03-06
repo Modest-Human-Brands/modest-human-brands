@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.8
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.7...v0.3.8)
+
+### 🚀 Enhancements
+
+- Multi stream added ([2011920](https://github.com/Modest-Human-Brands/modest-human-brands/commit/2011920))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.7
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.6...v0.3.7)
