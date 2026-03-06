@@ -12,13 +12,17 @@ export enum StreamStatus {
   Ready = 'ready', // processing done, VOD available
 }
 
-export interface ProjectStreamCollection {
-  slug: string
+export interface ProjectStream {
   deviceId: string
-  title: string
   status: StreamStatus
-  poster: string
   streamUrl: string
   media: string
+}
+
+export interface ProjectStreamCollection {
+  slug: string
+  title: string
+  poster: string
+  streams: ProjectStream[]
   client?: ProjectClient
 }

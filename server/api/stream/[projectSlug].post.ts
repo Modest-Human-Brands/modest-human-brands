@@ -1,6 +1,6 @@
 export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
-  const { deviceId } = await readBody(event)
+  const { deviceId } = await readBody<{ deviceId: string }>(event)
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
   const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
@@ -9,21 +9,28 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
   if (!project) return
 
   const config = useRuntimeConfig()
-  const stream = await $fetch<ProjectStreamCollection>(`${config.public.driveUrl}/stream/start`, {
-    method: 'POST',
-    body: { slug, deviceId },
-  })
-
   const { properties, cover } = project
+
+  const [stream] = await Promise.all([
+    $fetch<ProjectStream>(`${config.public.driveUrl}/stream/start`, {
+      method: 'POST',
+      body: { slug, deviceId },
+    }).catch(() => null),
+  ])
+
   const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
 
   return {
     slug,
     title: notionTextStringify(properties.Name.title),
-    deviceId,
-    streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-    media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
     poster: coverUrl,
-    status: stream?.status ?? StreamStatus.Idle,
+    streams: [
+      {
+        deviceId,
+        streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
+        media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
+        status: stream?.status ?? StreamStatus.Starting,
+      },
+    ],
   }
 })
