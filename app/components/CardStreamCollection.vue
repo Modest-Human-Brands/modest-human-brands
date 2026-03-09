@@ -19,37 +19,39 @@ function shareStream(e: Event) {
 
 const client = computed(() => ({
   name: props.streamCollection.client?.name ?? 'Anyomouns',
-  avatar: props.streamCollection.client?.avatar ?? '/logo.png'
+  avatar: props.streamCollection.client?.avatar ?? '/logo.png',
 }))
 </script>
 
 <template>
-  <div
-    class="relative w-full max-w-[51rem]  flex flex-col-reverse md:flex-row gap-3 md:gap-8 md:justify-between pr-6 pb-6  md:pr-0 md:pb-8">
-    <NuxtLink :to="`/sync/${streamCollection.slug}`"
-      class="group rounded-xl  md:rounded-2xl border border-white/5 bg-dark-500   hover:border-white/15 max-w-2xl p-3 grid grid-rows-[repeat(5,min-content)] w-full grid-cols-[auto_min-content] grid-flow-col gap-1.5  md:gap-2">
+  <div class="relative flex w-full max-w-[51rem] flex-col-reverse gap-3 pb-6 pr-6 md:flex-row md:justify-between md:gap-8 md:pb-8 md:pr-0">
+    <NuxtLink
+      :to="`/sync/${streamCollection.slug}`"
+      class="group grid w-full max-w-2xl grid-flow-col grid-cols-[auto_min-content] grid-rows-[repeat(5,min-content)] gap-1.5 rounded-xl border border-white/5 bg-dark-500 p-3 hover:border-white/15 md:gap-2 md:rounded-2xl">
       <!-- Status -->
-      <span class="flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-sm transition w-fit"
-        :class="[streamCollection.status === 'live' ? 'bg-alert-500' : 'bg-dark-400']">
+      <span class="flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-sm transition" :class="[streamCollection.status === 'live' ? 'bg-alert-500' : 'bg-dark-400']">
         <span v-if="streamCollection.status === 'live'" class="relative flex size-2">
-          <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75 bg-white" />
+          <span class="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" />
           <span class="relative inline-flex size-2 rounded-full bg-white" />
         </span>
         <span class="font-semibold text-xs uppercase tracking-wider text-white">{{ streamCollection.status }}</span>
       </span>
       <!-- Status -->
-      <h3 class="font-semibold text-base md:text-lg text-white capitalize">
+      <h3 class="font-semibold text-base capitalize text-white md:text-lg">
         {{ streamCollection.title }}
       </h3>
-      <span class="text-sm md:text-base opacity-60">{{ streamCollection.slug }}</span>
+      <span class="text-sm opacity-60 md:text-base">{{ streamCollection.slug }}</span>
       <div class="flex items-center gap-2">
         <NuxtImg :src="client.avatar" :alt="client.name" class="size-6 rounded-full object-cover" />
-        <span class="text-sm md:text-base opacity-60">{{ client.name }}</span>
+        <span class="text-sm opacity-60 md:text-base">{{ client.name }}</span>
       </div>
       <div class="flex gap-2 whitespace-nowrap">
         <div class="-space-x-3">
-          <img v-for="{ deviceId } in streamCollection.streams" :key="deviceId"
-            :src="`https://api.dicebear.com/9.x/glass/svg?seed=${deviceId}`" :alt="deviceId"
+          <img
+            v-for="{ deviceId } in streamCollection.streams"
+            :key="deviceId"
+            :src="`https://api.dicebear.com/9.x/glass/svg?seed=${deviceId}`"
+            :alt="deviceId"
             class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
         </div>
         <div class="text-neutral-500 flex items-center gap-2 text-sm md:text-base">
@@ -63,21 +65,26 @@ const client = computed(() => ({
           </span>
         </div>
       </div>
-      <NuxtImg :src="streamCollection.poster" :alt="streamCollection.title" width="160" height="160"
-        class="object-cover col-start-2  row-start-1 row-span-4 rounded-lg min-w-24 md:min-w-28 aspect-square" />
+      <NuxtImg
+        :src="streamCollection.poster"
+        :alt="streamCollection.title"
+        width="160"
+        height="160"
+        class="col-start-2 row-span-4 row-start-1 aspect-square min-w-24 rounded-lg object-cover md:min-w-28" />
 
-      <button v-if="streamCollection.status === 'live'" type="button"
-        class="col-start-2 row-start-5 inline-flex shrink-0 justify-center items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 md:px-4 md:py-1 text-xs md:text-sm text-white/80 hover:bg-dark-600"
+      <button
+        v-if="streamCollection.status === 'live'"
+        type="button"
+        class="col-start-2 row-start-5 inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:px-4 md:py-1 md:text-sm"
         @click="shareStream">
         <NuxtIcon name="local:link" class="text-[16px] md:text-[24px]" />
         Share
       </button>
     </NuxtLink>
-    <div class="absolute right-2 top-1 md:right-28 flex flex-col items-center h-full">
+    <div class="absolute right-2 top-1 flex h-full flex-col items-center md:right-28">
       <div
-        class="relative w-px h-full border-l-2 border-dashed border-dark-500 mt-1 before:size-2.5 before:absolute before:top-0 before:-left-px before:-translate-x-1/2 before:rounded-full before:bg-dark-500" />
+        class="relative mt-1 h-full w-px border-l-2 border-dashed border-dark-500 before:absolute before:-left-px before:top-0 before:size-2.5 before:-translate-x-1/2 before:rounded-full before:bg-dark-500" />
     </div>
-    <NuxtTime :datetime="streamCollection.date" month="short" day="numeric" year="numeric"
-      class="md:w-[5.5rem] self-end md:self-start w-fit" />
+    <NuxtTime :datetime="streamCollection.date" month="short" day="numeric" year="numeric" class="w-fit self-end md:w-[5.5rem] md:self-start" />
   </div>
 </template>

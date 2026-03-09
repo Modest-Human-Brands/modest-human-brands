@@ -23,15 +23,17 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
       const slug = properties.Slug.formula.string
       const coverUrl = cover?.type === 'external' ? cover.external.url : `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
 
-      const projectStreams = streams.filter((s) => s.slug.startsWith(slug)).map(({ slug, status }) => {
-        const deviceId = slug.split(':').at(-1)!
-        return {
-          deviceId,
-          streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-          media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
-          status: status ?? StreamStatus.Idle,
-        }
-      })
+      const projectStreams = streams
+        .filter((s) => s.slug.startsWith(slug))
+        .map(({ slug, status }) => {
+          const deviceId = slug.split(':').at(-1)!
+          return {
+            deviceId,
+            streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
+            media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
+            status: status ?? StreamStatus.Idle,
+          }
+        })
 
       const projectClient = clients.find((c) => c.id === properties.Client.relation[0]?.id)
 
@@ -42,12 +44,13 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
         date: properties.Date.date.start,
         client: projectClient
           ? {
-            name: notionTextStringify(projectClient.properties.Name.title),
-            avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
-          }
+              name: notionTextStringify(projectClient.properties.Name.title),
+              avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+            }
           : undefined,
         status: projectStreams.some(({ status }) => status === StreamStatus.Live) ? StreamStatus.Live : StreamStatus.Idle,
         streams: projectStreams,
       }
-    }).toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    })
+    .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })

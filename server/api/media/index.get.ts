@@ -34,9 +34,9 @@ export default defineEventHandler<Promise<ProjectMediaCollection[]>>(async (even
         status: properties.Status.status.name,
         client: projectClient
           ? {
-            name: notionTextStringify(projectClient.properties.Name.title),
-            avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
-          }
+              name: notionTextStringify(projectClient.properties.Name.title),
+              avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+            }
           : undefined,
         mediaCount: {
           photo: photoAsset.length,

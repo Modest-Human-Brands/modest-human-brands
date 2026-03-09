@@ -128,18 +128,18 @@ export interface Resource<T extends ResourceType = ResourceType> {
 
 type NotionImage =
   | {
-    type: 'file'
-    file: {
-      url: string
-      expiry_time: string
+      type: 'file'
+      file: {
+        url: string
+        expiry_time: string
+      }
     }
-  }
   | {
-    type: 'external'
-    external: {
-      url: string
+      type: 'external'
+      external: {
+        url: string
+      }
     }
-  }
   | null
 
 export interface NotionOrganization {
