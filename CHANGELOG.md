@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.3.9
+
+### 💅 Refactors
+
+- Enhance stream and client data handling in components and API ([d910cf0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/d910cf0))
+
+### 🏡 Chore
+
+- Apply code fixes [skip ci] ([cbc589d](https://github.com/Modest-Human-Brands/modest-human-brands/commit/cbc589d))
+
+### ❤️ Contributors
+
+- Shba007 ([@shba007](https://github.com/shba007))
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.8
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.7...v0.3.8)
