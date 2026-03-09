@@ -18,7 +18,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
     }).catch(() => null),
   ])
 
-  const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
+  const coverUrl = cover?.type === 'external' ? cover.external.url : `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
 
   return {
     slug,

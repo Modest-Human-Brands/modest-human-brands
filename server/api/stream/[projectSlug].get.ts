@@ -14,7 +14,6 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
     Promise.resolve(project),
   ])
 
-  console.log({ allStreams })
   const projectStreams = allStreams
     .filter((s) => s.slug.startsWith(slug))
     .map((s) => ({
@@ -22,10 +21,10 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
       deviceId: s.deviceId ?? s.slug.slice(slug.length + 1), // extract from "slug-deviceId"
     }))
     .filter((s, i, arr) => arr.findIndex((x) => x.deviceId === s.deviceId) === i) // dedupe
-  console.log({ projectStreams })
+
   const deviceIds = projectStreams.length ? projectStreams.map((s) => s.deviceId) : ['front-camera']
 
-  const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
+  const coverUrl = cover?.type === 'external' ? cover.external.url : `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
 
   return {
     slug,

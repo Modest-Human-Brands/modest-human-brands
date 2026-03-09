@@ -6,36 +6,48 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
   if (!activeOrg) return []
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
-
-  const config = useRuntimeConfig()
+  const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
   const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
     .flatMap(({ value }) => value.record)
     .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
-    .toSorted((a, b) => new Date(b.properties.Date.date.start).getTime() - new Date(a.properties.Date.date.start).getTime())
+  const clients = (await clientStorage.getItems(await clientStorage.getKeys()))
+    .flatMap(({ value }) => value.record)
+    .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
 
-  const streams = await $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.public.driveUrl}/stream`)
+  const config = useRuntimeConfig()
+  const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.public.driveUrl}/stream`)
 
-  return projects.map<ProjectStreamCollection>(({ properties, cover }) => {
-    const slug = properties.Slug.formula.string
-    const coverUrl = cover?.type === 'external' ? cover.external.url : `https://placehold.co/1280x720?text=${encodeURIComponent(slug)}`
+  return projects
+    .map<ProjectStreamCollection>(({ properties, cover }) => {
+      const slug = properties.Slug.formula.string
+      const coverUrl = cover?.type === 'external' ? cover.external.url : `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
 
-    const projectStreams = streams.filter((s) => s.slug === slug)
-    const deviceIds = projectStreams.length ? projectStreams.map((s) => s.deviceId) : []
-
-    return {
-      slug,
-      title: notionTextStringify(properties.Name.title),
-      poster: coverUrl,
-      streams: deviceIds.map<ProjectStream>((deviceId) => {
-        const currentStream = projectStreams.find((s) => s.deviceId === deviceId)
+      const projectStreams = streams.filter((s) => s.slug.startsWith(slug)).map(({ slug, status }) => {
+        const deviceId = slug.split(':').at(-1)!
         return {
           deviceId,
           streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
           media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
-          status: currentStream?.status ?? StreamStatus.Idle,
+          status: status ?? StreamStatus.Idle,
         }
-      }),
-    }
-  })
+      })
+
+      const projectClient = clients.find((c) => c.id === properties.Client.relation[0]?.id)
+
+      return {
+        slug,
+        title: notionTextStringify(properties.Name.title),
+        poster: coverUrl,
+        date: properties.Date.date.start,
+        client: projectClient
+          ? {
+            name: notionTextStringify(projectClient.properties.Name.title),
+            avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+          }
+          : undefined,
+        status: projectStreams.some(({ status }) => status === StreamStatus.Live) ? StreamStatus.Live : StreamStatus.Idle,
+        streams: projectStreams,
+      }
+    }).toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })

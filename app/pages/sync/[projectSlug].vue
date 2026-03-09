@@ -71,56 +71,56 @@ const nextDeviceId = computed(() => availableDeviceIds.find((id) => !streamColle
       </template>
       <!-- LIVE state -->
       <template v-else-if="overallStatus === StreamStatus.Live">
-        <NuxtVideo
-          ref="videoPlayer"
-          :poster="cover"
-          :media="activeStream!.media"
-          :live="true"
-          :disable-picture-in-picture="true"
-          :controls="false"
-          :autoplay="true"
-          :muted="true"
-          :playsinline="true"
-          preload="metadata"
-          class="size-full object-cover"
-          @progress="onProgress" />
+        <NuxtVideo ref="videoPlayer" :poster="cover" :media="activeStream!.media" :live="true"
+          :disable-picture-in-picture="true" :controls="false" :autoplay="true" :muted="true" :playsinline="true"
+          preload="metadata" class="size-full object-cover" @progress="onProgress" />
         <!-- Title overlay -->
-        <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4">
-          <div class="flex items-center gap-3">
+        <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4 ">
+          <div class="flex items-center gap-3 justify-between w-full">
             <!-- <img v-if="cover" :src="cover" class="size-8 rounded-full object-cover ring-1 ring-white/20" /> -->
-            <span class="font-medium text-sm text-white/90">{{ streamCollection?.title }}</span>
-          </div>
-        </div>
-        <!-- Bottom controls bar -->
-        <div class="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10">
-          <div class="flex items-center gap-1">
-            <button class="flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-sm transition" :class="[isAtLive ? 'bg-alert-500' : 'bg-dark-500']" @click="goLive">
+            <span class="font-medium text-sm text-white/90 capitalize">{{ streamCollection?.title }}</span>
+            <button class="flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-sm transition"
+              :class="[isAtLive ? 'bg-alert-500' : 'bg-dark-500']" @click="goLive">
               <span class="relative flex size-2">
-                <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75" :class="[isAtLive ? 'bg-white' : 'bg-alert-400']" />
-                <span class="relative inline-flex size-2 rounded-full" :class="[isAtLive ? 'bg-white' : 'bg-alert-500']" />
+                <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75"
+                  :class="[isAtLive ? 'bg-white' : 'bg-alert-400']" />
+                <span class="relative inline-flex size-2 rounded-full"
+                  :class="[isAtLive ? 'bg-white' : 'bg-alert-500']" />
               </span>
               <span class="font-semibold text-xs uppercase tracking-wider text-white">Live</span>
             </button>
-            <div class="flex items-center rounded-full bg-dark-600/80 backdrop-blur-sm">
-              <button class="flex size-9 items-center justify-center rounded-full text-white transition hover:bg-white/10">
+          </div>
+        </div>
+        <!-- Bottom controls bar -->
+        <div
+          class="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10">
+          <div class="flex items-center gap-1">
+
+            <div class="flex items-center rounded-full backdrop-blur-sm  bg-white/10 ">
+              <button
+                class="flex size-9 items-center justify-center rounded-full text-white transition    hover:bg-white/10">
                 <NuxtIcon name="local:microphone" class="text-[18px]" />
               </button>
               <div class="h-4 w-px bg-white/20" />
-              <button class="flex h-9 w-7 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white">
-                <NuxtIcon name="local:chevron-bold" class="text-[12px]" />
+              <button
+                class="flex p-2 items-center justify-center rounded-full text-white/60  transition hover:bg-white/20 hover:text-white">
+                <NuxtIcon name="local:chevron-bold" class="text-[12px] -rotate-90" />
               </button>
             </div>
-            <div class="flex items-center rounded-full bg-dark-600/80 backdrop-blur-sm">
-              <button class="flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10">
+            <div class="flex items-center rounded-full  bg-white/10  backdrop-blur-sm">
+              <button
+                class="flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10">
                 <NuxtIcon name="local:camera" class="text-[18px]" />
               </button>
               <div class="h-4 w-px bg-white/20" />
-              <button class="flex h-9 w-7 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white">
-                <NuxtIcon name="local:chevron-bold" class="text-[12px]" />
+              <button
+                class="flex p-2 items-center justify-center rounded-full text-white/60 transition hover:bg-white/20 hover:text-white">
+                <NuxtIcon name="local:chevron-bold" class="text-[12px] -rotate-90" />
               </button>
             </div>
           </div>
-          <button class="flex size-9 items-center justify-center rounded-full bg-dark-600/80 text-white/60 backdrop-blur-sm transition hover:bg-white/10 hover:text-white">
+          <button
+            class="flex size-9 items-center justify-center  bg-white/10  rounded-full  text-white/60 backdrop-blur-sm transition hover:bg-white/10 hover:text-white">
             <NuxtIcon name="local:cross" class="text-[16px]" />
           </button>
         </div>
@@ -137,10 +137,7 @@ const nextDeviceId = computed(() => availableDeviceIds.find((id) => !streamColle
             <p class="text-neutral-500 mt-1 text-sm">No active stream</p>
           </div>
           <div class="flex items-center gap-2">
-            <button
-              v-if="activeStream?.deviceId"
-              :key="activeStream.deviceId"
-              type="button"
+            <button v-if="activeStream?.deviceId" :key="activeStream.deviceId" type="button"
               class="font-medium inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm text-black transition hover:bg-white/90"
               @click="startStream(activeStream.deviceId)">
               <span class="relative inline-flex size-2 rounded-full bg-alert-500" />
@@ -156,23 +153,18 @@ const nextDeviceId = computed(() => availableDeviceIds.find((id) => !streamColle
         <div class="space-y-px">
           <!-- Inactive streams -->
           <template v-if="inactiveStreams.length">
-            <div v-for="{ deviceId, status, media } in inactiveStreams" :key="deviceId" class="group cursor-pointer transition" @click="activeDeviceId = deviceId">
+            <div v-for="{ deviceId, status, media } in inactiveStreams" :key="deviceId"
+              class="group cursor-pointer transition" @click="activeDeviceId = deviceId">
               <div class="relative aspect-video w-full overflow-hidden bg-dark-500">
-                <NuxtVideo
-                  v-if="status === StreamStatus.Live"
-                  :media="media"
-                  :live="true"
-                  :disable-picture-in-picture="true"
-                  :controls="false"
-                  :autoplay="true"
-                  :muted="true"
-                  :playsinline="true"
-                  preload="metadata"
+                <NuxtVideo v-if="status === StreamStatus.Live" :media="media" :live="true"
+                  :disable-picture-in-picture="true" :controls="false" :autoplay="true" :muted="true"
+                  :playsinline="true" preload="metadata"
                   class="size-full object-cover opacity-80 transition group-hover:opacity-100" />
                 <img v-else-if="cover" :src="cover" class="size-full object-cover opacity-30" />
                 <div v-else class="size-full bg-dark-500" />
                 <div class="absolute left-2 top-2">
-                  <span class="font-medium rounded-full px-1.5 py-0.5 text-[10px] backdrop-blur-sm" :class="status === StreamStatus.Live ? 'bg-alert-500/80 text-white' : 'bg-black/60 text-white/50'">
+                  <span class="font-medium rounded-full px-1.5 py-0.5 text-[10px] backdrop-blur-sm"
+                    :class="status === StreamStatus.Live ? 'bg-alert-500/80 text-white' : 'bg-black/60 text-white/50'">
                     {{ status === StreamStatus.Live ? 'Live' : 'Offline' }}
                   </span>
                 </div>
@@ -185,10 +177,12 @@ const nextDeviceId = computed(() => availableDeviceIds.find((id) => !streamColle
             </div>
           </template>
           <!-- Add stream placeholder (always shown at bottom) -->
-          <button type="button" class="group flex w-full cursor-pointer flex-col transition hover:bg-white/5" @click="startStream(nextDeviceId!)">
+          <button type="button" class="group flex w-full cursor-pointer flex-col transition hover:bg-white/5"
+            @click="startStream(nextDeviceId!)">
             <div class="relative aspect-video w-full overflow-hidden bg-dark-500">
               <div class="flex size-full flex-col items-center justify-center gap-2">
-                <div class="flex size-8 items-center justify-center rounded-full border border-dashed border-white/20 text-white/30 transition group-hover:border-white/40 group-hover:text-white/50">
+                <div
+                  class="flex size-8 items-center justify-center rounded-full border border-dashed border-white/20 text-white/30 transition group-hover:border-white/40 group-hover:text-white/50">
                   <NuxtIcon name="local:plus" class="text-[14px]" />
                 </div>
               </div>

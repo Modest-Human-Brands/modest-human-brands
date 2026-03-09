@@ -20,7 +20,7 @@ export default defineEventHandler<Promise<ProjectMediaCollection[]>>(async (even
     .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
 
   return projects
-    .map(({ properties }) => {
+    .map<ProjectMediaCollection>(({ properties }) => {
       const projectAssets = assets.filter((asset) => asset.properties['Project Slug'].rollup.array[0]?.formula.string === properties.Slug.formula.string)
 
       const photoAsset = projectAssets.filter((asset) => asset.properties.Type.select.name === 'Photo')
@@ -34,16 +34,16 @@ export default defineEventHandler<Promise<ProjectMediaCollection[]>>(async (even
         status: properties.Status.status.name,
         client: projectClient
           ? {
-              name: notionTextStringify(projectClient.properties.Name.title),
-              avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
-            }
+            name: notionTextStringify(projectClient.properties.Name.title),
+            avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+          }
           : undefined,
         mediaCount: {
           photo: photoAsset.length,
           video: videoAsset.length,
         },
-        previewImages: projectAssets.map(({ cover }) => (cover?.type === 'external' ? cover.external.url : undefined)),
-      } as ProjectMediaCollection
+        previewImages: projectAssets.map(({ cover }) => (cover?.type === 'external' ? cover.external.url : undefined)).filter((value) => value !== undefined),
+      }
     })
     .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
