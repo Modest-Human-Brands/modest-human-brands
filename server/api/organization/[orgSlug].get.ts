@@ -1,12 +1,13 @@
 export default defineEventHandler<Promise<Organization>>(async () => {
-  // const config = useRuntimeConfig()
-  // const notionDbId = config.private.notionDbId as unknown as NotionDB
+  const config = useRuntimeConfig()
+  const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-  // const organizations = (await notionQueryDb<NotionOrganization>(notion, notionDbId.organization)).filter((a) => !!a)
+  const organizations = (await notionQueryDb<NotionOrganization>(notion, notionDbId.organization)).filter((a) => !!a)
+  const filteredOrganization = organizations.filter(({ properties }) => notionTextStringify(properties.Name.title) === 'RED CAT PICTURES')[0]
 
   const organization: Organization = {
     id: 'red-cat-pictures',
-    name: 'RED CAT PICTURES',
+    name: notionTextStringify(filteredOrganization!.properties.Name.title),
     website: 'https://redcatpictures.com',
     branding: {
       logo: 'https://redcatpictures.com/logo-light.svg',

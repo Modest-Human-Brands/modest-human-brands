@@ -1,8 +1,12 @@
+import { generateCover } from './index.get'
+
 export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
   const { deviceId } = await readBody<{ deviceId: string }>(event)
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
+  const color = { primary: 'CD2D2D', accent: '262626' }
+
   const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
   const project = projects.find((p) => p.properties.Slug.formula.string === slug)
 
@@ -18,19 +22,25 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
     }).catch(() => null),
   ])
 
-  const coverUrl = cover?.type === 'external' ? cover.external.url : `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
+  const coverUrl = cover?.type === 'external' ? cover.external.url : generateCover(slug, [color.primary, color.accent])
 
-  return {
+  const result: ProjectStreamCollection = {
     slug,
     title: notionTextStringify(properties.Name.title),
     poster: coverUrl,
+    createdAt: new Date().toISOString(), //properties.Date.date.start
+    status: stream?.status ?? StreamStatus.Idle,
     streams: [
       {
         deviceId,
         streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-        media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
-        status: stream?.status ?? StreamStatus.Starting,
+        media: `live/${slug}_${deviceId}/master.m3u8`,
+        status: stream?.status ?? StreamStatus.Idle,
+        poster: generateCover(slug + deviceId, [color.primary, color.accent]),
+        createdAt: new Date().toISOString(), //properties.Date.date.start
       },
     ],
   }
+
+  return result
 })

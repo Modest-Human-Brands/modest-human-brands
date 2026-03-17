@@ -1,7 +1,11 @@
+import { generateCover } from './index.get'
+
 export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
+  const color = { primary: 'CD2D2D', accent: '262626' }
+
   const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
   const project = projects.find((p) => p.properties.Slug.formula.string === slug)
 
@@ -18,26 +22,37 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
     .filter((s) => s.slug.startsWith(slug))
     .map((s) => ({
       ...s,
-      deviceId: s.deviceId ?? s.slug.slice(slug.length + 1), // extract from "slug-deviceId"
+      deviceId: s.deviceId ?? s.slug.slice(slug.length + 1), // extract from "slug:deviceId"
     }))
     .filter((s, i, arr) => arr.findIndex((x) => x.deviceId === s.deviceId) === i) // dedupe
 
-  const deviceIds = projectStreams.length ? projectStreams.map((s) => s.deviceId) : ['front-camera']
+  const deviceIds = projectStreams.length ? projectStreams.map((s) => s.deviceId) : []
 
-  const coverUrl = cover?.type === 'external' ? cover.external.url : `https://api.dicebear.com/9.x/glass/svg?seed=${slug}`
+  const coverUrl = cover?.type === 'external' ? cover.external.url : generateCover(slug, [color.primary, color.accent])
 
-  return {
+  const result: ProjectStreamCollection = {
     slug,
     title: notionTextStringify(properties.Name.title),
     poster: coverUrl,
+    createdAt: new Date().toISOString(), //properties.Date.date.start
+    status: (() => {
+      const streams = projectStreams ?? []
+      if (streams.some((s) => s.status === StreamStatus.Live)) return StreamStatus.Live
+      if (streams.some((s) => s.status === StreamStatus.Starting)) return StreamStatus.Starting
+      return streams[0]?.status ?? StreamStatus.Idle
+    })(),
     streams: deviceIds.map<ProjectStream>((deviceId) => {
       const current = projectStreams.find((s) => s.deviceId === deviceId)
       return {
         deviceId,
         streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-        media: `stream/${slug}/${deviceId}/hls/master.m3u8`,
+        media: `live/${slug}_${deviceId}/master.m3u8`,
         status: current?.status ?? StreamStatus.Idle,
+        poster: generateCover(slug + deviceId, [color.primary, color.accent]),
+        createdAt: new Date().toISOString(), //properties.Date.date.start
       }
     }),
   }
+
+  return result
 })

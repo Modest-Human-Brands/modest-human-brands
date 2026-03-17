@@ -17,13 +17,15 @@ export interface ProjectStream {
   status: StreamStatus
   streamUrl: string
   media: string
+  poster: string
+  createdAt: string
 }
 
 export interface ProjectStreamCollection {
   slug: string
   title: string
   poster: string
-  date: string
+  createdAt: string
   client?: ProjectClient
   status: StreamStatus
   streams: ProjectStream[]

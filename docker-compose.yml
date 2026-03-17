@@ -14,16 +14,13 @@ services:
     build: ../code-drive
     restart: on-failure:3
     env_file:
-      - ../code-drive/.env.prod
+      - ../code-drive/.env.prod.redcatpictures
       # - ../code-drive/.env.prod.goldfishtalents
     ports:
       - 4600:3111 # REST API
       - 4601:3112 # Stream
       - 4602:49134 # WebSocket bridge
       - 4610:1935 # RTMP
-    volumes:
-      - data:/app/data
-      - static:/app/static
     networks:
       - internal
     # extra_hosts:
@@ -40,6 +37,32 @@ services:
     #     interval: 10s
     #     timeout: 5s
     #     retries: 5
+
+  media:
+    build: ../code-media
+    restart: on-failure:3
+    env_file:
+      - ../code-media/.env.prod
+    volumes:
+      - data:/app/data
+      - static:/app/static
+    networks:
+      - internal
+
+  ome:
+    image: airensoft/ovenmediaengine:latest
+    restart: on-failure:3
+    ports:
+      - '3333:3333'
+      - '9999:9999/udp' # SRT ingest
+      - '8080:8080' # HLS/DASH playback
+      - '8081:8081' # REST API
+    volumes:
+      - ./config/ome.xml:/opt/ovenmediaengine/bin/origin_conf/Server.xml
+      - ./config/omeRecord.xml:/opt/ovenmediaengine/bin/origin_conf/record_map.xml
+      - static:/opt/ovenmediaengine/media
+    networks:
+      - internal
 
   caddy:
     image: caddy:alpine
@@ -58,16 +81,16 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../code-drive/data
+      device: ../code-media/data
   static:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../code-drive/static
-      # device: ../code-drive/static/red-cat-pictures
-      # device: ../code-drive/static/gold-fish-talents
-  redis-data:
+      device: ../code-media/static
+      # device: ../code-media/static/red-cat-pictures
+      # device: ../code-media/static/gold-fish-talents
+      # redis-data:
 
 networks:
   internal:

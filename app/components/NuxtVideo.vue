@@ -138,7 +138,7 @@ const currentOrientation = computed<Orientation>(() => (width.value > height.val
 const activeSource = computed(() => (props.multiOrentation ? `${props.media}-${currentOrientation.value}` : props.media))
 
 onMounted(() => {
-  const url = `${baseUrl.value}/${activeSource.value}`
+  const url = `${baseUrl.value}/${activeSource.value}` //`${baseUrl.value}/${activeSource.value}`
 
   if (Hls.isSupported()) {
     player = new Hls({ liveSyncDurationCount: 3 })

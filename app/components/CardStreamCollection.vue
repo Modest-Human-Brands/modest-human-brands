@@ -1,8 +1,17 @@
 <script setup lang="ts">
 const props = defineProps<{ orgSlug: string; streamCollection: ProjectStreamCollection }>()
 
+const now = useNow({ interval: 1000 })
+
 const views = '100k'
-const duration = '10 min'
+const duration = computed(() => {
+  if (!props.streamCollection.createdAt || props.streamCollection.status !== StreamStatus.Live) return null
+  const elapsed = Math.floor((now.value.getTime() - new Date(props.streamCollection.createdAt).getTime()) / 1000)
+  const h = Math.floor(elapsed / 3600)
+  const m = Math.floor((elapsed % 3600) / 60)
+  const s = elapsed % 60
+  return [h > 0 ? String(h).padStart(2, '0') : null, String(m).padStart(2, '0'), String(s).padStart(2, '0')].filter(Boolean).join(':')
+})
 
 const { share, isSupported } = useShare()
 
@@ -24,7 +33,7 @@ const client = computed(() => ({
 </script>
 
 <template>
-  <div class="relative flex w-full max-w-[51rem] flex-col-reverse gap-3 pb-6 pr-6 md:flex-row md:justify-between md:gap-8 md:pb-8 md:pr-0">
+  <div class="relative flex w-full max-w-[51rem] flex-col-reverse gap-3 pb-2 pr-6 md:flex-row md:justify-between md:gap-8 md:pb-8 md:pr-0">
     <NuxtLink
       :to="`/sync/${streamCollection.slug}`"
       class="group grid w-full max-w-2xl grid-flow-col grid-cols-[auto_min-content] grid-rows-[repeat(5,min-content)] gap-1.5 rounded-xl border border-white/5 bg-dark-500 p-3 hover:border-white/15 md:gap-2 md:rounded-2xl">
@@ -48,9 +57,9 @@ const client = computed(() => ({
       <div class="flex gap-2 whitespace-nowrap">
         <div class="-space-x-3">
           <img
-            v-for="{ deviceId } in streamCollection.streams"
+            v-for="{ deviceId, poster } in streamCollection.streams"
             :key="deviceId"
-            :src="`https://api.dicebear.com/9.x/glass/svg?seed=${deviceId}`"
+            :src="poster"
             :alt="deviceId"
             class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
         </div>
@@ -85,6 +94,6 @@ const client = computed(() => ({
       <div
         class="relative mt-1 h-full w-px border-l-2 border-dashed border-dark-500 before:absolute before:-left-px before:top-0 before:size-2.5 before:-translate-x-1/2 before:rounded-full before:bg-dark-500" />
     </div>
-    <NuxtTime :datetime="streamCollection.date" month="short" day="numeric" year="numeric" class="w-fit self-end md:w-[5.5rem] md:self-start" />
+    <NuxtTime :datetime="streamCollection.createdAt" month="short" day="numeric" year="numeric" class="w-fit self-end md:w-[5.5rem] md:self-start" />
   </div>
 </template>

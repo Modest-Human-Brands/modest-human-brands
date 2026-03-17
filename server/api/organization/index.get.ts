@@ -6,7 +6,7 @@ export default defineEventHandler<Promise<Organization[]>>(async () => {
 
   return organizations.map(({ properties, id }) => {
     return {
-      id: id,
+      id,
       name: notionTextStringify(properties.Name.title),
       website: 'https://redcatpictures.com',
       branding: {
@@ -25,10 +25,10 @@ export default defineEventHandler<Promise<Organization[]>>(async () => {
       foundedYear: properties['Founded Year'].number,
       ownerId: '',
       /* socials: {
-  instagram: 'https://www.instagram.com/redcatpictures',
-  facebook: 'https://www.facebook.com/redcatpictures',
-  youtube: "https://www.youtube.com/@red_cat_pictures",
-} */
+        instagram: 'https://www.instagram.com/redcatpictures',
+        facebook: 'https://www.facebook.com/redcatpictures',
+        youtube: "https://www.youtube.com/@red_cat_pictures",
+      } */
     }
   })
 })

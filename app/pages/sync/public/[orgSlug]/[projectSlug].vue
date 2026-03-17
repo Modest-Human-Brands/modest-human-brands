@@ -4,24 +4,31 @@ definePageMeta({ layout: false })
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: streamCollection } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
+const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
 
-const cover = computed(() => (streamCollection.value?.poster ? extractCdnId(streamCollection.value.poster) : ''))
+const DEFAULT_ORG = {
+  name: 'Modest Human Brands',
+  website: 'https://modesthumanbrands.com',
+  branding: {
+    logo: 'https://modesthumanbrands.com/logo.svg',
+    color: { primary: '#4A85FF', accent: '' },
+    font: '',
+  },
+  phone: '+912269711501',
+  whatsapp: 'https://wa.me/912269711501',
+}
+const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
+
+const { data: streamCollection } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
 
 const videoPlayer = useTemplateRef<{ videoRef: Ref<HTMLVideoElement>; seekToLive: () => void }>('videoPlayer')
 
-const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId ?? 'front-camera')
+const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId)
+
 const activeStream = computed(() => streamCollection.value?.streams.find((s) => s.deviceId === activeDeviceId.value))
 const inactiveStreams = computed(() => streamCollection.value?.streams.filter((s) => s.deviceId !== activeDeviceId.value) ?? [])
 
-const overallStatus = computed(() => {
-  const streams = streamCollection.value?.streams ?? []
-  if (streams.some((s) => s.status === StreamStatus.Live)) return StreamStatus.Live
-  if (streams.some((s) => s.status === StreamStatus.Starting)) return StreamStatus.Starting
-  return streams[0]?.status ?? StreamStatus.Idle
-})
-
-const LIVE_THRESHOLD = 8
+const LIVE_THRESHOLD = 5
 const currentTime = ref(0)
 const duration = ref(0)
 
@@ -40,26 +47,37 @@ function onProgress() {
 function goLive() {
   videoPlayer.value?.seekToLive()
 }
+
+const now = useNow({ interval: 1000 })
+
+const streamDuration = computed(() => {
+  const createdAt = activeStream.value?.createdAt
+  if (!createdAt || streamCollection.value?.status !== StreamStatus.Live) return null
+  const elapsed = Math.floor((now.value.getTime() - new Date(createdAt).getTime()) / 1000)
+  const h = Math.floor(elapsed / 3600)
+  const m = Math.floor((elapsed % 3600) / 60)
+  const s = elapsed % 60
+  return [h > 0 ? String(h).padStart(2, '0') : null, String(m).padStart(2, '0'), String(s).padStart(2, '0')].filter(Boolean).join(':')
+})
 </script>
 
 <template>
-  <div class="flex h-screen w-screen overflow-hidden bg-black">
-    <!-- Main video panel -->
-    <div class="relative flex flex-1 flex-col overflow-hidden">
-      <!-- STARTING -->
-      <template v-if="overallStatus === StreamStatus.Starting">
-        <div class="flex size-full flex-col items-center justify-center gap-4">
-          <div class="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+  <!-- Organization -->
+  <CardOrganization :organization="organization" class="absolute right-4 top-16 z-20 md:right-1/2 md:top-4 md:translate-x-1/2" />
+  <!-- Header -->
+  <div class="flex h-screen w-screen flex-col gap-2 overflow-hidden md:flex-row">
+    <div class="relative flex flex-1 flex-col overflow-hidden bg-black">
+      <template v-if="streamCollection?.status === StreamStatus.Starting">
+        <div class="flex size-full flex-col items-center justify-center gap-4 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
+          <div class="size-8 animate-spin rounded-full" />
           <p class="text-neutral-400 text-sm">Stream is starting...</p>
         </div>
       </template>
-
-      <!-- LIVE -->
-      <template v-else-if="overallStatus === StreamStatus.Live">
+      <template v-else-if="streamCollection?.status === StreamStatus.Live && activeStream">
         <NuxtVideo
           ref="videoPlayer"
-          :poster="cover"
-          :media="activeStream!.media"
+          :poster="activeStream.poster"
+          :media="activeStream.media"
           :live="true"
           :disable-picture-in-picture="true"
           :controls="false"
@@ -69,70 +87,65 @@ function goLive() {
           preload="metadata"
           class="size-full object-cover"
           @progress="onProgress" />
-
-        <div class="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-black/60 to-transparent p-4">
-          <div class="flex items-center gap-3">
-            <!-- <img v-if="cover" :src="cover" class="h-8 w-8 rounded-full object-cover ring-1 ring-white/20" /> -->
-            <span class="font-medium text-sm text-white/90">{{ streamCollection?.title }}</span>
+        <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4">
+          <div class="absolute left-0 top-0 flex w-full items-center justify-between gap-3 bg-gradient-to-b from-black/60 to-transparent p-4 pb-8">
+            <div class="flex flex-col gap-1">
+              <span class="font-medium text-lg capitalize text-white">{{ streamCollection?.title }}</span>
+              <span class="text-base lowercase first-letter:uppercase">
+                {{ activeStream?.deviceId?.replace('-', ' ') }}
+              </span>
+            </div>
+            <div class="pointer-events-auto flex items-center gap-2">
+              <span v-if="streamDuration" class="font-mono rounded-full bg-black px-2 py-1 text-xs tabular-nums text-white">
+                {{ streamDuration }}
+              </span>
+              <button @click="goLive">
+                <LiveChip :status="isAtLive ? StreamStatus.Live : StreamStatus.Idle" />
+              </button>
+            </div>
           </div>
         </div>
-
-        <div class="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10">
-          <button class="flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-sm transition" :class="[isAtLive ? 'bg-alert-500' : 'bg-dark-500']" @click="goLive">
-            <span class="relative flex h-2 w-2">
-              <span class="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" :class="[isAtLive ? 'bg-white' : 'bg-alert-400']" />
-              <span class="relative inline-flex h-2 w-2 rounded-full" :class="[isAtLive ? 'bg-white' : 'bg-alert-500']" />
-            </span>
-            <span class="font-semibold text-xs uppercase tracking-wider text-white">Live</span>
-          </button>
-        </div>
       </template>
-
-      <!-- IDLE -->
       <template v-else>
-        <div class="absolute inset-0">
-          <img v-if="cover" :src="cover" class="size-full object-cover opacity-20 blur-sm" />
-          <div class="absolute inset-0 bg-black/60" />
-        </div>
-        <div class="relative flex size-full flex-col items-center justify-center gap-3">
-          <p class="font-medium text-base text-white">{{ streamCollection?.title }}</p>
-          <p class="text-neutral-500 text-sm">Stream not started yet, please wait...</p>
+        <div class="relative flex size-full flex-col items-center justify-center gap-6 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
+          <div class="text-center">
+            <span class="font-medium text-lg capitalize text-white">{{ streamCollection?.title }}</span>
+            <p class="mt-1 text-sm text-white/40">Stream not started yet, please wait...</p>
+          </div>
         </div>
       </template>
     </div>
+    <div
+      v-if="inactiveStreams.length"
+      class="scrollbar-hidden flex h-40 flex-shrink-0 flex-row overflow-x-auto overflow-y-hidden md:h-auto md:w-60 md:flex-col md:overflow-y-auto md:overflow-x-hidden xl:w-72">
+      <div class="flex flex-row gap-2 md:flex-col">
+        <div
+          v-for="{ deviceId, status, media, poster } in inactiveStreams"
+          :key="deviceId"
+          class="group relative flex-shrink-0 cursor-pointer transition hover:bg-white/5 md:w-auto"
+          @click="activeDeviceId = deviceId">
+          <div class="relative aspect-video h-full overflow-hidden bg-dark-500">
+            <NuxtVideo
+              v-if="status === StreamStatus.Live"
+              :poster="poster"
+              :media="media"
+              :live="true"
+              :disable-picture-in-picture="true"
+              :controls="false"
+              :autoplay="true"
+              :muted="true"
+              :playsinline="true"
+              preload="metadata"
+              class="size-full object-cover opacity-80 transition group-hover:opacity-100" />
+            <img v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />
+            <div v-else class="size-full bg-dark-500" />
 
-    <!-- Right panel: only when there are inactive streams -->
-    <div v-if="inactiveStreams.length" class="hidden w-60 flex-shrink-0 flex-col overflow-hidden border-l border-white/5 bg-dark-600 md:flex xl:w-72">
-      <p class="font-medium px-3 pb-2 pt-3 text-xs uppercase tracking-wider text-white/30">Cameras</p>
-      <div class="flex-1 overflow-y-auto">
-        <div class="space-y-px">
-          <div v-for="{ deviceId, status, media } in inactiveStreams" :key="deviceId" class="group cursor-pointer transition hover:bg-white/5" @click="activeDeviceId = deviceId">
-            <div class="relative aspect-video w-full overflow-hidden bg-dark-500">
-              <NuxtVideo
-                v-if="status === StreamStatus.Live"
-                :media="media"
-                :live="true"
-                :disable-picture-in-picture="true"
-                :controls="false"
-                :autoplay="true"
-                :muted="true"
-                :playsinline="true"
-                preload="metadata"
-                class="size-full object-cover opacity-80 transition group-hover:opacity-100" />
-              <img v-else-if="cover" :src="cover" class="size-full object-cover opacity-30" />
-              <div v-else class="size-full bg-dark-500" />
-
-              <div class="absolute left-2 top-2">
-                <span class="font-medium rounded-full px-1.5 py-0.5 text-[10px] backdrop-blur-sm" :class="status === StreamStatus.Live ? 'bg-alert-500/80 text-white' : 'bg-black/60 text-white/50'">
-                  {{ status === StreamStatus.Live ? 'Live' : 'Offline' }}
-                </span>
-              </div>
-            </div>
-            <div class="px-3 py-2">
-              <p class="font-medium text-xs text-white/60 transition group-hover:text-white/90">
-                {{ deviceId.replace('-', ' ') }}
-              </p>
-            </div>
+            <LiveChip class="absolute right-2 top-2" :status="status" />
+          </div>
+          <div class="absolute left-0 top-0 px-3 py-2">
+            <p class="font-medium text-base lowercase text-white transition first-letter:uppercase">
+              {{ deviceId.replace('-', ' ') }}
+            </p>
           </div>
         </div>
       </div>
