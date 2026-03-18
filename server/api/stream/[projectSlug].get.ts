@@ -13,26 +13,17 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
 
   const config = useRuntimeConfig()
 
-  const [allStreams, { properties, cover }] = await Promise.all([
-    $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.public.driveUrl}/stream`).catch(() => []),
-    Promise.resolve(project),
-  ])
+  const allStreams = await $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.public.driveUrl}/stream`).catch(() => [])
 
-  const projectStreams = allStreams
-    .filter((s) => s.slug.startsWith(slug))
-    .map((s) => ({
-      ...s,
-      deviceId: s.deviceId ?? s.slug.slice(slug.length + 1), // extract from "slug:deviceId"
-    }))
-    .filter((s, i, arr) => arr.findIndex((x) => x.deviceId === s.deviceId) === i) // dedupe
+  const projectStreams = allStreams.filter((s) => s.slug.startsWith(slug))
 
-  const deviceIds = projectStreams.length ? projectStreams.map((s) => s.deviceId) : []
+  const deviceIds = projectStreams.map((s) => s.deviceId)
 
-  const coverUrl = cover?.type === 'external' ? cover.external.url : generateCover(slug, [color.primary, color.accent])
+  const coverUrl = project.cover?.type === 'external' ? project.cover.external.url : generateCover(slug, [color.primary, color.accent])
 
   const result: ProjectStreamCollection = {
     slug,
-    title: notionTextStringify(properties.Name.title),
+    title: notionTextStringify(project.properties.Name.title),
     poster: coverUrl,
     createdAt: new Date().toISOString(), //properties.Date.date.start
     status: (() => {

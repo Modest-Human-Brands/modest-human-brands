@@ -64,17 +64,6 @@ services:
     networks:
       - internal
 
-  caddy:
-    image: caddy:alpine
-    restart: on-failure:3
-    ports:
-      - '4620:8080'
-    volumes:
-      - ./config/Caddyfile:/etc/caddy/Caddyfile
-      - static:/srv/static
-    networks:
-      - internal
-
 volumes:
   data:
     driver: local

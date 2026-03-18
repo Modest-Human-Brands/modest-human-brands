@@ -165,7 +165,7 @@ async function onSubmit() {
                 <option value="create-new" class="bg-dark-500 text-primary-400">+ Create new organization</option>
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <NuxtIcon name="mdi:chevron-down" class="text-xl text-white/60" />
+                <NuxtIcon name="local:chevron-bold" class="rotate-90 text-xl text-white/60" />
               </div>
             </div>
             <p v-if="showError('organizationId')" class="text-xs text-alert-500">
