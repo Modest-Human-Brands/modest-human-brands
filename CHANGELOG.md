@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.10
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.9...v0.3.10)
+
+### 💅 Refactors
+
+- Improve formatting and structure in signup form and update Docker configurations ([75b03bb](https://github.com/Modest-Human-Brands/modest-human-brands/commit/75b03bb))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi <shirsendu2001@gmail.com>
+
 ## v0.3.9
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.8...v0.3.9)
