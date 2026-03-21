@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.3.14
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.13...v0.3.14)
+
+### 🩹 Fixes
+
+- Update createdAt field to use project date instead of current date ([6e312ab](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6e312ab))
+
+### 🏡 Chore
+
+- Add esbuild and sharp to trustedDependencies in package.json ([3044f52](https://github.com/Modest-Human-Brands/modest-human-brands/commit/3044f52))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.13
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.12...v0.3.13)
