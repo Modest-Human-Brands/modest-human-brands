@@ -41,7 +41,7 @@ const { stream, enabled: isStreaming } = useUserMedia({
       deviceId: activeVideoInputId.value ? { exact: activeVideoInputId.value } : undefined,
       width: { ideal: 1080 },
       height: { ideal: 1080 },
-      frameRate: { ideal: 30, min: 30 },
+      frameRate: { ideal: 30 },
     },
     audio: {
       deviceId: activeAudioInputId.value ? { exact: activeAudioInputId.value } : undefined,

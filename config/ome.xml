@@ -130,38 +130,26 @@
             <OutputProfile>
               <Name>bypass_stream</Name>
               <OutputStreamName>${OriginStreamName}</OutputStreamName>
-              <!--LLHLS
-              URL : https://domain/app/stream/abr.m3u8 -->
               <Playlist>
                 <Name>For LLHLS</Name>
                 <FileName>abr</FileName>
-                <Options> <!-- Optional -->
-                  <!-- 
-			Automatically switch rendition in WebRTC ABR 
-			[Default] : true
-			-->
+                <Options>
                   <WebRtcAutoAbr>true</WebRtcAutoAbr>
                   <EnableTsPackaging>true</EnableTsPackaging>
                 </Options>
                 <Rendition>
                   <Name>FHD</Name>
-                  <Video>video_1280</Video>
+                  <Video>video_1080</Video>
                   <Audio>aac_audio</Audio>
                 </Rendition>
-                <Rendition>
+                <!-- <Rendition>
                   <Name>HD</Name>
                   <Video>video_720</Video>
                   <Audio>aac_audio</Audio>
-                </Rendition>
-              </Playlist>
-              <!--LLHLS
-              URL : https://domain/app/stream/llhls.m3u8 -->
-              <Playlist>
-                <Name>Change Default</Name>
-                <FileName>llhls</FileName>
+                </Rendition> -->
                 <Rendition>
-                  <Name>HD</Name>
-                  <Video>video_720</Video>
+                  <Name>SD</Name>
+                  <Video>video_480</Video>
                   <Audio>aac_audio</Audio>
                 </Rendition>
               </Playlist>
@@ -188,22 +176,30 @@
                   <Channel>2</Channel>
                 </Audio>
                 <Video>
-                  <Name>video_1280</Name>
+                  <Name>video_1080</Name>
                   <Codec>h264</Codec>
-                  <Bitrate>5024000</Bitrate>
+                  <Bitrate>3000000</Bitrate>
                   <Framerate>30</Framerate>
-                  <Height>1280</Height>
-                  <Preset>fast</Preset>
+                  <Height>1080</Height>
+                  <Preset>faster</Preset>
                   <KeyFrameInterval>2</KeyFrameInterval>
                 </Video>
-                <Video>
+                <!-- <Video>
                   <Name>video_720</Name>
                   <Codec>h264</Codec>
-                  <Bitrate>2024000</Bitrate>
+                  <Bitrate>1500000</Bitrate>
                   <Framerate>30</Framerate>
-                  <Width>1280</Width>
                   <Height>720</Height>
-                  <Preset>fast</Preset>
+                  <Preset>faster</Preset>
+                  <KeyFrameInterval>2</KeyFrameInterval>
+                </Video> -->
+                <Video>
+                  <Name>video_480</Name>
+                  <Codec>h264</Codec>
+                  <Bitrate>1400000</Bitrate>
+                  <Framerate>30</Framerate>
+                  <Height>480</Height>
+                  <Preset>faster</Preset>
                   <KeyFrameInterval>2</KeyFrameInterval>
                 </Video>
               </Encodes>
@@ -228,14 +224,14 @@
           </Providers>
 
           <Publishers>
-            <AppWorkerCount>1</AppWorkerCount>
+            <AppWorkerCount>2</AppWorkerCount>
             <StreamWorkerCount>8</StreamWorkerCount>
             <OVT />
             <LLHLS>
               <OriginMode>true</OriginMode>
-              <ChunkDuration>0.5</ChunkDuration>
-              <PartHoldBack>1.5</PartHoldBack>
-              <SegmentDuration>6</SegmentDuration>
+              <ChunkDuration>0.2</ChunkDuration>
+              <PartHoldBack>0.6</PartHoldBack>
+              <SegmentDuration>3</SegmentDuration>
               <SegmentCount>10</SegmentCount>
               <CrossDomains>
                 <Url>*</Url>
