@@ -114,7 +114,7 @@ export function useWhip(options: WhipOptions) {
         if (!params.encodings.length) params.encodings = [{}]
 
         if (track.kind === 'video') {
-          params.encodings[0]!.maxBitrate = 8_000_000
+          params.encodings[0]!.maxBitrate = 2_500_000
           params.encodings[0]!.priority = 'high'
           params.encodings[0]!.networkPriority = 'high'
         } else if (track.kind === 'audio') {
