@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.16
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.15...v0.3.16)
+
+### 🩹 Fixes
+
+- Add refresh functionality and improve stream status handling in [projectSlug].vue ([0b2b399](https://github.com/Modest-Human-Brands/modest-human-brands/commit/0b2b399))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.15
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.14...v0.3.15)
