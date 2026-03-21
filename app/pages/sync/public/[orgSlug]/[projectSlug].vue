@@ -2,7 +2,7 @@
 definePageMeta({ layout: false })
 
 const {
-  public: { whipUrl, llhlsUrl },
+  public: { llhlsUrl },
 } = useRuntimeConfig()
 
 const route = useRoute()
@@ -132,6 +132,7 @@ const streamDuration = computed(() => {
           <div class="relative aspect-video h-full overflow-hidden bg-dark-500">
             <NuxtVideo
               v-if="status === StreamStatus.Live"
+              :base-url="llhlsUrl"
               :poster="poster"
               :media="media"
               :live="true"

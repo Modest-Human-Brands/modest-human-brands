@@ -57,10 +57,15 @@ services:
       - '3480' # LLHSL playback
       - '8080' # HLS/DASH playback
       - '8081' # REST API
-      - '10000-10005/udp' #
     ports:
-      - 3478 # TURN TCP relay
+      - '3478:3478' # TURN TCP relay (fixed mapping)
       - '9999:9999/udp' # SRT ingest
+      - '10000:10000/udp' # ICE media
+      - '10001:10001/udp'
+      - '10002:10002/udp'
+      - '10003:10003/udp'
+      - '10004:10004/udp'
+      - '10005:10005/udp'
     volumes:
       - /root/modest-human-brands/ome.xml:/opt/ovenmediaengine/bin/origin_conf/Server.xml
       - /root/modest-human-brands/omeRecord.xml:/opt/ovenmediaengine/bin/origin_conf/record_map.xml

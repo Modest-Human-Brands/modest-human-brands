@@ -5,7 +5,7 @@ definePageMeta({
 })
 
 const {
-  public: { whipUrl },
+  public: { whipUrl, llhlsUrl },
 } = useRuntimeConfig()
 
 const route = useRoute()
@@ -121,7 +121,7 @@ function goLive() {}
         <NuxtVideo
           ref="videoPlayer"
           :poster="activeStream?.poster"
-          v-bind="!isStreaming && activeStream?.media ? { media: activeStream.media } : {}"
+          v-bind="!isStreaming && activeStream?.media ? { baseUrl: llhlsUrl, media: activeStream.media } : {}"
           :live="true"
           :disable-picture-in-picture="true"
           :controls="false"
@@ -218,6 +218,7 @@ function goLive() {}
             <div class="relative aspect-video h-full overflow-hidden bg-dark-500">
               <NuxtVideo
                 v-if="status === StreamStatus.Live && media"
+                :base-url="llhlsUrl"
                 :poster="poster"
                 :media="media"
                 :live="true"
