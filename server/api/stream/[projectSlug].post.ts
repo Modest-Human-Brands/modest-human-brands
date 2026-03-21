@@ -16,7 +16,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
   const { properties, cover } = project
 
   const [stream] = await Promise.all([
-    $fetch<ProjectStream>(`${config.public.driveUrl}/stream/start`, {
+    $fetch<ProjectStream>(`${config.public.mediaUrl}/stream/start`, {
       method: 'POST',
       body: { slug, deviceId },
     }).catch(() => null),
@@ -34,7 +34,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
       {
         deviceId,
         streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-        media: `live/${slug}_${deviceId}/master.m3u8`,
+        media: `live/${slug}_${deviceId}/abr.m3u8`,
         status: stream?.status ?? StreamStatus.Idle,
         poster: generateCover(slug + deviceId, [color.primary, color.accent]),
         createdAt: new Date().toISOString(), //properties.Date.date.start

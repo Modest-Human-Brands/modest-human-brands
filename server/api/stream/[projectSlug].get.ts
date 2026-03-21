@@ -13,7 +13,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
 
   const config = useRuntimeConfig()
 
-  const allStreams = await $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.public.driveUrl}/stream`).catch(() => [])
+  const allStreams = await $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.public.mediaUrl}/stream`).catch(() => [])
 
   const projectStreams = allStreams.filter((s) => s.slug.startsWith(slug))
 
@@ -37,7 +37,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
       return {
         deviceId,
         streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-        media: `live/${slug}_${deviceId}/master.m3u8`,
+        media: `live/${slug}_${deviceId}/abr.m3u8`,
         status: current?.status ?? StreamStatus.Idle,
         poster: generateCover(slug + deviceId, [color.primary, color.accent]),
         createdAt: new Date().toISOString(), //properties.Date.date.start

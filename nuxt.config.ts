@@ -97,8 +97,11 @@ export default defineNuxtConfig({
     },
     public: {
       siteUrl: '',
-      driveUrl: '',
       cdnUrl: '',
+      mediaUrl: '',
+      turnUrl: '',
+      whipUrl: '',
+      llhlsUrl: '',
       scripts: {
         googleAnalytics: {
           id: '',

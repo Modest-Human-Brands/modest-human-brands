@@ -4,82 +4,124 @@ definePageMeta({
   middleware: ['auth'],
 })
 
+const {
+  public: { whipUrl },
+} = useRuntimeConfig()
+
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
-
-const videoPlayer = useTemplateRef<{ videoRef: Ref<HTMLVideoElement>; seekToLive: () => void }>('videoPlayer')
+const { data: streamCollection } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
 
 const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId)
 
 const activeStream = computed(() => streamCollection.value?.streams.find((s) => s.deviceId === activeDeviceId.value))
 const inactiveStreams = computed(() => streamCollection.value?.streams.filter((s) => s.deviceId !== activeDeviceId.value) ?? [])
 
-async function startStream(deviceId: string) {
-  const stream = streamCollection.value?.streams.find((s) => s.deviceId === deviceId)
-  if (stream) stream.status = StreamStatus.Starting
-  activeDeviceId.value = deviceId
-  await $fetch(`/api/stream/${slug}`, { method: 'POST', body: { deviceId } })
-  await refresh()
-}
+const activeVideoInputId = shallowRef<string>()
+const activeAudioInputId = shallowRef<string>()
+const { videoInputs, audioInputs, ensurePermissions } = useDevicesList({
+  onUpdated() {
+    if (!videoInputs.value.find((i) => i.deviceId === activeVideoInputId.value)) activeVideoInputId.value = videoInputs.value[0]?.deviceId
 
-async function stopStream(deviceId: string) {
-  await $fetch(`/api/stream/${slug}/${deviceId}`, { method: 'DELETE' })
-  await refresh()
-}
-
-const LIVE_THRESHOLD = 5
-const currentTime = ref(0)
-const duration = ref(0)
-
-const isAtLive = computed(() => {
-  if (!isFinite(duration.value) || duration.value === 0) return true
-  return duration.value - currentTime.value <= LIVE_THRESHOLD
+    if (!audioInputs.value.find((i) => i.deviceId === activeAudioInputId.value)) activeAudioInputId.value = audioInputs.value[0]?.deviceId
+  },
 })
 
-function onProgress() {
-  const video = videoPlayer.value?.videoRef.value
-  if (!video) return
-  currentTime.value = video.currentTime
-  duration.value = video.duration
-}
+onMounted(() => {
+  activeVideoInputId.value = videoInputs.value[0]?.deviceId
+  activeAudioInputId.value = audioInputs.value[0]?.deviceId
+})
 
-function goLive() {
-  videoPlayer.value?.seekToLive()
+const videoPlayer = useTemplateRef<{ videoRef: HTMLVideoElement | null; seekToLive: () => object }>('videoPlayer')
+const { stream, enabled: isStreaming } = useUserMedia({
+  constraints: reactive({
+    video: {
+      deviceId: activeVideoInputId.value ? { exact: activeVideoInputId } : undefined,
+      width: { ideal: 1920 },
+      height: { ideal: 1080 },
+      frameRate: { ideal: 30, min: 30 },
+      aspectRatio: { ideal: 16 / 9 },
+      facingMode: 'user',
+    },
+    audio: {
+      deviceId: activeAudioInputId.value ? { exact: activeAudioInputId } : undefined,
+      echoCancellation: false, // disable processing for raw quality
+      noiseSuppression: false,
+      autoGainControl: false,
+      sampleRate: { ideal: 48000 },
+      sampleSize: { ideal: 16 },
+      channelCount: { ideal: 2 },
+    },
+  }),
+})
+
+const { start, stop } = useWhip({
+  baseUrl: whipUrl,
+})
+
+watchEffect(async () => {
+  if (videoPlayer.value?.videoRef && stream.value) {
+    videoPlayer.value.videoRef.srcObject = stream.value
+    if (isStreaming.value) await start(stream.value!, `${slug}_${activeDeviceId.value}`)
+  }
+})
+
+function updateActiveInput(type: 'video' | 'audio', id: string) {
+  if (type === 'video') activeVideoInputId.value = id
+  else if (type === 'audio') activeAudioInputId.value = id
 }
 
 const showDeviceModal = ref(false)
 
+async function createStream() {
+  await ensurePermissions()
+  showDeviceModal.value = true
+}
+
+function startStreaming(deviceId: string) {
+  isStreaming.value = true
+  activeDeviceId.value = deviceId
+}
+
+async function stopStreaming() {
+  await stop()
+  isStreaming.value = false
+}
+
+const isAtLive = ref(false)
+
+const streamStartedAt = ref<Date | null>(null)
+watch(isStreaming, (streaming) => {
+  streamStartedAt.value = streaming ? new Date() : null
+})
+
 const now = useNow({ interval: 1000 })
 
 const streamDuration = computed(() => {
-  const createdAt = activeStream.value?.createdAt
-  if (!createdAt || streamCollection.value?.status !== StreamStatus.Live) return null
-  const elapsed = Math.floor((now.value.getTime() - new Date(createdAt).getTime()) / 1000)
+  const startTime = isStreaming.value ? streamStartedAt.value : activeStream.value?.createdAt ? new Date(activeStream.value.createdAt) : null
+
+  if (!startTime) return null
+  if (!isStreaming.value && streamCollection.value?.status !== StreamStatus.Live) return null
+
+  const elapsed = Math.floor((now.value.getTime() - startTime.getTime()) / 1000)
   const h = Math.floor(elapsed / 3600)
   const m = Math.floor((elapsed % 3600) / 60)
   const s = elapsed % 60
   return [h > 0 ? String(h).padStart(2, '0') : null, String(m).padStart(2, '0'), String(s).padStart(2, '0')].filter(Boolean).join(':')
 })
 
-// const OME_BASE_URL = "http://localhost:3333"
+function goLive() {}
 </script>
 
 <template>
   <div class="flex size-full flex-col gap-2 overflow-hidden md:flex-row">
     <div class="relative flex flex-1 flex-col overflow-hidden bg-black">
-      <template v-if="streamCollection?.status === StreamStatus.Starting">
-        <div class="flex size-full flex-col items-center justify-center gap-4 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
-          <div class="size-8 animate-spin rounded-full" />
-          <p class="text-neutral-400 text-sm">Stream is starting...</p>
-        </div>
-      </template>
-      <template v-else-if="streamCollection?.status === StreamStatus.Live && activeStream">
+      <template v-if="isStreaming || streamCollection?.status === StreamStatus.Live">
         <NuxtVideo
           ref="videoPlayer"
-          :poster="activeStream.poster"
-          :media="activeStream.media"
+          :poster="activeStream?.poster"
+          v-bind="!isStreaming && activeStream?.media ? { media: activeStream.media } : {}"
           :live="true"
           :disable-picture-in-picture="true"
           :controls="false"
@@ -87,20 +129,21 @@ const streamDuration = computed(() => {
           :muted="true"
           :playsinline="true"
           preload="metadata"
-          class="size-full object-cover"
-          @progress="onProgress" />
+          class="size-full object-contain" />
+
         <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4">
           <div class="absolute left-0 top-0 flex w-full items-center justify-between gap-3 bg-gradient-to-b from-black/60 to-transparent p-4 pb-8">
             <div class="flex flex-col gap-1">
               <span class="font-medium text-lg capitalize text-white">{{ streamCollection?.title }}</span>
               <span class="text-base lowercase first-letter:uppercase">
-                {{ activeStream?.deviceId?.replace('-', ' ') }}
+                {{ activeStream?.deviceId?.replaceAll('-', ' ') }}
               </span>
             </div>
             <div class="pointer-events-auto flex items-center gap-2">
               <span v-if="streamDuration" class="font-mono rounded-full bg-black px-2 py-1 text-xs tabular-nums text-white">
                 {{ streamDuration }}
               </span>
+              <span v-if="isStreaming && !isStreaming" class="rounded-full bg-warning-500/20 px-2 py-1 text-xs text-warning-400"> Connecting… </span>
               <button @click="goLive">
                 <LiveChip :status="isAtLive ? StreamStatus.Live : StreamStatus.Idle" />
               </button>
@@ -128,26 +171,41 @@ const streamDuration = computed(() => {
               </button>
             </div>
           </div>
-          <button
-            class="flex size-9 items-center justify-center rounded-full bg-white/10 text-white/60 backdrop-blur-sm transition hover:bg-alert-500/80 hover:text-white"
-            @click="stopStream(activeStream!.deviceId)">
+          <button class="flex size-9 items-center justify-center rounded-full bg-white/10 text-white/60 backdrop-blur-sm transition hover:bg-alert-500/80 hover:text-white" @click="stopStreaming()">
             <NuxtIcon name="local:cross" class="text-[16px]" />
           </button>
         </div>
       </template>
+
+      <template v-else-if="!isStreaming && streamCollection?.status === StreamStatus.Starting">
+        <div class="flex size-full flex-col items-center justify-center gap-4 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
+          <div class="size-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+          <p class="text-neutral-400 text-sm">Requesting camera access…</p>
+          <!-- <p v-if="errorStreaming" class="text-xs text-alert-500">{{ errorStreaming.message }}</p> -->
+        </div>
+      </template>
+
+      <template v-else-if="streamCollection?.status === StreamStatus.Starting">
+        <div class="flex size-full flex-col items-center justify-center gap-4 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
+          <div class="size-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+          <p class="text-neutral-400 text-sm">Stream is starting…</p>
+        </div>
+      </template>
+
       <template v-else>
         <div class="relative flex size-full flex-col items-center justify-center gap-6 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
           <div class="text-center">
             <span class="font-medium text-lg capitalize text-white">{{ streamCollection?.title }}</span>
             <p class="mt-1 text-sm text-white/40">Ready to broadcast</p>
           </div>
-          <button type="button" class="font-medium inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm text-black transition hover:bg-white/90" @click="showDeviceModal = true">
+          <button type="button" class="font-medium inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm text-black transition hover:bg-white/90" @click="createStream">
             <span class="relative inline-flex size-2 rounded-full bg-alert-500" />
             Start Stream
           </button>
         </div>
       </template>
     </div>
+
     <div class="scrollbar-hidden flex h-40 flex-shrink-0 flex-row overflow-x-auto overflow-y-hidden md:h-auto md:w-60 md:flex-col md:overflow-y-auto md:overflow-x-hidden xl:w-72">
       <div class="flex flex-row gap-2 md:flex-col">
         <template v-if="inactiveStreams.length">
@@ -159,7 +217,7 @@ const streamDuration = computed(() => {
             @click="activeDeviceId = deviceId">
             <div class="relative aspect-video h-full overflow-hidden bg-dark-500">
               <NuxtVideo
-                v-if="status === StreamStatus.Live"
+                v-if="status === StreamStatus.Live && media"
                 :poster="poster"
                 :media="media"
                 :live="true"
@@ -176,12 +234,12 @@ const streamDuration = computed(() => {
             </div>
             <div class="absolute left-0 top-0 px-3 py-2">
               <p class="font-medium text-base lowercase text-white transition first-letter:uppercase">
-                {{ deviceId.replace('-', ' ') }}
+                {{ deviceId.replaceAll('-', ' ') }}
               </p>
             </div>
           </div>
         </template>
-        <button type="button" class="group flex w-56 flex-shrink-0 cursor-pointer flex-col transition hover:bg-white/5 md:w-auto" @click="showDeviceModal = true">
+        <button type="button" class="group flex w-56 flex-shrink-0 cursor-pointer flex-col transition hover:bg-white/5 md:w-auto" @click="createStream">
           <div class="relative aspect-video w-full overflow-hidden bg-dark-500">
             <div class="flex size-full flex-col items-center justify-center gap-2">
               <div class="flex size-8 items-center justify-center rounded-full border border-dashed border-white/20 text-white/30 transition group-hover:border-white/40 group-hover:text-white/50">
@@ -196,6 +254,15 @@ const streamDuration = computed(() => {
       </div>
     </div>
 
-    <ModalDeviceSelect :is-open="showDeviceModal" @close="showDeviceModal = false" @create="startStream" />
+    <ModalDeviceSelect
+      v-if="showDeviceModal"
+      :is-open="showDeviceModal"
+      :video-inputs="videoInputs"
+      :audio-inputs="audioInputs"
+      :active-video-input-id="activeVideoInputId"
+      :active-audio-input-id="activeAudioInputId"
+      @update="updateActiveInput"
+      @close="showDeviceModal = false"
+      @create="startStreaming" />
   </div>
 </template>

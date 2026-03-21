@@ -12,6 +12,6 @@ const isLive = computed(() => props.status === 'live')
       <span class="absolute inline-flex size-full animate-ping rounded-full opacity-75" :class="[isLive ? 'bg-white' : 'bg-alert-400']" />
       <span class="relative inline-flex size-2 rounded-full" :class="[isLive ? 'bg-white' : 'bg-alert-500']" />
     </span>
-    <span class="font-semibold text-xs uppercase tracking-wider text-white">Live</span>
+    <span class="font-semibold text-xs uppercase tracking-wider text-white">{{ status }}</span>
   </div>
 </template>

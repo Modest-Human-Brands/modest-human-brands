@@ -1,11 +1,16 @@
 <script setup lang="ts">
 defineProps<{
   isOpen: boolean
+  videoInputs: MediaDeviceInfo[]
+  audioInputs: MediaDeviceInfo[]
+  activeVideoInputId?: string
+  activeAudioInputId?: string
 }>()
 
 const emit = defineEmits<{
   close: []
   create: [deviceId: string]
+  update: [input: 'video' | 'audio', id: string]
 }>()
 
 const deviceId = ref('')
@@ -39,6 +44,24 @@ function onClose() {
           placeholder="e.g. front-camera, drone-cam"
           class="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/25"
           @keydown.enter="confirm" />
+      </div>
+      <div>
+        <div
+          v-for="videoInput of videoInputs"
+          :key="videoInput.deviceId"
+          class="cursor-pointer px-2 py-1"
+          :class="{ 'text-primary-500': activeVideoInputId === videoInput.deviceId }"
+          @click="emit('update', 'video', videoInput.deviceId)">
+          {{ videoInput.label }}
+        </div>
+        <div
+          v-for="audioInput of audioInputs"
+          :key="audioInput.deviceId"
+          class="cursor-pointer px-2 py-1"
+          :class="{ 'text-primary-500': activeAudioInputId === audioInput.deviceId }"
+          @click="emit('update', 'audio', audioInput.deviceId)">
+          {{ audioInput.label }}
+        </div>
       </div>
       <button
         type="button"

@@ -1,47 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Auto-recording config for OvenMediaEngine FILE publisher.
-
-  Storage strategy:
-    - Local:  /recordings/{vhost}/{app}/{stream}/  (Docker volume, fast access)
-    - R2/S3:  Written by OME natively via <Metadata> S3 credentials
-
-  Stream naming convention: SRT streamid = live/{slug}/{deviceId}
-  OME output stream name   = {slug}/{deviceId} (from SRT StreamMap in Server.xml)
-
-  Segment interval: 5 minutes (300000ms)
-  Segment rule: continuity — timestamps carry across splits for seamless VOD
--->
 <RecordInfo>
-  <!-- Bypass (passthrough) track — single file per stream session, no split -->
+  <!-- Raw passthrough recording — one file per stream session, split every 5 min. -->
   <Record>
     <Enable>true</Enable>
     <StreamName>*</StreamName>
-    <VariantNames>bypass_video,bypass_audio</VariantNames>
+    <VariantNames>video_1280,aac_audio</VariantNames>
 
-    <!-- Local path: /recordings/default/live/{stream}/recording/{start}_{seq}.mp4 -->
     <FilePath>/stream/${Stream}/recording/raw_${Sequence}.mp4</FilePath>
     <InfoPath>/stream/${Stream}/recording/raw_info.xml</InfoPath>
 
     <SegmentInterval>300000</SegmentInterval>
     <SegmentRule>continuity</SegmentRule>
 
-    <!-- <Metadata>access_key_id='${OME_R2_ACCESS_KEY_ID}',secret_access_key='${OME_R2_SECRET_ACCESS_KEY}',endpoint='${OME_R2_ENDPOINT}',region='auto',bucket='${OME_R2_BUCKET}'</Metadata> -->
+    <!--
+    <Metadata>access_key_id='${OME_R2_ACCESS_KEY_ID}',secret_access_key='${OME_R2_SECRET_ACCESS_KEY}',endpoint='${OME_R2_ENDPOINT}',region='auto',bucket='${OME_R2_BUCKET}'</Metadata> -->
   </Record>
-
-  <!-- ABR transcoded tracks — 5-min interval segments -->
-  <Record>
+  <!-- ABR transcoded recording — 5-min segments. -->
+  <!-- <Record>
     <Enable>true</Enable>
-    <StreamName>*_abr</StreamName>
-    <VariantNames>720p,aac_128k</VariantNames>
+    <StreamName>*</StreamName>
+    <VariantNames>video_720,bypass_audio</VariantNames>
 
-    <!-- Local path: /recordings/default/live/{stream}/abr/{start}_{seq}.mp4 -->
     <FilePath>/stream/${Stream}/abr/${StartTime:YYYYMMDDhhmmss}_${Sequence}.mp4</FilePath>
     <InfoPath>/stream/${Stream}/abr/info.xml</InfoPath>
 
     <SegmentInterval>300000</SegmentInterval>
     <SegmentRule>continuity</SegmentRule>
-
-    <!-- <Metadata>access_key_id='${OME_R2_ACCESS_KEY_ID}',secret_access_key='${OME_R2_SECRET_ACCESS_KEY}',endpoint='${OME_R2_ENDPOINT}',region='auto',bucket='${OME_R2_BUCKET}'</Metadata> -->
-  </Record>
+  <Metadata>access_key_id='${OME_R2_ACCESS_KEY_ID}',secret_access_key='${OME_R2_SECRET_ACCESS_KEY}',endpoint='${OME_R2_ENDPOINT}',region='auto',bucket='${OME_R2_BUCKET}'</Metadata>
+  </Record> -->
 </RecordInfo>

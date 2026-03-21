@@ -9,7 +9,7 @@ type Orientation = 'portrait' | 'landscape'
 
 const props = withDefaults(
   defineProps<{
-    media: string
+    media?: string
     multiOrentation?: boolean
     poster?: string
     controlsList?: string
@@ -87,17 +87,9 @@ function handleError(e?: Error) {
   console.error('Video Error occurred:', e)
 }
 
-function handleCanPlay() {
-  // console.log('Video can start playing')
-}
-
-function handlePlay() {
-  // console.log('Video played')
-}
-
-function handlePause() {
-  // console.log('Video paused')
-}
+function handleCanPlay() {}
+function handlePlay() {}
+function handlePause() {}
 
 function handleLoadedData() {
   isVideoLoaded.value = true
@@ -128,7 +120,7 @@ function handleLoadedMetadata() {
 const { width, height } = useElementSize(videoRef)
 
 const streamStats = ref({ bitrate: 0, codec: '', resolution: '' })
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const formattedBitrate = computed(() => {
   const bps = streamStats.value.bitrate || 0
   return bps > 1000000 ? `${(bps / 1000000).toFixed(2)} Mbps` : `${Math.round(bps / 1000)} kbps`
@@ -138,10 +130,12 @@ const currentOrientation = computed<Orientation>(() => (width.value > height.val
 const activeSource = computed(() => (props.multiOrentation ? `${props.media}-${currentOrientation.value}` : props.media))
 
 onMounted(() => {
-  const url = `${baseUrl.value}/${activeSource.value}` //`${baseUrl.value}/${activeSource.value}`
+  if (!activeSource.value) return
+
+  const url = `${baseUrl.value}/${activeSource.value}`
 
   if (Hls.isSupported()) {
-    player = new Hls({ liveSyncDurationCount: 3 })
+    player = new Hls({ lowLatencyMode: true })
     player.loadSource(url)
     player.attachMedia(videoRef.value!)
 
@@ -183,36 +177,34 @@ onUnmounted(() => player?.destroy())
 </script>
 
 <template>
-  <video
-    ref="videoRef"
-    class="size-full"
-    :poster="poster"
-    :controlsList="controlsList"
-    :preload="preload"
-    :controls="controls"
-    :autoplay="autoplay"
-    :muted="muted"
-    :playsinline="playsinline"
-    :disablePictureInPicture="disablePictureInPicture"
-    :class="{ shimmer: !isVideoLoaded }"
-    @error="handleError()"
-    @canplay="handleCanPlay"
-    @play="handlePlay"
-    @pause="handlePause"
-    @timeupdate="handleProgress"
-    @ended="handleEnded"
-    @loadeddata="handleLoadedData"
-    @loadedmetadata="handleLoadedMetadata"
-    @contextmenu.prevent>
-    Your browser does not support the video tag.
-  </video>
-  <!-- STATS OVERLAY -->
-  <!-- <div v-if="isVideoLoaded"
-      class="absolute bottom-2 right-2 bg-black/60 text-white text p-2 rounded font-mono pointer-events-none">
+  <div>
+    <video
+      ref="videoRef"
+      class="size-full"
+      :poster="poster"
+      :controlsList="controlsList"
+      :preload="preload"
+      :controls="controls"
+      :autoplay="autoplay"
+      :muted="muted"
+      :playsinline="playsinline"
+      :disablePictureInPicture="disablePictureInPicture"
+      :class="{ shimmer: !isVideoLoaded }"
+      @error="handleError()"
+      @canplay="handleCanPlay"
+      @play="handlePlay"
+      @pause="handlePause"
+      @timeupdate="handleProgress"
+      @ended="handleEnded"
+      @loadeddata="handleLoadedData"
+      @loadedmetadata="handleLoadedMetadata"
+      @contextmenu.prevent>
+      Your browser does not support the video tag.
+    </video>
+    <div v-if="isVideoLoaded && activeSource" class="font-mono pointer-events-none absolute bottom-2 right-2 rounded bg-black/60 p-2 text-white">
       <p>Bitrate: {{ formattedBitrate }}</p>
       <p>Resolution: {{ streamStats.resolution }}</p>
       <p>Codec: {{ streamStats.codec }}</p>
-      <p>Buffer: {{ buffer }} sec</p>
-    </div> -->
-  <!-- </div> -->
+    </div>
+  </div>
 </template>

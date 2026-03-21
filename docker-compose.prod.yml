@@ -52,11 +52,15 @@ services:
   ome:
     image: airensoft/ovenmediaengine:latest
     expose:
-      - 3333
-      - 8080
-      - 8081
+      - '3333' #
+      - '3334'
+      - '3480' # LLHSL playback
+      - '8080' # HLS/DASH playback
+      - '8081' # REST API
+      - '10000-10005/udp' #
     ports:
-      - '9999:9999/udp'
+      - 3478 # TURN TCP relay
+      - '9999:9999/udp' # SRT ingest
     volumes:
       - /root/modest-human-brands/ome.xml:/opt/ovenmediaengine/bin/origin_conf/Server.xml
       - /root/modest-human-brands/omeRecord.xml:/opt/ovenmediaengine/bin/origin_conf/record_map.xml

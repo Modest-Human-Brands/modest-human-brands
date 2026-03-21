@@ -1,6 +1,10 @@
 <script setup lang="ts">
 definePageMeta({ layout: false })
 
+const {
+  public: { whipUrl, llhlsUrl },
+} = useRuntimeConfig()
+
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
@@ -76,6 +80,7 @@ const streamDuration = computed(() => {
       <template v-else-if="streamCollection?.status === StreamStatus.Live && activeStream">
         <NuxtVideo
           ref="videoPlayer"
+          :base-url="llhlsUrl"
           :poster="activeStream.poster"
           :media="activeStream.media"
           :live="true"
