@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.12
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.11...v0.3.12)
+
+### 🩹 Fixes
+
+- Comment out unused ICE server configurations and TcpForce option ([8f565e9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/8f565e9))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.11
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.10...v0.3.11)
