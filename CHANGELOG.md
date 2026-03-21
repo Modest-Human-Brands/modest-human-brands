@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.3.15
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.14...v0.3.15)
+
+### 🩹 Fixes
+
+- Uncomment middleware and fix deviceId references in useUserMedia constraints ([0d8d501](https://github.com/Modest-Human-Brands/modest-human-brands/commit/0d8d501))
+- Uncomment middleware and clean up template formatting in [projectSlug].vue ([b81eda2](https://github.com/Modest-Human-Brands/modest-human-brands/commit/b81eda2))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.14
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.13...v0.3.14)
