@@ -55,7 +55,7 @@ export function useWhip(options: WhipOptions) {
 
       pc.onicecandidate = async (event) => {
         if (!event.candidate) return
-        console.log('ICE candidate:', event.candidate.type, event.candidate.protocol, event.candidate.address)
+        // console.log('ICE candidate:', event.candidate.type, event.candidate.protocol, event.candidate.address)
 
         if (!resourceUrl) {
           iceBuffer.push(event.candidate)
@@ -64,18 +64,16 @@ export function useWhip(options: WhipOptions) {
         }
       }
       pc.onicegatheringstatechange = () => {
-        console.log('ICE gathering state:', pc?.iceGatheringState)
+        // console.log('ICE gathering state:', pc?.iceGatheringState)
       }
       pc.oniceconnectionstatechange = () => {
-        console.log('ICE connection state:', pc?.iceConnectionState)
+        // console.log('ICE connection state:', pc?.iceConnectionState)
       }
       pc.onicecandidateerror = (e) => {
         console.error('ICE error:', e.errorCode, e.errorText, e.url)
       }
 
       stream.getTracks().forEach((track) => pc!.addTrack(track, stream!))
-
-      console.log({ getSetting: stream.getVideoTracks()[0]!.getSettings() })
 
       const transceivers = pc!.getTransceivers()
       const videoTransceiver = transceivers.find((t) => t.sender.track?.kind === 'video')

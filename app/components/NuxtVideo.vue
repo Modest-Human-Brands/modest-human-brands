@@ -121,10 +121,10 @@ const { width, height } = useElementSize(videoRef)
 
 const streamStats = ref({ bitrate: 0, codec: '', resolution: '' })
 
-const formattedBitrate = computed(() => {
+/* const formattedBitrate = computed(() => {
   const bps = streamStats.value.bitrate || 0
   return bps > 1000000 ? `${(bps / 1000000).toFixed(2)} Mbps` : `${Math.round(bps / 1000)} kbps`
-})
+}) */
 
 const currentOrientation = computed<Orientation>(() => (width.value > height.value ? 'landscape' : 'portrait'))
 const activeSource = computed(() => (props.multiOrentation ? `${props.media}-${currentOrientation.value}` : props.media))
@@ -177,34 +177,34 @@ onUnmounted(() => player?.destroy())
 </script>
 
 <template>
-  <div>
-    <video
-      ref="videoRef"
-      class="size-full"
-      :poster="poster"
-      :controlsList="controlsList"
-      :preload="preload"
-      :controls="controls"
-      :autoplay="autoplay"
-      :muted="muted"
-      :playsinline="playsinline"
-      :disablePictureInPicture="disablePictureInPicture"
-      :class="{ shimmer: !isVideoLoaded }"
-      @error="handleError()"
-      @canplay="handleCanPlay"
-      @play="handlePlay"
-      @pause="handlePause"
-      @timeupdate="handleProgress"
-      @ended="handleEnded"
-      @loadeddata="handleLoadedData"
-      @loadedmetadata="handleLoadedMetadata"
-      @contextmenu.prevent>
-      Your browser does not support the video tag.
-    </video>
-    <div v-if="isVideoLoaded && activeSource" class="font-mono pointer-events-none absolute bottom-2 right-2 rounded bg-black/60 p-2 text-white">
+  <!-- <div> -->
+  <video
+    ref="videoRef"
+    class="size-full"
+    :poster="poster"
+    :controlsList="controlsList"
+    :preload="preload"
+    :controls="controls"
+    :autoplay="autoplay"
+    :muted="muted"
+    :playsinline="playsinline"
+    :disablePictureInPicture="disablePictureInPicture"
+    :class="{ shimmer: !isVideoLoaded }"
+    @error="handleError()"
+    @canplay="handleCanPlay"
+    @play="handlePlay"
+    @pause="handlePause"
+    @timeupdate="handleProgress"
+    @ended="handleEnded"
+    @loadeddata="handleLoadedData"
+    @loadedmetadata="handleLoadedMetadata"
+    @contextmenu.prevent>
+    Your browser does not support the video tag.
+  </video>
+  <!-- <div v-if="isVideoLoaded && activeSource" class="font-mono pointer-events-none absolute bottom-2 right-2 rounded bg-black/60 p-2 text-white">
       <p>Bitrate: {{ formattedBitrate }}</p>
       <p>Resolution: {{ streamStats.resolution }}</p>
       <p>Codec: {{ streamStats.codec }}</p>
-    </div>
-  </div>
+    </div> -->
+  <!-- </div> -->
 </template>

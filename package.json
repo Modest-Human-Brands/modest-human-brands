@@ -89,6 +89,8 @@
   },
   "trustedDependencies": [
     "@parcel/watcher",
+    "esbuild",
+    "sharp",
     "unrs-resolver"
   ]
 }
