@@ -45,7 +45,7 @@ export function useWhip(options: WhipOptions) {
       error.value = null
 
       stream.getVideoTracks().forEach((track) => {
-        track.contentHint = 'motion'
+        track.contentHint = 'detail'
       })
 
       pc = new RTCPeerConnection({
@@ -69,8 +69,8 @@ export function useWhip(options: WhipOptions) {
       pc.oniceconnectionstatechange = () => {
         // console.log('ICE connection state:', pc?.iceConnectionState)
       }
-      pc.onicecandidateerror = (e) => {
-        console.error('ICE error:', e.errorCode, e.errorText, e.url)
+      pc.onicecandidateerror = () => {
+        // console.error('ICE error:', e.errorCode, e.errorText, e.url)
       }
 
       stream.getTracks().forEach((track) => pc!.addTrack(track, stream!))

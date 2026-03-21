@@ -11,7 +11,9 @@ const {
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { data: streamCollection } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
+const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
+
+const { resume } = useIntervalFn(refresh, 5000, { immediate: false })
 
 const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId)
 
@@ -29,8 +31,7 @@ const { videoInputs, audioInputs, ensurePermissions } = useDevicesList({
 })
 
 onMounted(() => {
-  activeVideoInputId.value = videoInputs.value[0]?.deviceId
-  activeAudioInputId.value = audioInputs.value[0]?.deviceId
+  resume()
 })
 
 const videoPlayer = useTemplateRef<{ videoRef: HTMLVideoElement | null; seekToLive: () => object }>('videoPlayer')
@@ -127,7 +128,7 @@ function goLive() {}
           :muted="true"
           :playsinline="true"
           preload="metadata"
-          class="size-full rounded-md object-contain" />
+          class="rounded-md object-contain" />
 
         <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4">
           <div class="absolute left-0 top-0 flex w-full items-center justify-between gap-3 bg-gradient-to-b from-black/60 to-transparent p-4 pb-8">
@@ -184,14 +185,14 @@ function goLive() {}
       </template>
 
       <template v-else-if="streamCollection?.status === StreamStatus.Starting">
-        <div class="flex size-full flex-col items-center justify-center gap-4 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
+        <div class="flex size-full flex-col items-center justify-center gap-4 rounded-md bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
           <div class="size-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
           <p class="text-neutral-400 text-sm">Stream is starting…</p>
         </div>
       </template>
 
       <template v-else>
-        <div class="relative flex size-full flex-col items-center justify-center gap-6 bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
+        <div class="relative flex size-full flex-col items-center justify-center gap-6 rounded-md bg-cover" :style="{ 'background-image': `url(${streamCollection?.poster})` }">
           <div class="text-center">
             <span class="font-medium text-lg capitalize text-white">{{ streamCollection?.title }}</span>
             <p class="mt-1 text-sm text-white/40">Ready to broadcast</p>
@@ -226,7 +227,7 @@ function goLive() {}
                 :muted="true"
                 :playsinline="true"
                 preload="metadata"
-                class="size-full rounded-md object-cover opacity-80 transition group-hover:opacity-100" />
+                class="rounded-md object-contain opacity-80 transition group-hover:opacity-100" />
               <img v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />
               <div v-else class="size-full bg-dark-500" />
               <LiveChip class="absolute right-2 top-2" :status="status" />
