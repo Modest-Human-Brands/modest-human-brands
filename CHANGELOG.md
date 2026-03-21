@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.18
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.17...v0.3.18)
+
+### 🩹 Fixes
+
+- Update video encoding settings for improved streaming quality ([f6e9189](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f6e9189))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.17
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.16...v0.3.17)
