@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.11
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.10...v0.3.11)
+
+### 🚀 Enhancements
+
+- Update streaming configuration and enhance media handling ([f443515](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f443515))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.10
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.9...v0.3.10)
