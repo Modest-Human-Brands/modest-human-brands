@@ -49,7 +49,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
             media: `live/${slug}_${deviceId}/abr.m3u8`,
             status: status ?? StreamStatus.Idle,
             poster: generateCover(slug + deviceId, [color.primary, color.accent]), //coverUrl + deviceId,
-            createdAt: new Date().toISOString(), //properties.Date.date.start
+            createdAt: properties.Date.date.start,
           }
         })
 
@@ -59,7 +59,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
         slug,
         title: notionTextStringify(properties.Name.title),
         poster: coverUrl,
-        createdAt: new Date().toISOString(), //properties.Date.date.start
+        createdAt: properties.Date.date.start,
         client: projectClient
           ? {
               name: notionTextStringify(projectClient.properties.Name.title),

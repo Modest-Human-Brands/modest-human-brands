@@ -28,7 +28,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
     slug,
     title: notionTextStringify(properties.Name.title),
     poster: coverUrl,
-    createdAt: new Date().toISOString(), //properties.Date.date.start
+    createdAt: properties.Date.date.start,
     status: stream?.status ?? StreamStatus.Idle,
     streams: [
       {
@@ -37,7 +37,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
         media: `live/${slug}_${deviceId}/abr.m3u8`,
         status: stream?.status ?? StreamStatus.Idle,
         poster: generateCover(slug + deviceId, [color.primary, color.accent]),
-        createdAt: new Date().toISOString(), //properties.Date.date.start
+        createdAt: properties.Date.date.start,
       },
     ],
   }

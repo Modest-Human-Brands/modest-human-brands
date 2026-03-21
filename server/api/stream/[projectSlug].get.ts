@@ -25,7 +25,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
     slug,
     title: notionTextStringify(project.properties.Name.title),
     poster: coverUrl,
-    createdAt: new Date().toISOString(), //properties.Date.date.start
+    createdAt: project.properties.Date.date.start,
     status: (() => {
       const streams = projectStreams ?? []
       if (streams.some((s) => s.status === StreamStatus.Live)) return StreamStatus.Live
@@ -40,7 +40,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
         media: `live/${slug}_${deviceId}/abr.m3u8`,
         status: current?.status ?? StreamStatus.Idle,
         poster: generateCover(slug + deviceId, [color.primary, color.accent]),
-        createdAt: new Date().toISOString(), //properties.Date.date.start
+        createdAt: project.properties.Date.date.start,
       }
     }),
   }

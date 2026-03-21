@@ -127,7 +127,7 @@ function goLive() {}
           :muted="true"
           :playsinline="true"
           preload="metadata"
-          class="size-full object-contain" />
+          class="size-full rounded-md object-contain" />
 
         <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4">
           <div class="absolute left-0 top-0 flex w-full items-center justify-between gap-3 bg-gradient-to-b from-black/60 to-transparent p-4 pb-8">
@@ -226,7 +226,7 @@ function goLive() {}
                 :muted="true"
                 :playsinline="true"
                 preload="metadata"
-                class="size-full object-cover opacity-80 transition group-hover:opacity-100" />
+                class="size-full rounded-md object-cover opacity-80 transition group-hover:opacity-100" />
               <img v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />
               <div v-else class="size-full bg-dark-500" />
               <LiveChip class="absolute right-2 top-2" :status="status" />
