@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.17
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.16...v0.3.17)
+
+### 🩹 Fixes
+
+- Adjust video bitrate and resolution settings for improved streaming quality ([208d5df](https://github.com/Modest-Human-Brands/modest-human-brands/commit/208d5df))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.16
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.15...v0.3.16)
