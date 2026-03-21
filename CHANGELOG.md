@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.13
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.12...v0.3.13)
+
+### 🩹 Fixes
+
+- Update port mappings for TURN and ICE media in docker-compose ([b94a1ee](https://github.com/Modest-Human-Brands/modest-human-brands/commit/b94a1ee))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.12
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.11...v0.3.12)
