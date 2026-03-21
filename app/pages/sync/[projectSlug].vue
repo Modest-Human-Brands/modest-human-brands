@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'navigation',
-  middleware: ['auth'],
+  // middleware: ['auth'],
 })
 
 const {
@@ -35,23 +35,23 @@ onMounted(() => {
 
 const videoPlayer = useTemplateRef<{ videoRef: HTMLVideoElement | null; seekToLive: () => object }>('videoPlayer')
 const { stream, enabled: isStreaming } = useUserMedia({
-  constraints: reactive({
+  constraints: computed(() => ({
     video: {
-      deviceId: activeVideoInputId.value ? { exact: activeVideoInputId } : undefined,
+      deviceId: activeVideoInputId.value ? { exact: activeVideoInputId.value } : undefined,
       width: { ideal: 1920 },
       height: { ideal: 1920 },
       frameRate: { ideal: 30, min: 30 },
     },
     audio: {
-      deviceId: activeAudioInputId.value ? { exact: activeAudioInputId } : undefined,
-      echoCancellation: false, // disable processing for raw quality
+      deviceId: activeAudioInputId.value ? { exact: activeAudioInputId.value } : undefined,
+      echoCancellation: false,
       noiseSuppression: false,
       autoGainControl: false,
       sampleRate: { ideal: 48000 },
       sampleSize: { ideal: 16 },
       channelCount: { ideal: 2 },
     },
-  }),
+  })),
 })
 
 const { start, stop } = useWhip({
