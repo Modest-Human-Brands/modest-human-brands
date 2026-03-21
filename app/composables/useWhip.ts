@@ -4,18 +4,19 @@ interface WhipOptions {
 }
 
 export function useWhip(options: WhipOptions) {
-  const {
-    public: { turnUrl },
-  } = useRuntimeConfig()
+  // const {
+  //   public: { turnUrl },
+  // } = useRuntimeConfig()
 
   const {
     baseUrl,
     iceServers = [
-      {
-        urls: `${turnUrl}?transport=tcp`,
-        username: 'ome',
-        credential: 'airen',
-      },
+      /*  {
+         urls: `${turnUrl}?transport=tcp`,
+         username: 'ome',
+         credential: 'airen',
+       }, */
+      { urls: 'stun:stun.l.google.com:19302' },
     ],
   } = options
 
@@ -47,7 +48,10 @@ export function useWhip(options: WhipOptions) {
         track.contentHint = 'motion'
       })
 
-      pc = new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' })
+      pc = new RTCPeerConnection({
+        iceServers,
+        // iceTransportPolicy: 'relay'
+      })
 
       pc.onicecandidate = async (event) => {
         if (!event.candidate) return

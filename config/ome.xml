@@ -55,7 +55,7 @@
         </Signalling>
         <IceCandidates>
           <TcpRelay>*:3478</TcpRelay>
-          <TcpForce>true</TcpForce>
+          <!-- <TcpForce>true</TcpForce> -->
           <IceCandidate>*:10000-10005/udp</IceCandidate>
           <IceCandidate>${env:MOTIA_OME_HOST:127.0.0.1}:10000-10005/udp</IceCandidate>
         </IceCandidates>
