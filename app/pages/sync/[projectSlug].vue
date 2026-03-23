@@ -23,6 +23,7 @@ const inactiveStreams = computed(() => streamCollection.value?.streams.filter((s
 const activeVideoInputId = shallowRef<string>()
 const activeAudioInputId = shallowRef<string>()
 const { videoInputs, audioInputs, ensurePermissions } = useDevicesList({
+  requestPermissions: true,
   onUpdated() {
     if (!videoInputs.value.find((i) => i.deviceId === activeVideoInputId.value)) activeVideoInputId.value = videoInputs.value[0]?.deviceId
 

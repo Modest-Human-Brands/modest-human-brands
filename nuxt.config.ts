@@ -41,6 +41,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: [
+    // '@hannoeru/nuxt-otel',
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/icon',
@@ -49,6 +50,7 @@ export default defineNuxtConfig({
     '@nuxt/test-utils/module',
     '@nuxtjs/color-mode',
     // '@nuxtjs/i18n',
+    '@nuxtjs/mcp-toolkit',
     '@nuxtjs/seo',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
@@ -147,6 +149,10 @@ export default defineNuxtConfig({
     preference: 'system',
     fallback: 'light',
     classSuffix: '',
+  },
+  mcp: {
+    name: 'Modest Human Brands MCP Server',
+    version: '1.0.0',
   },
   site: {
     name: 'Modest Human Brands',
