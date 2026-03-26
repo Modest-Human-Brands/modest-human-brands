@@ -1,7 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{ orgSlug: string; mediaCollection: ProjectMediaCollection }>()
+import { useShare } from '@vueuse/core'
 
-const previewImagesShown = computed(() => props.mediaCollection.previewImages.slice(0, 4))
+const props = defineProps<{
+  orgSlug: string
+  mediaCollection: ProjectMediaCollection // Ideally typed as ProjectDetail
+  index: number
+}>()
 
 const { share, isSupported } = useShare()
 
@@ -15,59 +19,122 @@ function shareMedia(e: Event) {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
+
+// Pinterest-style masonry logic: varied aspect ratios based on index
+const aspectRatio = computed(() => {
+  if (props.index === 0) return 'aspect-[3/4]' // Large featured
+  const patterns = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[1/1]', 'aspect-[4/3]']
+  return patterns[props.index % patterns.length]
+})
+
+// Get up to 4 images to create a rich collage look
+const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(0, 4) || [])
 </script>
 
 <template>
-  <NuxtLink :to="`/drive/${mediaCollection.slug}`" class="group flex items-start gap-2 rounded bg-dark-500 p-2 text-white md:gap-4 md:rounded-2xl md:p-4">
-    <div class="relative -space-x-10">
-      <NuxtImg
-        v-for="(src, idx) in previewImagesShown"
-        :key="src"
-        :src="src"
-        :alt="mediaCollection.title"
-        :width="128"
-        :height="171"
-        fit="cover"
-        class="relative inline-block aspect-[3/4] w-[3.125rem] rounded-lg object-cover md:w-20"
-        :style="{ zIndex: idx }" />
-    </div>
-
-    <div class="flex min-w-0 flex-1 flex-col gap-1">
-      <div class="font-semibold truncate text-sm text-white md:text-xl">{{ mediaCollection.title }}</div>
-
-      <NuxtTime :datetime="mediaCollection.date" class="text-2xs text-white md:text-base" day="numeric" month="short" year="numeric" />
-
-      <div class="flex items-center gap-2 text-2xs text-white/70 md:gap-3 md:text-base">
-        <div class="inline-flex items-center gap-2">
-          <span class="size-3 rounded-full" :class="mediaCollection.status === 'Delivered' ? 'bg-success-500' : 'bg-white/40'" />
-          <span class="text-white/75">{{ mediaCollection.status }}</span>
-        </div>
-        <div class="text-white/40">·</div>
-        <div class="text-white/60">{{ mediaCollection.mediaCount.photo }} Photos {{ mediaCollection.mediaCount.video }} Videos</div>
-      </div>
-
-      <div class="flex w-full justify-between">
-        <div v-if="mediaCollection.client" class="flex min-w-0 items-center gap-2">
-          <NuxtImg
-            v-if="mediaCollection.client.avatar"
-            :src="mediaCollection.client.avatar"
-            :alt="mediaCollection.client.name"
-            :width="32"
-            :height="32"
-            class="size-5 shrink-0 rounded-full object-cover md:size-8" />
-          <span class="truncate text-2xs text-white/75 md:text-base">{{ mediaCollection.client.name }}</span>
-        </div>
-        <!-- Share button -->
-        <button type="button" class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:hidden" @click="shareMedia">
-          <NuxtIcon name="local:link" class="text-[16px]" />
-          Share
-        </button>
-      </div>
-    </div>
-    <!-- Share button -->
-    <button type="button" class="mr-3 hidden shrink-0 items-center gap-2 self-center rounded-full bg-dark-400 px-4 py-2 text-sm text-white/80 hover:bg-dark-600 md:inline-flex" @click="shareMedia">
-      <NuxtIcon name="local:link" class="text-[24px]" />
-      Share
+  <NuxtLink
+    :to="`/drive/${mediaCollection.slug}`"
+    :style="{ animationDelay: `${index * 80}ms` }"
+    class="animate-fade-in group relative block w-full cursor-pointer overflow-hidden bg-dark-400 transition-all duration-500 hover:shadow-2xl hover:shadow-black/50"
+    :class="[index === 0 ? 'md:col-span-2 md:row-span-2' : '', aspectRatio]">
+    <!-- Share Button: Minimalist Floating -->
+    <button
+      class="absolute right-3 top-3 z-30 flex size-9 items-center justify-center rounded-full bg-white/10 text-white opacity-0 blur-sm backdrop-blur-md transition-all duration-500 hover:bg-white hover:text-black group-hover:opacity-100 group-hover:blur-none"
+      aria-label="Share Collection"
+      @click="shareMedia">
+      <NuxtIcon name="local:link" class="text-base" />
     </button>
+
+    <!-- Content Area: Multi-Image Collage -->
+    <div class="relative size-full overflow-hidden">
+      <!-- Scenario A: Real Preview Images (Collage Look) -->
+      <div v-if="galleryImages.length" class="flex size-full gap-0.5 md:gap-1">
+        <!-- Main Large Thumbnail -->
+        <div class="relative h-full flex-1 overflow-hidden">
+          <NuxtImg
+            :src="galleryImages[0]"
+            :alt="mediaCollection.title"
+            class="size-full bg-dark-600 object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+            fit="cover"
+            loading="lazy" />
+        </div>
+
+        <!-- Side Thumbnails (Stack) -->
+        <div v-if="galleryImages.length > 1" class="flex h-full w-1/3 flex-col gap-0.5 md:gap-1">
+          <div v-for="(img, i) in galleryImages.slice(1)" :key="i" class="relative flex-1 overflow-hidden">
+            <NuxtImg :src="img" class="size-full bg-dark-600 object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" fit="cover" loading="lazy" />
+          </div>
+          <!-- Placeholder if less than 4 images to keep grid balanced -->
+          <div v-if="galleryImages.length < 4 && galleryImages.length > 1" class="flex flex-1 items-center justify-center bg-white/5">
+            <span class="text-[8px] text-white/20">...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenario B: Minimal Empty State -->
+      <div v-else class="absolute inset-0 flex flex-col items-center justify-center bg-dark-600/50">
+        <div class="flex flex-col items-center opacity-20 transition-opacity duration-500 group-hover:opacity-40">
+          <NuxtIcon name="local:image" class="mb-2 text-3xl" />
+          <span class="text-[10px] font-light uppercase tracking-[0.4em]">Empty</span>
+        </div>
+      </div>
+
+      <!-- Overlay Gradients for legibility -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent transition-opacity duration-500 group-hover:from-black" />
+    </div>
+
+    <!-- UI Labels -->
+    <div class="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
+      <!-- Title Area: Persistent but shifts on hover -->
+      <div class="transform transition-all duration-500 group-hover:-translate-y-1">
+        <h2 class="line-clamp-2 text-sm font-regular leading-tight text-white drop-shadow-lg md:text-lg">
+          {{ mediaCollection.title }}
+        </h2>
+
+        <!-- Status dot: Always visible but tiny -->
+        <div class="mt-1.5 flex items-center gap-2">
+          <span class="size-1.5 rounded-full" :class="mediaCollection.status === 'Delivered' ? 'bg-success-500' : 'bg-white/30'" />
+          <span class="text-[9px] uppercase tracking-widest text-white/50">{{ mediaCollection.status || 'Draft' }}</span>
+        </div>
+      </div>
+
+      <!-- Detail Panel: Slides up Pinterest-style -->
+      <div class="mt-2 max-h-0 translate-y-4 overflow-hidden border-t border-white/10 opacity-0 transition-all duration-500 group-hover:max-h-20 group-hover:translate-y-0 group-hover:opacity-100">
+        <div class="flex items-center justify-between">
+          <div class="flex min-w-0 items-center gap-2">
+            <NuxtImg v-if="mediaCollection.client?.avatar" :src="mediaCollection.client.avatar" class="size-5 rounded-full object-cover ring-1 ring-white/20" />
+            <p class="truncate text-[10px] font-light uppercase tracking-widest text-white/70">
+              {{ mediaCollection.client?.name || 'Client' }}
+            </p>
+          </div>
+
+          <div class="flex items-baseline gap-1 text-white">
+            <span class="text-xl font-light">
+              {{ (mediaCollection.mediaCount?.photo || 0) + (mediaCollection.mediaCount?.video || 0) }}
+            </span>
+            <span class="text-[8px] uppercase tracking-tighter text-white/40">items</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </NuxtLink>
 </template>
+
+<style scoped>
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

@@ -241,7 +241,7 @@ async function onSubmit() {
                     class="group flex items-center gap-2 rounded-lg bg-primary-400/10 px-3 py-1.5 text-sm text-primary-400 ring-1 ring-primary-400/30">
                     <span>{{ email }}</span>
                     <button type="button" class="text-primary-400/60 transition hover:text-alert-500" @click="removeInvite(index)">
-                      <NuxtIcon name="mdi:close" class="text-base" />
+                      <NuxtIcon name="local:cross" class="text-base" />
                     </button>
                   </div>
                 </div>

@@ -1,14 +1,4 @@
 <script setup lang="ts">
-import type { MediaMetadata } from '~~/shared/types/project'
-
-interface MediaItem {
-  slug: string
-  type: MediaType
-  title: string
-  thumbnailUrl?: string
-  metadata: MediaMetadata
-}
-
 const props = defineProps<MediaItem>()
 
 const formatSize = (mb: number) => `${mb} MB`

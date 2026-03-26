@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ media: MediaItem; status?: 'approved' | 'rejected' }>()
+const props = defineProps<{ projectSlug: string; media: MediaItem; status?: 'approved' | 'rejected' }>()
 const emit = defineEmits<{ update: [value: 'approved' | 'rejected'] }>()
 
 const aspectRatio = computed(() => props.media.metadata.aspectRatio.replace(':', '/'))
@@ -7,7 +7,7 @@ const aspectRatio = computed(() => props.media.metadata.aspectRatio.replace(':',
 
 <template>
   <!-- :class="{ 'ring-1 ring-success-500': status === 'approved', 'ring-1 ring-alert-500': status === 'rejected' }" -->
-  <div class="group relative w-full cursor-pointer overflow-hidden bg-dark-500" :style="{ aspectRatio }">
+  <NuxtLink :to="`/drive/${projectSlug}/${media.slug}`" class="group relative w-full cursor-pointer overflow-hidden" :style="{ aspectRatio }">
     <NuxtImg :src="media.thumbnailUrl" :alt="media.title" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" fit="cover" />
     <div class="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -44,5 +44,5 @@ const aspectRatio = computed(() => props.media.metadata.aspectRatio.replace(':',
         <span v-if="media.type === 'video' && media.metadata.fps">&bull; {{ media.metadata.fps }}fps</span>
       </p>
     </div>
-  </div>
+  </NuxtLink>
 </template>

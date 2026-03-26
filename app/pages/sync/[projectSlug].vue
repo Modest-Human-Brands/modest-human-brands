@@ -31,11 +31,6 @@ const { videoInputs, audioInputs, ensurePermissions } = useDevicesList({
   },
 })
 
-onMounted(() => {
-  resume()
-})
-
-const videoPlayer = useTemplateRef<{ videoRef: HTMLVideoElement | null; seekToLive: () => object }>('videoPlayer')
 const { stream, enabled: isStreaming } = useUserMedia({
   constraints: computed(() => ({
     video: {
@@ -59,6 +54,12 @@ const { stream, enabled: isStreaming } = useUserMedia({
 const { start, stop } = useWhip({
   baseUrl: whipUrl,
 })
+
+onMounted(() => {
+  resume()
+})
+
+const videoPlayer = useTemplateRef<{ videoRef: HTMLVideoElement | null; seekToLive: () => object }>('videoPlayer')
 
 watchEffect(async () => {
   if (videoPlayer.value?.videoRef && stream.value) {
@@ -229,7 +230,7 @@ function goLive() {}
                 :playsinline="true"
                 preload="metadata"
                 class="rounded-md object-contain opacity-80 transition group-hover:opacity-100" />
-              <img v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />
+              <NuxtImg v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />
               <div v-else class="size-full bg-dark-500" />
               <LiveChip class="absolute right-2 top-2" :status="status" />
             </div>

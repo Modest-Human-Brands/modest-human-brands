@@ -56,7 +56,7 @@ const client = computed(() => ({
       </div>
       <div class="flex gap-2 whitespace-nowrap">
         <div class="-space-x-3">
-          <img
+          <NuxtImg
             v-for="{ deviceId, poster } in streamCollection.streams"
             :key="deviceId"
             :src="poster"

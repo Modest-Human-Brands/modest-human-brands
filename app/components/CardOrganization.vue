@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineProps<{ organization: Organization }>()
 
-const card = ref<HTMLElement | null>(null)
-const open = useElementHover(card, { delayLeave: 700 })
+const cardRef = useTemplateRef<HTMLDivElement>('card')
+const open = useElementHover(cardRef, { delayLeave: 700 })
 </script>
 
 <template>

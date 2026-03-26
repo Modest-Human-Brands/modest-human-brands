@@ -1,5 +1,7 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'default' })
+definePageMeta({ layout: false })
+
+export type ApprovalState = 'approved' | 'rejected'
 
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
@@ -22,7 +24,6 @@ const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Or
 const { data: media, status: projectStatus } = await useFetch<ProjectDetail>(`/api/media/${slug}`)
 const isLoading = computed(() => projectStatus.value === 'pending')
 
-type ApprovalState = 'approved' | 'rejected'
 const approvals = ref(new Map<string, ApprovalState>())
 const setApproval = (itemSlug: string, state: ApprovalState) => {
   approvals.value.get(itemSlug) === state ? approvals.value.delete(itemSlug) : approvals.value.set(itemSlug, state)
@@ -46,16 +47,16 @@ const activeTab = ref<'unset' | 'approved' | 'rejected'>('unset')
 
 const filteredMedia = computed(() => allMedia.value[activeTab.value])
 
-const scrollEl = ref<HTMLElement | null>(null)
-const { y } = useScroll(scrollEl)
+const scrollRef = useTemplateRef<HTMLDivElement>('scroll')
+const { y } = useScroll(scrollRef)
 const collapsed = computed(() => y.value > 40)
 
-const tabsRef = ref<HTMLElement | null>(null)
+const tabsRef = useTemplateRef<HTMLDivElement>('tabs')
 watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active="true"]')?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })))
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-dark-600">
+  <div class="scrollbar-hidden flex h-dvh flex-col overflow-hidden">
     <!-- Organization -->
     <CardOrganization :organization="organization" class="absolute right-4 top-4 z-20 md:right-1/2 md:translate-x-1/2" />
     <!-- Header -->
@@ -86,26 +87,26 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       </div>
     </div>
     <!-- Tabs -->
-    <nav ref="tabsRef" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto border-b border-white/[0.06] bg-dark-600 px-2 py-2.5 sm:gap-1.5 sm:px-3 sm:py-3">
+    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto border-b border-white/[0.06] bg-dark-600 px-2 py-2.5 sm:gap-1.5 sm:px-3 sm:py-3">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         :data-active="activeTab === tab.id"
         class="shrink-0 rounded-full px-3 py-1 text-2xs font-semi-bold transition-all duration-200 sm:px-4 sm:py-1.5 sm:text-xs"
-        :class="activeTab === tab.id ? 'text-white' : 'bg-dark-500 text-light-400 hover:text-white'"
+        :class="activeTab === tab.id ? 'text-white' : 'text-light-400 hover:text-white'"
         :style="activeTab === tab.id ? { backgroundColor: organization.branding.color.primary } : {}"
         @click="activeTab = tab.id">
         {{ tab.label }} ({{ tab.count }})
       </button>
     </nav>
     <!-- Media Grid -->
-    <main ref="scrollEl" class="flex-1 overflow-y-auto bg-dark-600 pb-16">
+    <main ref="scroll" class="scrollbar-hidden flex-1 overflow-y-auto pb-16">
       <div v-if="isLoading" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm bg-dark-500" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
+        <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
       </div>
 
       <div v-else-if="filteredMedia && filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        <CardMediaPublic v-for="item in filteredMedia" :key="item.slug" :media="item" :status="approvals.get(item.slug)" @update="(value) => setApproval(item.slug, value)" />
+        <CardMediaPublic v-for="item in filteredMedia" :key="item.slug" :project-slug="slug" :media="item" :status="approvals.get(item.slug)" @update="(value) => setApproval(item.slug, value)" />
       </div>
       <div v-else class="flex h-48 flex-col items-center justify-center gap-2 text-light-400/25">
         <NuxtIcon name="local:photo" class="size-10" />
