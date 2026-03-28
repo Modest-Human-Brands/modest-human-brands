@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.20
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.19...v0.3.20)
+
+### 🏡 Chore
+
+- Deps updated ([078fa93](https://github.com/Modest-Human-Brands/modest-human-brands/commit/078fa93))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.19
 
 ### 🏡 Chore
