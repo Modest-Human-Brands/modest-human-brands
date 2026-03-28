@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.3.19
+
+### 🏡 Chore
+
+- Apply code fixes [skip ci] ([a04e959](https://github.com/Modest-Human-Brands/modest-human-brands/commit/a04e959))
+
+### 🎨 Styles
+
+- Drive new ui ([22e7839](https://github.com/Modest-Human-Brands/modest-human-brands/commit/22e7839))
+
+### ❤️ Contributors
+
+- Shba007 ([@shba007](https://github.com/shba007))
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.18
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.17...v0.3.18)
