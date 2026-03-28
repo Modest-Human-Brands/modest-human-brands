@@ -61,7 +61,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
     <CardOrganization :organization="organization" class="absolute right-4 top-4 z-20 md:right-1/2 md:translate-x-1/2" />
     <!-- Header -->
     <div class="relative shrink-0 overflow-hidden transition-[height,opacity] duration-500 ease-in-out" :class="collapsed ? 'h-0 opacity-0' : 'h-60 opacity-100'">
-      <NuxtImg v-if="media?.mediaItems?.[0]?.thumbnailUrl" :src="media.mediaItems[0].thumbnailUrl" class="absolute inset-0 size-full object-cover" fit="cover" />
+      <NuxtImg v-if="media?.mediaItems?.[0]?.thumbnailUrl" :src="extractCdnId(media.mediaItems[0].thumbnailUrl)" class="absolute inset-0 size-full object-cover" fit="cover" @contextmenu.prevent />
       <div v-else class="absolute inset-0" />
       <div class="absolute inset-0 bg-gradient-to-t from-dark-600 via-dark-600/60 to-dark-600/10" />
       <div class="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-5 text-center">
@@ -100,13 +100,20 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       </button>
     </nav>
     <!-- Media Grid -->
-    <main ref="scroll" class="scrollbar-hidden flex-1 overflow-y-auto pb-16">
+    <main ref="scroll" class="scrollbar-hidden flex-1 overflow-y-auto">
       <div v-if="isLoading" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
       </div>
 
       <div v-else-if="filteredMedia && filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        <CardMediaPublic v-for="item in filteredMedia" :key="item.slug" :project-slug="slug" :media="item" :status="approvals.get(item.slug)" @update="(value) => setApproval(item.slug, value)" />
+        <CardMedia
+          v-for="item in filteredMedia"
+          :is-public="true"
+          :key="item.slug"
+          :project-slug="slug"
+          :media="item"
+          :status="approvals.get(item.slug)"
+          @update="(value) => setApproval(item.slug, value)" />
       </div>
       <div v-else class="flex h-48 flex-col items-center justify-center gap-2 text-light-400/25">
         <NuxtIcon name="local:photo" class="size-10" />

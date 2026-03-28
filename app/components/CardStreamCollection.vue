@@ -51,7 +51,7 @@ const client = computed(() => ({
       </h3>
       <span class="text-sm opacity-60 md:text-base">{{ streamCollection.slug }}</span>
       <div class="flex items-center gap-2">
-        <NuxtImg :src="client.avatar" :alt="client.name" class="size-6 rounded-full object-cover" />
+        <NuxtImg :src="extractCdnId(client.avatar)" :alt="client.name" class="size-6 rounded-full object-cover" />
         <span class="text-sm opacity-60 md:text-base">{{ client.name }}</span>
       </div>
       <div class="flex gap-2 whitespace-nowrap">

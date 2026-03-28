@@ -38,7 +38,7 @@ useSwipe(swipeRef, {
 const filmstripItems = useTemplateRefsList<HTMLButtonElement>()
 
 // Auto-scroll filmstrip to center active item
-watch(
+/* watch(
   currentIndex,
   async (newIndex) => {
     if (newIndex < 0) return
@@ -51,13 +51,13 @@ watch(
     })
   },
   { immediate: true }
-)
+) */
 
 const showInfo = ref(false)
 </script>
 
 <template>
-  <div ref="swipe" class="fixed inset-0 z-50 flex flex-col bg-dark-600 font-main">
+  <div ref="swipe" class="fixed inset-0 z-50 flex flex-col gap-4 bg-dark-500">
     <!-- Header -->
     <header class="z-20 grid shrink-0 grid-cols-3 items-center p-4 md:p-6">
       <!-- Left: Project Title -->
@@ -85,17 +85,28 @@ const showInfo = ref(false)
       <div v-if="!item" class="animate-pulse font-sub text-xs uppercase tracking-widest text-light-500">Loading...</div>
 
       <template v-else>
-        <!-- Image / Video Element -->
+        <!-- Image Element -->
         <NuxtImg
           v-if="item.type === 'photo'"
           :key="item.slug"
-          :src="item.thumbnailUrl"
+          :src="extractCdnId(item.thumbnailUrl)"
           :alt="item.title"
-          class="max-h-full w-full max-w-full object-contain shadow-2xl transition-opacity duration-300 landscape:h-full" />
-
-        <!-- Video Placeholder -->
+          class="max-h-full w-full max-w-full object-contain shadow-2xl transition-opacity duration-300 landscape:h-full"
+          @contextmenu.prevent />
+        <!-- Video Element -->
         <div v-else class="relative flex h-full w-full items-center justify-center">
-          <NuxtImg :src="item.thumbnailUrl" class="max-h-full max-w-full object-contain opacity-50 blur-sm" />
+          <NuxtVideo
+            ref="videoContainerRef"
+            :key="item.slug"
+            :poster="item.thumbnailUrl"
+            :media="item.media"
+            :disable-picture-in-picture="true"
+            controls-list="nodownload"
+            :autoplay="true"
+            :muted="true"
+            :playsinline="true"
+            preload="metadata"
+            class="aspect-video cursor-pointer" />
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="flex size-20 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-transform hover:scale-110">
               <NuxtIcon name="local:play" class="translate-x-0.5 text-3xl text-white" />
@@ -134,9 +145,8 @@ const showInfo = ref(false)
       </template>
     </main>
 
-    <!-- Filmstrip Bottom Slider -->
-    <div class="pb-safe h-28 shrink-0 border-t border-white/5 bg-dark-600/50 backdrop-blur-md md:h-32">
-      <div class="flex h-full items-center gap-3 overflow-x-auto scroll-smooth">
+    <div class="pb-safe shrink-0 bg-dark-500/50 backdrop-blur-md">
+      <div class="flex items-center gap-2 overflow-y-hidden scroll-smooth">
         <!-- Leading spacer to center active item -->
         <div class="w-[calc(50vw-48px)] shrink-0" />
 
@@ -145,17 +155,15 @@ const showInfo = ref(false)
           ref="filmstripItems"
           :key="sibling.slug"
           :data-slug="sibling.slug"
-          class="relative aspect-[4/3] w-20 shrink-0 overflow-hidden rounded-sm transition-all duration-500 ease-out md:w-24"
+          class="relative h-16 w-fit shrink-0 overflow-hidden rounded-sm transition-all duration-500 ease-out"
           :class="sibling.slug === mediaSlug ? 'z-10 scale-110 opacity-100 shadow-xl shadow-black/50 ring-1 ring-white' : 'scale-90 opacity-30 hover:opacity-60'"
           @click="goTo(sibling.slug)">
-          <NuxtImg :src="sibling.thumbnailUrl" :alt="sibling.slug" class="h-full w-full object-cover" loading="lazy" />
-
+          <NuxtImg :src="extractCdnId(sibling.thumbnailUrl)" :alt="sibling.slug" class="size-full object-contain" loading="lazy" />
           <div v-if="sibling.type === 'video'" class="absolute inset-0 flex items-center justify-center bg-black/20">
             <NuxtIcon name="local:play" class="size-4 text-white" />
           </div>
-
           <!-- Active Indicator line -->
-          <div v-if="sibling.slug === mediaSlug" class="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></div>
+          <div v-if="sibling.slug === mediaSlug" class="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
         </button>
 
         <!-- Trailing spacer -->

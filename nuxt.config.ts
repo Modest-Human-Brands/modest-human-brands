@@ -139,7 +139,16 @@ export default defineNuxtConfig({
       scan: true,
     },
   },
-  image: {},
+  image: {
+    provider: 'ipx',
+    ipx: {
+      baseURL: `${process.env.NUXT_PUBLIC_CDN_URL}/media/image`,
+      modifiers: {
+        format: 'auto',
+        quality: 80,
+      },
+    },
+  },
   scripts: {
     registry: {
       googleAnalytics: true,

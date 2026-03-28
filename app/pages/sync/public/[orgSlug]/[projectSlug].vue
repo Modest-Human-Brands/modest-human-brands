@@ -150,7 +150,7 @@ const streamDuration = computed(() => {
               :playsinline="true"
               preload="metadata"
               class="rounded-md object-contain opacity-80 transition group-hover:opacity-100" />
-            <NuxtImg v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />
+            <NuxtImg v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" @contextmenu.prevent />
             <div v-else class="size-full bg-dark-500" />
 
             <LiveChip class="absolute right-2 top-2" :status="status" />

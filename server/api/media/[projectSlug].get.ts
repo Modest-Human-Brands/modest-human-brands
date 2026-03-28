@@ -27,6 +27,7 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
       title: notionTextStringify(properties.Name.title),
       type: properties.Type.select.name.toLowerCase() as 'photo' | 'video',
       thumbnailUrl: cover?.type === 'external' ? cover.external.url : undefined,
+      media: properties.Type.select.name.toLowerCase() === 'video' ? `media/video/s_720-1080/${properties.Slug.formula.string}.mpd` : undefined,
       metadata: {
         size: 22,
         bitDepth: '10 bit',
@@ -34,6 +35,8 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
         aspectRatio: properties['Aspect ratio'].select.name,
         fps: properties.Type.select.name.toLowerCase() === 'video' ? 30 : undefined,
       },
+      // uploadDate:'',
+      // url:'',
     }))
     .toSorted((a, b) => a.slug.localeCompare(b.slug))
 
