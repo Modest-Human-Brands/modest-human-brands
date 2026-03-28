@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.23
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.22...v0.3.23)
+
+### 🏡 Chore
+
+- Changed mediaUrl scope ([69043d3](https://github.com/Modest-Human-Brands/modest-human-brands/commit/69043d3))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.22
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.21...v0.3.22)
