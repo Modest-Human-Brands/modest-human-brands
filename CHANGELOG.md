@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.21
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.20...v0.3.21)
+
+### 🩹 Fixes
+
+- Added CDN_URL and SITE_URL to docker ([ba49bc3](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ba49bc3))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.20
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.19...v0.3.20)
