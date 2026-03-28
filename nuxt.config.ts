@@ -100,7 +100,6 @@ export default defineNuxtConfig({
     public: {
       siteUrl: '',
       cdnUrl: '',
-      mediaUrl: '',
       turnUrl: '',
       whipUrl: '',
       llhlsUrl: '',
@@ -112,6 +111,7 @@ export default defineNuxtConfig({
       vapidKey: '',
     },
     private: {
+      mediaUrl: '',
       notionDbId: '',
       vapidKey: '',
       vapidSubject: '',

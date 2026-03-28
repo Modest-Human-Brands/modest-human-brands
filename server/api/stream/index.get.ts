@@ -31,7 +31,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
     .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
 
   const config = useRuntimeConfig()
-  const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.public.mediaUrl}/stream`)
+  const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.private.mediaUrl}/stream`)
 
   return projects
     .map<ProjectStreamCollection>(({ properties, cover }) => {

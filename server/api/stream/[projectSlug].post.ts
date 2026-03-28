@@ -16,7 +16,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
   const { properties, cover } = project
 
   const [stream] = await Promise.all([
-    $fetch<ProjectStream>(`${config.public.mediaUrl}/stream/start`, {
+    $fetch<ProjectStream>(`${config.private.mediaUrl}/stream/start`, {
       method: 'POST',
       body: { slug, deviceId },
     }).catch(() => null),

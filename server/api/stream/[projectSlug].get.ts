@@ -13,7 +13,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
 
   const config = useRuntimeConfig()
 
-  const allStreams = await $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.public.mediaUrl}/stream`).catch(() => [])
+  const allStreams = await $fetch<{ slug: string; deviceId: string; status: StreamStatus }[]>(`${config.private.mediaUrl}/stream`).catch(() => [])
 
   const projectStreams = allStreams.filter((s) => s.slug.startsWith(slug))
 
