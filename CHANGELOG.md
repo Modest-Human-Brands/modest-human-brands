@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.22
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.21...v0.3.22)
+
+### 🏡 Chore
+
+- Ci env variables added ([1dd4927](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1dd4927))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.21
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.20...v0.3.21)
