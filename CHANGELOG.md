@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.25
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.24...v0.3.25)
+
+### 🎨 Styles
+
+- Drive ui updated ([5875c59](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5875c59))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.24
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.23...v0.3.24)
