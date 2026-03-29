@@ -59,9 +59,13 @@ async function onDownload(e: MouseEvent) {
     <NuxtImg
       :src="extractCdnId(media.thumbnailUrl)"
       :alt="media.title"
-      class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-      loading="lazy"
+      :width="420"
+      :height="Math.round(420 / calculateAspectRatio(media.metadata.aspectRatio))"
+      sizes="50vw md:25vw 2xl:16vw"
       fit="cover"
+      loading="lazy"
+      :placeholder="[120, Math.round(120 / calculateAspectRatio(media.metadata.aspectRatio)), 50, 5]"
+      class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
       @contextmenu.prevent />
 
     <div class="absolute inset-0 bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

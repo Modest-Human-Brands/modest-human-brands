@@ -58,7 +58,14 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
   <div class="flex h-dvh flex-col overflow-hidden">
     <!-- Header -->
     <div class="relative shrink-0 overflow-hidden transition-[height,opacity] duration-500 ease-in-out" :class="collapsed ? 'h-0 opacity-0' : 'h-60 opacity-100'">
-      <NuxtImg v-if="media?.mediaItems?.[0]?.thumbnailUrl" :src="extractCdnId(media.mediaItems[0].thumbnailUrl)" class="absolute inset-0 size-full object-cover" fit="cover" />
+      <NuxtImg
+        v-if="media?.mediaItems?.[0]?.thumbnailUrl"
+        :src="extractCdnId(media.mediaItems[0].thumbnailUrl)"
+        :width="1280"
+        :height="Math.round(1280 / (2 / 1))"
+        fit="cover"
+        :placeholder="[320, Math.round(320 / (2 / 1)), 50, 5]"
+        class="absolute inset-0 size-full object-cover" />
       <div v-else class="absolute inset-0" />
       <div class="absolute inset-0 bg-gradient-to-t from-dark-600 via-dark-600/60 to-dark-600/10" />
       <div class="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-5 text-center">

@@ -54,9 +54,9 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
           <NuxtImg
             :src="extractCdnId(galleryImages[0])"
             :alt="mediaCollection.title"
-            class="size-full bg-dark-600 object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
             fit="cover"
-            loading="lazy" />
+            loading="lazy"
+            class="size-full bg-dark-600 object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
         </div>
 
         <!-- Side Thumbnails (Stack) -->
@@ -64,9 +64,10 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
           <div v-for="(image, i) in galleryImages.slice(1)" :key="i" class="relative flex-1 overflow-hidden">
             <NuxtImg
               :src="extractCdnId(image)"
-              class="size-full bg-dark-600 object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
+              :alt="mediaCollection.title"
               fit="cover"
-              loading="lazy" />
+              loading="lazy"
+              class="size-full bg-dark-600 object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
           </div>
           <!-- Placeholder if less than 4 images to keep grid balanced -->
           <div v-if="galleryImages.length < 4 && galleryImages.length > 1" class="flex flex-1 items-center justify-center bg-white/5">
@@ -102,11 +103,15 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
         </div>
       </div>
 
-      <!-- Detail Panel: Slides up Pinterest-style -->
       <div class="mt-2 max-h-0 translate-y-4 overflow-hidden border-t border-white/10 opacity-0 transition-all duration-500 group-hover:max-h-20 group-hover:translate-y-0 group-hover:opacity-100">
         <div class="flex items-center justify-between">
           <div class="flex min-w-0 items-center gap-2">
-            <NuxtImg v-if="mediaCollection.client?.avatar" :src="extractCdnId(mediaCollection.client.avatar)" class="size-5 rounded-full object-cover ring-1 ring-white/20" />
+            <NuxtImg
+              v-if="mediaCollection.client?.avatar"
+              :src="extractCdnId(mediaCollection.client.avatar)"
+              fit="cover"
+              loading="lazy"
+              class="size-5 rounded-full object-cover ring-1 ring-white/20" />
             <p class="truncate text-[10px] font-light uppercase tracking-widest text-white/70">
               {{ mediaCollection.client?.name || 'Client' }}
             </p>

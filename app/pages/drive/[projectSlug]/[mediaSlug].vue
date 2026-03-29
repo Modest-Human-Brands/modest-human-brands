@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { UseSwipeDirection } from '@vueuse/core'
+
 definePageMeta({
-  layout: 'default',
-  // middleware: ['auth'],
+  layout: false,
 })
 
 const route = useRoute()
@@ -9,188 +10,159 @@ const router = useRouter()
 const projectSlug = computed(() => route.params.projectSlug as string)
 const mediaSlug = computed(() => route.params.mediaSlug as string)
 
-// Fetch project to get siblings
 const { data: project } = await useFetch(`/api/media/${projectSlug.value}`)
 
-const siblings = computed(() => project.value?.mediaItems || [])
-const item = computed(() => siblings.value.find((m) => m.slug === mediaSlug.value))
-const currentIndex = computed(() => siblings.value.findIndex((m) => m.slug === mediaSlug.value))
-const prevItem = computed(() => siblings.value[currentIndex.value - 1] ?? null)
-const nextItem = computed(() => siblings.value[currentIndex.value + 1] ?? null)
+const mediaItems = computed(() => project.value?.mediaItems ?? [])
+const currentIndex = computed(() => mediaItems.value.findIndex((m) => m.slug === mediaSlug.value))
+const isFirst = computed(() => currentIndex.value <= 0)
+const isLast = computed(() => currentIndex.value >= mediaItems.value.length - 1)
+const currentItem = computed(() => mediaItems.value[currentIndex.value])
 
-function goTo(targetSlug: string) {
-  router.push(`/drive/${projectSlug.value}/${targetSlug}`)
+const backUrl = computed(() => `/drive/${projectSlug.value}`)
+
+async function navigateToIndex(index: number) {
+  const slug = mediaItems.value[index]?.slug
+  if (slug) await router.push(`/drive/${projectSlug.value}/${slug}`)
 }
 
-onKeyStroke('ArrowLeft', () => prevItem.value && goTo(prevItem.value.slug))
-onKeyStroke('ArrowRight', () => nextItem.value && goTo(nextItem.value.slug))
-onKeyStroke('Escape', () => router.push(`/drive/${projectSlug.value}`))
+async function prev() {
+  return await (isFirst.value ? router.push(backUrl.value) : navigateToIndex(currentIndex.value - 1))
+}
 
-const swipeRef = useTemplateRef<HTMLDivElement>('swipe')
+async function next() {
+  return await (isLast.value ? router.push(backUrl.value) : navigateToIndex(currentIndex.value + 1))
+}
 
-useSwipe(swipeRef, {
-  onSwipeEnd(_, dir) {
-    if (dir === 'left' && nextItem.value) goTo(nextItem.value.slug)
-    if (dir === 'right' && prevItem.value) goTo(prevItem.value.slug)
-  },
+onKeyStroke('Escape', () => router.push(backUrl.value))
+onKeyStroke('ArrowLeft', prev)
+onKeyStroke('ArrowRight', next)
+
+const imageEl = ref<HTMLElement | null>(null)
+onMounted(() => {
+  useSwipe(imageEl, {
+    passive: false,
+    async onSwipeEnd(_e: TouchEvent, direction: UseSwipeDirection) {
+      const finalDir = await (direction === 'left' ? next() : prev())
+      return finalDir
+    },
+  })
 })
 
-const filmstripItems = useTemplateRefsList<HTMLButtonElement>()
-
-// Auto-scroll filmstrip to center active item
-/* watch(
-  currentIndex,
-  async (newIndex) => {
-    if (newIndex < 0) return
-    await nextTick()
-
-    filmstripItems.value[newIndex]?.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest',
-    })
-  },
-  { immediate: true }
-) */
-
-const showInfo = ref(false)
+const img = useImage()
 </script>
 
 <template>
-  <div ref="swipe" class="fixed inset-0 z-50 flex flex-col gap-4 bg-dark-500">
-    <!-- Header -->
-    <header class="z-20 grid shrink-0 grid-cols-3 items-center p-4 md:p-6">
-      <!-- Left: Project Title -->
-      <div class="hidden md:block">
-        <h1 class="truncate text-[10px] uppercase tracking-[0.3em] text-light-500">
-          {{ project?.title }}
-        </h1>
-      </div>
+  <section v-if="currentItem && currentItem.slug" class="relative flex h-screen w-screen overflow-hidden bg-dark-600">
+    <!-- layout: filmstrip left (desktop) | filmstrip bottom (mobile) -->
+    <div class="relative z-10 flex size-full flex-col md:flex-row">
+      <!-- desktop filmstrip — left vertical -->
+      <MediaFlimstrip :project-slug="projectSlug" :media-items="mediaItems" :active-media-slug="currentItem.slug" vertical />
 
-      <!-- Middle: Counter -->
-      <div class="col-start-2 text-center">
-        <p class="font-medium text-sm tracking-tighter text-white">{{ currentIndex + 1 }} <span class="mx-1 text-light-500">/</span> {{ siblings.length }}</p>
-      </div>
+      <!-- main content -->
+      <div class="flex flex-1 flex-col overflow-hidden" :style="{ aspectRatio: currentItem.metadata.aspectRatio }">
+        <!-- top bar -->
+        <div class="flex h-12 shrink-0 items-center justify-between border-b border-white/5 px-4 backdrop-blur-sm">
+          <NuxtLink :to="backUrl" class="flex items-center gap-1.5 text-white/50 transition-colors duration-200 hover:text-white">
+            <NuxtIcon name="local:chevron-bold" class="text-[18px]" />
+            <span class="text-xs font-semi-bold">Back</span>
+          </NuxtLink>
 
-      <!-- Right: Actions -->
-      <div class="col-start-3 flex items-center justify-end gap-6">
-        <button class="text-xs uppercase tracking-widest transition-colors" :class="showInfo ? 'text-white' : 'text-light-400 hover:text-white'" @click="showInfo = !showInfo">Info</button>
-
-        <button class="text-xs uppercase tracking-widest text-light-400 transition-colors hover:text-white" @click="router.push(`/drive/${projectSlug}`)">Close</button>
-      </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="relative flex flex-1 items-center justify-center overflow-hidden">
-      <div v-if="!item" class="animate-pulse font-sub text-xs uppercase tracking-widest text-light-500">Loading...</div>
-
-      <template v-else>
-        <!-- Image Element -->
-        <NuxtImg
-          v-if="item.type === 'photo'"
-          :key="item.slug"
-          :src="extractCdnId(item.thumbnailUrl)"
-          :alt="item.title"
-          class="max-h-full w-full max-w-full object-contain shadow-2xl transition-opacity duration-300 landscape:h-full"
-          @contextmenu.prevent />
-        <!-- Video Element -->
-        <div v-else class="relative flex h-full w-full items-center justify-center">
-          <NuxtVideo
-            ref="videoContainerRef"
-            :key="item.slug"
-            :poster="item.thumbnailUrl"
-            :media="item.media"
-            :disable-picture-in-picture="true"
-            controls-list="nodownload"
-            :autoplay="true"
-            :muted="true"
-            :playsinline="true"
-            preload="metadata"
-            class="aspect-video cursor-pointer" />
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="flex size-20 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-transform hover:scale-110">
-              <NuxtIcon name="local:play" class="translate-x-0.5 text-3xl text-white" />
-            </div>
-          </div>
+          <span class="text-2xs tabular-nums text-white/30"> {{ currentIndex + 1 }}&thinsp;/&thinsp;{{ mediaItems.length }} </span>
         </div>
 
-        <!-- Meta Overlay Panel -->
-        <Transition name="slide-info">
-          <div v-if="showInfo" class="absolute bottom-0 right-0 top-0 z-30 w-72 border-l border-white/5 bg-dark-500/95 p-8 shadow-2xl backdrop-blur-xl">
-            <div class="mb-8">
-              <span class="mb-2 block text-[10px] uppercase tracking-[0.2em] text-light-500">Filename</span>
-              <h2 class="break-all text-lg font-regular leading-tight text-white">{{ item.title || item.slug }}</h2>
+        <!-- image area -->
+        <div ref="imageEl" class="relative flex flex-1 items-center justify-center overflow-hidden">
+          <!-- prev button -->
+          <button
+            type="button"
+            class="absolute left-2 z-10 flex size-9 items-center justify-center rounded-full bg-dark-500/70 text-white/50 backdrop-blur-sm transition-all duration-200 hover:bg-dark-400 hover:text-white disabled:opacity-0"
+            :disabled="isFirst"
+            aria-label="Previous"
+            @click="prev">
+            <NuxtIcon name="local:chevron-bold" class="text-[18px]" />
+          </button>
+
+          <Transition name="media-fade" mode="out-in">
+            <div :key="currentItem.slug" class="relative flex h-auto max-h-full w-full max-w-full items-center justify-center landscape:h-full landscape:w-auto">
+              <NuxtImg
+                v-if="currentItem.type === 'photo'"
+                :key="currentItem.slug"
+                :src="extractCdnId(currentItem.thumbnailUrl!)"
+                :alt="currentItem.title"
+                height="100vh"
+                loading="eager"
+                preload
+                :placeholder="img(extractCdnId(currentItem.thumbnailUrl!), { width: Math.round(240 * calculateAspectRatio(currentItem.metadata.aspectRatio)), height: 240, quality: 80 })"
+                class="h-auto max-h-full w-full max-w-full object-contain shadow-2xl transition-opacity duration-300 landscape:h-full landscape:w-auto"
+                @contextmenu.prevent />
+              <div v-else class="relative flex h-auto max-h-full w-full items-center justify-center landscape:h-full landscape:w-auto">
+                <NuxtVideo
+                  ref="videoContainerRef"
+                  :key="currentItem.slug"
+                  :poster="currentItem.thumbnailUrl"
+                  :media="currentItem.media"
+                  :disable-picture-in-picture="true"
+                  controls-list="nodownload"
+                  :autoplay="true"
+                  :muted="true"
+                  :playsinline="true"
+                  preload="metadata"
+                  class="aspect-video cursor-pointer" />
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="flex size-20 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-transform hover:scale-110">
+                    <NuxtIcon name="local:play" class="translate-x-0.5 text-3xl text-white" />
+                  </div>
+                </div>
+              </div>
             </div>
+          </Transition>
 
-            <div class="space-y-6">
-              <div v-if="item.type">
-                <span class="mb-1 block text-[9px] uppercase tracking-widest text-light-500">Type</span>
-                <span class="text-xs uppercase text-white">{{ item.type }}</span>
-              </div>
-              <div v-if="item.metadata?.resolution">
-                <span class="mb-1 block text-[9px] uppercase tracking-widest text-light-500">Resolution</span>
-                <span class="text-xs text-white">{{ item.metadata.resolution }}</span>
-              </div>
-              <div v-if="item.metadata?.bitDepth">
-                <span class="mb-1 block text-[9px] uppercase tracking-widest text-light-500">Color Depth</span>
-                <span class="text-xs text-white">{{ item.metadata.bitDepth }}</span>
-              </div>
-              <div v-if="item.metadata?.size">
-                <span class="mb-1 block text-[9px] uppercase tracking-widest text-light-500">File Size</span>
-                <span class="text-xs text-white">{{ item.metadata.size }} MB</span>
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </template>
-    </main>
+          <!-- next button -->
+          <button
+            type="button"
+            class="absolute right-2 z-10 flex size-9 items-center justify-center rounded-full bg-dark-500/70 text-white/50 backdrop-blur-sm transition-all duration-200 hover:bg-dark-400 hover:text-white disabled:opacity-0"
+            :disabled="isLast"
+            aria-label="Next"
+            @click="next">
+            <NuxtIcon name="local:chevron-bold" class="-scale-x-100 text-[18px]" />
+          </button>
+        </div>
 
-    <div class="pb-safe shrink-0 bg-dark-500/50 backdrop-blur-md">
-      <div class="flex items-center gap-2 overflow-y-hidden scroll-smooth">
-        <!-- Leading spacer to center active item -->
-        <div class="w-[calc(50vw-48px)] shrink-0" />
-
-        <button
-          v-for="sibling in siblings"
-          ref="filmstripItems"
-          :key="sibling.slug"
-          :data-slug="sibling.slug"
-          class="relative h-16 w-fit shrink-0 overflow-hidden rounded-sm transition-all duration-500 ease-out"
-          :class="sibling.slug === mediaSlug ? 'z-10 scale-110 opacity-100 shadow-xl shadow-black/50 ring-1 ring-white' : 'scale-90 opacity-30 hover:opacity-60'"
-          @click="goTo(sibling.slug)">
-          <NuxtImg :src="extractCdnId(sibling.thumbnailUrl)" :alt="sibling.slug" class="size-full object-contain" loading="lazy" />
-          <div v-if="sibling.type === 'video'" class="absolute inset-0 flex items-center justify-center bg-black/20">
-            <NuxtIcon name="local:play" class="size-4 text-white" />
-          </div>
-          <!-- Active Indicator line -->
-          <div v-if="sibling.slug === mediaSlug" class="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
-        </button>
-
-        <!-- Trailing spacer -->
-        <div class="w-[calc(50vw-48px)] shrink-0" />
+        <!-- mobile filmstrip — bottom horizontal -->
+        <MediaFlimstrip :project-slug="projectSlug" :media-items="mediaItems" :active-media-slug="currentItem.slug" />
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.filmstrip {
+.media-fade-enter-active,
+.media-fade-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.media-fade-enter-from,
+.media-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+@media (min-width: 768px) {
+  .imageEl {
+    view-transition-name: vtn-image;
+  }
+}
+</style>
+
+<style>
+.scrollbar-hidden {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.filmstrip::-webkit-scrollbar {
+.scrollbar-hidden::-webkit-scrollbar {
   display: none;
-}
-
-.slide-info-enter-active,
-.slide-info-leave-active {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.slide-info-enter-from,
-.slide-info-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
 }
 </style>
