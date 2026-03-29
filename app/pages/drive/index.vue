@@ -24,7 +24,7 @@ const orgSlug = 'red-cat-pictures'
 
     <!-- Collections grid -->
     <main v-else>
-      <div class="grid grid-cols-2 gap-1.5 md:gap-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div class="grid grid-cols-2 gap-1.5 md:gap-2 lg:grid-cols-3 2xl:grid-cols-4">
         <CardMediaCollection v-for="(media, i) in medias" :key="media.slug" :org-slug="orgSlug" :media-collection="media" :index="i" />
       </div>
     </main>

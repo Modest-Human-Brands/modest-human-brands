@@ -20,13 +20,6 @@ function shareMedia(e: Event) {
   }
 }
 
-// Pinterest-style masonry logic: varied aspect ratios based on index
-const aspectRatio = computed(() => {
-  if (props.index === 0) return 'aspect-[3/4]' // Large featured
-  const patterns = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[1/1]', 'aspect-[4/3]']
-  return patterns[props.index % patterns.length]
-})
-
 // Get up to 4 images to create a rich collage look
 const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(0, 4) || [])
 </script>
@@ -35,8 +28,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
   <NuxtLink
     :to="`/drive/${mediaCollection.slug}`"
     :style="{ animationDelay: `${index * 80}ms` }"
-    class="animate-fade-in group relative block w-full cursor-pointer overflow-hidden bg-dark-400 transition-all duration-500 hover:shadow-2xl hover:shadow-black/50"
-    :class="[index === 0 ? 'md:col-span-2 md:row-span-2' : '', aspectRatio]">
+    class="animate-fade-in group relative block w-full cursor-pointer overflow-hidden bg-dark-400 transition-all duration-500 hover:shadow-2xl hover:shadow-black/50">
     <!-- Share Button: Minimalist Floating -->
     <button
       class="absolute right-3 top-3 z-30 flex size-9 items-center justify-center rounded-full bg-white/10 text-white opacity-0 blur-sm backdrop-blur-md transition-all duration-500 hover:bg-white hover:text-black group-hover:opacity-100 group-hover:blur-none"
@@ -44,29 +36,34 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
       @click="shareMedia">
       <NuxtIcon name="local:link" class="text-base" />
     </button>
-
-    <!-- Content Area: Multi-Image Collage -->
     <div class="relative size-full overflow-hidden">
       <!-- Scenario A: Real Preview Images (Collage Look) -->
       <div v-if="galleryImages.length" class="flex size-full gap-0.5 md:gap-1">
         <!-- Main Large Thumbnail -->
         <div class="relative h-full flex-1 overflow-hidden">
           <NuxtImg
-            :src="extractCdnId(galleryImages[0])"
+            :src="extractCdnId(galleryImages[0]!)"
             :alt="mediaCollection.title"
+            :width="420"
+            :height="Math.round(420 / (4 / 3))"
+            sizes="50vw md:20vw 2xl:15vw"
             fit="cover"
             loading="lazy"
+            :placeholder="[240, Math.round(240 / (4 / 3)), 50, 5]"
             class="size-full bg-dark-600 object-cover transition-transform duration-1000 ease-out group-hover:scale-110" />
         </div>
-
         <!-- Side Thumbnails (Stack) -->
         <div v-if="galleryImages.length > 1" class="flex h-full w-1/3 flex-col gap-0.5 md:gap-1">
           <div v-for="(image, i) in galleryImages.slice(1)" :key="i" class="relative flex-1 overflow-hidden">
             <NuxtImg
               :src="extractCdnId(image)"
               :alt="mediaCollection.title"
+              :width="140"
+              :height="Math.round(140 / (4 / 3))"
+              sizes="18vw md:8vw 2xl:5vw"
               fit="cover"
               loading="lazy"
+              :placeholder="[70, Math.round(70 / (4 / 3)), 50, 5]"
               class="size-full bg-dark-600 object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
           </div>
           <!-- Placeholder if less than 4 images to keep grid balanced -->
@@ -75,7 +72,6 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
           </div>
         </div>
       </div>
-
       <!-- Scenario B: Minimal Empty State -->
       <div v-else class="absolute inset-0 flex flex-col items-center justify-center bg-dark-600/50">
         <div class="flex flex-col items-center opacity-20 transition-opacity duration-500 group-hover:opacity-40">
@@ -83,26 +79,23 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
           <span class="text-[10px] font-light uppercase tracking-[0.4em]">Empty</span>
         </div>
       </div>
-
       <!-- Overlay Gradients for legibility -->
       <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent transition-opacity duration-500 group-hover:from-black" />
     </div>
-
-    <!-- UI Labels -->
     <div class="absolute inset-0 flex flex-col justify-end p-4 md:p-6">
       <!-- Title Area: Persistent but shifts on hover -->
       <div class="transform transition-all duration-500 group-hover:-translate-y-1">
         <h2 class="line-clamp-2 text-sm font-regular leading-tight text-white drop-shadow-lg md:text-lg">
           {{ mediaCollection.title }}
         </h2>
-
         <!-- Status dot: Always visible but tiny -->
         <div class="mt-1.5 flex items-center gap-2">
           <span class="size-1.5 rounded-full" :class="mediaCollection.status === 'Delivered' ? 'bg-success-500' : 'bg-white/30'" />
-          <span class="text-[9px] uppercase tracking-widest text-white/50">{{ mediaCollection.status || 'Draft' }}</span>
+          <span class="text-[9px] uppercase tracking-widest text-white/50">
+            {{ mediaCollection.status || 'Draft' }}
+          </span>
         </div>
       </div>
-
       <div class="mt-2 max-h-0 translate-y-4 overflow-hidden border-t border-white/10 opacity-0 transition-all duration-500 group-hover:max-h-20 group-hover:translate-y-0 group-hover:opacity-100">
         <div class="flex items-center justify-between">
           <div class="flex min-w-0 items-center gap-2">
@@ -116,7 +109,6 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
               {{ mediaCollection.client?.name || 'Client' }}
             </p>
           </div>
-
           <div class="flex items-baseline gap-1 text-white">
             <span class="text-xl font-light">
               {{ (mediaCollection.mediaCount?.photo || 0) + (mediaCollection.mediaCount?.video || 0) }}
