@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.24
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.23...v0.3.24)
+
+### 🎨 Styles
+
+- Optimized images and medias ([f1432d9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f1432d9))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.23
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.22...v0.3.23)
