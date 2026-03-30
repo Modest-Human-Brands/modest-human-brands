@@ -18,11 +18,11 @@ const isFirst = computed(() => currentIndex.value <= 0)
 const isLast = computed(() => currentIndex.value >= mediaItems.value.length - 1)
 const currentItem = computed(() => mediaItems.value[currentIndex.value])
 
-const backUrl = computed(() => `/drive/${projectSlug.value}`)
+const backUrl = computed(() => `/drive/public/red-cat-pictures/${projectSlug.value}`)
 
 async function navigateToIndex(index: number) {
   const slug = mediaItems.value[index]?.slug
-  if (slug) await router.push(`/drive/${projectSlug.value}/${slug}`)
+  if (slug) await router.push(`/drive/public/red-cat-pictures/${projectSlug.value}/${slug}`)
 }
 
 async function prev() {

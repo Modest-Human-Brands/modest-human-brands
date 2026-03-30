@@ -96,7 +96,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
           </span>
         </div>
       </div>
-      <div class="mt-2 max-h-0 translate-y-4 overflow-hidden border-t border-white/10 opacity-0 transition-all duration-500 group-hover:max-h-20 group-hover:translate-y-0 group-hover:opacity-100">
+      <div class="max-h-0 translate-y-4 overflow-hidden border-t border-white/10 opacity-0 transition-all duration-500 group-hover:max-h-20 group-hover:translate-y-0 group-hover:opacity-100">
         <div class="flex items-center justify-between">
           <div class="flex min-w-0 items-center gap-2">
             <NuxtImg

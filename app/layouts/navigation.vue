@@ -66,8 +66,8 @@ const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) 
 <template>
   <div class="flex h-screen w-screen items-start justify-start">
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
-    <main class="relative isolate mx-auto flex h-screen w-full grow flex-col gap-4 overflow-hidden px-2 py-6 md:mb-8 md:px-4">
-      <div class="flex items-start justify-between md:gap-6">
+    <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
+      <div class="flex items-start justify-between px-2 pt-6 md:gap-6 md:px-4">
         <div>
           <div class="flex items-center gap-3">
             <NuxtIcon :name="activeTab.icon" class="text-[56px] md:text-[64px]" />
@@ -82,8 +82,9 @@ const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) 
       </div>
       <slot />
     </main>
-    <button type="button" class="fixed bottom-6 right-6 rounded-full bg-dark-500 p-2.5 text-white/80 hover:text-white" aria-label="AI Assistent">
+    <!-- <button type="button" class="fixed bottom-6 right-6 rounded-full bg-dark-500 p-2.5 text-white/80 hover:text-white"
+      aria-label="AI Assistent">
       <NuxtIcon name="local:chain" class="text-[36px]" />
-    </button>
+    </button> -->
   </div>
 </template>

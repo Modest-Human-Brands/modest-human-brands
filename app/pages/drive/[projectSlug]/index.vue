@@ -77,7 +77,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
           <span class="text-2xs">·</span>
           <span class="text-2xs font-semi-bold uppercase text-light-400 sm:text-xs"> {{ totalMedia }} pics </span>
           <span
-            class="rounded-full px-2 py-0.5 text-3xs font-bold uppercase sm:text-2xs"
+            class="rounded-full px-2 py-0.5 text-xs font-bold uppercase sm:text-2xs"
             :class="{
               'bg-light-400/10 text-light-400': media.status === 'Plan',
               'bg-primary-400/20 text-primary-400': media.status === 'Quotation',
@@ -91,7 +91,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       </div>
     </div>
     <!-- Tabs -->
-    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto py-2.5 sm:gap-1.5 sm:py-3">
+    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto px-2 py-2.5 sm:gap-1.5 sm:py-3">
       <button
         v-for="tab in tabs"
         :key="tab.id"
