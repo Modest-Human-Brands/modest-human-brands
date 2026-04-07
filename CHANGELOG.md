@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.3.25
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.24...v0.3.25)
+
+### 🚀 Enhancements
+
+- Update docker-compose to include Synapse and PostgreSQL services ([fdee8bd](https://github.com/Modest-Human-Brands/modest-human-brands/commit/fdee8bd))
+
+### 🎨 Styles
+
+- Drive ui updated ([5875c59](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5875c59))
+- Fixed padding ([e40822f](https://github.com/Modest-Human-Brands/modest-human-brands/commit/e40822f))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.24
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.23...v0.3.24)
