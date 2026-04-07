@@ -64,8 +64,10 @@ async function getExistingSubscription() {
   return subscription
 }
 
+const { init } = useChat()
 onMounted(async () => {
   if (isSupported.value && permissionGranted.value) await getExistingSubscription()
+  await init()
 })
 
 watch(permissionGranted, async (value) => {

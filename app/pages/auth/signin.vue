@@ -44,12 +44,14 @@ async function onEmailSignIn() {
         <p class="mt-1 text-light-600 opacity-70">Log in to your account</p>
       </header>
       <!-- Google sign-in -->
+      <!-- eslint-disable link-checker/valid-route -->
       <NuxtLink
         to="/auth/google"
         external
         class="focus:ring-yellow-300 flex w-full items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-3 text-black shadow-sm transition-shadow hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-1"
         aria-label="Sign in with Google"
         @click="onOauthSignIn">
+        <!-- eslint-enable link-checker/valid-route -->
         <NuxtIcon name="local:google" class="text-[18px]" />
         <span class="font-medium text-sm">Sign in with Google</span>
       </NuxtLink>
@@ -97,7 +99,10 @@ async function onEmailSignIn() {
       </form>
       <!-- subtle footer / link -->
       <div class="text-center text-xs text-white opacity-60">
-        By continuing, you agree to our <NuxtLink to="/terms" class="underline">Terms</NuxtLink> and <NuxtLink to="/privacy" class="ml-1 underline">Privacy Policy</NuxtLink>.
+        <!-- eslint-disable-next-line link-checker/valid-route -->
+        By continuing, you agree to our <NuxtLink to="/terms" class="underline">Terms</NuxtLink> and
+        <!-- eslint-disable-next-line link-checker/valid-route -->
+        <NuxtLink to="/privacy" class="ml-1 underline">Privacy Policy</NuxtLink>.
       </div>
     </section>
   </main>

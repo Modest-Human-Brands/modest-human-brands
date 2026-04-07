@@ -3,7 +3,7 @@ import { useShare } from '@vueuse/core'
 
 const props = defineProps<{
   orgSlug: string
-  mediaCollection: ProjectMediaCollection // Ideally typed as ProjectDetail
+  mediaCollection: ProjectMediaCollection
   index: number
 }>()
 
@@ -20,7 +20,6 @@ function shareMedia(e: Event) {
   }
 }
 
-// Get up to 4 images to create a rich collage look
 const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(0, 4) || [])
 </script>
 

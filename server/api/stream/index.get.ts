@@ -13,67 +13,80 @@ export function generateCover(seed: string, colors: string[]): string {
 }
 
 export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (event) => {
-  const { user } = await requireUserSession(event)
+  try {
+    const { user } = await requireUserSession(event)
 
-  const activeOrg = user.organizations[0]
+    const activeOrg = user.organizations[0]
 
-  if (!activeOrg) return []
+    if (!activeOrg) return []
 
-  const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
-  const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
-  const color = { primary: 'CD2D2D', accent: '262626' }
+    const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
+    const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
+    const color = { primary: 'CD2D2D', accent: '262626' }
 
-  const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
-    .flatMap(({ value }) => value.record)
-    .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
-  const clients = (await clientStorage.getItems(await clientStorage.getKeys()))
-    .flatMap(({ value }) => value.record)
-    .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
+    const projects = (await projectStorage.getItems(await projectStorage.getKeys()))
+      .flatMap(({ value }) => value.record)
+      .filter((p) => p?.properties && p.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
+    const clients = (await clientStorage.getItems(await clientStorage.getKeys()))
+      .flatMap(({ value }) => value.record)
+      .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
 
-  const config = useRuntimeConfig()
-  const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.private.mediaUrl}/stream`)
+    const config = useRuntimeConfig()
+    const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.private.mediaUrl}/stream`)
 
-  return projects
-    .map<ProjectStreamCollection>(({ properties, cover }) => {
-      const slug = properties.Slug.formula.string
+    return projects
+      .map<ProjectStreamCollection>(({ properties, cover }) => {
+        const slug = properties.Slug.formula.string
 
-      const coverUrl = cover?.type === 'external' ? cover.external.url : generateCover(slug, [color.primary, color.accent])
+        const coverUrl = cover?.type === 'external' ? cover.external.url : generateCover(slug, [color.primary, color.accent])
 
-      const projectStreams = streams
-        .filter((s) => s.slug.startsWith(slug))
-        .map(({ slug, status }) => {
-          const deviceId = slug.split('-').at(-1)!
-          return {
-            deviceId,
-            streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-            media: `live/${slug}_${deviceId}/abr.m3u8`,
-            status: status ?? StreamStatus.Idle,
-            poster: generateCover(slug + deviceId, [color.primary, color.accent]), //coverUrl + deviceId,
-            createdAt: properties.Date.date.start,
-          }
-        })
-
-      const projectClient = clients.find((c) => c.id === properties.Client.relation[0]?.id)
-
-      return {
-        slug,
-        title: notionTextStringify(properties.Name.title),
-        poster: coverUrl,
-        createdAt: properties.Date.date.start,
-        client: projectClient
-          ? {
-              name: notionTextStringify(projectClient.properties.Name.title),
-              avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+        const projectStreams = streams
+          .filter((s) => s.slug.startsWith(slug))
+          .map(({ slug, status }) => {
+            const deviceId = slug.split('-').at(-1)!
+            return {
+              deviceId,
+              streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
+              media: `live/${slug}_${deviceId}/abr.m3u8`,
+              status: status ?? StreamStatus.Idle,
+              poster: generateCover(slug + deviceId, [color.primary, color.accent]), //coverUrl + deviceId,
+              createdAt: properties.Date.date.start,
             }
-          : undefined,
-        status: (() => {
-          const streams = projectStreams ?? []
-          if (streams.some((s) => s.status === StreamStatus.Live)) return StreamStatus.Live
-          if (streams.some((s) => s.status === StreamStatus.Starting)) return StreamStatus.Starting
-          return streams[0]?.status ?? StreamStatus.Idle
-        })(),
-        streams: projectStreams,
-      }
+          })
+
+        const projectClient = clients.find((c) => c.id === properties.Client.relation[0]?.id)
+
+        return {
+          slug,
+          title: notionTextStringify(properties.Name.title),
+          poster: coverUrl,
+          createdAt: properties.Date.date.start,
+          client: projectClient
+            ? {
+                name: notionTextStringify(projectClient.properties.Name.title),
+                avatar: projectClient.cover?.type === 'external' ? projectClient.cover.external.url : undefined,
+              }
+            : undefined,
+          status: (() => {
+            const streams = projectStreams ?? []
+            if (streams.some((s) => s.status === StreamStatus.Live)) return StreamStatus.Live
+            if (streams.some((s) => s.status === StreamStatus.Starting)) return StreamStatus.Starting
+            return streams[0]?.status ?? StreamStatus.Idle
+          })(),
+          streams: projectStreams,
+        }
+      })
+      .toSorted((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  } catch (error: unknown) {
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
+    console.error('API stream GET', error)
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Some Unknown Error Found',
     })
-    .toSorted((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  }
 })

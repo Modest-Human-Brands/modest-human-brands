@@ -14,7 +14,7 @@ services:
     build: ../code-drive
     restart: on-failure:3
     env_file:
-      - ../code-drive/.env.prod.redcatpictures
+      - ../code-drive/.env.prod
       # - ../code-drive/.env.prod.goldfishtalents
     ports:
       - 4600:3111 # REST API
@@ -23,20 +23,6 @@ services:
       - 4610:1935 # RTMP
     networks:
       - internal
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway"
-    # drive-redis:
-    #   image: redis:alpine
-    #   restart: unless-stopped
-    #   ports:
-    #     - '6379:6379'
-    #   volumes:
-    #     - redis-data:/data
-    #   healthcheck:
-    #     test: [ 'CMD', 'redis-cli', 'ping' ]
-    #     interval: 10s
-    #     timeout: 5s
-    #     retries: 5
 
   media:
     build: ../code-media
@@ -48,6 +34,37 @@ services:
       - static:/app/static
     networks:
       - internal
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    restart: on-failure:3
+    networks:
+      - internal
+    expose:
+      - 8008
+    volumes:
+      - /root/synapse/data:/data
+    depends_on:
+      synapse-postgres:
+        condition: service_healthy
+
+  synapse-postgres:
+    image: postgres:latest
+    restart: on-failure:3
+    networks:
+      - internal
+    environment:
+      - POSTGRES_USER=synapse_user
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=synapse
+      - POSTGRES_INITDB_ARGS=--encoding='UTF8' --lc-collate='C' --lc-ctype='C'
+    volumes:
+      - /root/synapse/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U synapse_user -d synapse']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ome:
     image: airensoft/ovenmediaengine:latest

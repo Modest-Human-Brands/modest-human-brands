@@ -2,7 +2,7 @@
 name = "modest-human-brands"
 description = "Autonomous Next-Gen Media Operating System"
 authors = ["Shirsendu Bairagi <shirsendu2001@gmail.com>"]
-license = "GPL-3.0-only"
+license = "MIT"
 repository = "https://github.com/Modest-Human-Brands/modest-human-brands.git"
 edition = "2021"
 rust-version = "1.77.2"

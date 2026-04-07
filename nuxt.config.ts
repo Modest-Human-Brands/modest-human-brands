@@ -10,6 +10,9 @@ const nativeConfig =
         devServer: { host },
         ignore: ['**/src-tauri/**', '**/node_modules/**', '**/dist/**', '**/.git/**', '**/.nuxt/**', '**/.output/**'],
         vite: {
+          optimizeDeps: {
+            exclude: ['@matrix-org/matrix-sdk-crypto-wasm'],
+          },
           clearScreen: false,
           envPrefix: ['VITE_', 'TAURI_'],
           server: {
@@ -59,6 +62,11 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-auth-utils',
   ],
+  vite: {
+    optimizeDeps: {
+      exclude: ['@matrix-org/matrix-sdk-crypto-wasm'],
+    },
+  },
   nitro: {
     compressPublicAssets: true,
     rollupConfig: {
@@ -99,6 +107,7 @@ export default defineNuxtConfig({
     },
     public: {
       siteUrl: '',
+      matrixUrl: '',
       cdnUrl: '',
       turnUrl: '',
       whipUrl: '',
@@ -322,7 +331,7 @@ export default defineNuxtConfig({
     injectManifest: {
       globPatterns: ['**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}'],
       globIgnores: ['manifest**.webmanifest'],
-      maximumFileSizeToCacheInBytes: 3000000,
+      maximumFileSizeToCacheInBytes: 10485760,
     },
     devOptions: {
       type: 'module',

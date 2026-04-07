@@ -16,7 +16,6 @@ const DEFAULT_ORG = {
 const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
 
 const route = useRoute()
-// const showFooter = computed(() => route.path === '/')
 
 const editedAt = 'Jan 17'
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })

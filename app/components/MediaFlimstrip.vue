@@ -12,7 +12,6 @@ const y = ref<number>(0)
 const { width, height } = useWindowSize()
 
 async function scrollToActive(slug: string) {
-  // get width of current image
   const currentMedia = props.mediaItems!.filter((item) => item.slug === slug)
   const index = props.mediaItems!.indexOf(currentMedia[0]!) as number
 
@@ -23,7 +22,6 @@ async function scrollToActive(slug: string) {
 
   if (imageWidth === undefined || imageHeight === undefined) return
 
-  // calculate translate to do. (current translate + middle screen pos x - middle thumbnail to move pos x)
   if (props.vertical) y.value = y.value + (height.value / 2 - (imgToMove.value!.getBoundingClientRect().top + imageHeight / 2))
   else x.value = x.value + (width.value / 2 - (imgToMove.value!.getBoundingClientRect().left + imageWidth / 2))
 }

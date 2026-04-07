@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
 
   let organizationPageId: string | undefined
 
-  // Handle organization creation/selection
   if (data.organizationId === 'create-new' && data.organization) {
     const orgPage = await notion.pages.create({
       parent: { data_source_id: notionDbId.organization },
@@ -50,7 +49,6 @@ export default defineEventHandler(async (event) => {
     organizationPageId = data.organizationId
   }
 
-  // Update user page with organization relation
   await notion.pages.update({
     page_id: query.results[0]!.id,
     properties: {
@@ -83,7 +81,6 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  // Update session with organization data
   await replaceUserSession(
     event,
     {
