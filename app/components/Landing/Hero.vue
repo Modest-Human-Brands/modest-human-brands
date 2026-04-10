@@ -47,7 +47,7 @@ const particles = Array.from({ length: 30 }, (_, i) => ({
         A unified platform for content creation, project management, and media delivery. Built for modern creative teams who demand speed, control, and scalability.
       </p>
 
-      <div class="animate-slide-up flex flex-col gap-4 sm:flex-row" style="animation-delay: 0.8s">
+      <div class="animate-slide-up flex flex-col gap-4 md:flex-row" style="animation-delay: 0.8s">
         <NuxtLink
           v-if="!loggedIn"
           to="/auth/signin"

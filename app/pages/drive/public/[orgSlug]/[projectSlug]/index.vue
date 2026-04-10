@@ -78,8 +78,8 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
         </h1>
         <div v-if="media" class="mt-2 flex items-center gap-2">
           <NuxtTime :datetime="media.date" class="text-xs text-white md:text-base" day="numeric" month="short" year="numeric" />
-          <span class="text-2xs">·</span>
-          <span class="text-2xs font-semi-bold uppercase text-light-400 md:text-xs"> {{ totalMedia }} pics </span>
+          <span class="text-xs">·</span>
+          <span class="text-xs font-semi-bold uppercase text-light-400 md:text-xs"> {{ totalMedia }} pics </span>
           <span
             class="rounded-full px-2 py-0.5 text-xs font-bold uppercase md:text-sm"
             :class="{
@@ -100,7 +100,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
         v-for="tab in tabs"
         :key="tab.id"
         :data-active="activeTab === tab.id"
-        class="shrink-0 rounded-full px-3 py-1 text-2xs font-semi-bold transition-all duration-200 md:px-4 md:py-1.5 md:text-xs"
+        class="shrink-0 rounded-full px-3 py-1 text-xs font-semi-bold transition-all duration-200 md:px-4 md:py-1.5 md:text-xs"
         :class="activeTab === tab.id ? 'text-white' : 'text-light-400 hover:text-white'"
         :style="activeTab === tab.id ? { backgroundColor: organization.branding.color.primary } : {}"
         @click="activeTab = tab.id">

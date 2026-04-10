@@ -69,15 +69,15 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       <div v-else class="absolute inset-0" />
       <div class="absolute inset-0 bg-gradient-to-t from-dark-600 via-dark-600/60 to-dark-600/10" />
       <div class="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-5 text-center">
-        <h1 v-if="media" class="text-3xl font-light leading-tight text-white drop-shadow-lg sm:text-4xl lg:text-5xl">
+        <h1 v-if="media" class="text-3xl font-light leading-tight text-white drop-shadow-lg md:text-4xl lg:text-5xl">
           {{ media.title }}
         </h1>
         <div v-if="media" class="mt-2 flex items-center gap-2">
           <NuxtTime :datetime="media.date" class="text-xs text-white md:text-base" day="numeric" month="short" year="numeric" />
-          <span class="text-2xs">·</span>
-          <span class="text-2xs font-semi-bold uppercase text-light-400 sm:text-xs"> {{ totalMedia }} pics </span>
+          <span class="text-xs">·</span>
+          <span class="text-xs font-semi-bold uppercase text-light-400 md:text-xs"> {{ totalMedia }} pics </span>
           <span
-            class="rounded-full px-2 py-0.5 text-xs font-bold uppercase sm:text-2xs"
+            class="rounded-full px-2 py-0.5 text-xs font-bold uppercase md:text-xs"
             :class="{
               'bg-light-400/10 text-light-400': media.status === 'Plan',
               'bg-primary-400/20 text-primary-400': media.status === 'Quotation',
@@ -91,12 +91,12 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       </div>
     </div>
     <!-- Tabs -->
-    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto px-2 py-2.5 sm:gap-1.5 sm:py-3">
+    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto px-2 py-2.5 md:gap-1.5 md:py-3">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         :data-active="activeTab === tab.id"
-        class="shrink-0 rounded-full px-3 py-1 text-2xs font-semi-bold transition-all duration-200 sm:px-4 sm:py-1.5 sm:text-xs"
+        class="shrink-0 rounded-full px-3 py-1 text-xs font-semi-bold transition-all duration-200 md:px-4 md:py-1.5 md:text-xs"
         :class="activeTab === tab.id ? 'text-white' : 'text-light-400 hover:text-white'"
         :style="activeTab === tab.id ? { backgroundColor: organization.branding.color.primary } : {}"
         @click="activeTab = tab.id">
@@ -105,11 +105,11 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
     </nav>
     <!-- Media Grid -->
     <main ref="scroll" class="scrollbar-hidden flex-1 overflow-y-auto">
-      <div v-if="isLoading" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      <div v-if="isLoading" class="grid grid-cols-2 gap-0.5 p-0.5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
       </div>
 
-      <div v-else-if="filteredMedia && filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      <div v-else-if="filteredMedia && filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <CardMedia v-for="item in filteredMedia" :key="item.slug" :is-public="false" :project-slug="slug" :media="item" />
       </div>
       <div v-else class="flex h-full flex-col items-center justify-center gap-2 text-light-400/25">

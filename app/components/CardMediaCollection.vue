@@ -67,7 +67,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
           </div>
           <!-- Placeholder if less than 4 images to keep grid balanced -->
           <div v-if="galleryImages.length < 4 && galleryImages.length > 1" class="flex flex-1 items-center justify-center bg-white/5">
-            <span class="text-[8px] text-white/20">...</span>
+            <span class="text-xs text-white/20">...</span>
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
       <div v-else class="absolute inset-0 flex flex-col items-center justify-center bg-dark-600/50">
         <div class="flex flex-col items-center opacity-20 transition-opacity duration-500 group-hover:opacity-40">
           <NuxtIcon name="local:image" class="mb-2 text-3xl" />
-          <span class="text-[10px] font-light uppercase tracking-[0.4em]">Empty</span>
+          <span class="text-xs font-light uppercase tracking-[0.4em]">Empty</span>
         </div>
       </div>
       <!-- Overlay Gradients for legibility -->
@@ -90,7 +90,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
         <!-- Status dot: Always visible but tiny -->
         <div class="mt-1.5 flex items-center gap-2">
           <span class="size-1.5 rounded-full" :class="mediaCollection.status === 'Delivered' ? 'bg-success-500' : 'bg-white/30'" />
-          <span class="text-[9px] uppercase tracking-widest text-white/50">
+          <span class="text-xs uppercase tracking-widest text-white/50">
             {{ mediaCollection.status || 'Draft' }}
           </span>
         </div>
@@ -104,7 +104,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
               fit="cover"
               loading="lazy"
               class="size-5 rounded-full object-cover ring-1 ring-white/20" />
-            <p class="truncate text-[10px] font-light uppercase tracking-widest text-white/70">
+            <p class="text-xxs truncate font-light uppercase tracking-widest text-white/70">
               {{ mediaCollection.client?.name || 'Client' }}
             </p>
           </div>
@@ -112,7 +112,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
             <span class="text-xl font-light">
               {{ (mediaCollection.mediaCount?.photo || 0) + (mediaCollection.mediaCount?.video || 0) }}
             </span>
-            <span class="text-[8px] uppercase tracking-tighter text-white/40">items</span>
+            <span class="text-xs uppercase tracking-tighter text-white/40">items</span>
           </div>
         </div>
       </div>

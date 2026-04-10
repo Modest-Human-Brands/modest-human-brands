@@ -52,31 +52,27 @@ const img = useImage()
 </script>
 
 <template>
-  <section v-if="currentItem && currentItem.slug" class="relative flex h-screen w-screen overflow-hidden bg-dark-600">
+  <section v-if="currentItem && currentItem.slug" class="relative flex h-screen w-screen overflow-hidden bg-dark-400">
     <div class="relative z-10 flex size-full flex-col md:flex-row">
       <MediaFlimstrip :project-slug="projectSlug" :media-items="mediaItems" :active-media-slug="currentItem.slug" vertical />
 
-      <!-- main content -->
       <div class="flex flex-1 flex-col overflow-hidden" :style="{ aspectRatio: currentItem.metadata.aspectRatio }">
-        <!-- top bar -->
         <div class="flex h-12 shrink-0 items-center justify-between border-b border-white/5 px-4 backdrop-blur-sm">
           <NuxtLink :to="backUrl" class="flex items-center gap-1.5 text-white/50 transition-colors duration-200 hover:text-white">
             <NuxtIcon name="local:chevron-bold" class="text-[18px]" />
-            <span class="text-xs font-semi-bold">Back</span>
+            <span class="text-sm font-semi-bold">Back</span>
           </NuxtLink>
 
-          <span class="text-2xs tabular-nums text-white/30"> {{ currentIndex + 1 }}&thinsp;/&thinsp;{{ mediaItems.length }} </span>
+          <span class="text-sm tabular-nums text-white/30"> {{ currentIndex + 1 }}&thinsp;/&thinsp;{{ mediaItems.length }} </span>
         </div>
 
-        <!-- image area -->
-        <div ref="imageEl" class="relative flex flex-1 items-center justify-center overflow-hidden">
-          <!-- prev button -->
+        <div ref="mediaElem" class="relative flex flex-1 items-center justify-center overflow-hidden">
           <button
             type="button"
             class="absolute left-2 z-10 flex size-9 items-center justify-center rounded-full bg-dark-500/70 text-white/50 backdrop-blur-sm transition-all duration-200 hover:bg-dark-400 hover:text-white disabled:opacity-0"
             :disabled="isFirst"
             aria-label="Previous"
-            @click="prev">
+            @click.prevent="prev">
             <NuxtIcon name="local:chevron-bold" class="text-[18px]" />
           </button>
 
@@ -91,42 +87,35 @@ const img = useImage()
                 loading="eager"
                 preload
                 :placeholder="img(extractCdnId(currentItem.thumbnailUrl!), { width: Math.round(240 * calculateAspectRatio(currentItem.metadata.aspectRatio)), height: 240, quality: 80 })"
-                class="h-auto max-h-full w-full max-w-full object-contain shadow-2xl transition-opacity duration-300 landscape:h-full landscape:w-auto"
+                class="size-full object-contain shadow-2xl transition-opacity duration-300"
                 @contextmenu.prevent />
-              <div v-else class="relative flex h-auto max-h-full w-full items-center justify-center landscape:h-full landscape:w-auto">
-                <NuxtVideo
-                  ref="videoContainerRef"
-                  :key="currentItem.slug"
-                  :poster="currentItem.thumbnailUrl"
-                  :media="currentItem.media"
-                  :disable-picture-in-picture="true"
-                  controls-list="nodownload"
-                  :autoplay="true"
-                  :muted="true"
-                  :playsinline="true"
-                  preload="metadata"
-                  class="aspect-video cursor-pointer" />
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="flex size-20 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition-transform hover:scale-110">
-                    <NuxtIcon name="local:play" class="translate-x-0.5 text-3xl text-white" />
-                  </div>
-                </div>
-              </div>
+              <NuxtVideo
+                v-else
+                ref="videoContainerRef"
+                :poster="currentItem.thumbnailUrl"
+                :media="currentItem.media"
+                :aspect-ratio="currentItem.metadata.aspectRatio"
+                :disable-picture-in-picture="true"
+                :controls="true"
+                controls-list="nodownload"
+                :autoplay="true"
+                :muted="true"
+                :playsinline="true"
+                preload="metadata"
+                class="relative flex size-full cursor-pointer items-center justify-center" />
             </div>
           </Transition>
 
-          <!-- next button -->
           <button
             type="button"
             class="absolute right-2 z-10 flex size-9 items-center justify-center rounded-full bg-dark-500/70 text-white/50 backdrop-blur-sm transition-all duration-200 hover:bg-dark-400 hover:text-white disabled:opacity-0"
             :disabled="isLast"
             aria-label="Next"
-            @click="next">
+            @click.prevent="next">
             <NuxtIcon name="local:chevron-bold" class="-scale-x-100 text-[18px]" />
           </button>
         </div>
 
-        <!-- mobile filmstrip — bottom horizontal -->
         <MediaFlimstrip :project-slug="projectSlug" :media-items="mediaItems" :active-media-slug="currentItem.slug" />
       </div>
     </div>

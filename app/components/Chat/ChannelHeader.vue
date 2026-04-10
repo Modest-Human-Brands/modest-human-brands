@@ -47,7 +47,7 @@ const hasMultiChannel = computed(() => (activeRoom.value?.channels.length ?? 0) 
           <span v-if="state.activeChannelId === channel.id" class="absolute inset-x-0 bottom-0 h-[2px] rounded-t-full bg-primary-400" />
           <span v-if="channel.unread > 0 && state.activeChannelId !== channel.id" class="absolute right-2 top-1.5 size-1.5 rounded-full bg-primary-400" />
           <NuxtIcon :name="CHANNEL_ICONS[channel.type]!" class="text-[18px] md:text-[20px]" />
-          <span class="hidden capitalize sm:inline">{{ channel.name }}</span>
+          <span class="hidden capitalize md:inline">{{ channel.name }}</span>
         </button>
       </div>
     </div>

@@ -72,16 +72,16 @@ async function onDownload(e: MouseEvent) {
 
     <!-- top-left: status badge (public) OR type badge (private) -->
     <div class="absolute left-1.5 top-1.5 z-10">
-      <div v-if="isPublic && status" class="flex size-5 items-center justify-center rounded-full fill-black sm:size-6" :class="status === 'approved' ? 'bg-success-400' : 'bg-alert-400'">
-        <NuxtIcon :name="status === 'approved' ? 'local:check' : 'local:cross'" class="size-2.5 text-dark-600 sm:size-3" />
+      <div v-if="isPublic && status" class="flex size-5 items-center justify-center rounded-full fill-black md:size-6" :class="status === 'approved' ? 'bg-success-400' : 'bg-alert-400'">
+        <NuxtIcon :name="status === 'approved' ? 'local:check' : 'local:cross'" class="size-2.5 text-dark-600 md:size-3" />
       </div>
-      <span v-else-if="!isPublic" class="rounded-full bg-black/50 px-2.5 py-0.5 text-2xs font-semi-bold capitalize text-white backdrop-blur-sm">
+      <span v-else-if="!isPublic" class="rounded-full bg-black/50 px-2.5 py-0.5 text-xs font-semi-bold capitalize text-white backdrop-blur-sm">
         {{ media.type }}
       </span>
     </div>
 
     <!-- top-right: approve/reject (public) OR download (private) -->
-    <div class="absolute right-1.5 top-1.5 z-10 sm:right-2 sm:top-2">
+    <div class="absolute right-1.5 top-1.5 z-10 md:right-2 md:top-2">
       <div v-if="isPublic" class="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <button
           class="flex size-6 items-center justify-center rounded-full bg-black/50 transition-all duration-150"
@@ -99,17 +99,17 @@ async function onDownload(e: MouseEvent) {
       <button
         v-else
         type="button"
-        class="flex size-6 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-all duration-150 hover:bg-black/70 group-hover:opacity-100 sm:size-7"
+        class="flex size-6 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-all duration-150 hover:bg-black/70 group-hover:opacity-100 md:size-7"
         aria-label="Download"
         @click="onDownload">
-        <NuxtIcon name="local:download" class="size-3 sm:size-3.5" />
+        <NuxtIcon name="local:download" class="size-3 md:size-3.5" />
       </button>
     </div>
 
     <!-- video play -->
     <div v-if="media.type === 'video'" class="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <div class="flex size-9 items-center justify-center rounded-full bg-black/60 ring-1 ring-white/20 backdrop-blur-sm sm:size-11">
-        <NuxtIcon name="local:play" class="size-4 translate-x-px text-white sm:size-5" />
+      <div class="flex size-9 items-center justify-center rounded-full bg-black/60 ring-1 ring-white/20 backdrop-blur-sm md:size-11">
+        <NuxtIcon name="local:play" class="size-4 translate-x-px text-white md:size-5" />
       </div>
     </div>
 
@@ -119,7 +119,7 @@ async function onDownload(e: MouseEvent) {
       <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
         <div v-for="item in metadataItems" :key="item.value" class="flex items-center gap-0.5 text-light-500">
           <NuxtIcon :name="item.icon" class="text-[14px]" />
-          <span class="text-2xs leading-none">{{ item.value }}</span>
+          <span class="text-xs leading-none">{{ item.value }}</span>
         </div>
       </div>
     </div>

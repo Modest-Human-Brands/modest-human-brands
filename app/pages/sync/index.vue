@@ -11,7 +11,7 @@ const orgSlug = 'red-cat-pictures'
 <template>
   <section class="h-full overflow-y-auto p-2 md:p-2.5">
     <!-- Loading skeleton -->
-    <div v-if="pending" class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div v-if="pending" class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="i in 4" :key="i" class="aspect-[4/5] animate-pulse rounded-sm bg-dark-500" />
     </div>
 

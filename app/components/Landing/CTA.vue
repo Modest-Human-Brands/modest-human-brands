@@ -28,7 +28,7 @@ defineProps<{
 
         <p class="mx-auto mb-10 max-w-2xl text-lg text-white/70 md:text-xl">Join thousands of creative teams using Modest Human Brands to streamline their operations.</p>
 
-        <div class="flex flex-col justify-center gap-4 sm:flex-row">
+        <div class="flex flex-col justify-center gap-4 md:flex-row">
           <NuxtLink
             v-if="!loggedIn"
             to="/auth/signin"

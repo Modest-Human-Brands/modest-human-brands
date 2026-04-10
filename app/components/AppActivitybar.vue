@@ -24,7 +24,7 @@ const extraCollaborators = computed(() => props.collaborators.length - visibleCo
       <NuxtImg v-for="{ id, avatar, name } in visibleCollaborators" :key="id" :src="avatar" :alt="name" class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
     </div>
     <span v-if="extraCollaborators > 0" class="p-1 text-xs text-white"> +{{ extraCollaborators }} </span>
-    <button type="button" class="hidden p-1 sm:block">Share</button>
+    <button type="button" class="hidden p-1 md:block">Share</button>
     <button type="button" class="rounded-full bg-white/0 p-1 text-white hover:bg-white/10" aria-label="Star">
       <NuxtIcon name="local:star" class="text-[24px]" />
     </button>

@@ -56,7 +56,7 @@ const features = [
       <p class="mx-auto mt-4 max-w-2xl text-lg text-white/60">Eight integrated modules working together seamlessly</p>
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div
         v-for="(feature, idx) in features"
         :key="feature.key"

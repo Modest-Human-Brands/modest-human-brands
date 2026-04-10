@@ -93,6 +93,11 @@ export default defineNuxtConfig({
       '*/5 * * * *': ['sync:resource'],
     },
   },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => /^(video-|media-|dash-|hls-)/.test(tag),
+    },
+  },
   routeRules: {
     '/': { ssr: true },
     '/_ipx/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },

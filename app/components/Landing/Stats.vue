@@ -35,7 +35,7 @@ onMounted(() => {
       </h2>
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       <div
         v-for="(stat, idx) in stats"
         :key="stat.label"
