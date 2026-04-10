@@ -38,7 +38,7 @@ export default <Partial<Config>>{
       dark: {
         400: '#191919',
         500: '#2B2B2B',
-        600: '#0A0A0A',
+        600: '#3D3D3D',
       },
       primary: {
         400: '#6B9FFF',
