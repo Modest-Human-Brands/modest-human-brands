@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.3.26
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.25...v0.3.26)
+
+### 🚀 Enhancements
+
+- Added videojs for video playback ([f489431](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f489431))
+
+### 🏡 Chore
+
+- Update dependencies and package configurations ([d7ad269](https://github.com/Modest-Human-Brands/modest-human-brands/commit/d7ad269))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.25
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.24...v0.3.25)
