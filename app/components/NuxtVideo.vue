@@ -250,6 +250,11 @@ onMounted(() => {
   import('@videojs/html/video/minimal-skin.css')
   import('@videojs/html/video/player')
   import('@videojs/html/media/dash-video')
+  import('@videojs/html/media/hls-video')
+})
+
+const isDash = computed(() => {
+  return videoUrl.value?.toLowerCase().endsWith('.mpd') || false
 })
 </script>
 
@@ -259,6 +264,24 @@ onMounted(() => {
       <video-player class="size-full" :class="{ shimmer: !isVideoLoaded }">
         <video-minimal-skin v-if="controls" class="size-full">
           <dash-video
+            v-if="isDash"
+            ref="videoRef"
+            class="size-full"
+            :src="videoUrl"
+            :poster="poster"
+            :preload="preload"
+            :autoplay="autoplay"
+            :muted="muted"
+            :playsinline="playsinline"
+            :stream-type="live ? 'live' : 'on-demand'"
+            crossorigin
+            @play="handlePlay"
+            @pause="handlePause"
+            @time-update="handleTimeUpdate"
+            @ended="handleEnded"
+            @contextmenu.prevent />
+          <hls-video
+            v-else
             ref="videoRef"
             class="size-full"
             :src="videoUrl"
@@ -278,6 +301,24 @@ onMounted(() => {
 
         <media-container v-else class="size-full">
           <dash-video
+            v-if="isDash"
+            ref="videoRef"
+            class="size-full"
+            :src="videoUrl"
+            :poster="poster"
+            :preload="preload"
+            :autoplay="autoplay"
+            :muted="muted"
+            :playsinline="playsinline"
+            :stream-type="live ? 'live' : 'on-demand'"
+            crossorigin
+            @play="handlePlay"
+            @pause="handlePause"
+            @time-update="handleTimeUpdate"
+            @ended="handleEnded"
+            @contextmenu.prevent />
+          <hls-video
+            v-else
             ref="videoRef"
             class="size-full"
             :src="videoUrl"

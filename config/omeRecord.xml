@@ -4,7 +4,7 @@
   <Record>
     <Enable>true</Enable>
     <StreamName>*</StreamName>
-    <VariantNames>video_1280,aac_audio</VariantNames>
+    <VariantNames>bypass_video,bypass_audio</VariantNames>
 
     <FilePath>/stream/${Stream}/recording/raw_${Sequence}.mp4</FilePath>
     <InfoPath>/stream/${Stream}/recording/raw_info.xml</InfoPath>

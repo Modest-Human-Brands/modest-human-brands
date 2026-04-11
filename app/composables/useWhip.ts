@@ -4,21 +4,7 @@ interface WhipOptions {
 }
 
 export function useWhip(options: WhipOptions) {
-  // const {
-  //   public: { turnUrl },
-  // } = useRuntimeConfig()
-
-  const {
-    baseUrl,
-    iceServers = [
-      /*  {
-         urls: `${turnUrl}?transport=tcp`,
-         username: 'ome',
-         credential: 'airen',
-       }, */
-      { urls: 'stun:stun.l.google.com:19302' },
-    ],
-  } = options
+  const { baseUrl, iceServers = [{ urls: 'stun:stun.l.google.com:19302' }] } = options
 
   const isStreaming = ref(false)
   const error = ref<Error | null>(null)
@@ -45,7 +31,7 @@ export function useWhip(options: WhipOptions) {
       error.value = null
 
       /* stream.getVideoTracks().forEach((track) => {
-            track.contentHint = 'detail'
+        track.contentHint = 'detail'
       }) */
 
       pc = new RTCPeerConnection({
@@ -92,7 +78,7 @@ export function useWhip(options: WhipOptions) {
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
 
-      const signalingUrl = `${baseUrl}/live/${streamName}?direction=whip&transport=tcp`
+      const signalingUrl = `${baseUrl}/live/${streamName}?direction=whip`
       const response = await fetch(signalingUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/sdp' },
@@ -114,9 +100,10 @@ export function useWhip(options: WhipOptions) {
         if (!params.encodings.length) params.encodings = [{}]
 
         if (track.kind === 'video') {
-          params.encodings[0]!.maxBitrate = 3_000_000
+          params.encodings[0]!.maxBitrate = 5000000
           params.encodings[0]!.priority = 'high'
           params.encodings[0]!.networkPriority = 'high'
+          params.encodings[0]!.maxFramerate = 30
         } else if (track.kind === 'audio') {
           params.encodings[0]!.maxBitrate = 128_000
         }
