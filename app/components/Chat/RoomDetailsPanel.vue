@@ -93,7 +93,7 @@ const showDetailsPanel = false
             <span class="size-1.5 rounded-full" :style="{ backgroundColor: STATUS_COLOR[status as string] }" />
             <span class="text-xs font-bold uppercase tracking-widest text-white/25"> {{ STATUS_LABEL[status as string] }} · {{ members.length }} </span>
           </div>
-          <div v-for="member in members" :key="member.id" class="group flex cursor-pointer items-center gap-2.5 rounded-xl px-2 py-2 transition-all duration-150 hover:bg-white/[0.05]">
+          <div v-for="member in members" :key="member.id" class="group flex cursor-pointer items-center gap-2.5 rounded-xl px-2 py-2 transition-all duration-150 hover:bg-dark-600">
             <ChatUserAvatar :name="member.name" :status="member.status" size="md" />
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-1.5">
@@ -124,7 +124,7 @@ const showDetailsPanel = false
       </div>
       <div class="border-t border-white/10 p-3">
         <button
-          class="border-white/12 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed py-2.5 text-sm text-white/30 transition-all hover:border-white/25 hover:bg-white/[0.03] hover:text-white/60 active:scale-[0.98]">
+          class="border-white/12 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed py-2.5 text-sm text-white/30 transition-all hover:border-white/25 hover:bg-dark-600 hover:text-white/60 active:scale-[0.98]">
           <NuxtIcon name="local:plus" class="text-sm" />
           Invite Members
         </button>

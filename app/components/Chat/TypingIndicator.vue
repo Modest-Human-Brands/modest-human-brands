@@ -18,7 +18,7 @@ defineProps<{ users: ChatUser[] }>()
         <span class="font-semibold text-sm">
           {{ users.map((u) => u.name.split(' ')[0]).join(', ') }}
         </span>
-        <div class="flex items-center gap-1 rounded-2xl rounded-tl-md bg-white/[0.07] px-4 py-3 ring-1 ring-white/[0.06]">
+        <div class="flex items-center gap-1 rounded-2xl rounded-tl-md bg-dark-600 px-4 py-3 ring-1 ring-dark-600">
           <span class="size-1.5 animate-bounce rounded-full bg-white/40" style="animation-delay: 0ms" />
           <span class="size-1.5 animate-bounce rounded-full bg-white/40" style="animation-delay: 160ms" />
           <span class="size-1.5 animate-bounce rounded-full bg-white/40" style="animation-delay: 320ms" />

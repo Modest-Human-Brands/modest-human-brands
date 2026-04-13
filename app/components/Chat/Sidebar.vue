@@ -25,7 +25,7 @@ function isActive(roomId: string) {
 }
 
 function activeClass(roomId: string, variant: RoomType) {
-  if (!isActive(roomId)) return 'text-white/40 hover:bg-white/[0.04] hover:text-white/75'
+  if (!isActive(roomId)) return 'text-white/40 hover:bg-dark-600 hover:text-white/75'
   return variant === 'topic' ? 'bg-dark-500 text-white' : 'bg-primary-500/10 text-white'
 }
 </script>
@@ -46,7 +46,7 @@ function activeClass(roomId: string, variant: RoomType) {
               v-for="room in section.rooms"
               :key="room.id"
               class="group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition-all duration-150"
-              :class="isActive(room.id) ? 'bg-primary-500/10 text-white' : room.unread > 0 ? 'text-white/80 hover:bg-white/[0.04]' : 'text-white/40 hover:bg-white/[0.04] hover:text-white/75'"
+              :class="isActive(room.id) ? 'bg-primary-500/10 text-white' : room.unread > 0 ? 'text-white/80 hover:bg-dark-600' : 'text-white/40 hover:bg-dark-600 hover:text-white/75'"
               @click="emit('selectRoom', room.id)">
               <span v-if="isActive(room.id)" class="absolute inset-y-1.5 left-0 w-[3px] rounded-r-full bg-primary-400" />
 
@@ -97,7 +97,7 @@ function activeClass(roomId: string, variant: RoomType) {
         </div>
       </div>
 
-      <div v-if="section.type !== 'contact'" class="mx-3 h-px shrink-0 bg-white/[0.06]" />
+      <div v-if="section.type !== 'contact'" class="mx-3 h-px shrink-0 bg-dark-600" />
     </div>
   </aside>
 </template>

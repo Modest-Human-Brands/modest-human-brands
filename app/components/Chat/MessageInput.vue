@@ -72,7 +72,7 @@ onClickOutside(emojiPickerRef, () => {
         Join
       </button>
     </div>
-    <div v-else class="relative rounded-2xl bg-dark-500/50 ring-1 ring-white/[0.08] transition-shadow duration-200 focus-within:shadow-lg focus-within:shadow-black/20 focus-within:ring-white/[0.14]">
+    <div v-else class="relative rounded-2xl bg-dark-500/50 ring-1 ring-dark-600 transition-shadow duration-200 focus-within:shadow-lg focus-within:shadow-black/20 focus-within:ring-dark-600">
       <Transition
         enter-active-class="transition-all duration-150 ease-out"
         enter-from-class="opacity-0 translate-y-2 scale-95"
@@ -127,9 +127,7 @@ onClickOutside(emojiPickerRef, () => {
           <button
             class="font-semibold ml-1 flex items-center justify-center gap-1.5 rounded-full p-3 transition-all duration-150"
             :class="
-              canSend
-                ? 'bg-primary-500 text-white shadow-md shadow-primary-500/25 hover:bg-primary-400 hover:shadow-primary-400/30 active:scale-95'
-                : 'cursor-not-allowed bg-white/[0.05] text-white/20'
+              canSend ? 'bg-primary-500 text-white shadow-md shadow-primary-500/25 hover:bg-primary-400 hover:shadow-primary-400/30 active:scale-95' : 'cursor-not-allowed bg-dark-600 text-white/20'
             "
             :disabled="!canSend"
             @click="submit">

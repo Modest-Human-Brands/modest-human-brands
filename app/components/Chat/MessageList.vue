@@ -163,7 +163,7 @@ const participants: { name: string }[] = []
     <div v-else ref="containerRef" class="scrollbar-hidden h-full overflow-y-auto overscroll-contain" @scroll="onScroll">
       <div class="flex flex-col gap-2 py-2">
         <div v-if="!activeMessages.length" class="flex flex-col items-center justify-center gap-3 py-24 text-center">
-          <div class="ring-white/8 flex size-14 items-center justify-center rounded-2xl bg-white/[0.05] ring-1">
+          <div class="ring-white/8 flex size-14 items-center justify-center rounded-2xl bg-dark-600 ring-1">
             <NuxtIcon name="local:chat" class="text-2xl text-white/25" />
           </div>
           <p class="text-sm text-white/35">No messages yet</p>
@@ -172,7 +172,7 @@ const participants: { name: string }[] = []
         <template v-for="group in messageGroups" :key="group.dayLabel">
           <div class="flex items-center gap-3 px-5 py-4">
             <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            <span class="font-semibold shrink-0 rounded-full bg-dark-500/80 px-3 py-0.5 text-xs text-white/30 ring-1 ring-white/[0.06]">
+            <span class="font-semibold shrink-0 rounded-full bg-dark-500/80 px-3 py-0.5 text-xs text-white/30 ring-1 ring-dark-600">
               {{ group.dayLabel }}
             </span>
             <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />

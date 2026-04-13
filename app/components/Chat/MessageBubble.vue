@@ -72,7 +72,7 @@ function docIconColor(fileName?: string): string {
       <div
         v-else-if="message.type === 'text'"
         class="relative max-w-full whitespace-break-spaces rounded-xl px-3.5 pb-2 pt-2 text-sm leading-relaxed"
-        :class="isOwn ? 'rounded-tr-none bg-primary-600/40 text-white ring-1 ring-primary-500/25' : 'rounded-tl-none bg-white/[0.07] text-white/90 ring-1 ring-white/[0.06]'">
+        :class="isOwn ? 'rounded-tr-none bg-primary-600/40 text-white ring-1 ring-primary-500/25' : 'rounded-tl-none bg-dark-600 text-white/90 ring-1 ring-dark-600'">
         <span>{{ message.content }}</span>
         <span v-if="message.edited" class="ml-1 text-xs opacity-40">(edited)</span>
         <NuxtTime v-if="isOwn" :datetime="message.at" hour="2-digit" minute="2-digit" hour-cycle="h11" class="ml-2 inline-block align-bottom text-xs leading-loose text-white/30" />
@@ -92,8 +92,8 @@ function docIconColor(fileName?: string): string {
       </div>
       <div
         v-else-if="message.type === 'document'"
-        class="flex w-60 items-center gap-3 rounded-xl p-3 ring-1 transition-all hover:bg-white/[0.03]"
-        :class="isOwn ? 'rounded-tr-none bg-primary-600/30 ring-primary-500/20' : 'rounded-tl-none bg-white/[0.06] ring-white/[0.07]'">
+        class="flex w-60 items-center gap-3 rounded-xl p-3 ring-1 transition-all hover:bg-dark-600"
+        :class="isOwn ? 'rounded-tr-none bg-primary-600/30 ring-primary-500/20' : 'rounded-tl-none bg-dark-600 ring-dark-600'">
         <div class="bg-white/8 flex size-9 shrink-0 items-center justify-center rounded-xl">
           <NuxtIcon name="local:document" class="text-lg" :style="{ color: docIconColor(message.fileName) }" />
         </div>
@@ -110,7 +110,7 @@ function docIconColor(fileName?: string): string {
           v-for="reaction in message.reactions"
           :key="reaction.emoji"
           class="flex items-center gap-1 rounded-full px-2 py-0.5 text-sm ring-1 transition-all duration-150 active:scale-95"
-          :class="reaction.reactedByMe ? 'text-primary-300 bg-primary-500/20 ring-primary-500/40' : 'bg-white/[0.05] text-white/60 ring-white/10 hover:bg-white/10 hover:ring-white/20'"
+          :class="reaction.reactedByMe ? 'text-primary-300 bg-primary-500/20 ring-primary-500/40' : 'bg-dark-600 text-white/60 ring-white/10 hover:bg-white/10 hover:ring-white/20'"
           @click="onToggleReaction(reaction.emoji)">
           <span class="text-sm leading-none">{{ reaction.emoji }}</span>
           <span class="font-semibold text-sm">{{ reaction.count }}</span>
