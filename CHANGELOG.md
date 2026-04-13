@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.3.27
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.26...v0.3.27)
+
+### 💅 Refactors
+
+- Enhance video playback support with HLS integration and improve stream URL handling ([56bc6b1](https://github.com/Modest-Human-Brands/modest-human-brands/commit/56bc6b1))
+
+### 🎨 Styles
+
+- Update background colors to dark variants for improved contrast in chat components ([bd11493](https://github.com/Modest-Human-Brands/modest-human-brands/commit/bd11493))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.26
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.25...v0.3.26)
