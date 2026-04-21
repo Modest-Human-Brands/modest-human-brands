@@ -1,6 +1,6 @@
 [package]
 name = "modest-human-brands"
-description = "Autonomous Next-Gen Media Operating System"
+description = "Autonomous Next-Gen Media Operating System Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist"
 authors = ["Shirsendu Bairagi <shirsendu2001@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/Modest-Human-Brands/modest-human-brands.git"

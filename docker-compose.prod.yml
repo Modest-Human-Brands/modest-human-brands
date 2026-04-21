@@ -13,6 +13,30 @@ services:
         condition: on-failure
         max_attempts: 3
 
+  connect:
+    image: ghcr.io/modest-human-brands/mconnect:latest
+    env_file:
+      - .env
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  doc:
+    image: ghcr.io/modest-human-brands/mdoc:latest
+    env_file:
+      - .env
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
   drive:
     image: ghcr.io/modest-human-brands/mdrive:latest
     env_file:

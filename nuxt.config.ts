@@ -198,7 +198,7 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Modest Human Brands',
       short_name: 'MHB',
-      description: 'Autonomous Next-Gen Media Operating System',
+      description: 'Autonomous Next-Gen Media Operating System Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist',
       theme_color: '#FFFFFF',
       background_color: '#FFFFFF',
       display: 'fullscreen',

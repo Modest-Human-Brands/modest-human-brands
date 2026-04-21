@@ -10,32 +10,51 @@ services:
     networks:
       - internal
 
-  drive:
-    build: ../code-drive
+  connect:
+    build: ../code-connect
     restart: on-failure:3
     env_file:
-      - ../code-drive/.env.prod
-      # - ../code-drive/.env.prod.goldfishtalents
-    ports:
-      - 4600:3111 # REST API
-      - 4601:3112 # Stream
-      - 4602:49134 # WebSocket bridge
-      - 4610:1935 # RTMP
-    networks:
-      - internal
-
-  media:
-    build: ../code-media
-    restart: on-failure:3
-    env_file:
-      - ../code-media/.env.prod
+      - ../code-connect/.env.prod
     volumes:
-      - data:/app/data
-      - static:/app/static
+      - mconnect-data:/app/data
+    ports:
+      - 5000:3111
     networks:
       - internal
 
-  synapse:
+  doc:
+    build: ../code-doc
+    restart: on-failure:3
+    env_file:
+      - ../code-doc/.env.prod
+    ports:
+      - 4700:3000
+    networks:
+      - internal
+    depends_on:
+      doc-gotenberg:
+        condition: service_healthy
+
+  doc-gotenberg:
+    image: gotenberg/gotenberg:latest
+    restart: on-failure:3
+    ports:
+      - '4710:3000'
+    networks:
+      - internal
+      # command:
+      # - "gotenberg"
+      # - '--chromium-allow-list=^http://(doc|host\.docker\.internal):300[0-1]/.*$$|^file:///tmp/.*$$'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  coordinate-synapse:
     image: matrixdotorg/synapse:latest
     restart: on-failure:3
     networks:
@@ -45,10 +64,10 @@ services:
     volumes:
       - /root/synapse/data:/data
     depends_on:
-      synapse-postgres:
+      coordinate-synapse-postgres:
         condition: service_healthy
 
-  synapse-postgres:
+  coordinate-synapse-postgres:
     image: postgres:latest
     restart: on-failure:3
     networks:
@@ -66,7 +85,28 @@ services:
       timeout: 5s
       retries: 5
 
-  ome:
+  drive:
+    build: ../code-drive
+    restart: on-failure:3
+    env_file:
+      - ../code-drive/.env.prod
+    ports:
+      - 4600:3000
+    networks:
+      - internal
+
+  media:
+    build: ../code-media
+    restart: on-failure:3
+    env_file:
+      - ../code-media/.env.prod
+    volumes:
+      - mmedia-data:/app/data
+      - mmedia-static:/app/static
+    networks:
+      - internal
+
+  media-ome:
     image: airensoft/ovenmediaengine:latest
     restart: on-failure:3
     ports:
@@ -81,18 +121,24 @@ services:
     volumes:
       - ./config/ome.xml:/opt/ovenmediaengine/bin/origin_conf/Server.xml
       - ./config/omeRecord.xml:/opt/ovenmediaengine/bin/origin_conf/record_map.xml
-      - static:/opt/ovenmediaengine/media
+      - mmedia-static:/opt/ovenmediaengine/media
     networks:
       - internal
 
 volumes:
-  data:
+  mconnect-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../code-connect/data
+  mmedia-data:
     driver: local
     driver_opts:
       type: none
       o: bind
       device: ../code-media/data
-  static:
+  mmedia-static:
     driver: local
     driver_opts:
       type: none
