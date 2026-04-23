@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.3.28
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.27...v0.3.28)
+
+### 🚀 Enhancements
+
+- Mdoc intergrated ([555c3ec](https://github.com/Modest-Human-Brands/modest-human-brands/commit/555c3ec))
+
+### 🩹 Fixes
+
+- Enhance document management with new components and layout actions ([6cfd84d](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6cfd84d))
+
+### 🏡 Chore
+
+- Integrate new services and update configurations ([ac8ccd9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ac8ccd9))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.27
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.26...v0.3.27)
