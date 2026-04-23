@@ -112,6 +112,7 @@ export default defineNuxtConfig({
     },
     public: {
       siteUrl: '',
+      docUrl: '',
       matrixUrl: '',
       cdnUrl: '',
       turnUrl: '',
@@ -130,13 +131,6 @@ export default defineNuxtConfig({
       vapidKey: '',
       vapidSubject: '',
       emailMetaData: '',
-    },
-  },
-  app: {
-    head: {
-      htmlAttrs: {
-        lang: 'en',
-      },
     },
   },
   icon: {

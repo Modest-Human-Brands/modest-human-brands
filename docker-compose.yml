@@ -34,26 +34,6 @@ services:
     depends_on:
       doc-gotenberg:
         condition: service_healthy
-
-  doc-gotenberg:
-    image: gotenberg/gotenberg:latest
-    restart: on-failure:3
-    ports:
-      - '4710:3000'
-    networks:
-      - internal
-      # command:
-      # - "gotenberg"
-      # - '--chromium-allow-list=^http://(doc|host\.docker\.internal):300[0-1]/.*$$|^file:///tmp/.*$$'
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-
   coordinate-synapse:
     image: matrixdotorg/synapse:latest
     restart: on-failure:3

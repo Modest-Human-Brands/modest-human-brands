@@ -15,7 +15,7 @@ export default defineEventHandler<Promise<Organization>>(async () => {
         primary: '#CD2D2D',
         accent: '',
       },
-      font: '',
+      font: 'Exo 2',
     },
     phone: '+912269711501',
     whatsapp: 'https://wa.me/912269711501',
