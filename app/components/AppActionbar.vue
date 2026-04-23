@@ -10,6 +10,16 @@ const actions: ActionItem[] = [
   { icon: 'local:search', label: 'Search' },
   { icon: 'local:bar', label: 'Properties' },
 ]
+
+const emit = defineEmits<{
+  create: []
+}>()
+
+export interface LayoutAction {
+  name: 'create' | 'filter' | 'refresh' | 'export' | string
+  payload?: { type: string; source: string }
+  timestamp: number // Used to trigger watchers even if the name is the same
+}
 </script>
 
 <template>
@@ -23,7 +33,10 @@ const actions: ActionItem[] = [
       :title="action.label">
       <NuxtIcon :name="action.icon" class="text-[18px] md:text-[20px]" />
     </button>
-    <button type="button" class="font-semibold ml-1.5 inline-flex items-center gap-1 rounded-full bg-white fill-black px-2 py-1 text-xs text-black hover:bg-white/90 md:gap-2 md:px-3 md:text-sm">
+    <button
+      type="button"
+      class="font-semibold ml-1.5 inline-flex items-center gap-1 rounded-full bg-white fill-black px-2 py-1 text-xs text-black hover:bg-white/90 md:gap-2 md:px-3 md:text-sm"
+      @click="emit('create')">
       <NuxtIcon name="local:plus" class="text-[18px] md:text-[20px]" />
       New
     </button>

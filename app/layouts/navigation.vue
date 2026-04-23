@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { LayoutAction } from '~/components/AppActionbar.vue'
+
 const slug = 'red-cat-pictures'
 const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
 
@@ -60,6 +62,25 @@ const tabs = [
 ]
 
 const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) ?? tabs[0]!)
+
+const layoutBus = ref<LayoutAction>({
+  name: '',
+  payload: null,
+  timestamp: 0,
+})
+
+const emitAction = (name: string, payload: { type: string; source: string } | null = null) => {
+  layoutBus.value = {
+    name,
+    payload,
+    timestamp: Date.now(),
+  }
+}
+
+provide('layout-actions', {
+  bus: readonly(layoutBus), // Keep it readonly for consumers
+  emitAction, // (Optional) if you want children to also be able to emit back to the layout
+})
 </script>
 
 <template>
@@ -76,7 +97,7 @@ const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) 
         </div>
         <div class="flex shrink-0 flex-col items-end gap-2 md:gap-3">
           <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
-          <AppActionbar />
+          <AppActionbar @create="emitAction('create', { type: activeTab.id, source: 'top-bar' })" />
         </div>
       </div>
       <slot />

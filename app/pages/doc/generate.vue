@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { useFileDialog, useBase64 } from '@vueuse/core'
+definePageMeta({
+  layout: 'navigation',
+  middleware: ['auth'],
+})
 
-// --- Types ---
-// const TEMPLATES = ['quotation', 'internship-completion-certificate'] as const
-// type TemplateName = (typeof TEMPLATES)[number]
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const TEMPLATES = ['quotation', 'internship-completion-certificate'] as const
+type TemplateName = (typeof TEMPLATES)[number]
 
 interface QuotationPayload {
   logoUrl: string
@@ -33,15 +36,15 @@ interface InternshipCompletionCertificatePayload {
   companylogoUrl: string
 }
 
-// --- Scalable Form Configuration ---
 interface FormField {
   key: string
   label: string
-  type: 'text' | 'email' | 'textarea' | 'date' | 'image' // Added 'image' type
+  type: 'text' | 'email' | 'textarea' | 'date' | 'image'
   placeholder?: string
   spanFull?: boolean
 }
 
+// --- Scalable Form Configuration ---
 const templateSchemas: Record<TemplateName, FormField[]> = {
   quotation: [
     { key: 'logoUrl', label: 'Company Logo', type: 'image', spanFull: true },
@@ -72,22 +75,42 @@ const templateSchemas: Record<TemplateName, FormField[]> = {
   ],
 }
 
-// --- Page Setup & State ---
-definePageMeta({
-  layout: 'navigation',
-  middleware: ['auth'],
-})
-
+// --- State ---
 const config = useRuntimeConfig()
 const { data: templateResponse, status: templateStatus } = useFetch('/api/document/generate', { baseURL: config.public.docUrl })
 const templates = computed(() => templateResponse.value?.templates || [])
 
 const selectedTemplate = ref<TemplateName | null>(null)
 const isGenerating = ref(false)
-
 const formData = ref<Record<string, string>>({})
 const currentSchema = computed(() => (selectedTemplate.value ? templateSchemas[selectedTemplate.value] : []))
 
+// --- Logic: Image Handling ---
+const activeUploadField = ref<string | null>(null)
+const activeFile = ref<File | null>(null)
+const { base64: activeFileBase64 } = useBase64(activeFile)
+const { open: openFileDialog, onChange: onFileChange } = useFileDialog({
+  accept: 'image/png, image/jpeg, image/webp',
+  multiple: false,
+})
+
+onFileChange((files) => {
+  if (files && files.length > 0) activeFile.value = files[0]
+})
+
+watch(activeFileBase64, (newBase64) => {
+  if (newBase64 && activeUploadField.value) {
+    formData.value[activeUploadField.value] = newBase64
+  }
+})
+
+function triggerImageUpload(key: string) {
+  activeUploadField.value = key
+  activeFile.value = null
+  openFileDialog()
+}
+
+// --- Logic: Generation ---
 watch(selectedTemplate, (newTemplate) => {
   formData.value = {}
   if (newTemplate) {
@@ -97,40 +120,6 @@ watch(selectedTemplate, (newTemplate) => {
   }
 })
 
-// --- Image Upload Logic (VueUse) ---
-const activeUploadField = ref<string | null>(null)
-const activeFile = ref<File | null>(null)
-
-// useBase64 automatically creates a reactive base64 string from a reactive file source
-const { base64: activeFileBase64 } = useBase64(activeFile)
-
-// useFileDialog provides a simple trigger to open the system file picker
-const { open: openFileDialog, onChange: onFileChange } = useFileDialog({
-  accept: 'image/png, image/jpeg, image/webp',
-  multiple: false,
-})
-
-// When the user selects a file, update our active file ref
-onFileChange((files) => {
-  if (files && files.length > 0) {
-    activeFile.value = files[0]
-  }
-})
-
-// Watch the generated base64 string and apply it to the corresponding form field
-watch(activeFileBase64, (newBase64) => {
-  if (newBase64 && activeUploadField.value) {
-    formData.value[activeUploadField.value] = newBase64
-  }
-})
-
-function triggerImageUpload(key: string) {
-  activeUploadField.value = key
-  activeFile.value = null // reset before opening picker
-  openFileDialog()
-}
-
-// --- Actions ---
 function buildPayload(): QuotationPayload | InternshipCompletionCertificatePayload {
   if (selectedTemplate.value === 'quotation') {
     return {
@@ -152,7 +141,6 @@ function buildPayload(): QuotationPayload | InternshipCompletionCertificatePaylo
       termsMarkdown: formData.value.termsMarkdown,
     } as QuotationPayload
   }
-
   return { ...formData.value } as unknown as InternshipCompletionCertificatePayload
 }
 
@@ -163,29 +151,20 @@ async function onGenerate() {
   const payloadData = buildPayload()
 
   try {
-    const response1 = await $fetch<Blob>('/api/health', {
-      baseURL: config.public.docUrl,
-      method: 'GET',
-    })
-    console.log({ response1 })
-    const response = await $fetch<Blob>('/api/document/generate', {
+    // API should return { id: string, ... } metadata instead of Blob
+    const response = await $fetch<DocumentMeta>('/api/document/generate', {
       baseURL: config.public.docUrl,
       method: 'POST',
       body: {
         template: selectedTemplate.value,
         data: payloadData,
       },
-      responseType: 'blob',
     })
 
-    const url = window.URL.createObjectURL(response)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', `${selectedTemplate.value}_${new Date().getTime()}.pdf`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
+    // Redirect to the viewer page rather than downloading
+    if (response?.id) {
+      await navigateTo(`/doc/${response.id}`)
+    }
   } catch (error) {
     console.error('Failed to generate document:', error)
   } finally {
@@ -196,9 +175,9 @@ async function onGenerate() {
 
 <template>
   <section class="flex h-full w-full flex-col items-center overflow-y-auto p-2 md:p-2.5">
-    <header class="mb-8 flex items-center justify-between gap-8">
+    <header class="mb-8 flex w-full max-w-4xl items-center justify-between gap-8 px-4">
       <div>
-        <h1 class="text-2xl font-bold text-white">Generate Document</h1>
+        <h1 class="text-2xl font-bold uppercase tracking-tight text-white">Generate Document</h1>
         <span class="mt-1 text-sm text-light-600 opacity-70">
           {{ selectedTemplate ? 'Fill out the details below to generate your PDF.' : 'Select a template to begin.' }}
         </span>
@@ -210,7 +189,8 @@ async function onGenerate() {
         ← Back to Templates
       </button>
     </header>
-    <section v-if="!selectedTemplate" class="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
+
+    <section v-if="!selectedTemplate" class="grid w-full max-w-4xl grid-cols-1 gap-5 px-4 md:grid-cols-2">
       <div v-if="templateStatus === 'pending'" class="text-light-600">Loading templates...</div>
 
       <button
@@ -227,7 +207,8 @@ async function onGenerate() {
         </div>
       </button>
     </section>
-    <section v-else class="rounded-2xl bg-dark-500 p-6 shadow-xl ring-1 ring-dark-600 md:p-8">
+
+    <section v-else class="w-full max-w-4xl rounded-2xl bg-dark-500 p-6 shadow-xl ring-1 ring-dark-600 md:p-8">
       <form class="flex flex-col gap-6" @submit.prevent="onGenerate">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div v-for="field in currentSchema" :key="field.key" class="flex flex-col gap-3" :class="{ 'md:col-span-2': field.spanFull }">
@@ -246,7 +227,6 @@ async function onGenerate() {
               <div v-if="formData[field.key]" class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-dark-600 ring-1 ring-dark-600">
                 <img :src="formData[field.key]" alt="Preview" class="h-full w-full object-contain" />
               </div>
-
               <button
                 type="button"
                 class="flex items-center gap-2 rounded-lg bg-dark-600 px-4 py-2 text-sm text-white transition-colors hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -254,7 +234,6 @@ async function onGenerate() {
                 <NuxtIcon name="local:file" class="text-lg" />
                 {{ formData[field.key] ? 'Change Image' : 'Upload Image' }}
               </button>
-
               <button v-if="formData[field.key]" type="button" class="text-xs text-alert-500 transition-colors hover:text-alert-400 hover:underline" @click="formData[field.key] = ''">Remove</button>
             </div>
 
