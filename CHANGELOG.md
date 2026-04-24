@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.29
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.28...v0.3.29)
+
+### 💅 Refactors
+
+- Document management pages and templates ([c25f67a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/c25f67a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.28
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.27...v0.3.28)
