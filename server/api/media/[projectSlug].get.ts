@@ -1,11 +1,11 @@
 export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (event) => {
   const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
-  const assetStorage = useStorage<Resource<'media'>>(`data:resource:media`)
+  const documentStorage = useStorage<Resource<'media'>>(`data:resource:media`)
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
   const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
-  const assets = (await assetStorage.getItems(await assetStorage.getKeys())).flatMap(({ value }) => value.record)
+  const assets = (await documentStorage.getItems(await documentStorage.getKeys())).flatMap(({ value }) => value.record)
 
   const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
 

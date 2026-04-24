@@ -29,6 +29,9 @@ services:
     image: ghcr.io/modest-human-brands/mdoc:latest
     env_file:
       - .env
+    volumes:
+      - mdoc-document:/app/document
+      - mdoc-static:/app/static
     networks:
       - internal
     deploy:
@@ -111,6 +114,18 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/.data
+  mdoc-document:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdoc/document
+  mdoc-static:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdoc/static
   mdrive-data:
     driver: local
     driver_opts:

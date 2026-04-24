@@ -5,11 +5,11 @@ export default defineEventHandler<Promise<ProjectMediaCollection[]>>(async (even
 
   if (!activeOrg) return []
 
-  const assetStorage = useStorage<Resource<'media'>>(`data:resource:media`)
+  const documentStorage = useStorage<Resource<'media'>>(`data:resource:media`)
   const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
   const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
-  const assets = (await assetStorage.getItems(await assetStorage.getKeys()))
+  const assets = (await documentStorage.getItems(await documentStorage.getKeys()))
     .flatMap(({ value }) => value.record)
     .filter((a) => a?.properties && a.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
   const projects = (await projectStorage.getItems(await projectStorage.getKeys()))

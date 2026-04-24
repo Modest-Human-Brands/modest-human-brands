@@ -1,8 +1,5 @@
 <script setup lang="ts">
-/**
- * @file [id].vue
- * @description Individual document viewer for Modest Human Brands.
- */
+import type { DocumentMeta } from './template.vue'
 
 definePageMeta({
   layout: 'navigation',
@@ -13,40 +10,19 @@ const route = useRoute()
 const config = useRuntimeConfig()
 const docId = route.params.id as string
 
-// 1. Fetch metadata for the specific document
-const { data: doc, status } = useFetch<DocumentMeta>(`/api/document/${docId}`, {
+const { data: doc, status } = await useFetch<DocumentMeta>(`/api/document/${docId}`, {
   baseURL: config.public.docUrl,
 })
 
-// 2. Compute the direct URL for the PDF preview
-// This assumes your backend serves the file at /api/document/view/[filename]
 const pdfUrl = computed(() => {
   if (!doc.value) return ''
-  return `${config.public.docUrl}/api/document/${docId}/view`
+  return `${config.public.docUrl}/api/document/${docId}/content#view=Fit`
 })
-
-// 3. Handle Download Action
-async function downloadPdf() {
-  if (!doc.value) return
-
-  try {
-    const response = await $fetch<Blob>(pdfUrl.value, { responseType: 'blob' })
-    const url = window.URL.createObjectURL(response)
-    const link = document.createElement('a')
-    link.href = url
-    link.setAttribute('download', doc.value.fileName)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  } catch (e) {
-    console.error('Download failed', e)
-  }
-}
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col overflow-hidden bg-black">
-    <header class="flex items-center justify-between border-b border-dark-600 bg-dark-500/50 px-6 py-4 backdrop-blur-md">
+  <main v-if="doc" class="flex h-full w-full flex-col overflow-hidden bg-black">
+    <header class="flex items-center justify-between border-b border-dark-600 bg-dark-500/50 p-2 backdrop-blur-md md:p-4">
       <div class="flex items-center gap-4">
         <NuxtLink to="/doc" class="flex h-8 w-8 items-center justify-center rounded-lg bg-dark-600 text-light-600 transition-colors hover:bg-dark-400 hover:text-white">
           <NuxtIcon name="local:chevron-bold" />
@@ -58,21 +34,24 @@ async function downloadPdf() {
       </div>
 
       <div class="flex items-center gap-3">
-        <button class="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold text-black transition-transform hover:scale-[1.02] active:scale-[0.98]" @click="downloadPdf">
+        <NuxtLink
+          external
+          class="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold text-black transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          :to="`${config.public.docUrl}/api/document/${docId}/content?download=true#view=Fit`">
           <NuxtIcon name="local:download" class="fill-black" />
           Download PDF
-        </button>
+        </NuxtLink>
       </div>
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-      <section class="relative flex-1 bg-dark-400 p-4 md:p-8">
-        <div class="h-full w-full overflow-hidden rounded-xl bg-dark-500 shadow-2xl ring-1 ring-dark-600">
+      <section class="relative flex-1 bg-dark-400 p-2 md:p-4">
+        <div class="h-full w-full overflow-hidden bg-dark-500 shadow-2xl ring-1 ring-dark-600">
           <div v-if="status === 'pending'" class="flex h-full w-full items-center justify-center text-light-600">
             <NuxtIcon name="local:loader" class="animate-spin text-3xl" />
           </div>
 
-          <iframe v-else-if="pdfUrl" :src="pdfUrl" class="h-full w-full border-none" title="PDF Preview"></iframe>
+          <iframe v-else-if="pdfUrl" :src="pdfUrl" class="h-full w-full border-none" title="PDF Preview" />
 
           <div v-else class="flex h-full w-full flex-col items-center justify-center gap-4 text-light-600">
             <NuxtIcon name="local:alert" class="text-4xl text-alert-500" />
@@ -92,14 +71,12 @@ async function downloadPdf() {
 
           <div class="flex flex-col gap-1">
             <span class="text-xs text-light-600">Created At</span>
-            <span class="font-medium text-sm text-white">
-              {{ doc ? new Date(doc.createdAt).toLocaleString() : '---' }}
-            </span>
+            <NuxtTime :datetime="doc.createdAt" class="font-medium text-sm text-white" day="numeric" month="short" year="numeric" :hour12="true" hour="2-digit" minute="2-digit" />
           </div>
 
           <div class="flex flex-col gap-1">
             <span class="text-xs text-light-600">File Reference</span>
-            <span class="font-mono break-all text-[10px] text-primary-400 opacity-70">{{ doc?.fileName }}</span>
+            <span class="font-mono break-all text-[10px] text-primary-400 opacity-70">{{ doc.fileName }}</span>
           </div>
 
           <hr class="border-dark-600" />

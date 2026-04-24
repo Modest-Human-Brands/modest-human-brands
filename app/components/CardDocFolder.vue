@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <div class="group flex flex-1 items-center justify-between rounded-xl bg-dark-500 p-5 ring-1 ring-dark-600 transition-all hover:ring-primary-500">
     <div class="flex items-center gap-4">
-      <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-dark-600 group-hover:bg-primary-600/20 group-hover:text-primary-400">
+      <div class="flex items-center justify-center rounded-lg group-hover:bg-primary-600/20 group-hover:text-primary-400">
         <NuxtIcon :name="icon" class="text-2xl" />
       </div>
       <div>

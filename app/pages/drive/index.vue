@@ -5,12 +5,11 @@ definePageMeta({
 })
 
 const { data: medias, pending } = await useFetch(`/api/media`)
-
 const orgSlug = 'red-cat-pictures'
 </script>
 
 <template>
-  <div class="h-full overflow-y-auto p-2 md:p-2.5">
+  <section class="h-full overflow-y-auto p-2 md:p-4">
     <!-- Loading skeleton -->
     <div v-if="pending" class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="i in 4" :key="i" class="aspect-[4/5] animate-pulse rounded-sm bg-dark-500" />
@@ -28,5 +27,5 @@ const orgSlug = 'red-cat-pictures'
         <CardMediaCollection v-for="(media, i) in medias" :key="media.slug" :org-slug="orgSlug" :media-collection="media" :index="i" />
       </div>
     </template>
-  </div>
+  </section>
 </template>

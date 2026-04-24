@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { LayoutAction } from '~/components/AppActionbar.vue'
 
-const { bus } = inject('layout-actions') as { bus: Ref<LayoutAction> }
-
 definePageMeta({
   layout: 'navigation',
   middleware: ['auth'],
@@ -11,28 +9,25 @@ definePageMeta({
 const config = useRuntimeConfig()
 const router = useRouter()
 
-const { data, status } = useFetch<{
-  total: number
-  documents: {
+const { data: documents, pending } = await useFetch<
+  {
     id: string
     template: string
     label: string
     fileName: string
     createdAt: string
   }[]
-}>('/api/document', {
+>('/api/document', {
   baseURL: config.public.docUrl,
 })
-
-onMounted(() => {
-  console.log({ data: data })
-})
+// const orgSlug = 'red-cat-pictures'
 
 const folderSummaries = [
-  { title: 'Quotation', docCount: 14, folderCount: 0, icon: 'local:folder' },
-  { title: 'Offer Letter', docCount: 14, folderCount: 0, icon: 'local:folder' },
+  { title: 'Quotation', docCount: 0, folderCount: 0, icon: 'local:folder' },
+  { title: 'Internship Certificate', docCount: 0, folderCount: 0, icon: 'local:folder' },
 ]
 
+const { bus } = inject('layout-actions') as { bus: Ref<LayoutAction> }
 watch(
   () => bus.value.timestamp,
   () => {
@@ -45,7 +40,6 @@ watch(
         handleCreate(payload)
         break
       case 'export':
-        console.log('Exporting data with filter:', payload.filter)
         break
       default:
         console.warn(`Unhandled action: ${name}`)
@@ -53,84 +47,80 @@ watch(
   }
 )
 
-function handleCreate(payload: { type: string; source: string }) {
-  if (payload.type === 'doc') {
-    router.push('/doc/generate')
+function handleCreate(payload?: { type: string; source: string }) {
+  if (payload?.type === 'doc') {
+    router.push('/doc/template')
   }
 }
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col gap-8 overflow-y-auto p-6 md:p-10">
-    <section class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-      <CardDocFolder v-for="folder in folderSummaries" :key="folder.title" v-bind="folder" />
-    </section>
+  <section class="h-full overflow-y-auto p-2 md:p-4">
+    <!-- Loading skeleton -->
+    <div v-if="pending" class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div v-for="i in 4" :key="i" class="aspect-[4/5] animate-pulse rounded-sm bg-dark-500" />
+    </div>
 
-    <section class="flex flex-col gap-4">
-      <div class="flex items-center justify-between border-b border-dark-600 pb-4">
-        <div class="flex gap-2">
-          <button class="font-medium rounded-md bg-dark-600 px-3 py-1.5 text-xs text-white ring-1 ring-dark-500">All</button>
-          <button class="font-medium px-3 py-1.5 text-xs text-light-600 hover:text-white">Pending</button>
-          <button class="font-medium px-3 py-1.5 text-xs text-light-600 hover:text-white">Draft</button>
+    <!-- Empty state -->
+    <div v-else-if="!documents?.length" class="flex min-h-[60vh] flex-col items-center justify-center text-center">
+      <p class="text-2xl font-light text-white">No Projects Found</p>
+      <p class="mt-3 text-sm uppercase tracking-widest text-light-500">Create document to get started</p>
+    </div>
+
+    <!-- Collections grid -->
+    <template v-else>
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <CardDocFolder v-for="folder in folderSummaries" :key="folder.title" v-bind="folder" />
+      </div>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-dark-600 py-4">
+          <div class="flex gap-2">
+            <button class="font-medium rounded-md bg-dark-600 px-3 py-1.5 text-base text-white ring-1 ring-dark-500">All ({{ documents?.length }})</button>
+            <button class="font-medium px-3 py-1.5 text-base text-light-600 hover:text-white">Pending</button>
+            <button class="font-medium px-3 py-1.5 text-base text-light-600 hover:text-white">Draft</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-center text-sm">
+            <thead class="whitespace-nowrap border-b border-dark-600 text-base uppercase text-light-600">
+              <tr>
+                <th class="font-medium px-2 py-1 md:px-6 md:py-4">Created</th>
+                <th class="font-medium px-2 py-1 md:px-6 md:py-4">Document Title</th>
+                <th class="font-medium px-2 py-1 md:px-6 md:py-4">Template</th>
+                <th class="font-medium px-2 py-1 md:px-6 md:py-4">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-dark-600">
+              <tr v-for="doc in documents" :key="doc.id" class="group cursor-pointer transition-colors hover:bg-dark-600/40" @click="router.push(`/doc/${doc.id}`)">
+                <td class="whitespace-nowrap px-2 py-1 text-light-500 md:px-6 md:py-4">
+                  <NuxtTime :datetime="doc.createdAt" class="text-base" day="numeric" month="short" year="numeric" :hour12="true" hour="2-digit" minute="2-digit" />
+                </td>
+
+                <td class="px-2 py-1 md:px-6 md:py-4">
+                  <div class="flex flex-col">
+                    <span class="font-medium text-white">{{ doc.fileName }}</span>
+                    <!-- <span class="text-sm text-light-600 font-mono opacity-50">{{ doc.label }}</span> -->
+                  </div>
+                </td>
+
+                <td class="px-2 py-1 md:px-6 md:py-4">
+                  <span
+                    class="font-medium inline-flex items-center whitespace-nowrap rounded-full px-2 py-1 text-center text-sm capitalize tracking-tighter text-primary-400 ring-1 ring-inset ring-primary-400/20">
+                    {{ doc.template.replace(/-/g, ' ') }}
+                  </span>
+                </td>
+
+                <td class="px-2 py-1 md:px-6 md:py-4">
+                  <div class="mx-auto flex w-fit items-center gap-1.5 text-success-400">
+                    <span class="size-1.5 animate-pulse rounded-full bg-success-500"></span>
+                    <span class="font-medium text-base">Success</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="overflow-hidden rounded-xl bg-dark-500 ring-1 ring-dark-600">
-        <table class="w-full text-left text-sm">
-          <thead class="border-b border-dark-600 bg-dark-600/30 text-xs uppercase text-light-600">
-            <tr>
-              <th class="font-medium px-6 py-4">Created</th>
-              <th class="font-medium px-6 py-4">Document Title</th>
-              <th class="font-medium px-6 py-4">Template</th>
-              <th class="font-medium px-6 py-4">Status</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-dark-600">
-            <tr v-if="status === 'pending'" class="animate-pulse">
-              <td colspan="4" class="px-6 py-10 text-center text-light-600">Loading documents...</td>
-            </tr>
-
-            <tr v-else-if="!data || !data.documents?.length">
-              <td colspan="4" class="px-6 py-10 text-center text-light-600">No documents found. Start by creating one.</td>
-            </tr>
-
-            <tr v-for="doc in data?.documents" :key="doc.id" class="group cursor-pointer transition-colors hover:bg-dark-600/40" @click="router.push(`/doc/${doc.id}`)">
-              <td class="whitespace-nowrap px-6 py-4 text-light-500">
-                {{ new Date(doc.createdAt).toLocaleDateString() }}
-                <span class="ml-1 text-2xs opacity-40">{{
-                  new Date(doc.createdAt).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })
-                }}</span>
-              </td>
-
-              <td class="px-6 py-4">
-                <div class="flex flex-col">
-                  <span class="font-medium text-white">{{ doc.fileName }}</span>
-                  <!-- <span class="text-2xs text-light-600 font-mono opacity-50">{{ doc.label }}</span> -->
-                </div>
-              </td>
-
-              <td class="px-6 py-4">
-                <span class="font-medium inline-flex items-center rounded-md bg-dark-600 px-2 py-1 text-2xs uppercase tracking-tighter text-primary-400 ring-1 ring-inset ring-primary-400/20">
-                  {{ doc.template.replace(/-/g, ' ') }}
-                </span>
-              </td>
-
-              <td class="px-6 py-4">
-                <span class="flex items-center gap-1.5 text-success-400">
-                  <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-success-500"></span>
-                  <span class="font-medium text-xs">Success</span>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="flex items-center justify-between px-2 text-xs text-light-600">
-        <p>Showing {{ data?.documents.length }} results.</p>
-      </div>
-    </section>
-  </main>
+    </template>
+  </section>
 </template>

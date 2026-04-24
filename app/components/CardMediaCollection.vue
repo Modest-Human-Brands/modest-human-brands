@@ -27,7 +27,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
   <NuxtLink
     :to="`/drive/${mediaCollection.slug}`"
     :style="{ animationDelay: `${index * 80}ms` }"
-    class="animate-fade-in group relative block w-full cursor-pointer overflow-hidden bg-dark-400 transition-all duration-500 hover:shadow-2xl hover:shadow-black/50">
+    class="animate-fade-in group relative block aspect-square w-full cursor-pointer overflow-hidden bg-dark-400 transition-all duration-500 hover:shadow-2xl hover:shadow-black/50">
     <!-- Share Button: Minimalist Floating -->
     <button
       class="absolute right-3 top-3 z-30 flex size-9 items-center justify-center rounded-full bg-white/10 text-white opacity-0 blur-sm backdrop-blur-md transition-all duration-500 hover:bg-white hover:text-black group-hover:opacity-100 group-hover:blur-none"
