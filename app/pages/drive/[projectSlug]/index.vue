@@ -57,7 +57,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
 <template>
   <div class="flex h-dvh flex-col overflow-hidden">
     <!-- Header -->
-    <div class="relative shrink-0 overflow-hidden transition-[height,opacity] duration-500 ease-in-out" :class="collapsed ? 'h-0 opacity-0' : 'h-60 opacity-100'">
+    <div class="relative shrink-0 overflow-hidden transition-[height,opacity] duration-500 ease-in-out" :class="collapsed ? 'h-0 opacity-0' : 'mb-2.5 h-60 opacity-100'">
       <NuxtImg
         v-if="media?.mediaItems?.[0]?.thumbnailUrl"
         :src="extractCdnId(media.mediaItems[0].thumbnailUrl)"
@@ -67,7 +67,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
         :placeholder="[320, Math.round(320 / (2 / 1)), 50, 5]"
         class="absolute inset-0 size-full object-cover" />
       <div v-else class="absolute inset-0" />
-      <div class="absolute inset-0 bg-gradient-to-t from-dark-600 via-dark-600/60 to-dark-600/10" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/10" />
       <div class="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-5 text-center">
         <h1 v-if="media" class="text-3xl font-light leading-tight text-white drop-shadow-lg md:text-4xl lg:text-5xl">
           {{ media.title }}
@@ -75,11 +75,11 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
         <div v-if="media" class="mt-2 flex items-center gap-2">
           <NuxtTime :datetime="media.date" class="text-xs text-white md:text-base" day="numeric" month="short" year="numeric" />
           <span class="text-xs">·</span>
-          <span class="text-xs font-semi-bold uppercase text-light-400 md:text-xs"> {{ totalMedia }} pics </span>
+          <span class="text-xs font-semi-bold uppercase text-white md:text-xs"> {{ totalMedia }} pics </span>
           <span
             class="rounded-full px-2 py-0.5 text-xs font-bold uppercase md:text-xs"
             :class="{
-              'bg-light-400/10 text-light-400': media.status === 'Plan',
+              'bg-light-400/10 text-white': media.status === 'Plan',
               'bg-primary-400/20 text-primary-400': media.status === 'Quotation',
               'bg-warning-500/20 text-warning-500': media.status === 'Shoot',
               'bg-primary-500/20 text-primary-500': media.status === 'Edit',
@@ -91,20 +91,20 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       </div>
     </div>
     <!-- Tabs -->
-    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto px-2 py-2.5 md:gap-1.5 md:py-3">
+    <nav ref="tabs" class="scrollbar-none flex shrink-0 gap-1 overflow-x-auto px-2 pb-2.5 md:gap-1.5 md:pb-3">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         :data-active="activeTab === tab.id"
         class="shrink-0 rounded-full px-3 py-1 text-xs font-semi-bold transition-all duration-200 md:px-4 md:py-1.5 md:text-xs"
-        :class="activeTab === tab.id ? 'text-white' : 'text-light-400 hover:text-white'"
+        :class="activeTab === tab.id ? 'text-white' : 'text-white hover:text-white'"
         :style="activeTab === tab.id ? { backgroundColor: organization.branding.color.primary } : {}"
         @click="activeTab = tab.id">
         {{ tab.label }} ({{ tab.count }})
       </button>
     </nav>
     <!-- Media Grid -->
-    <main ref="scroll" class="scrollbar-hidden flex-1 overflow-y-auto">
+    <main ref="scroll" class="scrollbar-hidden grow overflow-y-auto">
       <div v-if="isLoading" class="grid grid-cols-2 gap-0.5 p-0.5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <div v-for="i in 12" :key="i" class="animate-pulse rounded-sm" :style="{ aspectRatio: ['4/3', '1/1', '3/4', '16/9', '2/3'][i % 5] }" />
       </div>
@@ -112,7 +112,7 @@ watch(activeTab, () => nextTick(() => tabsRef.value?.querySelector('[data-active
       <div v-else-if="filteredMedia && filteredMedia.length" class="grid grid-cols-2 gap-0.5 p-0.5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <CardMedia v-for="item in filteredMedia" :key="item.slug" :is-public="false" :project-slug="slug" :media="item" />
       </div>
-      <div v-else class="flex h-full flex-col items-center justify-center gap-2 text-light-400/25">
+      <div v-else class="flex h-full flex-col items-center justify-center gap-2 text-white/25">
         <NuxtIcon name="local:photo" class="size-10" />
         <p class="text-sm">No media in this category</p>
       </div>

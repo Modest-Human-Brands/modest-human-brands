@@ -39,7 +39,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
       <!-- Scenario A: Real Preview Images (Collage Look) -->
       <div v-if="galleryImages.length" class="flex size-full gap-0.5 md:gap-1">
         <!-- Main Large Thumbnail -->
-        <div class="relative h-full flex-1 overflow-hidden">
+        <div class="relative h-full grow overflow-hidden">
           <NuxtImg
             :src="extractCdnId(galleryImages[0]!)"
             :alt="mediaCollection.title"
@@ -53,7 +53,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
         </div>
         <!-- Side Thumbnails (Stack) -->
         <div v-if="galleryImages.length > 1" class="flex h-full w-1/3 flex-col gap-0.5 md:gap-1">
-          <div v-for="(image, i) in galleryImages.slice(1)" :key="i" class="relative flex-1 overflow-hidden">
+          <div v-for="(image, i) in galleryImages.slice(1)" :key="i" class="relative grow overflow-hidden">
             <NuxtImg
               :src="extractCdnId(image)"
               :alt="mediaCollection.title"
@@ -66,7 +66,7 @@ const galleryImages = computed(() => props.mediaCollection.previewImages?.slice(
               class="size-full bg-dark-600 object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
           </div>
           <!-- Placeholder if less than 4 images to keep grid balanced -->
-          <div v-if="galleryImages.length < 4 && galleryImages.length > 1" class="flex flex-1 items-center justify-center bg-white/5">
+          <div v-if="galleryImages.length < 4 && galleryImages.length > 1" class="flex grow items-center justify-center bg-white/5">
             <span class="text-xs text-white/20">...</span>
           </div>
         </div>

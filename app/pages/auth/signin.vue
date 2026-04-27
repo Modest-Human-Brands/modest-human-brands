@@ -56,14 +56,14 @@ async function onEmailSignIn() {
         <span class="font-medium text-sm">Sign in with Google</span>
       </NuxtLink>
       <div class="flex items-center gap-4 opacity-50">
-        <span class="h-px flex-1 bg-light-600"></span>
+        <span class="h-px grow bg-light-600"></span>
         <span class="text-xs text-light-600">or</span>
-        <span class="h-px flex-1 bg-light-600"></span>
+        <span class="h-px grow bg-light-600"></span>
       </div>
       <form class="flex flex-col gap-4" novalidate @submit.prevent="onEmailSignIn">
         <!-- email field -->
         <div class="flex flex-col gap-3">
-          <label for="email" class="font-medium text-slate-300 block text-sm">Email</label>
+          <label for="email" class="font-medium block text-sm text-light-600">Email</label>
           <input
             id="email"
             v-model="r$.$value.email"
@@ -71,18 +71,18 @@ async function onEmailSignIn() {
             autocomplete="email"
             placeholder="you@email.com"
             :disabled="isOTPSent"
-            class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+            class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
             :aria-invalid="r$.$invalid ? 'true' : 'false'" />
           <p v-if="showError('email')" class="text-xs text-alert-500">{{ r$.email.$errors[0] }}</p>
         </div>
         <!-- otp field -->
         <div v-if="isOTPSent" class="flex flex-col gap-3">
-          <label for="otp" class="font-medium text-slate-300 block text-sm">OTP</label>
+          <label for="otp" class="font-medium block text-sm text-light-600">OTP</label>
           <input
             id="otp"
             v-model="r$.$value.otp"
             type="password"
-            class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+            class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
             :aria-invalid="r$.$invalid ? 'true' : 'false'" />
           <p v-if="showError('otp') || error" class="text-xs text-alert-500">
             {{ r$.otp?.$errors?.[0] || error?.message }}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LayoutAction } from '~/components/AppActionbar.vue'
+// import type { LayoutAction } from '~/components/AppActionbar.vue'
 
 const slug = 'red-cat-pictures'
 const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
@@ -15,10 +15,9 @@ const DEFAULT_ORG = {
   phone: '+912269711501',
   whatsapp: 'https://wa.me/912269711501',
 }
+
 const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
-
 const route = useRoute()
-
 const editedAt = 'Jan 17'
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 
@@ -63,48 +62,61 @@ const tabs = [
 
 const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) ?? tabs[0]!)
 
-const layoutBus = ref<LayoutAction>({
-  name: '',
-  payload: null,
-  timestamp: 0,
-})
+/**
+ * Dynamic Breadcrumbs Logic
+ */
+const dynamicBreadcrumbs = computed(() => {
+  const pathSegments = route.path.split('/').filter((p) => p)
+  const crumbs: { label: string; to: string; icon?: string }[] = []
+  let pathAccumulator = ''
 
-const emitAction = (name: string, payload: { type: string; source: string } | null = null) => {
-  layoutBus.value = {
-    name,
-    payload,
-    timestamp: Date.now(),
-  }
-}
+  pathSegments.forEach((segment, index) => {
+    pathAccumulator += `/${segment}`
 
-provide('layout-actions', {
-  bus: readonly(layoutBus), // Keep it readonly for consumers
-  emitAction, // (Optional) if you want children to also be able to emit back to the layout
+    const matchingTab = tabs.find((t) => t.id === segment)
+
+    if (matchingTab) {
+      crumbs.push({
+        label: matchingTab.title,
+        to: `/${matchingTab.id}`,
+        icon: matchingTab.icon,
+      })
+    } else {
+      const formattedLabel = segment
+        .split('-')
+        .filter((word) => isNaN(Number(word)))
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+        .replace(/\d+$/, '')
+        .trim()
+
+      crumbs.push({
+        label: formattedLabel || segment,
+        to: pathAccumulator,
+        icon: index === 0 ? 'ph:folder' : undefined,
+      })
+    }
+  })
+
+  return crumbs
 })
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start">
+  <div class="flex h-screen w-screen items-start justify-start bg-dark-400 font-main">
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
+
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
-      <div class="flex items-start justify-between px-2 pt-6 md:gap-6 md:px-4">
-        <div>
-          <div class="flex items-center gap-3">
-            <NuxtIcon :name="activeTab.icon" class="text-[56px] md:text-[64px]" />
-            <h1 class="font-semibold hidden truncate text-3xl md:inline">{{ activeTab.title }}</h1>
-          </div>
-          <p class="mt-2 hidden text-sm text-white/60 md:inline">{{ activeTab.description }}</p>
-        </div>
+      <div class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-2 py-6 pr-4 md:gap-6 md:px-4 md:pr-6">
+        <AppBreadcrumb :items="dynamicBreadcrumbs" />
         <div class="flex shrink-0 flex-col items-end gap-2 md:gap-3">
           <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
-          <AppActionbar @create="emitAction('create', { type: activeTab.id, source: 'top-bar' })" />
         </div>
       </div>
-      <slot />
+
+      <div class="min-h-0 grow overflow-hidden">
+        <slot />
+      </div>
     </main>
-    <!-- <button type="button" class="fixed bottom-6 right-6 rounded-full bg-dark-500 p-2.5 text-white/80 hover:text-white"
-      aria-label="AI Assistent">
-      <NuxtIcon name="local:chain" class="text-[36px]" />
-    </button> -->
   </div>
 </template>

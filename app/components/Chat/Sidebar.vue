@@ -32,14 +32,14 @@ function activeClass(roomId: string, variant: RoomType) {
 
 <template>
   <aside class="flex size-full flex-col border-l border-white/10 md:max-w-60">
-    <div v-for="section in sections" :key="section.label" class="flex h-1/3 min-h-0 flex-1 basis-1/3 flex-col">
+    <div v-for="section in sections" :key="section.label" class="flex h-1/3 min-h-0 grow basis-1/3 flex-col">
       <div class="shrink-0 px-3 pb-1 pt-3">
         <span class="text-xs font-bold uppercase tracking-widest text-white/25">
           {{ section.label }}
         </span>
       </div>
 
-      <div class="scrollbar-hidden min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+      <div class="scrollbar-hidden min-h-0 grow overflow-y-auto px-2 pb-2">
         <div class="space-y-0.5">
           <template v-if="section.type === 'contact'">
             <button
@@ -59,7 +59,7 @@ function activeClass(roomId: string, variant: RoomType) {
                 </span>
               </div>
 
-              <div class="min-w-0 flex-1">
+              <div class="min-w-0 grow">
                 <div class="flex items-baseline justify-between gap-1">
                   <span class="truncate text-base leading-snug" :class="room.unread > 0 && !isActive(room.id) ? 'font-semibold text-white' : ''">{{ room.name }}</span>
                   <NuxtTime :datetime="room.lastAt" :relative="true" class="shrink-0 text-xs text-white/25" />
@@ -87,7 +87,7 @@ function activeClass(roomId: string, variant: RoomType) {
                 <span v-else>{{ room.name.at(0) }}</span>
               </div>
 
-              <span class="min-w-0 flex-1 truncate text-base capitalize">{{ room.name }}</span>
+              <span class="min-w-0 grow truncate text-base capitalize">{{ room.name }}</span>
 
               <span v-if="room.unread > 0 && !isActive(room.id)" class="flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full bg-primary-500 px-1 text-xs font-bold text-white">
                 {{ room.unread > 9 ? '9+' : room.unread }}

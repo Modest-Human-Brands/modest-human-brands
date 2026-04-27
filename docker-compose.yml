@@ -31,9 +31,7 @@ services:
       - 4700:3000
     networks:
       - internal
-    depends_on:
-      doc-gotenberg:
-        condition: service_healthy
+
   coordinate-synapse:
     image: matrixdotorg/synapse:latest
     restart: on-failure:3

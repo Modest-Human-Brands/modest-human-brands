@@ -19,7 +19,7 @@ function onSelectRoom(id: string) {
     <!-- Empty state -->
     <div class="flex w-full min-w-0 flex-col">
       <ChatChannelHeader />
-      <div class="relative mx-auto flex w-full max-w-3xl flex-1 flex-col overflow-hidden">
+      <div class="relative mx-auto flex w-full max-w-3xl grow flex-col overflow-hidden">
         <ClientOnly>
           <ChatMessageList />
           <ChatMessageInput />

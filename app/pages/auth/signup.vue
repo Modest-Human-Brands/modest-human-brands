@@ -93,32 +93,32 @@ async function onSubmit() {
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
           <!-- Name -->
           <div class="flex flex-col gap-3">
-            <label for="name" class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']">Full name</label>
+            <label for="name" class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']">Full name</label>
             <input
               id="name"
               v-model="r$.$value.name"
               type="text"
               autocomplete="name"
               placeholder="Your full name"
-              class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
               :aria-invalid="showError('name') ? 'true' : 'false'" />
             <p v-if="showError('name')" class="text-xs text-alert-500">{{ r$.name.$errors[0] }}</p>
           </div>
           <!-- DOB -->
           <div class="flex flex-col gap-3">
-            <label for="dob" class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']">Date of birth</label>
+            <label for="dob" class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']">Date of birth</label>
             <input
               id="dob"
               v-model="r$.$value.dob"
               type="date"
               placeholder="YYYY-MM-DD"
-              class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
               :aria-invalid="showError('dob') ? 'true' : 'false'" />
             <p v-if="showError('dob')" class="text-xs text-alert-500">{{ r$.dob.$errors[0] }}</p>
           </div>
           <!-- Gender -->
           <div class="flex flex-col gap-3">
-            <label class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']">Gender</label>
+            <label class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']">Gender</label>
             <div class="mt-2 flex gap-3">
               <label class="inline-flex items-center gap-2">
                 <input v-model="r$.$value.gender" type="radio" value="male" />
@@ -137,25 +137,25 @@ async function onSubmit() {
           </div>
           <!-- Phone -->
           <div class="flex flex-col gap-3">
-            <label for="phone" class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']">Phone</label>
+            <label for="phone" class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']">Phone</label>
             <input
               id="phone"
               v-model="r$.$value.phone"
               type="tel"
               inputmode="tel"
               placeholder="9876543210"
-              class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
               :aria-invalid="showError('phone') ? 'true' : 'false'" />
             <p v-if="showError('phone')" class="text-xs text-alert-500">{{ r$.phone.$errors[0] }}</p>
           </div>
           <!-- Organization -->
           <div class="col-span-full flex flex-col gap-3">
-            <label for="organization" class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']"> Organization </label>
+            <label for="organization" class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']"> Organization </label>
             <div class="relative">
               <select
                 id="organization"
                 v-model="r$.$value.organizationId"
-                class="text-slate-200 w-full appearance-none rounded-lg bg-dark-500 px-4 py-3 pr-10 ring-2 ring-dark-600 transition focus:outline-none focus:ring-2 focus:ring-primary-400"
+                class="w-full appearance-none rounded-lg bg-dark-500 px-4 py-3 pr-10 text-light-600 ring-2 ring-dark-600 transition focus:outline-none focus:ring-2 focus:ring-primary-400"
                 :class="showError('organizationId') ? 'ring-alert-500' : 'ring-dark-600'"
                 :aria-invalid="showError('organizationId') ? 'true' : 'false'">
                 <option value="" disabled class="bg-dark-500 text-white/60">Select an organization</option>
@@ -183,13 +183,13 @@ async function onSubmit() {
             <div v-if="isCreatingOrg" class="col-span-full flex flex-col gap-5">
               <!-- Organization Name -->
               <div class="flex flex-col gap-3">
-                <label for="org-name" class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']"> Organization name </label>
+                <label for="org-name" class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']"> Organization name </label>
                 <input
                   id="org-name"
                   v-model="orgR$.$value.name"
                   type="text"
                   placeholder="Acme Corp"
-                  class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+                  class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
                   :aria-invalid="showOrgError('name') ? 'true' : 'false'" />
                 <p v-if="showOrgError('name')" class="text-xs text-alert-500">
                   {{ orgR$.name.$errors[0] }}
@@ -197,7 +197,7 @@ async function onSubmit() {
               </div>
               <!-- Founded Year -->
               <div class="flex flex-col gap-3">
-                <label for="founded-year" class="font-medium text-slate-300 text-sm after:ml-1 after:text-alert-500 after:content-['*']"> Founded year </label>
+                <label for="founded-year" class="font-medium text-sm text-light-600 after:ml-1 after:text-alert-500 after:content-['*']"> Founded year </label>
                 <input
                   id="founded-year"
                   v-model="orgR$.$value.foundedYear"
@@ -205,7 +205,7 @@ async function onSubmit() {
                   min="1900"
                   :max="new Date().getFullYear()"
                   placeholder="2020"
-                  class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+                  class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
                   :aria-invalid="showOrgError('foundedYear') ? 'true' : 'false'" />
                 <p v-if="showOrgError('foundedYear')" class="text-xs text-alert-500">
                   {{ orgR$.foundedYear.$errors[0] }}
@@ -213,7 +213,7 @@ async function onSubmit() {
               </div>
               <!-- Invite Members -->
               <div class="flex flex-col gap-3">
-                <label for="invite-email" class="font-medium text-slate-300 text-sm">
+                <label for="invite-email" class="font-medium text-sm text-light-600">
                   Invite team members
                   <span class="ml-1 text-xs text-white/60">(optional)</span>
                 </label>
@@ -224,7 +224,7 @@ async function onSubmit() {
                     v-model="inviteEmail"
                     type="email"
                     placeholder="colleague@example.com"
-                    class="text-slate-200 w-full rounded-lg bg-transparent px-4 py-3 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+                    class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
                     @keydown.enter.prevent="addInvite" />
                   <button
                     type="button"

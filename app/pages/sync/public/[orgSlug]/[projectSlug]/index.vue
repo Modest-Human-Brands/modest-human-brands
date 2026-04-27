@@ -76,7 +76,7 @@ const streamDuration = computed(() => {
   <CardOrganization :organization="organization" class="absolute right-4 top-16 z-20 md:right-1/2 md:top-4 md:translate-x-1/2" />
   <!-- Header -->
   <div class="flex h-screen w-screen flex-col gap-2 overflow-hidden p-2 md:flex-row">
-    <div class="relative flex flex-1 flex-col overflow-hidden bg-black">
+    <div class="relative flex grow flex-col overflow-hidden bg-black">
       <template v-if="streamCollection?.status === StreamStatus.Live && activeStream">
         <NuxtVideo
           ref="videoPlayer"

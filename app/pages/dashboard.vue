@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'navigation',
+  layout: 'navigation-header',
   middleware: ['auth'],
 })
 </script>

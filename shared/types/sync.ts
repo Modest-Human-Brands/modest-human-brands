@@ -25,7 +25,7 @@ export interface ProjectStreamCollection {
   slug: string
   title: string
   poster: string
-  createdAt: string
+  date: string
   client?: ProjectClient
   status: StreamStatus
   streams: ProjectStream[]

@@ -41,10 +41,14 @@ interface FormField {
 
 export interface DocumentMeta {
   id: string
-  template: string
-  label: string
+  name: string
   fileName: string
+  extension: string
+  sizeBytes: number
+  templateId: string
+  previewUrl: string
   createdAt: string
+  updatedAt: string
 }
 
 definePageMeta({
@@ -176,7 +180,7 @@ async function onGenerate() {
 </script>
 
 <template>
-  <section class="relative flex h-full flex-col p-2 md:p-4">
+  <section class="relative flex h-full flex-col">
     <!-- Loading skeleton -->
     <div v-if="pending" class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="i in 4" :key="i" class="aspect-[4/5] animate-pulse rounded-sm bg-dark-500" />
@@ -185,14 +189,14 @@ async function onGenerate() {
     <!-- Empty state -->
     <div v-else-if="!templates?.length" class="flex min-h-[60vh] flex-col items-center justify-center text-center">
       <p class="text-2xl font-light text-white">No Projects Found</p>
-      <p class="mt-3 text-sm uppercase tracking-widest text-light-500">Create document template to get started</p>
+      <p class="mt-3 text-sm uppercase tracking-widest text-white">Create document template to get started</p>
     </div>
 
     <template v-else>
-      <header class="flex w-full items-center justify-between">
+      <header class="flex w-full items-center justify-between px-2 md:px-4">
         <div>
-          <h1 class="text-2xl font-bold tracking-tight text-white">Generate Document</h1>
-          <span class="mt-1 text-sm text-light-600 opacity-70">
+          <h1 class="text-lg font-bold tracking-tight text-white md:text-2xl">Generate Document</h1>
+          <span class="mt-1 text-sm text-white opacity-70">
             {{ selectedTemplate ? 'Fill out the details below to create PDF.' : 'Select a template to begin.' }}
           </span>
         </div>
@@ -204,7 +208,7 @@ async function onGenerate() {
         </button>
       </header>
 
-      <div class="relative h-[1200px] overflow-y-auto">
+      <div class="relative overflow-y-auto px-2 pb-24 pt-2 md:px-4 md:pb-12 md:pt-4">
         <section v-if="!selectedTemplate" class="flex w-full flex-col gap-4 md:flex-row">
           <button
             v-for="template in templates"
@@ -216,18 +220,18 @@ async function onGenerate() {
             </div>
             <div>
               <h2 class="font-semibold text-lg text-white">{{ template.label || template.id }}</h2>
-              <p class="mt-1 text-sm text-light-600">
+              <p class="mt-1 text-sm text-white">
                 {{ template.description || 'Generate a new document using this template.' }}
               </p>
             </div>
           </button>
         </section>
 
-        <section v-else class="mx-auto w-full max-w-2xl bg-dark-500 p-6 shadow-xl ring-1 ring-dark-600 md:p-8">
+        <section v-else class="mx-auto w-full max-w-2xl p-2 shadow-xl md:p-10">
           <form class="flex h-fit flex-col gap-6" @submit.prevent="onGenerate">
             <div class="grid h-fit grid-cols-1 gap-6 md:grid-cols-2">
               <div v-for="field in currentSchema" :key="field.key" class="flex flex-col gap-3" :class="{ 'md:col-span-2': field.spanFull }">
-                <label :for="field.key" class="font-medium text-sm text-light-500">{{ field.label }}</label>
+                <label :for="field.key" class="font-medium text-sm text-white">{{ field.label }}</label>
 
                 <textarea
                   v-if="field.type === 'textarea'"
@@ -266,7 +270,7 @@ async function onGenerate() {
               <button
                 type="submit"
                 :disabled="isGenerating"
-                class="font-medium flex h-fit w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-base text-black transition-all disabled:cursor-not-allowed disabled:opacity-60 md:w-auto">
+                class="font-medium col-span-full flex h-fit w-full items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-base text-black transition-all disabled:cursor-not-allowed disabled:opacity-60 md:w-auto">
                 <NuxtIcon v-if="isGenerating" name="local:loader" class="animate-spin text-[24px]" />
                 {{ isGenerating ? 'Generating...' : 'Generate PDF' }}
               </button>

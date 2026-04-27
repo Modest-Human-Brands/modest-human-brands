@@ -83,11 +83,11 @@ const showDetailsPanel = false
         <div v-if="showSearch" class="px-3 pb-2">
           <label class="ring-white/8 flex items-center gap-2 rounded-xl bg-dark-500/60 px-3 py-1.5 ring-1 focus-within:ring-primary-500/30">
             <NuxtIcon name="local:search" class="shrink-0 text-sm text-white/25" />
-            <input ref="searchRef" v-model="searchQuery" type="text" placeholder="Find member…" class="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/25" />
+            <input ref="searchRef" v-model="searchQuery" type="text" placeholder="Find member…" class="grow bg-transparent text-sm text-white outline-none placeholder:text-white/25" />
           </label>
         </div>
       </Transition>
-      <div class="scrollbar-hidden flex-1 overflow-y-auto px-2.5 pb-3">
+      <div class="scrollbar-hidden grow overflow-y-auto px-2.5 pb-3">
         <template v-for="(members, status) in grouped" :key="status">
           <div class="mb-1.5 mt-4 flex items-center gap-1.5 px-1 first:mt-2">
             <span class="size-1.5 rounded-full" :style="{ backgroundColor: STATUS_COLOR[status as string] }" />
@@ -95,7 +95,7 @@ const showDetailsPanel = false
           </div>
           <div v-for="member in members" :key="member.id" class="group flex cursor-pointer items-center gap-2.5 rounded-xl px-2 py-2 transition-all duration-150 hover:bg-dark-600">
             <ChatUserAvatar :name="member.name" :status="member.status" size="md" />
-            <div class="min-w-0 flex-1">
+            <div class="min-w-0 grow">
               <div class="flex items-center gap-1.5">
                 <span class="font-semibold truncate text-sm text-white/75 transition-colors group-hover:text-white">
                   {{ member.name }}

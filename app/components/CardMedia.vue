@@ -117,7 +117,7 @@ async function onDownload(e: MouseEvent) {
     <div class="absolute bottom-0 left-0 right-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent px-1.5 pb-1.5 pt-4 transition-transform duration-300 group-hover:translate-y-0">
       <p class="truncate text-xs font-semi-bold leading-none text-white">{{ media.title }}</p>
       <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-        <div v-for="item in metadataItems" :key="item.value" class="flex items-center gap-0.5 text-light-500">
+        <div v-for="item in metadataItems" :key="item.value" class="flex items-center gap-0.5 text-white">
           <NuxtIcon :name="item.icon" class="text-[14px]" />
           <span class="text-xs leading-none">{{ item.value }}</span>
         </div>

@@ -63,11 +63,11 @@ function docIconColor(fileName?: string): string {
         <NuxtTime :datetime="message.at" hour="2-digit" minute="2-digit" hour-cycle="h11" class="text-xs text-white/25" />
       </div>
       <div v-if="message.type === 'system'" class="flex w-full items-center gap-3">
-        <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div class="h-px grow bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <span class="ring-white/8 rounded-full bg-white/5 px-3 py-0.5 text-xs italic text-white/35 ring-1">
           {{ message.content }}
         </span>
-        <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div class="h-px grow bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </div>
       <div
         v-else-if="message.type === 'text'"
@@ -97,7 +97,7 @@ function docIconColor(fileName?: string): string {
         <div class="bg-white/8 flex size-9 shrink-0 items-center justify-center rounded-xl">
           <NuxtIcon name="local:document" class="text-lg" :style="{ color: docIconColor(message.fileName) }" />
         </div>
-        <div class="min-w-0 flex-1">
+        <div class="min-w-0 grow">
           <p class="font-semibold truncate text-sm text-white">{{ message.fileName }}</p>
           <p class="text-sm text-white/35">{{ message.fileSize }}</p>
         </div>

@@ -109,7 +109,7 @@ const participants: { name: string }[] = []
 </script>
 
 <template>
-  <div class="relative min-h-0 w-full flex-1">
+  <div class="relative min-h-0 w-full grow">
     <div v-if="isCallChannel" class="flex h-full flex-col items-center justify-center gap-6 px-8">
       <p class="text-sm font-bold uppercase tracking-widest text-white/25">
         {{ activeChannel?.type === 'voice' ? 'Voice Channel' : 'Video Channel' }}
@@ -171,11 +171,11 @@ const participants: { name: string }[] = []
         </div>
         <template v-for="group in messageGroups" :key="group.dayLabel">
           <div class="flex items-center gap-3 px-5 py-4">
-            <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div class="h-px grow bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             <span class="font-semibold shrink-0 rounded-full bg-dark-500/80 px-3 py-0.5 text-xs text-white/30 ring-1 ring-dark-600">
               {{ group.dayLabel }}
             </span>
-            <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div class="h-px grow bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           </div>
           <ChatMessageBubble v-for="msg in group.messages" :key="msg.id" :message="msg" :is-first="msg.isFirst" :is-last="msg.isLast" />
         </template>

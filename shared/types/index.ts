@@ -101,7 +101,7 @@ export interface VideoDetails extends Video {
 }
 
 /* Server Only */
-export const resourceTypes = ['organization', 'user', 'client', 'project', 'stream', 'media'] as const
+export const resourceTypes = ['organization', 'user', 'client', 'project', 'document', 'stream', 'media'] as const
 
 export type ResourceType = (typeof resourceTypes)[number]
 
@@ -112,6 +112,7 @@ export interface ResourceRecordMap {
   user: NotionUser
   client: NotionProjectClient
   project: NotionProject
+  document: NotionDocument
   stream: NotionStream
   media: NotionMedia
   terms: string
@@ -350,6 +351,70 @@ export interface NotionProject {
       type: 'relation'
       relation: { id: string }[]
       has_more: boolean
+    }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+  }
+  url: string
+  public_url: null
+}
+
+export interface NotionDocument {
+  id: string
+  created_time: Date
+  last_edited_time: Date
+  cover: NotionImage
+  icon: NotionImage
+  properties: {
+    Name: {
+      type: 'title'
+      title: {
+        plain_text: string
+      }[]
+    }
+    'Project Slug': {
+      type: 'rollup'
+      rollup: {
+        array: {
+          formula: {
+            string: string
+          }
+        }[]
+      }
+    }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+  }
+  url: string
+  public_url: null
+}
+
+export interface NotionStream {
+  id: string
+  created_time: Date
+  last_edited_time: Date
+  cover: NotionImage
+  icon: NotionImage
+  properties: {
+    Name: {
+      type: 'title'
+      title: {
+        plain_text: string
+      }[]
+    }
+    'Project Slug': {
+      type: 'rollup'
+      rollup: {
+        array: {
+          formula: {
+            string: string
+          }
+        }[]
+      }
     }
     Organization: {
       type: 'relation'

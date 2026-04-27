@@ -60,7 +60,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
           slug,
           title: notionTextStringify(properties.Name.title),
           poster: coverUrl,
-          createdAt: properties.Date.date.start,
+          date: properties.Date.date.start,
           client: projectClient
             ? {
                 name: notionTextStringify(projectClient.properties.Name.title),
@@ -76,7 +76,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
           streams: projectStreams,
         }
       })
-      .toSorted((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

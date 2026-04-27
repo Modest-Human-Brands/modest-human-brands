@@ -17,7 +17,7 @@ const hasMultiChannel = computed(() => (activeRoom.value?.channels.length ?? 0) 
 <template>
   <header class="shrink-0 border-b border-white/10 bg-dark-500/20">
     <div class="flex items-center gap-3 px-4 py-2.5">
-      <div class="flex min-w-0 flex-1 items-center gap-2.5">
+      <div class="flex min-w-0 grow items-center gap-2.5">
         <div class="shrink-0">
           <div v-if="activeRoom && activeRoom?.type !== 'dm'" class="flex size-11 select-none items-center justify-center rounded-full bg-dark-500 text-lg font-bold uppercase leading-none text-white">
             <NuxtImg v-if="activeRoom.logo" :src="activeRoom.logo" :alt="activeRoom.name" class="relative size-[28px] object-contain" />

@@ -25,6 +25,10 @@
 - ⚡️ API Route Caching
 - 📐 Analytics
 
+# Avatar
+
+size = 2(font-size) + 8
+
 ## Change the Icons and Screenshots
 
 dir public/pwa/screenshot

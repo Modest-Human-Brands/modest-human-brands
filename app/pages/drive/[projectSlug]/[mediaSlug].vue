@@ -56,7 +56,7 @@ const img = useImage()
     <div class="relative z-10 flex size-full flex-col md:flex-row">
       <MediaFlimstrip :project-slug="projectSlug" :media-items="mediaItems" :active-media-slug="currentItem.slug" vertical />
 
-      <div class="flex flex-1 flex-col overflow-hidden" :style="{ aspectRatio: currentItem.metadata.aspectRatio }">
+      <div class="flex grow flex-col overflow-hidden" :style="{ aspectRatio: currentItem.metadata.aspectRatio }">
         <div class="flex h-12 shrink-0 items-center justify-between border-b border-white/5 px-4 backdrop-blur-sm">
           <NuxtLink :to="backUrl" class="flex items-center gap-1.5 text-white/50 transition-colors duration-200 hover:text-white">
             <NuxtIcon name="local:chevron-bold" class="text-[18px]" />
@@ -66,7 +66,7 @@ const img = useImage()
           <span class="text-sm tabular-nums text-white/30"> {{ currentIndex + 1 }}&thinsp;/&thinsp;{{ mediaItems.length }} </span>
         </div>
 
-        <div ref="mediaElem" class="relative flex flex-1 items-center justify-center overflow-hidden">
+        <div ref="mediaElem" class="relative flex grow items-center justify-center overflow-hidden">
           <button
             type="button"
             class="absolute left-2 z-10 flex size-9 items-center justify-center rounded-full bg-dark-500/70 text-white/50 backdrop-blur-sm transition-all duration-200 hover:bg-dark-400 hover:text-white disabled:opacity-0"

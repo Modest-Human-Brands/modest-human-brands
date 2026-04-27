@@ -14,12 +14,6 @@ const actions: ActionItem[] = [
 const emit = defineEmits<{
   create: []
 }>()
-
-export interface LayoutAction {
-  name: 'create' | 'filter' | 'refresh' | 'export' | string
-  payload?: { type: string; source: string }
-  timestamp: number // Used to trigger watchers even if the name is the same
-}
 </script>
 
 <template>

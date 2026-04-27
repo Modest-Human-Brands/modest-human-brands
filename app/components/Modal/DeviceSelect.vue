@@ -42,7 +42,7 @@ function onClose() {
           v-model="deviceId"
           type="text"
           placeholder="e.g. front-camera, drone-cam"
-          class="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/25"
+          class="grow bg-transparent text-sm text-white outline-none placeholder:text-white/25"
           @keydown.enter="confirm" />
       </div>
       <div>

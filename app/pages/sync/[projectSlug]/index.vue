@@ -117,7 +117,7 @@ function goLive() {}
 
 <template>
   <div class="flex size-full flex-col gap-2 overflow-hidden md:flex-row">
-    <div class="relative flex flex-1 flex-col overflow-hidden bg-black">
+    <div class="relative flex grow flex-col overflow-hidden bg-black">
       <template v-if="isStreaming || streamCollection?.status === StreamStatus.Live">
         <NuxtVideo
           ref="videoPlayer"

@@ -61,7 +61,7 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
             v-if="organization.phone"
             :to="`tel:${organization.phone}`"
             external
-            class="flex size-7 items-center justify-center rounded-full bg-dark-600 text-light-400 transition-colors hover:bg-success-500/20 hover:text-[oklch(76.8%_0.233_130.85)]"
+            class="flex size-7 items-center justify-center rounded-full bg-dark-600 text-white transition-colors hover:bg-success-500/20 hover:text-[oklch(76.8%_0.233_130.85)]"
             :title="`Call ${organization.phone}`">
             <NuxtIcon name="local:phone" class="text-[14px]" />
           </NuxtLink>
@@ -72,7 +72,7 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
             :to="`https://wa.me/${organization.whatsapp.replace(/\D/g, '')}`"
             target="_blank"
             rel="noopener"
-            class="flex size-7 items-center justify-center rounded-full bg-dark-600 text-light-400 transition-colors hover:bg-success-500/20 hover:text-[oklch(72.3%_0.219_149.579)]"
+            class="flex size-7 items-center justify-center rounded-full bg-dark-600 text-white transition-colors hover:bg-success-500/20 hover:text-[oklch(72.3%_0.219_149.579)]"
             title="WhatsApp">
             <NuxtIcon name="local:whatsapp" class="text-[14px]" />
           </NuxtLink>
@@ -86,7 +86,7 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
             external
             target="_blank"
             rel="noopener"
-            class="hover:bg-pink-500/20 flex size-7 items-center justify-center rounded-full bg-dark-600 text-light-400 transition-colors hover:text-[oklch(71.8%_0.202_349.761)]">
+            class="hover:bg-pink-500/20 flex size-7 items-center justify-center rounded-full bg-dark-600 text-white transition-colors hover:text-[oklch(71.8%_0.202_349.761)]">
             <NuxtIcon name="local:instagram" class="text-[14px]" />
           </NuxtLink>
 
@@ -97,7 +97,7 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
             external
             target="_blank"
             rel="noopener"
-            class="hover:bg-blue-500/20 flex size-7 items-center justify-center rounded-full bg-dark-600 text-light-400 transition-colors hover:text-[oklch(70.7%_0.165_254.624)]">
+            class="hover:bg-blue-500/20 flex size-7 items-center justify-center rounded-full bg-dark-600 text-white transition-colors hover:text-[oklch(70.7%_0.165_254.624)]">
             <NuxtIcon name="local:facebook" class="text-[14px]" />
           </NuxtLink>
 
@@ -108,7 +108,7 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
             external
             target="_blank"
             rel="noopener"
-            class="flex size-7 items-center justify-center rounded-full bg-dark-600 text-light-400 transition-colors hover:bg-alert-500/20 hover:text-[oklch(71.2%_0.194_13.428)]">
+            class="flex size-7 items-center justify-center rounded-full bg-dark-600 text-white transition-colors hover:bg-alert-500/20 hover:text-[oklch(71.2%_0.194_13.428)]">
             <NuxtIcon name="local:youtube" class="text-[14px]" />
           </NuxtLink>
         </div>
