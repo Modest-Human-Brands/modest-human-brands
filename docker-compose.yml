@@ -84,25 +84,6 @@ services:
     networks:
       - internal
 
-  media-ome:
-    image: airensoft/ovenmediaengine:latest
-    restart: on-failure:3
-    ports:
-      - '3333:3333' #
-      - '3334:3334'
-      - '3478:3478' # TURN TCP relay
-      - '9999:9999/udp' # SRT ingest
-      - '3480:3480' # LLHSL playback
-      - '8080:8080' # HLS/DASH playback
-      - '8081:8081' # REST API
-      - '10000-10005:10000-10005/udp' #
-    volumes:
-      - ./config/ome.xml:/opt/ovenmediaengine/bin/origin_conf/Server.xml
-      - ./config/omeRecord.xml:/opt/ovenmediaengine/bin/origin_conf/record_map.xml
-      - mmedia-static:/opt/ovenmediaengine/media
-    networks:
-      - internal
-
 volumes:
   mconnect-data:
     driver: local

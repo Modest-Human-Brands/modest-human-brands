@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
+import { ref, onMounted, watch } from 'vue'
+
 const props = defineProps<{
   projectSlug: string
   mediaItems: MediaItem[]
@@ -35,9 +38,7 @@ watch(
 
 <template>
   <aside
-    :class="[
-      vertical ? 'relative hidden w-[72px] shrink-0 flex-col border-r border-white/5 backdrop-blur-sm md:flex' : 'relative flex h-[68px] shrink-0 border-t border-white/5 backdrop-blur-sm md:hidden',
-    ]">
+    :class="[vertical ? 'w-18 relative hidden shrink-0 flex-col border-r border-white/5 backdrop-blur-sm md:flex' : 'h-18 relative flex shrink-0 border-t border-white/5 backdrop-blur-sm md:hidden']">
     <nav class="scrollbar-hidden" :class="vertical ? 'h-full overflow-y-auto overflow-x-hidden' : 'w-full overflow-x-auto overflow-y-hidden'">
       <ul ref="listEl" class="flex gap-1.5 p-1.5" :class="vertical ? 'flex-col' : 'flex-row items-center'">
         <li v-for="media in mediaItems" :key="media.slug" class="shrink-0" :style="`transform: translateX(${x}px)  translateY(${y}px)translateZ(0)`">

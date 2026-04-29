@@ -56,7 +56,7 @@ if (import.meta.client) {
             leave-to-class="transform scale-95 opacity-0">
             <div v-if="openMenuId === documentCollection.slug" class="absolute right-0 top-10 z-20 w-36 rounded-lg bg-[#18181b] p-1.5 shadow-2xl ring-1 ring-white/10" @click.stop>
               <button class="text-gray-300 w-full rounded-md px-3 py-2 text-left text-xs hover:bg-white/5 sm:text-sm">Edit</button>
-              <button class="text-red-400 hover:bg-red-400/10 w-full rounded-md px-3 py-2 text-left text-xs sm:text-sm">Delete</button>
+              <button class="w-full rounded-md px-3 py-2 text-left text-xs text-alert-500 hover:bg-alert-500/10 sm:text-sm">Delete</button>
             </div>
           </transition>
         </div>

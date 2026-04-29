@@ -5,8 +5,8 @@ const now = useNow({ interval: 1000 })
 
 const views = '100k'
 const duration = computed(() => {
-  if (!props.streamCollection.createdAt || props.streamCollection.status !== StreamStatus.Live) return null
-  const elapsed = Math.floor((now.value.getTime() - new Date(props.streamCollection.createdAt).getTime()) / 1000)
+  if (!props.streamCollection.date || props.streamCollection.status !== StreamStatus.Live) return null
+  const elapsed = Math.floor((now.value.getTime() - new Date(props.streamCollection.date).getTime()) / 1000)
   const h = Math.floor(elapsed / 3600)
   const m = Math.floor((elapsed % 3600) / 60)
   const s = elapsed % 60
@@ -63,7 +63,7 @@ const client = computed(() => ({
             :alt="deviceId"
             class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
         </div>
-        <div class="text-neutral-500 flex items-center gap-2 text-sm md:text-base">
+        <div class="flex items-center gap-2 text-sm text-dark-500 md:text-base">
           <span class="flex items-center justify-center gap-1">
             <NuxtIcon name="local:eye" class="text-[16px]" />
             {{ views }}
@@ -94,6 +94,6 @@ const client = computed(() => ({
       <div
         class="relative mt-1 h-full w-px border-l-2 border-dashed border-dark-500 before:absolute before:-left-px before:top-0 before:size-2.5 before:-translate-x-1/2 before:rounded-full before:bg-dark-500" />
     </div>
-    <NuxtTime :datetime="streamCollection.createdAt" month="short" day="numeric" year="numeric" class="w-fit self-end md:w-[5.5rem] md:self-start" />
+    <NuxtTime :datetime="streamCollection.date" month="short" day="numeric" year="numeric" class="w-fit self-end md:w-[5.5rem] md:self-start" />
   </div>
 </template>

@@ -13,10 +13,13 @@ export enum StreamStatus {
 }
 
 export interface ProjectStream {
+  slug: string
   deviceId: string
   status: StreamStatus
   streamUrl: string
+  streamKey: string
   media: string
+  token: string
   poster: string
   createdAt: string
 }
@@ -28,5 +31,5 @@ export interface ProjectStreamCollection {
   date: string
   client?: ProjectClient
   status: StreamStatus
-  streams: ProjectStream[]
+  streams: Omit<ProjectStream, 'slug'>[]
 }

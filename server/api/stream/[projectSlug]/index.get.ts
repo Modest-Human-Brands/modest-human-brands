@@ -1,4 +1,4 @@
-import { generateCover } from './index.get'
+import { generateCover } from '../index.get'
 
 export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   try {
@@ -33,17 +33,20 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
         if (streams.some((s) => s.status === StreamStatus.Starting)) return StreamStatus.Starting
         return streams[0]?.status ?? StreamStatus.Idle
       })(),
-      streams: deviceIds.map<ProjectStream>((deviceId) => {
-        const current = projectStreams.find((s) => s.deviceId === deviceId)
-        return {
-          deviceId,
-          streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-          media: `live/${slug}_${deviceId}/master.m3u8`,
-          status: current?.status ?? StreamStatus.Idle,
-          poster: generateCover(slug + deviceId, [color.primary, color.accent]),
-          createdAt: project.properties.Date.date.start,
-        }
-      }),
+      streams: await Promise.all(
+        deviceIds.map<Promise<Omit<ProjectStream, 'slug'>>>(async (deviceId) => {
+          const current = projectStreams.find((s) => s.deviceId === deviceId)
+          return {
+            deviceId,
+            streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
+            streamKey: '',
+            media: `live/${slug}_${deviceId}/master.m3u8`,
+            status: current?.status ?? StreamStatus.Idle,
+            poster: generateCover(slug + deviceId, [color.primary, color.accent]),
+            createdAt: project.properties.Date.date.start,
+          }
+        })
+      ),
     }
 
     return result

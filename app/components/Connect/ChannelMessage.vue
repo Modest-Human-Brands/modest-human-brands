@@ -13,7 +13,7 @@ defineProps<{
       {{ senderName.charAt(0) }}
     </div>
 
-    <div class="flex max-w-[70%] flex-col gap-1">
+    <div class="flex max-w-[80%] flex-col gap-1">
       <div class="flex items-center gap-2 px-1">
         <span class="text-[10px] font-bold text-white">{{ senderName }}</span>
         <span class="text-[10px] text-white">{{ time }}</span>

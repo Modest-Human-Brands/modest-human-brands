@@ -116,7 +116,7 @@ export default defineNuxtConfig({
       matrixUrl: '',
       cdnUrl: '',
       turnUrl: '',
-      whipUrl: '',
+      livekitUrl: '',
       llhlsUrl: '',
       scripts: {
         googleAnalytics: {
@@ -126,6 +126,8 @@ export default defineNuxtConfig({
       vapidKey: '',
     },
     private: {
+      livekitApiKey: '',
+      livekitApiSecret: '',
       mediaUrl: '',
       notionDbId: '',
       vapidKey: '',

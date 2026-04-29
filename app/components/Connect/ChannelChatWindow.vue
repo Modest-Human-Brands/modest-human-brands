@@ -1,83 +1,22 @@
 <script setup lang="ts">
-/**
- * Types and Interfaces
- */
-interface Channel {
-  name: string
-  icon: string
-}
-
-interface Message {
-  id: string
-  senderName: string
-  time: string
-  text: string
-  isOwn?: boolean
-}
-
-interface Contact {
-  name: string
-  initial: string
-  status: string
-  role: string
-}
-
-const props = defineProps<{
+defineProps<{
   contact: Contact
+  messages: Message[]
 }>()
 
-/**
- * State Management (Rule 4)
- */
 const activeChannel = ref('All')
 
-const channels = reactive<Channel[]>([
+function setActiveChannel(name: string) {
+  activeChannel.value = name
+}
+
+const channels: Channel[] = [
   { name: 'All', icon: 'local:chat' },
   { name: 'WhatsApp', icon: 'local:whatsapp' },
   { name: 'Email', icon: 'local:envelope' },
   { name: 'Instagram', icon: 'local:instagram' },
   { name: 'Calls', icon: 'local:phone' },
-])
-
-const messages = reactive<Message[]>([
-  {
-    id: 'm1',
-    senderName: 'Sarah Liu',
-    time: '10:30 AM',
-    text: "Hi! I'm looking for a new branding solution for our company.",
-    isOwn: false,
-  },
-  {
-    id: 'm2',
-    senderName: 'Me',
-    time: '10:32 AM',
-    text: "Hi Sarah! That's great to hear. Can you tell me more about your requirements?",
-    isOwn: true,
-  },
-  {
-    id: 'm3',
-    senderName: 'Sarah Liu',
-    time: '10:33 AM',
-    text: "Sure, let's schedule a quick call.",
-    isOwn: false,
-  },
-  {
-    id: 'm4',
-    senderName: 'Sarah Liu',
-    time: '10:34 AM',
-    text: 'Got it?',
-    isOwn: false,
-  },
-])
-
-const contactData = reactive({ ...props.contact })
-
-/**
- * Actions
- */
-function setActiveChannel(name: string) {
-  activeChannel.value = name
-}
+]
 </script>
 
 <template>
@@ -85,17 +24,17 @@ function setActiveChannel(name: string) {
     <header class="border-b border-white/5 p-2 md:p-4 md:pb-0">
       <div class="mb-6 flex items-center gap-4">
         <div class="flex size-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-bold leading-none text-dark-400">
-          {{ contactData.initial }}
+          {{ contact.initial }}
         </div>
 
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-3">
-            <h2 class="text-lg font-bold text-white md:text-xl">{{ contactData.name }}</h2>
+            <h2 class="text-lg font-bold text-white md:text-xl">{{ contact.name }}</h2>
             <span class="rounded bg-success-500/10 px-2 py-1 text-sm font-bold text-success-500">
-              {{ contactData.status }}
+              {{ contact.status }}
             </span>
           </div>
-          <p class="text-sm text-white">{{ contactData.role }}</p>
+          <p class="text-sm text-white">{{ contact.jobTitle }}</p>
         </div>
       </div>
 

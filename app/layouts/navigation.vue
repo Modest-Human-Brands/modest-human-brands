@@ -107,7 +107,7 @@ const dynamicBreadcrumbs = computed(() => {
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
 
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
-      <div class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-2 py-6 pr-4 md:gap-6 md:px-4 md:pr-6">
+      <div class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-2 py-4 pr-4 md:gap-6 md:px-4 md:py-6 md:pr-6">
         <AppBreadcrumb :items="dynamicBreadcrumbs" />
         <div class="flex shrink-0 flex-col items-end gap-2 md:gap-3">
           <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />

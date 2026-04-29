@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { Connect } from '~/types/connect'
-
-defineProps<{ connect: Connect }>()
+const props = defineProps<{ contact: Contact }>()
 defineEmits(['close'])
 
 type Tab = 'Details' | 'Conversations' | 'Activities'
@@ -15,11 +13,7 @@ const fields = {
   jobTitle: 'Job Title',
 }
 
-const messages = [
-  { id: 1, sender: 'Sarah Liu', time: '10:30 AM', text: "Hi! I'm looking for a new branding solution for our company.", isMe: false },
-  { id: 2, sender: 'You', time: '10:32 AM', text: "Hi Sarah! That's great to hear. Can you tell me more about your requirements?", isMe: true },
-  { id: 3, sender: 'Sarah Liu', time: '10:33 AM', text: "Sure, let's schedule a quick call.", isMe: false },
-]
+const messages = computed(() => props.contact.conversations.at(-1)?.messages)
 
 const activities = [
   { id: 1, type: 'status', title: 'Status updated to Contacted', time: '2 mins ago' },
@@ -34,16 +28,16 @@ const activities = [
       <div class="mb-8 flex items-center justify-between">
         <div class="flex items-center gap-4">
           <div class="flex h-12 w-12 items-center justify-center rounded-full bg-dark-600 text-lg font-bold text-white">
-            {{ connect.name[0] }}
+            {{ contact.name[0] }}
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h2 class="text-lg font-bold text-white">{{ connect.name }}</h2>
+              <h2 class="text-lg font-bold text-white">{{ contact.name }}</h2>
               <span class="rounded bg-success-600/20 px-2 py-1 text-sm font-bold">
-                {{ connect.status }}
+                {{ contact.status }}
               </span>
             </div>
-            <p class="text-xs text-white">{{ connect.jobTitle }} at {{ connect.company }}</p>
+            <p class="text-xs text-white">{{ contact.jobTitle }} at {{ contact.company }}</p>
           </div>
         </div>
         <button class="text-white transition-colors hover:text-white" @click="$emit('close')">
@@ -78,7 +72,7 @@ const activities = [
       <div v-if="activeTab === 'Details'" class="space-y-6">
         <div v-for="(label, key) in fields" :key="key">
           <p class="mb-1 text-sm uppercase tracking-widest text-white">{{ label }}</p>
-          <p class="text-sm font-light text-white">{{ connect[key as keyof Connect] || 'N/A' }}</p>
+          <p class="text-sm font-light text-white">{{ contact[key as keyof Contact] || 'N/A' }}</p>
         </div>
 
         <div class="pt-4">
@@ -98,13 +92,13 @@ const activities = [
         </div>
 
         <div class="grow space-y-4">
-          <div v-for="msg in messages" :key="msg.id" :class="['flex max-w-[85%] flex-col', msg.isMe ? 'ml-auto items-end' : 'items-start']">
+          <div v-for="message in messages" :key="message.id" :class="['flex max-w-[85%] flex-col', message.isOwn ? 'ml-auto items-end' : 'items-start']">
             <div class="mb-1 flex items-center gap-2">
-              <span class="text-sm text-white">{{ msg.sender }}</span>
-              <span class="text-sm text-white">{{ msg.time }}</span>
+              <span class="text-sm text-white">{{ message.senderName }}</span>
+              <span class="text-sm text-white">{{ message.time }}</span>
             </div>
-            <div :class="['rounded-2xl p-3 text-sm', msg.isMe ? 'rounded-tr-none bg-primary-600 text-white' : 'rounded-tl-none border border-dark-600 bg-dark-500 text-white']">
-              {{ msg.text }}
+            <div :class="['rounded-2xl p-3 text-sm', message.isOwn ? 'rounded-tr-none bg-primary-600 text-white' : 'rounded-tl-none border border-dark-600 bg-dark-500 text-white']">
+              {{ message.text }}
             </div>
           </div>
         </div>
