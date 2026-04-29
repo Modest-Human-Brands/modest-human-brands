@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.4.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.29...v0.4.0)
+
+### 🚀 Enhancements
+
+- **api:** ⚠️ Add document retrieval and media handling improvements ([f85f636](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f85f636))
+- ⚠️ Integrate LiveKit for streaming ([89193bb](https://github.com/Modest-Human-Brands/modest-human-brands/commit/89193bb))
+
+#### ⚠️ Breaking Changes
+
+- **api:** ⚠️ Add document retrieval and media handling improvements ([f85f636](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f85f636))
+- ⚠️ Integrate LiveKit for streaming ([89193bb](https://github.com/Modest-Human-Brands/modest-human-brands/commit/89193bb))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.3.29
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.28...v0.3.29)
