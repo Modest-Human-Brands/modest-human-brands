@@ -31,8 +31,8 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
       .flatMap(({ value }) => value.record)
       .filter((c) => c?.properties && c.properties?.Organization.relation.findIndex(({ id }) => id === activeOrg) !== -1)
 
-    const config = useRuntimeConfig()
-    const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.private.mediaUrl}/stream`)
+    // const config = useRuntimeConfig()
+    // const streams = await $fetch<{ slug: string; status: StreamStatus }[]>(`${config.private.mediaUrl}/stream`)
 
     return projects
       .map<ProjectStreamCollection>(({ properties, cover }) => {
@@ -40,19 +40,20 @@ export default defineEventHandler<Promise<ProjectStreamCollection[]>>(async (eve
 
         const coverUrl = cover?.type === 'external' ? cover.external.url : generateCover(slug, [color.primary, color.accent])
 
-        const projectStreams = streams
-          .filter((s) => s.slug.startsWith(slug))
-          .map(({ slug, status }) => {
-            const deviceId = slug.split('-').at(-1)!
-            return {
-              deviceId,
-              streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
-              media: `live/${slug}_${deviceId}/master.m3u8`,
-              status: status ?? StreamStatus.Idle,
-              poster: generateCover(slug + deviceId, [color.primary, color.accent]), //coverUrl + deviceId,
-              createdAt: properties.Date.date.start,
-            }
-          })
+        const projectStreams: ProjectStream[] = []
+        // streams
+        //   .filter((s) => s.slug.startsWith(slug))
+        //   .map(({ slug, status }) => {
+        //     const deviceId = slug.split('-').at(-1)!
+        //     return {
+        //       deviceId,
+        //       streamUrl: `srt://${import.meta.env.MOTIA_SRT_HOST}:${import.meta.env.MOTIA_SRT_PORT}?streamid=live/${slug}/${deviceId}`,
+        //       media: `live/${slug}_${deviceId}/master.m3u8`,
+        //       status: status ?? StreamStatus.Idle,
+        //       poster: generateCover(slug + deviceId, [color.primary, color.accent]), //coverUrl + deviceId,
+        //       createdAt: properties.Date.date.start,
+        //     }
+        //   })
 
         const projectClient = clients.find((c) => c.id === properties.Client.relation[0]?.id)
 

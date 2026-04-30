@@ -8,7 +8,7 @@ const {
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { loggedIn } = useUserSession()
+const { loggedIn } = { loggedIn: false }
 
 const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
 
@@ -176,7 +176,7 @@ const streamDuration = computed(() => {
   <!-- Header -->
   <div class="flex h-screen w-screen flex-col gap-2 overflow-hidden p-2 md:flex-row">
     <div class="relative flex grow flex-col overflow-hidden bg-black">
-      <video ref="videoEl" autoplay playsinline :muted="loggedIn" class="size-full rounded-md object-contain" />
+      <video ref="videoEl" autoplay playsinline :controls="false" :muted="true" class="size-full rounded-md object-contain" />
 
       <!-- ── STREAMER OVERLAYS ─────────────────────────────────────── -->
       <template v-if="loggedIn">
