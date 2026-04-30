@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.4.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.0...v0.4.1)
+
+### 🩹 Fixes
+
+- Update user session handling and improve video element attributes ([bc7947f](https://github.com/Modest-Human-Brands/modest-human-brands/commit/bc7947f))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.4.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.3.29...v0.4.0)
