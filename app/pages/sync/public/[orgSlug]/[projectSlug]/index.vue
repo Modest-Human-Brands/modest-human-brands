@@ -8,7 +8,7 @@ const {
 const route = useRoute()
 const slug = route.params.projectSlug!.toString()
 
-const { loggedIn } = { loggedIn: false }
+const { loggedIn } = { loggedIn: { value: false } }
 
 const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
 
@@ -25,7 +25,6 @@ const DEFAULT_ORG = {
 }
 const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
 
-// ─── Stream collection ────────────────────────────────────────────────────
 const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
 const { resume } = useIntervalFn(refresh, 5000, { immediate: false })
 
@@ -33,7 +32,6 @@ const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId)
 const activeStream = computed(() => streamCollection.value?.streams.find((s) => s.deviceId === activeDeviceId.value))
 const inactiveStreams = computed(() => streamCollection.value?.streams.filter((s) => s.deviceId !== activeDeviceId.value) ?? [])
 
-// ─── Device enumeration ───────────────────────────────────────────────────
 const activeVideoInputId = shallowRef<string>()
 const activeAudioInputId = shallowRef<string>()
 const { videoInputs, audioInputs, ensurePermissions } = useDevicesList({
@@ -44,9 +42,6 @@ const { videoInputs, audioInputs, ensurePermissions } = useDevicesList({
   },
 })
 
-// ─── Camera preview (before going live) ──────────────────────────────────
-// useUserMedia holds the camera only during the brief preview window.
-// It is disabled before startPublishing so LiveKit can acquire the device.
 const { stream: cameraStream, enabled: isCameraEnabled } = useUserMedia({
   constraints: computed(() => ({
     video: {
@@ -67,30 +62,21 @@ const { stream: cameraStream, enabled: isCameraEnabled } = useUserMedia({
   })),
 })
 
-// ─── LiveKit ──────────────────────────────────────────────────────────────
 const { isConnecting, isConnected, isPublishing, startPublishing, stopPublishing, viewerCount, isHostPresent, startViewing, stopViewing } = useLiveKit()
 
-// ─── Video element ────────────────────────────────────────────────────────
-// Always a native <video> — never a component ref — to keep LiveKit's
-// track.attach() away from Vue reactive proxies.
 const videoEl = ref<HTMLVideoElement | null>(null)
 
-// Show camera preview as soon as useUserMedia has a stream,
-// but only while we haven't handed off to LiveKit yet.
 watchEffect(() => {
   if (videoEl.value && cameraStream.value && !isPublishing.value) {
     videoEl.value.srcObject = cameraStream.value
   }
 })
 
-// ─── Lifecycle ────────────────────────────────────────────────────────────
 onMounted(async () => {
   resume()
 
-  // Streamer connects via button click — nothing to do here
   if (loggedIn.value) return
 
-  // Viewer: auto-connect on mount
   if (!videoEl.value) return
   try {
     const { streams } = await $fetch(`/api/stream/${slug}`, {
@@ -109,7 +95,6 @@ onUnmounted(() => {
   else stopViewing()
 })
 
-// ─── Stream controls ──────────────────────────────────────────────────────
 const showDeviceModal = ref(false)
 
 async function createStream() {
@@ -119,26 +104,21 @@ async function createStream() {
 
 async function startStreaming(deviceId: string) {
   activeDeviceId.value = deviceId
-  // 1. Start camera preview via useUserMedia
   isCameraEnabled.value = true
 
-  // 2. Fetch publisher token while preview is showing
   const { streams } = await $fetch(`/api/stream/${slug}`, {
     method: 'POST',
     body: { deviceId },
   })
 
-  // 3. Release camera so LiveKit can acquire it with the same deviceId
   isCameraEnabled.value = false
   await nextTick()
 
-  // 4. LiveKit takes over — re-acquires camera with the chosen deviceId
   await startPublishing(livekitUrl, streams[0].token, videoEl.value!, activeVideoInputId.value, activeAudioInputId.value)
 }
 
 async function stopStreaming() {
   await stopPublishing()
-  // Clear srcObject so the black frame doesn't linger
   if (videoEl.value) videoEl.value.srcObject = null
 }
 
@@ -147,7 +127,6 @@ function updateActiveInput(type: 'video' | 'audio', id: string) {
   else activeAudioInputId.value = id
 }
 
-// ─── Stream duration ──────────────────────────────────────────────────────
 const isAtLive = ref(false)
 const streamStartedAt = ref<Date | null>(null)
 const now = useNow({ interval: 1000 })
@@ -171,18 +150,13 @@ const streamDuration = computed(() => {
 </script>
 
 <template>
-  <!-- Organization -->
   <CardOrganization :organization="organization" class="absolute right-4 top-16 z-20 md:right-1/2 md:top-4 md:translate-x-1/2" />
-  <!-- Header -->
   <div class="flex h-screen w-screen flex-col gap-2 overflow-hidden p-2 md:flex-row">
     <div class="relative flex grow flex-col overflow-hidden bg-black">
       <video ref="videoEl" autoplay playsinline :controls="false" :muted="true" class="size-full rounded-md object-contain" />
 
-      <!-- ── STREAMER OVERLAYS ─────────────────────────────────────── -->
       <template v-if="loggedIn">
-        <!-- Active: publishing or stream already live from another device -->
         <template v-if="isPublishing || streamCollection?.status === StreamStatus.Live">
-          <!-- Top gradient: title + duration + live chip -->
           <div class="pointer-events-none absolute inset-x-0 top-0 z-10">
             <div class="flex w-full items-center justify-between gap-3 bg-gradient-to-b from-black/60 to-transparent p-4 pb-8">
               <div class="flex flex-col gap-1">
@@ -206,10 +180,8 @@ const streamDuration = computed(() => {
             </div>
           </div>
 
-          <!-- Bottom controls — only while this device is publishing -->
           <div v-if="isPublishing" class="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-10">
             <div class="flex items-center gap-1">
-              <!-- Mic -->
               <div class="flex items-center rounded-full bg-white/10 backdrop-blur-sm">
                 <button class="flex size-9 items-center justify-center rounded-full text-white transition hover:bg-white/10">
                   <NuxtIcon name="local:microphone" class="text-[18px]" />
@@ -219,7 +191,6 @@ const streamDuration = computed(() => {
                   <NuxtIcon name="local:chevron-bold" class="-rotate-90 text-[12px]" />
                 </button>
               </div>
-              <!-- Camera -->
               <div class="flex items-center rounded-full bg-white/10 backdrop-blur-sm">
                 <button class="flex size-9 items-center justify-center rounded-full text-white transition hover:bg-white/10">
                   <NuxtIcon name="local:camera" class="text-[18px]" />
@@ -230,14 +201,12 @@ const streamDuration = computed(() => {
                 </button>
               </div>
             </div>
-            <!-- End stream -->
             <button class="flex size-9 items-center justify-center rounded-full bg-white/10 text-white/60 backdrop-blur-sm transition hover:bg-alert-500/80 hover:text-white" @click="stopStreaming">
               <NuxtIcon name="local:cross" class="text-[16px]" />
             </button>
           </div>
         </template>
 
-        <!-- Starting state -->
         <template v-else-if="streamCollection?.status === StreamStatus.Starting">
           <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-cover bg-center" :style="{ backgroundImage: `url(${streamCollection?.poster})` }">
             <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" />
@@ -248,7 +217,6 @@ const streamDuration = computed(() => {
           </div>
         </template>
 
-        <!-- Idle: ready to broadcast -->
         <template v-else>
           <div class="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-cover bg-center" :style="{ backgroundImage: `url(${streamCollection?.poster})` }">
             <div class="absolute inset-0 bg-black/40" />
@@ -267,19 +235,15 @@ const streamDuration = computed(() => {
         </template>
       </template>
 
-      <!-- ── VIEWER OVERLAYS ──────────────────────────────────────────── -->
       <template v-else>
-        <!-- Connecting spinner -->
         <div v-if="!isConnected" class="absolute inset-0 flex items-center justify-center bg-black/60">
           <div class="size-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
         </div>
 
-        <!-- Stream ended -->
         <div v-if="isConnected && !isHostPresent" class="absolute inset-0 flex items-center justify-center">
           <p class="text-sm text-white/50">Stream has ended</p>
         </div>
 
-        <!-- Live badge + viewer count -->
         <div v-if="isConnected && isHostPresent" class="absolute left-4 top-4 flex items-center gap-2">
           <span class="bg-red-500 font-semibold rounded-full px-2 py-1 text-xs uppercase text-white"> Live </span>
           <span class="rounded-full bg-black/60 px-2 py-1 text-xs text-white/70"> {{ viewerCount }} watching </span>
@@ -287,7 +251,6 @@ const streamDuration = computed(() => {
       </template>
     </div>
 
-    <!-- ── Sidebar: inactive streams + add camera (streamer only) ──────── -->
     <template v-if="loggedIn">
       <div class="scrollbar-hidden flex h-40 flex-shrink-0 flex-row overflow-x-auto overflow-y-hidden border-white/5 md:h-auto md:w-60 md:flex-col md:overflow-y-auto md:overflow-x-hidden xl:w-72">
         <div class="flex flex-row gap-px md:flex-col">
@@ -319,7 +282,6 @@ const streamDuration = computed(() => {
             </div>
           </div>
 
-          <!-- Add camera source -->
           <button type="button" class="group flex w-56 flex-shrink-0 cursor-pointer flex-col transition hover:bg-white/5 md:w-auto" @click="createStream">
             <div class="relative aspect-video w-full overflow-hidden bg-dark-500/50">
               <div class="flex size-full items-center justify-center">
@@ -336,7 +298,6 @@ const streamDuration = computed(() => {
       </div>
     </template>
 
-    <!-- ── Device selection modal ──────────────────────────────────────── -->
     <ModalDeviceSelect
       v-if="showDeviceModal && loggedIn"
       :is-open="showDeviceModal"

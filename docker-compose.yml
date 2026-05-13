@@ -10,6 +10,18 @@ services:
     networks:
       - internal
 
+  assist:
+    build: ../code-assist
+    restart: on-failure:3
+    env_file:
+      - ../code-assist/.env.prod
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    ports:
+      - 6000:3111
+    networks:
+      - internal
+
   connect:
     build: ../code-connect
     restart: on-failure:3
