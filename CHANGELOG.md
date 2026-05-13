@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.4.2
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.1...v0.4.2)
+
+### 🚀 Enhancements
+
+- Add assist service to docker-compose and update dependencies in package.json ([df70335](https://github.com/Modest-Human-Brands/modest-human-brands/commit/df70335))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.4.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.0...v0.4.1)
