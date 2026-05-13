@@ -239,7 +239,9 @@ const streamDuration = computed(() => {
     </div>
 
     <template v-if="loggedIn">
-      <div class="scrollbar-hidden flex h-40 flex-shrink-0 flex-row overflow-x-auto overflow-y-hidden border-white/5 md:h-auto md:w-60 md:flex-col md:overflow-y-auto md:overflow-x-hidden xl:w-72">
+      <div
+        v-if="inactiveStreams.length"
+        class="scrollbar-hidden flex h-40 flex-shrink-0 flex-row overflow-x-auto overflow-y-hidden border-white/5 md:h-auto md:w-60 md:flex-col md:overflow-y-auto md:overflow-x-hidden xl:w-72">
         <div class="flex flex-row gap-px md:flex-col">
           <div
             v-for="{ deviceId, status, media, poster } in inactiveStreams"
