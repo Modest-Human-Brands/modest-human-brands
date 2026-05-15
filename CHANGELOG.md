@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.4.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.3...v0.4.4)
+
+### 🩹 Fixes
+
+- Enhance LiveKit integration and improve error handling in streaming components ([7bf364e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/7bf364e))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.4.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.2...v0.4.3)
