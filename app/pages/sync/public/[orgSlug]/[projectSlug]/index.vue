@@ -46,8 +46,15 @@ onMounted(async () => {
       method: 'POST',
       body: { deviceId: slug },
     })
-    await startViewing(livekitUrl, streams[0].token, videoEl.value)
-  } catch {
+
+    // Add a safety check before trying to access index 0
+    if (streams && streams.length > 0) {
+      await startViewing(livekitUrl, streams[0].token, videoEl.value)
+    } else {
+      console.warn('No active streams found for this project.')
+    }
+  } catch (error) {
+    console.error('Failed to start viewing:', error)
     // await navigateTo('/')
   }
 })
@@ -83,7 +90,7 @@ const streamDuration = computed(() => {
   <CardOrganization :organization="organization" class="absolute right-4 top-16 z-20 md:right-1/2 md:top-4 md:translate-x-1/2" />
   <div class="flex h-screen w-screen flex-col gap-2 overflow-hidden p-2 md:flex-row">
     <div class="relative flex grow flex-col overflow-hidden bg-black">
-      <video ref="videoEl" autoplay playsinline :controls="false" :muted="true" class="size-full rounded-md object-contain" />
+      <video ref="videoEl" autoplay playsinline :controls="false" class="size-full rounded-md object-contain" />
 
       <div v-if="!isConnected" class="absolute inset-0 flex items-center justify-center bg-black/60">
         <div class="size-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
@@ -117,7 +124,6 @@ const streamDuration = computed(() => {
               :live="true"
               :controls="false"
               :autoplay="true"
-              :muted="true"
               :playsinline="true"
               class="size-full object-cover opacity-80 transition group-hover:opacity-100" />
             <NuxtImg v-else-if="poster" :src="poster" class="size-full object-cover opacity-30" />

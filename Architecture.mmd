@@ -1,0 +1,143 @@
+graph LR
+    %% ==== STYLING DEFINITIONS ====
+    %% Main/Root
+    classDef main fill:#1a1a1a,stroke:#333,stroke-width:2px,color:#fff,rx:5px,ry:5px;
+    classDef ai fill:#111827,stroke:#374151,stroke-width:2px,color:#9ca3af,rx:5px,ry:5px,stroke-dasharray: 5 5;
+
+    %% Default States (Neutral Dark Theme)
+    classDef def1 fill:#262626,stroke:#404040,stroke-width:2px,color:#fff,rx:5px,ry:5px;
+    classDef def2 fill:#333333,stroke:#525252,stroke-width:1px,color:#e0e0e0,rx:4px,ry:4px;
+    classDef def3 fill:#404040,stroke:#666666,stroke-width:1px,color:#ccc,rx:3px,ry:3px;
+
+    %% Exploring States (Blue Theme - Active Node)
+    classDef expl1 fill:#1e3a8a,stroke:#2563eb,stroke-width:2px,color:#fff,rx:5px,ry:5px;
+    classDef expl2 fill:#1e40af,stroke:#3b82f6,stroke-width:1px,color:#f8fafc,rx:4px,ry:4px;
+    classDef expl3 fill:#1d4ed8,stroke:#60a5fa,stroke-width:1px,color:#f1f5f9,rx:3px,ry:3px;
+    classDef expl4 fill:#2563eb,stroke:#93c5fd,stroke-width:1px,color:#e2e8f0,rx:3px,ry:3px;
+    classDef expl5 fill:#3b82f6,stroke:#bfdbfe,stroke-width:1px,color:#fff,rx:2px,ry:2px;
+    classDef expl6 fill:#60a5fa,stroke:#dbeafe,stroke-width:1px,color:#1e3a8a,rx:2px,ry:2px;
+    classDef expl7 fill:#93c5fd,stroke:#eff6ff,stroke-width:1px,color:#1e3a8a,rx:2px,ry:2px;
+    classDef expl8 fill:#bfdbfe,stroke:#fff,stroke-width:1px,color:#1e40af,rx:2px,ry:2px;
+    classDef expl9 fill:#dbeafe,stroke:#1e40af,stroke-width:1px,color:#1e3a8a,rx:2px,ry:2px;
+    classDef expl10 fill:#eff6ff,stroke:#1e3a8a,stroke-width:1px,color:#000,rx:2px,ry:2px;
+
+    %% ==== ROOT ====
+    Root["0. MHB Unified UI"]:::main
+
+    %% ==== GLOBAL SHARED CORE (Moved from child nodes) ====
+    Root --> Root_Brand["0.1 Global Branding & Theming <br/><i>(Core UI: Tailwind/CSS Vars Manager)</i>"]:::def2
+    Root --> Root_Search["0.2 Global Search & Filtering <br/><i>(Core Logic: useGlobalFilter Composable)</i>"]:::def2
+    Root --> Root_Auth["0.3 Unified Auth & RBAC <br/><i>(Core API: Cross-service Permissions)</i>"]:::def2
+
+    %% ==== PREVIOUSLY EXPLORED MICROSERVICES (Default) ====
+    Root --> MWap["1. MWap"]:::def1
+    MWap --> W_F["1.1 Website Builder"]:::def2
+    W_F --> W_S1["1.1.1 UI: Media-centric Nuxt sites <br/><i>(Consumes 0.1 Global Branding)</i>"]:::def3
+
+    Root --> MConnect["2. MConnect"]:::def1
+    MConnect --> C_F["2.1 Aggregator & CRM"]:::def2
+    C_F --> C_S1["2.1.1 API: Multi-channel comms <br/><i>(API Route / Webhook Listener)</i>"]:::def3
+
+    Root --> MDoc["3. MDoc"]:::def1
+    MDoc --> D_F["3.1 Document Management"]:::def2
+    D_F --> D_S1["3.1.1 UI: Digital signature engine <br/><i>(Vue Component)</i>"]:::def3
+
+    Root --> MCoordinate["4. MCoordinate"]:::def1
+    MCoordinate --> Co_F["4.1 Internal Team Comms"]:::def2
+    Co_F --> Co_S1["4.1.1 API: Matrix project chat <br/><i>(Node Microservice)</i>"]:::def3
+
+    Root --> MSync["5. MSync"]:::def1
+    MSync --> S_F["5.1 Desktop Streaming App"]:::def2
+    S_F --> S_S1["5.1.1 Core: OBS to LiveKit engine <br/><i>(Tauri / Electron Process)</i>"]:::def3
+
+    Root --> MMedia["6. MMedia"]:::def1
+    MMedia --> M_F["6.1 Event-Driven Media Engine"]:::def2
+    M_F --> M_S1["6.1.1 API: On-the-fly Image Optimization <br/><i>(Motia / CDN Edge Worker)</i>"]:::def3
+    M_F --> M_S2["6.1.2 API: Adaptive Bitrate Transcoding <br/><i>(Background Worker / FFMPEG)</i>"]:::def3
+    M_F --> M_S3["6.1.3 API: Live RTMP/SRT/WebRTC to HLS <br/><i>(Streaming Ingest Pipeline)</i>"]:::def3
+
+    %% ==== ACTIVE MICROSERVICE BRANCH: MDrive (Blue Base) ====
+    Root --> MDrive["7. MDrive"]:::expl1
+    
+    %% 7.5 Upload & Ingestion 
+    MDrive --> Dr_Up["7.5 Upload & Ingestion Layer"]:::def2
+    Dr_Up --> Dr_Up1["7.5.1 UI: Drag-and-Drop Zone <br/><i>(Vue Component: Uploader)</i>"]:::def3
+    Dr_Up --> Dr_Up2["7.5.2 API: Chunked Multipart Upload <br/><i>(S3 API Integration)</i>"]:::def3
+    Dr_Up --> Dr_Up3["7.5.3 Core: EXIF/Metadata Extraction <br/><i>(Background Worker)</i>"]:::def3
+
+    %% Shallow MDrive Features (Default)
+    MDrive --> Dr_Org["7.1 Internal Asset Organization"]:::def2
+    Dr_Org --> Dr_Org1["7.1.1 UI: Card Grids & Navigation <br/><i>(Consumes 0.2 Global Search)</i>"]:::def3
+    Dr_Org --> Dr_Org2["7.1.2 UI/API: Bulk Actions <br/><i>(Multi-select, Move, Delete, Download)</i>"]:::def3
+    Dr_Org --> Dr_Org3["7.1.3 UI/API: Soft Delete & Trash Recovery <br/><i>(30-day retention)</i>"]:::def3
+    
+    MDrive --> Dr_Collab["7.2 Internal Workflow Control"]:::def2
+    Dr_Collab --> Dr_Collab1["7.2.1 UI/API: Status tags <br/><i>(Vue Component + API Route)</i>"]:::def3
+    Dr_Collab --> Dr_Collab2["7.2.2 UI: Publish / Send to Client <br/><i>(Triggers MConnect Dispatch)</i>"]:::def3
+    Dr_Collab --> Dr_Collab3["7.2.3 Core: Audit Logging & Activity Tracker <br/><i>(Action History Service)</i>"]:::def3
+    
+    %% MConnect Notification Trigger
+    Dr_Collab2 -.->|Triggers Email Campaign| C_S1
+
+    %% 7.6 Sharing & Access Management
+    MDrive --> Dr_Sec["7.6 Sharing & Access Management"]:::def2
+    Dr_Sec --> Dr_Sec1["7.6.1 UI/API: Password & Expiration <br/><i>(Access Gateway Middleware)</i>"]:::def3
+    Dr_Sec --> Dr_Sec2["7.6.2 Core: Granular Download Toggles <br/><i>(RBAC Policy Engine)</i>"]:::def3
+    Dr_Sec --> Dr_Sec3["7.6.3 UI/Core: Enforce Watermarks Toggle <br/><i>(Dynamic Delivery Policy)</i>"]:::def3
+
+    %% PREVIOUS Deep Dive: Collaboration & Feedback View (Default)
+    MDrive --> Dr_View["7.3 Media Collaboration View"]:::def2
+    Dr_View --> Dr_V_Ver["7.3.2 UI/API: Asset Version Stacking (V1/V2) <br/><i>(Core Service Logic)</i>"]:::def3
+    Dr_View --> Dr_V_UI["7.3.1 UI: Immersive Lightbox"]:::def3
+    
+    %% Main Canvas for Interaction
+    Dr_V_UI --> Dr_Center["7.3.1.1 UI: Main Interactive Canvas"]:::def3
+    Dr_Center --> Dr_C_Com["7.3.1.1.1 UI: Drop Pin / Area Selection"]:::def3
+    Dr_C_Com --> Dr_C_Com_API["7.3.1.1.1.1 Core: Track X/Y Coordinates <br/><i>(Vue Composable: useCanvas)</i>"]:::def3
+    
+    %% Commenting & Reply System
+    Dr_V_UI --> Dr_Bot["7.3.1.2 UI: Bottom Comment Console"]:::def3
+    Dr_Bot --> Dr_Bot_Inp["7.3.1.2.1 UI: Text Input & Threading"]:::def3
+    Dr_Bot_Inp --> Dr_Bot_API["7.3.1.2.1.1 API: Save Client Comment / User Reply"]:::def3
+    
+    %% Left Sidebar
+    Dr_V_UI --> Dr_Side["7.3.1.3 UI: Left Thumbnail Strip"]:::def3
+    Dr_Side --> Dr_Side1["7.3.1.3.1 UI: Navigate Asset Gallery <br/><i>(Vue Component: ThumbnailStrip)</i>"]:::def3
+    
+    %% Top Action Bar
+    Dr_V_UI --> Dr_Top["7.3.1.4 UI: Top Action Bar"]:::def3
+    Dr_Top --> Dr_Top1["7.3.1.4.1 UI: Aspect Ratio / Zoom Controls <br/><i>(Vue Component: Toolbar)</i>"]:::def3
+    Dr_Top --> Dr_Top2["7.3.1.4.2 UI: Share/Download"]:::def3
+    Dr_Top2 --> Dr_Top2_API["7.3.1.4.2.1 API: Generate S3 presigned URLs <br/><i>(API Route: /api/s3/sign)</i>"]:::def3
+
+    %% ==== CURRENT EXPLORING BRANCH: Client Public Gallery (Blue) ====
+    MDrive --> Dr_Client["7.4 Client Public Gallery View <br/><i>(Nuxt Page: /share/[id].vue)</i>"]:::expl2
+
+    %% Top Hero Section
+    Dr_Client --> Dr_Cl_Hero["7.4.1 UI: Project Hero Banner"]:::expl3
+    Dr_Cl_Hero --> Dr_Cl_H_Data["7.4.1.1 API: Fetch Public Meta"]:::expl4
+
+    %% Filter Navigation
+    Dr_Client --> Dr_Cl_Tabs["7.4.2 UI: Approval Tab Navigation"]:::expl3
+    Dr_Cl_Tabs --> Dr_Cl_T_Logic["7.4.2.1 Core: Client-side UI filtering <br/><i>(Consumes 0.2 Global Search)</i>"]:::expl4
+    Dr_Cl_T_Logic --> Dr_Cl_T_API["7.4.2.1.1 API: Fetch Approval Counts <br/><i>(API Route: /api/project/[id]/stats)</i>"]:::expl5
+
+    %% Main Media Grid & Deep Dive into Approval Flow
+    Dr_Client --> Dr_Cl_Grid["7.4.3 UI: Masonry Media Grid"]:::expl3
+    Dr_Cl_Grid --> Dr_Cl_Card["7.4.3.1 UI: Media Card Component"]:::expl4
+    
+    %% >> CONNECTION: MDrive -> MMedia <<
+    Dr_Cl_Card --> Dr_Cl_Img["7.4.3.1.1 UI: Lazy CDN Image Load <br/><i>(Vue Component: NuxtImg)</i>"]:::expl5
+    Dr_Cl_Img -.->|Requests Optimized Delivery| M_S1
+    
+    %% Deepest nesting: The Client Approval Interaction
+    Dr_Cl_Card --> Dr_Cl_Act["7.4.3.1.2 UI: Open Shared Media Page"]:::expl5
+    Dr_Cl_Act --> Dr_Cl_App["7.4.3.1.2.1 API: Client Approve/Reject <br/><i>(API Route: POST /api/media/approve)</i>"]:::expl6
+    Dr_Cl_App --> Dr_Cl_State["7.4.3.1.2.1.1 Core: Mutate Status & Notify MCoordinate <br/><i>(Service Logic)</i>"]:::expl7
+
+    %% Client Bulk Delivery
+    Dr_Client --> Dr_Cl_Zip["7.4.4 UI: 'Download Approved' Action"]:::expl3
+    Dr_Cl_Zip --> Dr_Cl_Zip_API["7.4.4.1 API: On-the-fly ZIP Generation <br/><i>(S3 Stream Wrapper)</i>"]:::expl4
+
+    %% ==== BACKGROUND SERVICE ====
+    Root -.-> MAssist["8. MAssist: Global AI Harness <br/><i>(Standalone Service)</i>"]:::ai

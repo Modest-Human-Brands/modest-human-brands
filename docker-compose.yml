@@ -16,11 +16,55 @@ services:
     env_file:
       - ../code-assist/.env.prod
     volumes:
-      - ~/.cache/huggingface:/root/.cache/huggingface
+      - ../code-assist/artifact:/artifact
     ports:
       - 6000:3111
     networks:
       - internal
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
+
+    # model-init:
+    #   image: python:3.11-slim
+    #   volumes:
+    #     - D:/Models/huggingface:/hf_cache
+    #   environment:
+    #     - HF_TOKEN=${HF_TOKEN} # optional — OmniVoice is public
+    #     - HF_ENDPOINT=${HF_ENDPOINT:-https://huggingface.co}
+    #   command: >
+    #     bash -c "
+    #       pip install -q huggingface_hub &&
+    #       python -c \"
+    #       from huggingface_hub import snapshot_download
+    #       snapshot_download('k2-fsa/OmniVoice', cache_dir='/hf_cache')
+    #       print('Model ready.')
+    #       \"
+    #     "
+
+  assist-triton:
+    build: ../code-assist/inference
+    volumes:
+      - ../code-assist/inference/model_repository:/models
+      - ../code-assist/artifact:/artifact
+      - D:/Models/huggingface:/root/.cache/huggingface/hub
+    ports:
+      - '8000:8000' # HTTP
+      - '8001:8001' # gRPC
+      - '8002:8002' # metrics
+    networks:
+      - internal
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   connect:
     build: ../code-connect
@@ -47,12 +91,12 @@ services:
   coordinate-synapse:
     image: matrixdotorg/synapse:latest
     restart: on-failure:3
-    networks:
-      - internal
-    expose:
-      - 8008
     volumes:
       - /root/synapse/data:/data
+    expose:
+      - 8008
+    networks:
+      - internal
     depends_on:
       coordinate-synapse-postgres:
         condition: service_healthy
@@ -60,8 +104,6 @@ services:
   coordinate-synapse-postgres:
     image: postgres:latest
     restart: on-failure:3
-    networks:
-      - internal
     environment:
       - POSTGRES_USER=synapse_user
       - POSTGRES_PASSWORD=postgres
@@ -69,6 +111,8 @@ services:
       - POSTGRES_INITDB_ARGS=--encoding='UTF8' --lc-collate='C' --lc-ctype='C'
     volumes:
       - /root/synapse/postgres:/var/lib/postgresql/data
+    networks:
+      - internal
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U synapse_user -d synapse']
       interval: 10s
