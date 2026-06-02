@@ -2,7 +2,7 @@ import * as z from 'zod'
 
 /* Email Schema */
 export const emailFormSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.email('Please enter a valid email address'),
   otp: z.string().optional(),
 })
 

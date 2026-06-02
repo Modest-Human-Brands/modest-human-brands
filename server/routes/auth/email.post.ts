@@ -1,25 +1,41 @@
 import { findOrCreateNotionUser } from '~~/server/routes/auth/google.get'
 
+const mhbOrg = {
+  id: 'modest-human-brands',
+  name: 'Modest Human Brands',
+  address: 'Abc Road, Near DEF, UIO - 1890',
+  website: 'https://modesthumanbrands.com',
+  branding: {
+    logo: 'https://modesthumanbrands.com/logo-dark.svg',
+    color: { primary: '#2B2B2B', accent: '#4A85FF' },
+    font: 'Exo2',
+  },
+}
+
+export type EmailTemplateData = {
+  otp: { otp: string } & ({ toEmail: string; contactId?: never } | { contactId: string; toEmail?: never })
+}
+
 export async function sendEmail<T extends keyof EmailTemplateData>(template: T, payload: EmailTemplateData[T][]) {
   let isSuccessful = true
-  const config = useRuntimeConfig()
-  const metaData = config.private.emailMetaData as unknown as EmailMetaData
 
   await Promise.allSettled(
     payload.map(async (payloadData) => {
       try {
-        const allData = { ...metaData, ...emailTemplate[template].data, ...payloadData }
-        console.log({ allData })
-        // const html = await render(emailTemplate[template].template as Component, allData)
-        // const text = await render(emailTemplate[template].template as Component, allData, { plainText: true })
-
-        /*         await transport.sendMail({
-                  from: `"${allData.fromCompanyName}" <${allData.fromEmail}>`,
-                  to: allData.toEmail,
-                  subject: allData.emailSubject,
-                  html,
-                  text,
-                }) */
+        await $fetch('/api/connect/text/email/send', {
+          baseURL: 'http://localhost:3001',
+          method: 'POST',
+          body: {
+            recipientEmail: payloadData.toEmail,
+            template: 'otp',
+            variables: {
+              recipientEmail: payloadData.toEmail,
+              otpCode: payloadData.otp,
+              expiresIn: '5 minutes',
+              organization: mhbOrg,
+            },
+          },
+        })
       } catch (error) {
         console.error('function sendEmail', error)
         isSuccessful = false
@@ -64,8 +80,9 @@ export default defineEventHandler(async (event) => {
               createdAt: user.createdAt,
               updatedAt: user.updatedAt,
               isProfileComplete: user.isProfileComplete,
+              organizations: user.organizations,
             },
-            logged_at: new Date().toISOString(),
+            loggedInAt: new Date().toISOString(),
           },
           { maxAge: 30 * 24 * 60 * 60 * 1000 }
         )

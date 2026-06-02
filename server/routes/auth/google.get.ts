@@ -11,16 +11,15 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-  const query = await notion.dataSources.query({
-    data_source_id: notionDbId.user,
+  const results = await notionQueryDb(notion, notionDbId.user, {
     filter: {
       property: 'Email',
       email: { equals: authUser.email },
     },
   })
 
-  if (query.results.length > 0) {
-    const data = query.results[0] as unknown as NotionUser
+  if (results.length > 0) {
+    const data = results[0] as unknown as NotionUser
 
     return {
       id: data.id,

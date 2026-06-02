@@ -25,6 +25,53 @@
 - ⚡️ API Route Caching
 - 📐 Analytics
 
+# Specs
+
+## 0. Health Layer
+
+### `GET /api/health`
+
+**Description:** Verification ping to check system readiness and isolate active compute infrastructure nodes.
+
+**Input:** _(None)_
+
+**Output (JSON):**
+
+```json
+{
+  "status": "OK",
+  "node": "Gigabyte"
+}
+```
+
+---
+
+### MHB Ecosystem Progress Tracker
+
+**Legend:** ✅ Complete / Defined | 🚧 In Progress | ⏳ Pending / Planned
+
+| Microservice       | Core Feature                      | Architecture | API Design | UX Design | Implementation (Code) | Testing | Production (MVP) |
+| ------------------ | --------------------------------- | ------------ | ---------- | --------- | --------------------- | ------- | ---------------- |
+| **1. MHB**         | Unified UI & Global Core          | 🚧           | 🚧         | 🚧        | 🚧                    | ⏳      | ⏳               |
+| **2. MWap**        | Media-Centric Website Builder     | ✅           | ⏳         | ⏳        | ⏳                    | ⏳      | ⏳               |
+| **3. MConnect**    | Comms Aggregator & CRM            | ✅           | ✅         | 🚧        | 🚧                    | 🚧      | 🚧               |
+| **4. MDoc**        | Document & Signature Engine       | ✅           | ✅         | 🚧        | 🚧                    | 🚧      | 🚧               |
+| **5. MCoordinate** | Internal Project Chat             | ✅           | ⏳         | ⏳        | ⏳                    | ⏳      | ⏳               |
+| **6. MSync**       | Desktop Streaming                 | ✅           | 🚧         | 🚧        | 🚧                    | ⏳      | ⏳               |
+| **7. MMedia**      | Event-Driven Processing Pipeline  | ✅           | 🚧         | 🚧        | 🚧                    | ⏳      | ⏳               |
+| **8. MDrive**      | Asset Management & Client Gallery | ✅           | ✅         | 🚧        | 🚧                    | 🚧      | 🚧               |
+| **9. MAssist**     | Global AI Harness                 | ✅           | 🚧         | ⏳        | ⏳                    | ⏳      | ⏳               |
+
+---
+
+### MHB Ecosystem Percentage
+
+Formula = [ (✅ x 1.0) + (🚧 x 0.5) + (⏳ x 0.0) ] / Total Tasks x 100
+
+Total Tasks = 9 microservices x 6 phases = 54
+
+Progress = [ (11 x 1.0) + (23 x 0.5) + (21 x 0.0) ] / 54 x 100 = 41.66
+
 # Avatar
 
 size = 2(font-size) + 8
@@ -38,6 +85,8 @@ dir public/pwa/screenshot
 put upload-keystore.jks, keystore.properties into src-tauri/gen/android
 
 add those files into the .gitignore on the same folder
+
+---
 
 ## License
 

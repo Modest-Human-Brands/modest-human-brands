@@ -17,6 +17,74 @@ services:
     image: ghcr.io/modest-human-brands/mconnect:latest
     env_file:
       - .env
+    volumes:
+      - /root/modest-human-brands/mconnect/config:/app/config
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  connect-livekit:
+    image: livekit/livekit-server:latest
+    command: --config /etc/livekit.yaml
+    # ports:
+    #   - "7881:7881/tcp"
+    #   - "7882:7882/udp"
+    #   - "50000-60000:50000-60000/udp"
+    volumes:
+      - /root/modest-human-brands/mconnect/config/livekit.yaml:/etc/livekit.yaml
+    networks:
+      - internal
+    depends_on:
+      - connect-livekit-redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  connect-livekit-egress:
+    image: livekit/egress:latest
+    environment:
+      - EGRESS_CONFIG_FILE=/etc/egress.yaml
+    volumes:
+      - /root/modest-human-brands/mconnect/config/egress.yaml:/etc/egress.yaml
+      - /root/modest-human-brands/mconnect/recordings:/recordings
+    networks:
+      - internal
+    depends_on:
+      - connect-livekit
+      - connect-livekit-redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  connect-livekit-sip:
+    image: livekit/sip:latest
+    ports:
+      - '5060:5060/udp'
+      - '5060:5060/tcp'
+      - '10000-10100:10000-10100/udp'
+    volumes:
+      - /root/modest-human-brands/mconnect/config/sip.yaml:/sip/config.yaml
+    networks:
+      - internal
+    depends_on:
+      - connect-livekit
+      - connect-livekit-redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+  connect-livekit-redis:
+    image: redis:7-alpine
     networks:
       - internal
     deploy:
@@ -83,6 +151,12 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/.data
+  mconnect-config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mconnect/config
   mdoc-document:
     driver: local
     driver_opts:

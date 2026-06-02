@@ -9,135 +9,247 @@ graph LR
     classDef def2 fill:#333333,stroke:#525252,stroke-width:1px,color:#e0e0e0,rx:4px,ry:4px;
     classDef def3 fill:#404040,stroke:#666666,stroke-width:1px,color:#ccc,rx:3px,ry:3px;
 
-    %% Exploring States (Blue Theme - Active Node)
+    %% Exploring States (Blue Theme - Active Node: MSync Deep Dive)
     classDef expl1 fill:#1e3a8a,stroke:#2563eb,stroke-width:2px,color:#fff,rx:5px,ry:5px;
     classDef expl2 fill:#1e40af,stroke:#3b82f6,stroke-width:1px,color:#f8fafc,rx:4px,ry:4px;
     classDef expl3 fill:#1d4ed8,stroke:#60a5fa,stroke-width:1px,color:#f1f5f9,rx:3px,ry:3px;
-    classDef expl4 fill:#2563eb,stroke:#93c5fd,stroke-width:1px,color:#e2e8f0,rx:3px,ry:3px;
-    classDef expl5 fill:#3b82f6,stroke:#bfdbfe,stroke-width:1px,color:#fff,rx:2px,ry:2px;
-    classDef expl6 fill:#60a5fa,stroke:#dbeafe,stroke-width:1px,color:#1e3a8a,rx:2px,ry:2px;
-    classDef expl7 fill:#93c5fd,stroke:#eff6ff,stroke-width:1px,color:#1e3a8a,rx:2px,ry:2px;
-    classDef expl8 fill:#bfdbfe,stroke:#fff,stroke-width:1px,color:#1e40af,rx:2px,ry:2px;
-    classDef expl9 fill:#dbeafe,stroke:#1e40af,stroke-width:1px,color:#1e3a8a,rx:2px,ry:2px;
-    classDef expl10 fill:#eff6ff,stroke:#1e3a8a,stroke-width:1px,color:#000,rx:2px,ry:2px;
 
     %% ==== ROOT ====
-    Root["0. MHB Unified UI"]:::main
+    Root["0. MHB"]:::main
 
-    %% ==== GLOBAL SHARED CORE (Moved from child nodes) ====
+    %% ==== GLOBAL SHARED CORE ====
     Root --> Root_Brand["0.1 Global Branding & Theming <br/><i>(Core UI: Tailwind/CSS Vars Manager)</i>"]:::def2
     Root --> Root_Search["0.2 Global Search & Filtering <br/><i>(Core Logic: useGlobalFilter Composable)</i>"]:::def2
     Root --> Root_Auth["0.3 Unified Auth & RBAC <br/><i>(Core API: Cross-service Permissions)</i>"]:::def2
 
-    %% ==== PREVIOUSLY EXPLORED MICROSERVICES (Default) ====
+    %% ==== INACTIVE MICROSERVICE BRANCH: MWap (Returned to Default Theme) ====
     Root --> MWap["1. MWap"]:::def1
-    MWap --> W_F["1.1 Website Builder"]:::def2
-    W_F --> W_S1["1.1.1 UI: Media-centric Nuxt sites <br/><i>(Consumes 0.1 Global Branding)</i>"]:::def3
-
-    Root --> MConnect["2. MConnect"]:::def1
-    MConnect --> C_F["2.1 Aggregator & CRM"]:::def2
-    C_F --> C_S1["2.1.1 API: Multi-channel comms <br/><i>(API Route / Webhook Listener)</i>"]:::def3
-
-    Root --> MDoc["3. MDoc"]:::def1
-    MDoc --> D_F["3.1 Document Management"]:::def2
-    D_F --> D_S1["3.1.1 UI: Digital signature engine <br/><i>(Vue Component)</i>"]:::def3
-
-    Root --> MCoordinate["4. MCoordinate"]:::def1
-    MCoordinate --> Co_F["4.1 Internal Team Comms"]:::def2
-    Co_F --> Co_S1["4.1.1 API: Matrix project chat <br/><i>(Node Microservice)</i>"]:::def3
-
-    Root --> MSync["5. MSync"]:::def1
-    MSync --> S_F["5.1 Desktop Streaming App"]:::def2
-    S_F --> S_S1["5.1.1 Core: OBS to LiveKit engine <br/><i>(Tauri / Electron Process)</i>"]:::def3
-
-    Root --> MMedia["6. MMedia"]:::def1
-    MMedia --> M_F["6.1 Event-Driven Media Engine"]:::def2
-    M_F --> M_S1["6.1.1 API: On-the-fly Image Optimization <br/><i>(Motia / CDN Edge Worker)</i>"]:::def3
-    M_F --> M_S2["6.1.2 API: Adaptive Bitrate Transcoding <br/><i>(Background Worker / FFMPEG)</i>"]:::def3
-    M_F --> M_S3["6.1.3 API: Live RTMP/SRT/WebRTC to HLS <br/><i>(Streaming Ingest Pipeline)</i>"]:::def3
-
-    %% ==== ACTIVE MICROSERVICE BRANCH: MDrive (Blue Base) ====
-    Root --> MDrive["7. MDrive"]:::expl1
     
-    %% 7.5 Upload & Ingestion 
-    MDrive --> Dr_Up["7.5 Upload & Ingestion Layer"]:::def2
-    Dr_Up --> Dr_Up1["7.5.1 UI: Drag-and-Drop Zone <br/><i>(Vue Component: Uploader)</i>"]:::def3
-    Dr_Up --> Dr_Up2["7.5.2 API: Chunked Multipart Upload <br/><i>(S3 API Integration)</i>"]:::def3
-    Dr_Up --> Dr_Up3["7.5.3 Core: EXIF/Metadata Extraction <br/><i>(Background Worker)</i>"]:::def3
+    MWap --> W_Edge["1.1 SSR Edge Engine & Routing"]:::def2
+    W_Edge --> W_E1["1.1.1 API: Tenant Resolver <br/><i>(GET /api/builder/tenant/resolve)</i>"]:::def3
+    W_Edge --> W_E2["1.1.2 API: Dynamic Ingress Routing <br/><i>(POST /api/ingress/routes)</i>"]:::def3
+    W_Edge --> W_E3["1.1.3 API: Real-time Cache Purge <br/><i>(POST /api/builder/tenant/:id/cache/purge)</i>"]:::def3
 
-    %% Shallow MDrive Features (Default)
+    MWap --> W_Run["1.2 Configuration & Content Runtime"]:::def2
+    W_Run --> W_R1["1.2.1 API: Tenant Provisioning <br/><i>(POST /api/builder/tenant)</i>"]:::def3
+    W_Run --> W_R2["1.2.2 API: Fetch SSR Content <br/><i>(GET /api/runtime/content/:tenantId)</i>"]:::def3
+    W_Run --> W_R3["1.2.3 API: Headless Form Submit <br/><i>(POST /api/runtime/forms/submit)</i>"]:::def3
+
+    MWap --> W_Nat["1.3 Native Compilation Pipeline"]:::def2
+    W_Nat --> W_N1["1.3.1 API: Spawn Tauri Build <br/><i>(POST /api/builder/compile/native)</i>"]:::def3
+    W_Nat --> W_N2["1.3.2 API: Spawn Decoupled Worker <br/><i>(POST /api/builder/compile/worker/spawn)</i>"]:::def3
+    W_Nat --> W_N3["1.3.3 API: Docker Health Metrics <br/><i>(GET /api/system/containers/metrics)</i>"]:::def3
+
+    %% ==== INACTIVE MICROSERVICE BRANCH: MConnect (Returned to Default Theme) ====
+    Root --> MConnect["2. MConnect"]:::def1
+    
+    MConnect --> C_Core["2.1 Unified Directory & Ledger"]:::def2
+    C_Core --> C_C1["2.1.1 API: Upsert Profile Mapping <br/><i>(POST /api/contacts)</i>"]:::def3
+    C_Core --> C_C2["2.1.2 API: Aggregated Timeline <br/><i>(GET /api/contacts/:id/timeline)</i>"]:::def3
+
+    MConnect --> C_In["2.2 Omnichannel Ingest Controller"]:::def2
+    C_In --> C_I1["2.2.1 Webhook: Centralized Provider Ingest <br/><i>(POST /webhook/ingest/:channel)</i>"]:::def3
+
+    MConnect --> C_Voice["2.3 Plivo Voice & Call Control"]:::def2
+    C_Voice --> C_V1["2.3.1 API: Inbound Route & Hunting <br/><i>(POST /api/voice/inbound-route)</i>"]:::def3
+    C_Voice --> C_V2["2.3.2 Webhook: Fallback & Missed Call <br/><i>(POST /connect/call/phone/fallback)</i>"]:::def3
+    C_Voice --> C_V3["2.3.3 API: Programmatic Call Bridge <br/><i>(POST /api/voice/bridge)</i>"]:::def3
+
+    MConnect --> C_Tmpl["2.4 Dynamic Template Engine"]:::def2
+    C_Tmpl --> C_T1["2.4.1 API: Render Channel Payload <br/><i>(POST /api/templates/render)</i>"]:::def3
+    C_Tmpl --> C_T2["2.4.2 API: Dispatch Templated Message <br/><i>(POST /api/templates/send)</i>"]:::def3
+
+    MConnect --> C_Camp["2.5 Automated Campaigns & Lead Gen"]:::def2
+    C_Camp --> C_Ca1["2.5.1 API: Enroll Client to Drip <br/><i>(POST /api/campaigns/enroll)</i>"]:::def3
+    C_Camp --> C_Ca2["2.5.2 API: Trigger Action Evaluation <br/><i>(POST /api/campaigns/trigger-action)</i>"]:::def3
+
+    %% ==== INACTIVE MICROSERVICE BRANCH: MDoc (Returned to Default Theme) ====
+    Root --> MDoc["3. MDoc"]:::def1
+    
+    MDoc --> D_Tmpl["3.1 Template & Generation Engine"]:::def2
+    D_Tmpl --> D_T1["3.1.1 API: Dynamic Block Rendering <br/><i>(POST /api/document/template)</i>"]:::def3
+    D_Tmpl --> D_T2["3.1.2 API: Draft Management <br/><i>(PATCH /api/document/:id)</i>"]:::def3
+
+    MDoc --> D_Rout["3.2 Envelope Routing & Access"]:::def2
+    D_Rout --> D_R1["3.2.1 API: Sequential Signer Queue <br/><i>(POST /api/document/:id/envelope)</i>"]:::def3
+    D_Rout --> D_R2["3.2.2 API: Magic Link Provisioner <br/><i>(POST /api/document/:id/session)</i>"]:::def3
+    D_Rout --> D_R3["3.2.3 API: Workflow Control <br/><i>(POST /api/document/:id/void|remind)</i>"]:::def3
+
+    MDoc --> D_Exec["3.3 Execution & Attachments"]:::def2
+    D_Exec --> D_E1["3.3.1 API: Cryptographic Signature Capture <br/><i>(POST /api/document/:id/sign)</i>"]:::def3
+    D_Exec --> D_E2["3.3.2 API: Supplementary File Upload <br/><i>(POST /api/document/:id/attachments)</i>"]:::def3
+
+    MDoc --> D_Aud["3.4 Audit & Archival Layer"]:::def2
+    D_Aud --> D_A1["3.4.1 API: Tamper-Evident Verification <br/><i>(GET /api/document/:id/verify)</i>"]:::def3
+    D_Aud --> D_A2["3.4.2 API: Immutable S3 Export <br/><i>(POST /api/document/:id/export/s3)</i>"]:::def3
+
+    %% ==== INACTIVE MICROSERVICE BRANCH: MCoordinate (Returned to Default Theme) ====
+    Root --> MCoordinate["4. MCoordinate"]:::def1
+    
+    MCoordinate --> Co_In["4.1 Matrix Appservice & Ingestion Layer"]:::def2
+    Co_In --> Co_In1["4.1.1 API: Room Provisioning <br/><i>(POST /api/coordinate/rooms/provision)</i>"]:::def3
+    Co_In --> Co_In2["4.1.2 API: Webhook Ingest <br/><i>(POST /api/coordinate/webhooks/ingest)</i>"]:::def3
+    
+    MCoordinate --> Co_WS["4.2 WebSocket Telemetry Layer"]:::def2
+    Co_WS --> Co_WS1["4.2.1 WS: Geo-Location Stream <br/><i>(WS /api/coordinate/location/stream)</i>"]:::def3
+    
+    MCoordinate --> Co_Call["4.3 Media Huddle & Recording Engine"]:::def2
+    Co_Call --> Co_Call1["4.3.1 API: LiveKit Huddle <br/><i>(POST /api/coordinate/calls/huddle)</i>"]:::def3
+    Co_Call --> Co_Call2["4.3.2 API: Egress Recording <br/><i>(POST /api/coordinate/calls/:callId/record)</i>"]:::def3
+
+    MCoordinate --> Co_UI["4.4 Frontend Client Implementation"]:::def2
+    Co_UI --> Co_UI1["4.4.1 Client: Direct Matrix Sync & E2EE <br/><i>(SDK: matrix-js-sdk)</i>"]:::def3
+    Co_UI --> Co_UI2["4.4.2 UI: Custom Event Renderers <br/><i>(Pipeline Cards & Drive Attachments)</i>"]:::def3
+
+    %% ==== ACTIVE MICROSERVICE BRANCH: MSync (Blue Base Deep Dive) ====
+    Root --> MSync["5. MSync"]:::expl1
+    
+    MSync --> S_Mesh["5.2 Local P2P Mesh Layer"]:::expl2
+    S_Mesh --> S_M1["5.2.1 Discovery: Decentralized mDNS/ZeroConf Engine"]:::expl3
+    S_Mesh --> S_M2["5.2.2 State Sync: Gossip Protocol LAN Topology Map"]:::expl3
+    
+    MSync --> S_Org["5.3 File Organization & Stacking Engine"]:::expl2
+    S_Org --> S_O1["5.3.1 Engine: spec.json Automated Rule Rule Ingestion"]:::expl3
+    S_Org --> S_O2["5.3.2 Parsing: Atomic Sidecar Stacking (.xmp Pair Binding)"]:::expl3
+    
+    MSync --> S_Proc["5.4 Pre-Flight Processing Engine"]:::expl2
+    S_Proc --> S_P1["5.4.1 Graphics: Local Bulk Watermarking Layout Renderer"]:::expl3
+    S_Proc --> S_P2["5.4.2 Generation: High-Speed Image Preview Proxy Sheets"]:::expl3
+    
+    MSync --> S_Link["5.5 Cloud Uplink & QoS Traffic Shaper"]:::expl2
+    S_Link --> S_LK1["5.5.1 Queue: Transactional SQLite State Tracking Queue"]:::expl3
+    S_Link --> S_LK2["5.5.2 Shaping: Stream Priority Throttling Rule System"]:::expl3
+    
+    MSync --> S_Stream["5.6 SRT Hardware Streaming Plane"]:::expl2
+    S_Stream --> S_ST1["5.6.1 Intercept: Native Capture Ingest (AVFoundation/Camera2/UVC)"]:::expl3
+    S_Stream --> S_ST2["5.6.2 Buffer: Local Fail-Safe Append-Only Disk Cache"]:::expl3
+    
+    MSync --> S_Conv["5.7 Local Media Conversion Engine"]:::expl2
+    S_Conv --> S_C1["5.7.1 Optimization: Offline Hardware Transcoding (VideoToolbox/NVENC/QSV)"]:::expl3
+    S_Conv --> S_C2["5.7.2 Pipeline: Fast Zero-Copy Container Remuxing"]:::expl3
+    
+    MSync --> S_Cmd["5.8 Decentralized Mesh Commands (RPC)"]:::expl2
+    S_Cmd --> S_CM1["5.8.1 Task: Pre-Flight Space-Asserted Clone Command Loop"]:::expl3
+    S_Cmd --> S_CM2["5.8.2 Task: Broadcast Integrity-Verified Dedup Command Loop"]:::expl3
+
+    MSync --> S_CCTL["5.9 Wireless Camera Control & Telemetry (CCTL)"]:::expl2
+    S_CCTL --> S_CC1["5.9.1 RPC: IP-Based Orchestration & Status Telemetry"]:::expl3
+    S_CCTL --> S_CC2["5.9.2 Core: Low-Latency Sub-Stream Decoupling"]:::expl3
+    S_CCTL --> S_CC3["5.9.3 UI/Shaders: Real-Time DIT Overlays (LUTs, Waveform)"]:::expl3
+    S_CCTL --> S_CC4["5.9.4 UI/API: Capacitive Touch-Focus Matrix"]:::expl3
+
+    %% ==== INACTIVE MICROSERVICE BRANCH: MMedia (Returned to Default Theme) ====
+    Root --> MMedia["6. MMedia"]:::def1
+    
+    MMedia --> M_Core["6.1 Ingestion & Core Processing Layer"]:::def2
+    M_Core --> M_C1["6.1.1 Webhook: Cloud Storage Event Monitor <br/><i>(POST /webhook/media/uploads)</i>"]:::def3
+    M_Core --> M_C2["6.1.2 API: Accelerated ABR & Binary Transformer <br/><i>(POST /api/media/transform)</i>"]:::def3
+    M_Core --> M_C3["6.1.3 API: Technical Metadata Analyzer <br/><i>(GET /api/media/[mediaId]/metadata)</i>"]:::def3
+
+    MMedia --> M_Live["6.2 Live Broadcast Ingress Layer"]:::def2
+    M_Live --> M_L1["6.2.1 API: Hardware Ingress Provisioner <br/><i>(POST /api/stream/ingress)</i>"]:::def3
+    M_Live --> M_L2["6.2.2 API: SFU WebRTC Session Access Token <br/><i>(POST /api/stream/token)</i>"]:::def3
+
+    MMedia --> M_Egress["6.3 Live Delivery Optimization & Archiving"]:::def2
+    M_Egress --> M_E1["6.3.1 API: WebRTC to HLS Live Packager <br/><i>(POST /api/stream/egress/hls)</i>"]:::def3
+    M_Egress --> M_E2["6.3.2 API: Native Format Track Archival Recorder <br/><i>(POST /api/stream/egress/record)</i>"]:::def3
+
+    MMedia --> M_Analytics["6.4 Interactivity & Audience Analytics"]:::def2
+    M_Analytics --> M_A1["6.4.1 API: Data-Channel Audience Chat Gateway <br/><i>(POST /api/stream/chat/token)</i>"]:::def3
+    M_Analytics --> M_A2["6.4.2 API: High-Frequency Telemetry Heartbeat <br/><i>(POST /api/stream/analytics/heartbeat)</i>"]:::def3
+    M_Analytics --> M_A3["6.4.3 API: Reference Telemetry Baseline Prober <br/><i>(GET /api/stream/[roomName]/telemetry-baseline)</i>"]:::def3
+
+    %% ==== INACTIVE MICROSERVICE BRANCH: MDrive (Default Theme) ====
+    Root --> MDrive["7. MDrive"]:::def1
+    
+    MDrive --> Dr_Up["7.5 Upload & Ingestion Layer"]:::def2
+    Dr_Up --> Dr_Up1["7.5.1 UI: Drag-and-Drop Zone"]:::def3
+    Dr_Up --> Dr_Up2["7.5.2 API: Batch Upload Initialization <br/><i>(POST /api/media/uploads)</i>"]:::def3
+    Dr_Up --> Dr_Up3["7.5.3 Webhook: Storage Event Listener <br/><i>(POST /webhook/media/uploads)</i>"]:::def3
+    Dr_Up --> Dr_Up4["7.5.4 API: Upload Status Polling <br/><i>(GET /api/media/uploads/:batchId)</i>"]:::def3
+
     MDrive --> Dr_Org["7.1 Internal Asset Organization"]:::def2
-    Dr_Org --> Dr_Org1["7.1.1 UI: Card Grids & Navigation <br/><i>(Consumes 0.2 Global Search)</i>"]:::def3
-    Dr_Org --> Dr_Org2["7.1.2 UI/API: Bulk Actions <br/><i>(Multi-select, Move, Delete, Download)</i>"]:::def3
-    Dr_Org --> Dr_Org3["7.1.3 UI/API: Soft Delete & Trash Recovery <br/><i>(30-day retention)</i>"]:::def3
+    Dr_Org --> Dr_Org1["7.1.1 UI: Card Grids & Navigation"]:::def3
+    Dr_Org --> Dr_Org2["7.1.2 API: RPC Bulk Operations <br/><i>(POST /api/media/action)</i>"]:::def3
+    Dr_Org --> Dr_Org3["7.1.3 UI/API: Soft Delete & Trash Recovery"]:::def3
     
     MDrive --> Dr_Collab["7.2 Internal Workflow Control"]:::def2
-    Dr_Collab --> Dr_Collab1["7.2.1 UI/API: Status tags <br/><i>(Vue Component + API Route)</i>"]:::def3
-    Dr_Collab --> Dr_Collab2["7.2.2 UI: Publish / Send to Client <br/><i>(Triggers MConnect Dispatch)</i>"]:::def3
-    Dr_Collab --> Dr_Collab3["7.2.3 Core: Audit Logging & Activity Tracker <br/><i>(Action History Service)</i>"]:::def3
-    
-    %% MConnect Notification Trigger
-    Dr_Collab2 -.->|Triggers Email Campaign| C_S1
+    Dr_Collab --> Dr_Collab1["7.2.1 UI/API: Status tags"]:::def3
+    Dr_Collab --> Dr_Collab2["7.2.2 API: Publish / Send to Client <br/><i>(POST /api/projects/:projectId/publish)</i>"]:::def3
+    Dr_Collab --> Dr_Collab3["7.2.3 Core: Audit Logging & Activity Tracker"]:::def3
 
-    %% 7.6 Sharing & Access Management
     MDrive --> Dr_Sec["7.6 Sharing & Access Management"]:::def2
-    Dr_Sec --> Dr_Sec1["7.6.1 UI/API: Password & Expiration <br/><i>(Access Gateway Middleware)</i>"]:::def3
-    Dr_Sec --> Dr_Sec2["7.6.2 Core: Granular Download Toggles <br/><i>(RBAC Policy Engine)</i>"]:::def3
-    Dr_Sec --> Dr_Sec3["7.6.3 UI/Core: Enforce Watermarks Toggle <br/><i>(Dynamic Delivery Policy)</i>"]:::def3
+    Dr_Sec --> Dr_Sec1["7.6.1 API: Global MHB Share Settings <br/><i>(PATCH /api/mhb/share/:id/settings)</i>"]:::def3
+    Dr_Sec --> Dr_Sec2["7.6.2 Core: Granular Download Toggles"]:::def3
+    Dr_Sec --> Dr_Sec3["7.6.3 UI/Core: Enforce Watermarks Toggle"]:::def3
 
-    %% PREVIOUS Deep Dive: Collaboration & Feedback View (Default)
     MDrive --> Dr_View["7.3 Media Collaboration View"]:::def2
-    Dr_View --> Dr_V_Ver["7.3.2 UI/API: Asset Version Stacking (V1/V2) <br/><i>(Core Service Logic)</i>"]:::def3
+    Dr_View --> Dr_V_Ver["7.3.2 UI/API: Asset Version Stacking (V1/V2)"]:::def2
     Dr_View --> Dr_V_UI["7.3.1 UI: Immersive Lightbox"]:::def3
-    
-    %% Main Canvas for Interaction
     Dr_V_UI --> Dr_Center["7.3.1.1 UI: Main Interactive Canvas"]:::def3
     Dr_Center --> Dr_C_Com["7.3.1.1.1 UI: Drop Pin / Area Selection"]:::def3
-    Dr_C_Com --> Dr_C_Com_API["7.3.1.1.1.1 Core: Track X/Y Coordinates <br/><i>(Vue Composable: useCanvas)</i>"]:::def3
-    
-    %% Commenting & Reply System
+    Dr_C_Com --> Dr_C_Com_API["7.3.1.1.1.1 Core: Track X/Y Coordinates"]:::def3
     Dr_V_UI --> Dr_Bot["7.3.1.2 UI: Bottom Comment Console"]:::def3
     Dr_Bot --> Dr_Bot_Inp["7.3.1.2.1 UI: Text Input & Threading"]:::def3
-    Dr_Bot_Inp --> Dr_Bot_API["7.3.1.2.1.1 API: Save Client Comment / User Reply"]:::def3
-    
-    %% Left Sidebar
+    Dr_Bot_Inp --> Dr_Bot_API["7.3.1.2.1.1 API: Append Comment/Pin <br/><i>(POST /api/media/comments)</i>"]:::def3
+    Dr_Bot_Inp --> Dr_Bot_Qry["7.3.1.2.1.2 API: Fetch Timelines <br/><i>(POST /api/media/comments/query)</i>"]:::def3
     Dr_V_UI --> Dr_Side["7.3.1.3 UI: Left Thumbnail Strip"]:::def3
-    Dr_Side --> Dr_Side1["7.3.1.3.1 UI: Navigate Asset Gallery <br/><i>(Vue Component: ThumbnailStrip)</i>"]:::def3
-    
-    %% Top Action Bar
     Dr_V_UI --> Dr_Top["7.3.1.4 UI: Top Action Bar"]:::def3
-    Dr_Top --> Dr_Top1["7.3.1.4.1 UI: Aspect Ratio / Zoom Controls <br/><i>(Vue Component: Toolbar)</i>"]:::def3
-    Dr_Top --> Dr_Top2["7.3.1.4.2 UI: Share/Download"]:::def3
-    Dr_Top2 --> Dr_Top2_API["7.3.1.4.2.1 API: Generate S3 presigned URLs <br/><i>(API Route: /api/s3/sign)</i>"]:::def3
+    Dr_Top --> Dr_Top2_API["7.3.1.4.2.1 API: Pre-signed Download URL <br/><i>(POST /api/media/downloads)</i>"]:::def3
 
-    %% ==== CURRENT EXPLORING BRANCH: Client Public Gallery (Blue) ====
-    MDrive --> Dr_Client["7.4 Client Public Gallery View <br/><i>(Nuxt Page: /share/[id].vue)</i>"]:::expl2
-
-    %% Top Hero Section
-    Dr_Client --> Dr_Cl_Hero["7.4.1 UI: Project Hero Banner"]:::expl3
-    Dr_Cl_Hero --> Dr_Cl_H_Data["7.4.1.1 API: Fetch Public Meta"]:::expl4
-
-    %% Filter Navigation
-    Dr_Client --> Dr_Cl_Tabs["7.4.2 UI: Approval Tab Navigation"]:::expl3
-    Dr_Cl_Tabs --> Dr_Cl_T_Logic["7.4.2.1 Core: Client-side UI filtering <br/><i>(Consumes 0.2 Global Search)</i>"]:::expl4
-    Dr_Cl_T_Logic --> Dr_Cl_T_API["7.4.2.1.1 API: Fetch Approval Counts <br/><i>(API Route: /api/project/[id]/stats)</i>"]:::expl5
-
-    %% Main Media Grid & Deep Dive into Approval Flow
-    Dr_Client --> Dr_Cl_Grid["7.4.3 UI: Masonry Media Grid"]:::expl3
-    Dr_Cl_Grid --> Dr_Cl_Card["7.4.3.1 UI: Media Card Component"]:::expl4
+    MDrive --> Dr_Client["7.4 Client Public Gallery View"]:::def2
+    Dr_Client --> Dr_Cl_Hero["7.4.1 API: Fetch Project Dashboard & Stats <br/><i>(GET /api/projects/:projectId)</i>"]:::def3
+    Dr_Client --> Dr_Cl_Grid["7.4.3 UI: Masonry Media Grid"]:::def3
+    Dr_Cl_Grid --> Dr_Cl_Grid_API["7.4.3.1 API: Fetch Paginated Assets <br/><i>(GET /api/projects/:projectId/media)</i>"]:::def3
+    Dr_Cl_Grid_API --> Dr_Cl_Card["7.4.3.1.1 UI: Media Card Component"]:::def3
+    Dr_Cl_Card --> Dr_Cl_Img["7.4.3.1.1.1 UI: Lazy CDN Image Load <br/><i>(Vue Component: NuxtImg)</i>"]:::def3
     
-    %% >> CONNECTION: MDrive -> MMedia <<
-    Dr_Cl_Card --> Dr_Cl_Img["7.4.3.1.1 UI: Lazy CDN Image Load <br/><i>(Vue Component: NuxtImg)</i>"]:::expl5
-    Dr_Cl_Img -.->|Requests Optimized Delivery| M_S1
+    Dr_Cl_Img -.->|Proxies Request to Optimized API| M_C2
     
-    %% Deepest nesting: The Client Approval Interaction
-    Dr_Cl_Card --> Dr_Cl_Act["7.4.3.1.2 UI: Open Shared Media Page"]:::expl5
-    Dr_Cl_Act --> Dr_Cl_App["7.4.3.1.2.1 API: Client Approve/Reject <br/><i>(API Route: POST /api/media/approve)</i>"]:::expl6
-    Dr_Cl_App --> Dr_Cl_State["7.4.3.1.2.1.1 Core: Mutate Status & Notify MCoordinate <br/><i>(Service Logic)</i>"]:::expl7
+    Dr_Cl_Card --> Dr_Cl_Act["7.4.3.1.2 UI: Open Shared Media Page"]:::def3
+    Dr_Cl_Card --> Dr_Cl_App["7.4.3.1.2.1 API: RPC Client Approve/Reject <br/><i>(POST /api/media/action)</i>"]:::def3
+    Dr_Client --> Dr_Cl_Zip["7.4.4 UI: 'Download Approved' Action"]:::def3
+    Dr_Cl_Zip --> Dr_Cl_Zip_API["7.4.4.1 API: Parallel Pre-signed Downloads <br/><i>(POST /api/media/downloads)</i>"]:::def3
 
-    %% Client Bulk Delivery
-    Dr_Client --> Dr_Cl_Zip["7.4.4 UI: 'Download Approved' Action"]:::expl3
-    Dr_Cl_Zip --> Dr_Cl_Zip_API["7.4.4.1 API: On-the-fly ZIP Generation <br/><i>(S3 Stream Wrapper)</i>"]:::expl4
+    %% ==== INACTIVE MICROSERVICE BRANCH: MAssist (Returned to Default Theme) ====
+    Root -.-> MAssist["8. MAssist"]:::def1
 
-    %% ==== BACKGROUND SERVICE ====
-    Root -.-> MAssist["8. MAssist: Global AI Harness <br/><i>(Standalone Service)</i>"]:::ai
+    MAssist --> A_Router["8.1 Automated Core & Routing"]:::def2
+    A_Router --> A_R1["8.1.1 API: Intent Classification <br/><i>(POST /api/router/intent)</i>"]:::def3
+
+    MAssist --> A_Poly["8.2 Polymorphic Generation & Edit"]:::def2
+    A_Poly --> A_P1["8.2.1 API: Asset Generation <br/><i>(POST /api/generate/:asset)</i>"]:::def3
+    A_Poly --> A_P2["8.2.2 API: Edit & Localize <br/><i>(POST /api/edit/:asset)</i>"]:::def3
+
+    MAssist --> A_Vec["8.3 Multimodal Vector KB"]:::def2
+    A_Vec --> A_V1["8.3.1 API: Semantic Index <br/><i>(POST /api/semantic/index)</i>"]:::def3
+    A_Vec --> A_V2["8.3.2 API: Fused Search <br/><i>(POST /api/embed/search)</i>"]:::def3
+
+    MAssist --> A_Agent["8.4 MCP Mesh & Agentic Workflow"]:::def2
+    A_Agent --> A_A1["8.4.1 API: MCP Server Registry <br/><i>(POST /api/mcp/registry)</i>"]:::def3
+    A_Agent --> A_A2["8.4.2 API: Agent Council <br/><i>(POST /api/agent/session)</i>"]:::def3
+
+    MAssist --> A_Wiki["8.5 LLM Wiki & Memory Compliance"]:::def2
+    A_Wiki --> A_W1["8.5.1 API: Wiki Upsert <br/><i>(POST /api/memory/wiki/upsert)</i>"]:::def3
+    A_Wiki --> A_W2["8.5.2 API: Prune & Review <br/><i>(POST /api/memory/wiki/review/:factId)</i>"]:::def3
+
+    MAssist --> A_Ops["8.6 Orchestration & Billing"]:::def2
+    A_Ops --> A_O1["8.6.1 API: Tenant Limits <br/><i>(POST /api/billing/limits/:tenantId)</i>"]:::def3
+    A_Ops --> A_O2["8.6.2 Webhook: Task Callback <br/><i>(POST /webhook/task-callback)</i>"]:::def3
+
+    %% ==== CROSS-SERVICE PIPELINE LINKAGES ====
+    S_ST1 -.->|Broadcasts Outbound SRT Live Stream| M_L1
+    S_Link -.->|Pushes Direct-To-Cloud Batch Footprint| Dr_Up2
+    W_R2 -.->|Pulls Media Manifest| Dr_Org
+    W_R3 -.->|Routes Form Data| Co_In2
+    C_I1 -.->|Triggers Intent Analysis| A_R1
+    A_R1 -.->|Dispatches Lead Action| C_Ca1
+    A_A1 -.->|Exposes Tools via MCP| MDrive
+    A_A1 -.->|Exposes Tools via MCP| MConnect
+    Dr_Org3 -.->|Hard Purges Embeddings| A_V1
+    
+    %% ==== MCOORDINATE WEBHOOK INGESTION PIPELINES ====
+    Dr_Org2 -.->|Approval/RPC Action State Webhook| Co_In2
+    M_C2 -.->|Media Processing Done Webhook| Co_In2
+    D_Rout -.->|Document State Event Webhook| Co_In2
+    C_In -.->|Omnichannel Lead/Alert Webhook| Co_In2

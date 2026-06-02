@@ -132,7 +132,6 @@ export default defineNuxtConfig({
       notionDbId: '',
       vapidKey: '',
       vapidSubject: '',
-      emailMetaData: '',
     },
   },
   icon: {

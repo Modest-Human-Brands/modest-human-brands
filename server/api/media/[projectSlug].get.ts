@@ -2,11 +2,11 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
   try {
     const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
 
-    const documentStorage = useStorage<Resource<'media'>>(`data:resource:media`)
+    const mediaStorage = useStorage<Resource<'media'>>(`data:resource:media`)
     const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
     const clientStorage = useStorage<Resource<'client'>>(`data:resource:client`)
 
-    const assets = (await documentStorage.getItems(await documentStorage.getKeys())).flatMap(({ value }) => value.record)
+    const media = (await mediaStorage.getItems(await mediaStorage.getKeys())).flatMap(({ value }) => value.record)
 
     const projects = (await projectStorage.getItems(await projectStorage.getKeys())).flatMap(({ value }) => value.record)
 
@@ -17,12 +17,12 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
     if (!filteredProject) return
 
     const projectClient = clients.filter(({ properties }) => properties.Project.relation.some(({ id }) => id === filteredProject.id))[0]
-    const projectAssets = assets.filter((a) => a.properties['Project Slug'].rollup.array[0]?.formula.string === filteredProject.properties.Slug.formula.string)
+    const projectMedia = media.filter((a) => a.properties['Project Slug'].rollup.array[0]?.formula.string === filteredProject.properties.Slug.formula.string)
 
-    const photoAsset = projectAssets.filter((a) => a.properties.Type.select.name === 'Photo')
-    const videoAsset = projectAssets.filter((a) => a.properties.Type.select.name === 'Video')
+    const photo = projectMedia.filter((a) => a.properties.Type.select.name === 'Photo')
+    const video = projectMedia.filter((a) => a.properties.Type.select.name === 'Video')
 
-    const projectMediaItems = projectAssets
+    const projectMediaItems = projectMedia
       .map<MediaItem>(({ properties, cover }) => ({
         slug: properties.Slug.formula.string,
         title: notionTextStringify(properties.Name.title),
@@ -53,8 +53,8 @@ export default defineEventHandler<Promise<ProjectDetail | undefined>>(async (eve
           }
         : undefined,
       mediaCount: {
-        photo: photoAsset.length,
-        video: videoAsset.length,
+        photo: photo.length,
+        video: video.length,
       },
       mediaItems: projectMediaItems,
     } as ProjectDetail

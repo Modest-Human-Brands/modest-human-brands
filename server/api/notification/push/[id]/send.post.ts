@@ -1,4 +1,5 @@
 import webpush from 'web-push'
+import { z } from 'zod'
 import type { NotificationSubscription } from '../subscribe.post'
 
 interface PushNotification {
@@ -7,6 +8,8 @@ interface PushNotification {
   url: string
   icon?: string
 }
+
+const pathParamsSchema = z.object({ id: z.string() })
 
 export async function sendPushNotification(payload: PushNotification, subscriptions: NotificationSubscription[]) {
   try {
@@ -25,7 +28,8 @@ export async function sendPushNotification(payload: PushNotification, subscripti
 
 export default defineEventHandler(async (event) => {
   try {
-    const { id } = getRouterParams(event)
+    const { id } = await getValidatedRouterParams(event, pathParamsSchema.parse)
+
     const body = await readBody<PushNotification>(event)
     const notificationStorage = useStorage<NotificationSubscription>('data:subscription:notification')
 

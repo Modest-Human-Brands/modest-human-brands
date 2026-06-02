@@ -9,15 +9,14 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-    const query = await notion.dataSources.query({
-      data_source_id: notionDbId.user,
+    const results = await notionQueryDb(notion, notionDbId.user, {
       filter: {
         property: 'Email',
         email: { equals: user.email },
       },
     })
 
-    if (query.results.length === 0) {
+    if (results.length === 0) {
       throw createError({
         statusCode: 404,
         message: 'User not found',
@@ -40,7 +39,7 @@ export default defineEventHandler(async (event) => {
           },
           User: {
             type: 'relation',
-            relation: [{ id: query.results[0]!.id }],
+            relation: [{ id: results.results[0]!.id }],
           },
         },
       })
@@ -51,7 +50,7 @@ export default defineEventHandler(async (event) => {
     }
 
     await notion.pages.update({
-      page_id: query.results[0]!.id,
+      page_id: results.results[0]!.id,
       properties: {
         Name: {
           type: 'title',

@@ -22,7 +22,7 @@ export default defineEventHandler(async () => {
         from: 'admin@redcatpictures.com',
         displayName: 'RED CAT PICTURES',
         to: ['shirsendu2001@gmail.com'],
-        template: 'internship-completion',
+        template: 'internship-completion-certificate',
         data: {
           organization: {
             id: 'red-cat-pictures',
