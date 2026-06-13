@@ -1,40 +1,24 @@
-export type LeadStatus = 'New' | 'Contacted' | 'Qualified' | 'Proposal Sent' | 'Converted'
-export type CommunicationChannel = 'whatsapp' | 'email' | 'call' | 'instagram'
+export type ChannelType = 'email' | 'whatsapp' | 'instagram' | 'phone' | 'sms'
 
-export interface Message {
+export interface InboxMessage {
   id: string
-  senderName: string
-  time: string
   text: string
-  isOwn: boolean
-}
-
-export interface Conversation {
-  id: string
-  name: string
-  msg: string
+  senderName: string
+  senderInitial: string
   time: string
-  channel: CommunicationChannel
-  unread: number
-  active: boolean
-  messages: Message[]
+  isOwn: boolean
+  dateGroup?: string
+  channel: ChannelType
+  status?: 'sending' | 'sent' | 'error'
 }
 
-export interface Contact {
+export interface InboxContact {
   id: string
   name: string
   initial: string
   company: string
   lastActive: string
-  status: LeadStatus
-  channels: CommunicationChannel[]
-  jobTitle?: string
-  email?: string
-  phone?: string
-  conversations: Conversation[]
-}
-
-export interface Channel {
-  name: string
-  icon: string
+  lastMessageSnippet: string
+  activeChannel: ChannelType
+  availableChannels: ChannelType[]
 }

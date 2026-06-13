@@ -1,15 +1,17 @@
+export interface OrganizationBranding {
+  logo: string
+  color: {
+    primary: string
+    accent: string
+  }
+  font: string
+}
+
 export interface Organization {
   id: string
   name: string
   foundedYear: number
-  branding: {
-    logo: string
-    color: {
-      primary: string
-      accent: string
-    }
-    font: string
-  }
+  branding: OrganizationBranding
   website?: string
   phone?: string
   whatsapp?: string
@@ -110,7 +112,7 @@ export type NotionDB = { [K in ResourceType]: string }
 export interface ResourceRecordMap {
   organization: NotionOrganization
   user: NotionUser
-  client: NotionProjectClient
+  client: NotionContact
   project: NotionProject
   document: NotionDocument
   stream: NotionStream
@@ -153,6 +155,34 @@ export interface NotionOrganization {
     Name: {
       type: 'title'
       title: { plain_text: string }[]
+    }
+    Id: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    Phone: {
+      type: 'phone_number'
+      phone_number: string
+    }
+    Whatsapp: {
+      type: 'url'
+      url: string
+    }
+    Website: {
+      type: 'url'
+      url: string
+    }
+    Branding: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
     }
     'Founded Year': {
       type: 'number'
@@ -208,89 +238,154 @@ export interface NotionUser {
       type: 'phone_number'
       phone_number: string
     }
+    Emails: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
   }
 }
 
-export interface NotionProjectClient {
+export interface NotionContact {
   id: string
-  created_time: Date
-  last_edited_time: Date
-  cover: NotionImage
-  icon: NotionImage
+  created_time: string
+  last_edited_time: string
+  cover: NotionImage | null
+  icon: NotionImage | null
+  url: string
   properties: {
     Name: {
       type: 'title'
-      title: {
-        plain_text: string
-      }[]
+      title: { plain_text: string; text: { content: string } }[]
+    }
+    Index: {
+      type: 'number'
+      number: number | null
+    }
+    Status: {
+      type: 'select'
+      select: { name: 'Researched' | 'Active' | 'Inactive' | 'External Contact' | string } | null
     }
     Company: {
       type: 'rich_text'
-      rich_text: {
-        text: {
-          content: string
-        }
-      }[]
+      rich_text: { plain_text: string; text: { content: string } }[]
+    }
+    Type: {
+      type: 'select'
+      select: { name: string } | null
     }
     Address: {
       type: 'rich_text'
-      rich_text: {
-        text: {
-          content: string
-        }
-      }[]
+      rich_text: { plain_text: string; text: { content: string } }[]
     }
-    Website: {
-      type: 'url'
-      url: string
-    }
-    Instagram: {
-      type: 'url'
-      url: string
-    }
-    LinkedIn: {
-      type: 'url'
-      url: string
-    }
-    'Point of Contact': {
-      type: 'select'
-      select: {
-        name: string
-        color: string
-      }
+    Place: {
+      type: 'rich_text'
+      rich_text: { plain_text: string; text: { content: string } }[]
     }
     Email: {
       type: 'email'
-      email: string
+      email: string | null
     }
     Whatsapp: {
       type: 'phone_number'
-      phone_number: string
+      phone_number: string | null
     }
     Phone: {
       type: 'phone_number'
-      phone_number: string
+      phone_number: string | null
     }
+    Website: {
+      type: 'url'
+      url: string | null
+    }
+    Facebook: {
+      type: 'url'
+      url: string | null
+    }
+    Instagram: {
+      type: 'url'
+      url: string | null
+    }
+    Twitter: {
+      type: 'url'
+      url: string | null
+    }
+    LinkedIn: {
+      type: 'url'
+      url: string | null
+    }
+    'Platform Profile': {
+      type: 'url'
+      url: string | null
+    }
+    Username: {
+      type: 'rich_text'
+      rich_text: { plain_text: string; text: { content: string } }[]
+    }
+    Tags: {
+      type: 'multi_select'
+      multi_select: { name: string }[]
+    }
+
+    // --- Point of Contact Details ---
+    'PoC Person': {
+      type: 'rich_text'
+      rich_text: { plain_text: string; text: { content: string } }[]
+    }
+    'PoC Company': {
+      type: 'rich_text'
+      rich_text: { plain_text: string; text: { content: string } }[]
+    }
+    'PoC Address': {
+      type: 'rich_text'
+      rich_text: { plain_text: string; text: { content: string } }[]
+    }
+    'PoC Email': {
+      type: 'email'
+      email: string | null
+    }
+    'PoC Phone': {
+      type: 'phone_number'
+      phone_number: string | null
+    }
+
+    // --- Dates & Project ---
     Project: {
       type: 'relation'
       relation: { id: string }[]
-      has_more: boolean
     }
-    Profit: {
-      type: 'rollup'
-      rollup: {
-        type: string
-        number: null
-        function: string
-      }
+    'Acquisition Date': {
+      type: 'date'
+      date: { start: string; end?: string | null } | null
     }
+
+    // --- Relations (Omnichannel Linking) ---
     Organization: {
       type: 'relation'
       relation: { id: string }[]
     }
+    Emails: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Messages: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Calls: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+
+    // --- Dynamic/Rollup fields for the UI Queue ---
+    'Last Active'?: {
+      type: 'date'
+      date: { start: string; end?: string | null } | null
+    }
+    'Last Message Snippet': {
+      type: 'rich_text'
+      rich_text: { plain_text: string; text: { content: string } }[]
+    }
   }
-  url: string
-  public_url: null
 }
 
 export interface NotionProject {
@@ -336,9 +431,10 @@ export interface NotionProject {
       type: 'date'
       date: {
         start: string
+        end: string
       }
     }
-    Client: {
+    Contact: {
       type: 'relation'
       relation: { id: string }[]
       has_more: boolean
@@ -351,10 +447,6 @@ export interface NotionProject {
       type: 'relation'
       relation: { id: string }[]
       has_more: boolean
-    }
-    Organization: {
-      type: 'relation'
-      relation: { id: string }[]
     }
   }
   url: string

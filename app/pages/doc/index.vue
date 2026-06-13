@@ -4,17 +4,24 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: documentCollections, pending } = await useFetch('/api/document')
-const orgSlug = 'red-cat-pictures'
+const { data: folders, pending } = await useFetch<DocFolder[]>('/api/doc')
 </script>
 
 <template>
-  <section class="my-1 h-full overflow-y-auto px-2 py-1 md:my-2 md:px-4 md:py-2">
-    <div v-if="pending" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <div v-for="i in 8" :key="i" class="h-40 animate-pulse rounded-md bg-dark-500" />
+  <main class="flex h-full w-full overflow-hidden bg-dark-400 font-main">
+    <div class="flex flex-1 flex-col overflow-y-auto p-8">
+      <div v-if="pending" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div v-for="i in 10" :key="i" class="w-full animate-pulse rounded-2xl bg-white/5 pt-[75%]"></div>
+      </div>
+
+      <div v-else-if="folders && folders.length > 0" class="grid grid-cols-2 justify-between gap-4 lg:grid-cols-4">
+        <DocFolderCard v-for="folder in folders" :key="folder.id" :folder="folder" />
+      </div>
+
+      <div v-else class="flex h-64 flex-col items-center justify-center text-white/40">
+        <NuxtIcon name="local:folder" class="mb-4 text-4xl opacity-50" />
+        <p class="text-sm font-bold">No documents found.</p>
+      </div>
     </div>
-    <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <CardDocCollection v-for="(document, i) in documentCollections" :key="document.slug" :org-slug="orgSlug" :document-collection="document" :index="i" />
-    </div>
-  </section>
+  </main>
 </template>

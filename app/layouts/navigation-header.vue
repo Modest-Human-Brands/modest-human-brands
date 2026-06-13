@@ -61,7 +61,7 @@ const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) 
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start bg-dark-400 font-main text-white">
+  <div class="flex h-screen w-screen items-start justify-start bg-dark-400 text-white">
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
 
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">

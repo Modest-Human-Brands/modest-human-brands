@@ -27,7 +27,7 @@ const recipients = reactive<Recipient[]>([
 ])
 
 const channels = reactive<Channel[]>([
-  { id: 'email', name: 'Email', icon: 'local:envelope' },
+  { id: 'email', name: 'Email', icon: 'local:email' },
   { id: 'whatsapp', name: 'WhatsApp', icon: 'local:whatsapp' },
   { id: 'sms', name: 'SMS', icon: 'local:chat' },
 ])

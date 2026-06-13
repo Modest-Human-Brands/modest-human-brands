@@ -1,12 +1,12 @@
 import { findOrCreateNotionUser } from '~~/server/routes/auth/google.get'
 
-const mhbOrg = {
+export const mhbOrg = {
   id: 'modest-human-brands',
   name: 'Modest Human Brands',
   address: 'Abc Road, Near DEF, UIO - 1890',
   website: 'https://modesthumanbrands.com',
   branding: {
-    logo: 'https://modesthumanbrands.com/logo-dark.svg',
+    logo: 'https://modesthumanbrands.com/logo.svg',
     color: { primary: '#2B2B2B', accent: '#4A85FF' },
     font: 'Exo2',
   },

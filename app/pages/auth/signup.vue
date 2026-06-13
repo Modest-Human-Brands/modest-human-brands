@@ -234,7 +234,7 @@ async function onSubmit() {
                   </button>
                 </div>
 
-                <div v-if="orgR$.$value.invites && orgR$.$value.invites.length > 0" class="mt-2 flex flex-wrap gap-2">
+                <div v-if="orgR$.$value.invites && orgR$.$value.invites.length > 0" class="mt-2 flex gap-2">
                   <div
                     v-for="(email, index) in orgR$.$value.invites"
                     :key="email"

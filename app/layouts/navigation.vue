@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// import type { LayoutAction } from '~/components/AppActionbar.vue'
-
 const slug = 'red-cat-pictures'
 const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
 
@@ -62,9 +60,6 @@ const tabs = [
 
 const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) ?? tabs[0]!)
 
-/**
- * Dynamic Breadcrumbs Logic
- */
 const dynamicBreadcrumbs = computed(() => {
   const pathSegments = route.path.split('/').filter((p) => p)
   const crumbs: { label: string; to: string; icon?: string }[] = []
@@ -103,7 +98,7 @@ const dynamicBreadcrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start bg-dark-400 font-main">
+  <div class="flex h-screen w-screen items-start justify-start bg-dark-400">
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
 
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">

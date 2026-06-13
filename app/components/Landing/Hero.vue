@@ -3,13 +3,25 @@ defineProps<{
   loggedIn: boolean
 }>()
 
-const particles = Array.from({ length: 30 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  duration: 3 + Math.random() * 4,
-  delay: Math.random() * 2,
-}))
+interface Particle {
+  id: number
+  x: number
+  y: number
+  duration: number
+  delay: number
+}
+
+const particles = ref<Particle[]>([])
+
+onMounted(() => {
+  particles.value = Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    duration: 3 + Math.random() * 4,
+    delay: Math.random() * 2,
+  }))
+})
 </script>
 
 <template>

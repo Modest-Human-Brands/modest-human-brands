@@ -13,24 +13,24 @@ withDefaults(
     activeKey?: string
   }>(),
   {
-    activeKey: 'dashboard',
+    activeKey: 'connect',
   }
 )
 
 const navGroups: NavItem[][] = [
   [
-    { id: 'dashboard', label: 'Dashboard', icon: 'local:grid', to: '/dashboard' },
-    { id: 'website', label: 'Website/App', icon: 'local:app', to: '/website-app' },
+    // { id: 'dashboard', label: 'Dashboard', icon: 'local:grid', to: '/dashboard' },
+    // { id: 'website', label: 'Website/App', icon: 'local:app', to: '/website-app' },
     { id: 'connect', label: 'Connect', icon: 'local:network', to: '/connect' },
     { id: 'doc', label: 'Doc', icon: 'local:document', to: '/doc' },
-    { id: 'coordinate', label: 'Coordinate', icon: 'local:node', to: '/coordinate' },
-    { id: 'sync', label: 'Sync', icon: 'local:stream', to: '/sync' },
-    { id: 'drive', label: 'Drive', icon: 'local:hard-drive', to: '/drive' },
+    // { id: 'coordinate', label: 'Coordinate', icon: 'local:node', to: '/coordinate' },
+    // { id: 'sync', label: 'Sync', icon: 'local:stream', to: '/sync' },
+    // { id: 'drive', label: 'Drive', icon: 'local:hard-drive', to: '/drive' },
   ],
   [
-    { id: 'client', label: 'Client', icon: 'local:briefcase', to: '/client' },
-    { id: 'project', label: 'Project', icon: 'local:target-fill', to: '/project' },
-    { id: 'content', label: 'Content', icon: 'local:book', to: '/content' },
+    // { id: 'client', label: 'Client', icon: 'local:briefcase', to: '/client' },
+    // { id: 'project', label: 'Project', icon: 'local:target-fill', to: '/project' },
+    // { id: 'content', label: 'Content', icon: 'local:book', to: '/content' },
   ],
 ]
 

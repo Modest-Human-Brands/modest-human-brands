@@ -1,3 +1,5 @@
+import type { OrganizationBranding } from '~~/shared/types'
+
 export default defineEventHandler<Promise<Organization[]>>(async () => {
   try {
     const config = useRuntimeConfig()
@@ -9,21 +11,14 @@ export default defineEventHandler<Promise<Organization[]>>(async () => {
       return {
         id,
         name: notionTextStringify(properties.Name.title),
-        website: 'https://redcatpictures.com',
-        branding: {
-          logo: 'https://redcatpictures.com/logo-light.svg',
-          color: {
-            primary: '#CD2D2D',
-            accent: '',
-          },
-          font: '',
-        },
-        phone: '+912269711501',
-        whatsapp: 'https://wa.me/912269711501',
+        website: properties.Website.url,
+        branding: JSON.parse(notionTextStringify(properties.Branding.rich_text)) as OrganizationBranding,
+        phone: properties.Phone.phone_number,
+        whatsapp: properties.Whatsapp.url,
         invites: [],
+        foundedYear: properties['Founded Year'].number,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        foundedYear: properties['Founded Year'].number,
         ownerId: '',
         /* socials: {
           instagram: 'https://www.instagram.com/redcatpictures',
