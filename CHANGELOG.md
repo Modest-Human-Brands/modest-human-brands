@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.5.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.4...v0.5.0)
+
+### 🚀 Enhancements
+
+- Email auth integrated ([9880ace](https://github.com/Modest-Human-Brands/modest-human-brands/commit/9880ace))
+
+### 💅 Refactors
+
+- Removed old ui/api files and integrated mconnect & mdoc ([f3c2309](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f3c2309))
+- ⚠️ Mcoordinate added ([a80b152](https://github.com/Modest-Human-Brands/modest-human-brands/commit/a80b152))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Mcoordinate added ([a80b152](https://github.com/Modest-Human-Brands/modest-human-brands/commit/a80b152))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.4.4
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.3...v0.4.4)
