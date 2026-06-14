@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.0...v0.5.1)
+
+### 💅 Refactors
+
+- Replace hardcoded base URLs with runtime configuration values ([0b4cc3b](https://github.com/Modest-Human-Brands/modest-human-brands/commit/0b4cc3b))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.4.4...v0.5.0)
