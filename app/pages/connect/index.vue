@@ -6,7 +6,7 @@ definePageMeta({
 
 const { data: rawContacts, pending: loadingContacts } = await useFetch<UIConnectCard[]>('/api/connect')
 
-const contacts = computed<InboxContact[]>(() => {
+const contacts = computed<ChatContact[]>(() => {
   if (!rawContacts.value) return []
   return rawContacts.value.map((c) => ({
     id: c.id,
@@ -22,15 +22,15 @@ const contacts = computed<InboxContact[]>(() => {
 </script>
 
 <template>
-  <main class="flex h-full w-full overflow-hidden">
+  <main class="flex size-full overflow-hidden">
     <div class="hidden h-full min-w-0 flex-1 flex-col transition-all duration-300 md:flex">
-      <ChatArea :active-contact="null" :messages="[]" />
+      <ConnectChatArea :active-contact="null" :messages="[]" />
     </div>
 
-    <div class="flex h-full w-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
-      <div v-if="loadingContacts" class="h-full w-full animate-pulse bg-white/5" />
+    <div class="flex size-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
+      <div v-if="loadingContacts" class="size-full animate-pulse bg-white/5" />
 
-      <ConnectSidebar v-else :contacts="contacts" :active-contact-id="null" />
+      <ConnectSidebar v-else :contacts="contacts" :active-id="null" />
     </div>
   </main>
 </template>

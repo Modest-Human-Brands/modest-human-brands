@@ -23,7 +23,7 @@ const navGroups: NavItem[][] = [
     // { id: 'website', label: 'Website/App', icon: 'local:app', to: '/website-app' },
     { id: 'connect', label: 'Connect', icon: 'local:network', to: '/connect' },
     { id: 'doc', label: 'Doc', icon: 'local:document', to: '/doc' },
-    // { id: 'coordinate', label: 'Coordinate', icon: 'local:node', to: '/coordinate' },
+    { id: 'coordinate', label: 'Coordinate', icon: 'local:node', to: '/coordinate' },
     // { id: 'sync', label: 'Sync', icon: 'local:stream', to: '/sync' },
     // { id: 'drive', label: 'Drive', icon: 'local:hard-drive', to: '/drive' },
   ],

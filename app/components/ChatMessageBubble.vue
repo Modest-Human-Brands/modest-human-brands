@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ message: InboxMessage }>()
+const props = defineProps<{ message: ChatMessage }>()
 const timeAgo = useTimeAgo(new Date(props.message.time))
 </script>
 

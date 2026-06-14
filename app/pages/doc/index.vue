@@ -8,7 +8,7 @@ const { data: folders, pending } = await useFetch<DocFolder[]>('/api/doc')
 </script>
 
 <template>
-  <main class="flex h-full w-full overflow-hidden bg-dark-400 font-main">
+  <main class="flex size-full overflow-hidden bg-dark-400 font-main">
     <div class="flex flex-1 flex-col overflow-y-auto p-8">
       <div v-if="pending" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div v-for="i in 10" :key="i" class="w-full animate-pulse rounded-2xl bg-white/5 pt-[75%]"></div>

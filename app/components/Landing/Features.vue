@@ -63,7 +63,7 @@ const features = [
         class="group relative overflow-hidden rounded-2xl border border-white/10 bg-dark-500/50 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:border-white/30 hover:shadow-2xl hover:shadow-white/10"
         :style="{ animationDelay: `${idx * 0.1}s` }">
         <div class="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <NuxtImg :src="feature.background" :alt="feature.title" class="h-full w-full object-cover" />
+          <NuxtImg :src="feature.background" :alt="feature.title" class="size-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-br from-black/90 via-black/80 to-black/70" />
         </div>
 

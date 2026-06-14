@@ -15,7 +15,7 @@ defineProps<{ document: DocumentDetail | null }>()
 </script>
 
 <template>
-  <div class="flex h-full w-full flex-col overflow-y-auto bg-dark-400 p-6 md:w-[380px]">
+  <div class="flex size-full flex-col overflow-y-auto bg-dark-400 p-6 md:w-[380px]">
     <div v-if="!document" class="flex h-full flex-col items-center justify-center text-white/40">
       <NuxtIcon name="local:document" class="mb-4 text-4xl opacity-50" />
       <p class="text-sm font-bold">Select a document to preview</p>
@@ -37,7 +37,7 @@ defineProps<{ document: DocumentDetail | null }>()
           <span class="font-semibold flex w-24 shrink-0 items-center gap-2 text-light-500"> <NuxtIcon name="local:chevron-bold" /> Created by: </span>
           <div class="flex items-center gap-2 text-white">
             <div class="flex size-6 items-center justify-center overflow-hidden rounded-full bg-white text-xs font-bold text-black">
-              <img v-if="document.uploadedBy.avatar" :src="document.uploadedBy.avatar" class="h-full w-full object-cover" />
+              <img v-if="document.uploadedBy.avatar" :src="document.uploadedBy.avatar" class="size-full object-cover" />
               <span v-else>{{ document.uploadedBy.name.charAt(0) }}</span>
             </div>
             <span class="font-bold">{{ document.uploadedBy.name }}</span>

@@ -1,6 +1,6 @@
 export type ChannelType = 'email' | 'whatsapp' | 'instagram' | 'phone' | 'sms'
 
-export interface InboxMessage {
+export interface ChatMessage {
   id: string
   text: string
   senderName: string
@@ -8,11 +8,11 @@ export interface InboxMessage {
   time: string
   isOwn: boolean
   dateGroup?: string
-  channel: ChannelType
+  channel?: ChannelType
   status?: 'sending' | 'sent' | 'error'
 }
 
-export interface InboxContact {
+export interface ChatContact {
   id: string
   name: string
   initial: string

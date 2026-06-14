@@ -9,7 +9,7 @@ const activeContactId = route.params.id as string
 
 const { data: rawContacts, pending: loadingContacts } = await useFetch<UIConnectCard[]>('/api/connect')
 
-const contacts = computed<InboxContact[]>(() => {
+const contacts = computed<ChatContact[]>(() => {
   if (!rawContacts.value) return []
   return rawContacts.value.map((c) => ({
     id: c.id,
@@ -27,7 +27,7 @@ const activeContact = computed(() => contacts.value.find((c) => c.id === activeC
 
 const { data: timeline, pending: loadingTimeline } = await useFetch<UIConnectTimeline>(`/api/connect/${activeContactId}/timeline`)
 
-const messages = computed<InboxMessage[]>(() => {
+const messages = computed<ChatMessage[]>(() => {
   if (!timeline.value) return []
 
   return timeline.value.interactions
@@ -90,7 +90,7 @@ async function handleSendMessage({ text, channel }: { text: string; channel: Cha
 </script>
 
 <template>
-  <main class="flex h-full w-full overflow-hidden">
+  <main class="flex size-full overflow-hidden">
     <div class="flex h-full min-w-0 flex-1 flex-col transition-all duration-300">
       <div v-if="loadingTimeline && messages.length === 0" class="flex h-full items-center justify-center text-white/40">
         <div class="flex animate-pulse flex-col items-center gap-3">
@@ -98,11 +98,11 @@ async function handleSendMessage({ text, channel }: { text: string; channel: Cha
           <span class="text-sm font-bold uppercase tracking-widest">Synchronizing Ledger...</span>
         </div>
       </div>
-      <ChatArea v-else :active-contact="activeContact" :messages="messages" @send="handleSendMessage" />
+      <ConnectChatArea v-else :active-contact="activeContact" :messages="messages" @send="handleSendMessage" />
     </div>
     <div class="hidden h-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
-      <div v-if="loadingContacts" class="h-full w-full animate-pulse bg-white/5" />
-      <ConnectSidebar v-else :contacts="contacts" :active-contact-id="activeContactId" />
+      <div v-if="loadingContacts" class="size-full animate-pulse bg-white/5" />
+      <ConnectSidebar v-else :contacts="contacts" :active-id="activeContactId" />
     </div>
   </main>
 </template>

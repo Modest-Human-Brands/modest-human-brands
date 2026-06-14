@@ -28,7 +28,6 @@ export const useLayoutActions = () => {
       timestamp: Date.now(),
     }
 
-    // Navigation logic for 'create' action
     if (name === 'create') {
       const targetBase = currentBaseRoute.value || payload?.type
 

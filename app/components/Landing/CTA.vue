@@ -8,7 +8,7 @@ defineProps<{
   <section class="relative mx-auto max-w-7xl px-6 py-24">
     <div class="relative overflow-hidden rounded-3xl border border-white/30">
       <div class="absolute inset-0">
-        <NuxtImg src="https://viteplus.dev/terminal-background.jpg" alt="CTA Background" class="h-full w-full object-cover opacity-30" />
+        <NuxtImg src="https://viteplus.dev/terminal-background.jpg" alt="CTA Background" class="size-full object-cover opacity-30" />
         <div class="absolute inset-0 bg-gradient-to-br from-white/20 via-black/80 to-dark-500/90" />
       </div>
 

@@ -21,7 +21,7 @@ const organization = computed(() => organizationData.value ?? DEFAULT_ORG as Org
     <!-- Large grid overlay with perspective -->
     <div class="pointer-events-none fixed inset-0 z-0">
       <div
-        class="h-full w-full"
+        class="size-full"
         style="
           background-image: linear-gradient(to right, rgba(72, 254, 167, 0.1) 2px, transparent 2px), linear-gradient(to bottom, rgba(72, 254, 167, 0.1) 2px, transparent 2px);
           background-size: 300px 300px;

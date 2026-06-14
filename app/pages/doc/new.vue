@@ -244,7 +244,7 @@ async function onGenerate() {
 
                 <div v-else-if="field.type === 'image'" class="flex items-center gap-4">
                   <div v-if="formData[field.key]" class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-dark-600 ring-1 ring-dark-600">
-                    <img :src="formData[field.key]" alt="Preview" class="h-full w-full object-contain" />
+                    <img :src="formData[field.key]" alt="Preview" class="size-full object-contain" />
                   </div>
                   <button
                     type="button"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  contact: InboxContact
+  contact: ChatContact
   isActive?: boolean
 }>()
 

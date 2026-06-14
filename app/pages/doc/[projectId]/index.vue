@@ -35,7 +35,7 @@ const getFileIcon = (ext: string) => {
 </script>
 
 <template>
-  <main class="flex h-full w-full overflow-hidden bg-dark-400 font-main">
+  <main class="flex size-full overflow-hidden bg-dark-400 font-main">
     <div class="flex min-w-0 flex-1 flex-col border-r border-dark-500 bg-dark-400 transition-all duration-300">
       <div class="grid grid-cols-[auto_2fr_1fr_1.5fr] items-center gap-4 border-y border-white/5 px-6 py-3 text-xs font-bold uppercase tracking-wider text-light-500">
         <div class="w-5"></div>
@@ -81,7 +81,7 @@ const getFileIcon = (ext: string) => {
 
             <div class="flex items-center gap-3">
               <div class="flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-xs font-bold text-black">
-                <img v-if="doc.uploadedBy.avatar" :src="doc.uploadedBy.avatar" class="h-full w-full object-cover" />
+                <img v-if="doc.uploadedBy.avatar" :src="doc.uploadedBy.avatar" class="size-full object-cover" />
                 <span v-else>{{ doc.uploadedBy.name.charAt(0) }}</span>
               </div>
               <span class="truncate text-sm font-bold text-white">{{ doc.uploadedBy.name }}</span>

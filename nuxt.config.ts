@@ -132,6 +132,8 @@ export default defineNuxtConfig({
       notionDbId: '',
       vapidKey: '',
       vapidSubject: '',
+      matrixAdminPassword: '',
+      matrixAdminAccessToken: '',
     },
   },
   icon: {

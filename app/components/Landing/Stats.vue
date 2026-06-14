@@ -45,7 +45,7 @@ onMounted(() => {
           <NuxtImg
             src="https://viteplus.dev/feature-test-background-nostats.jpg"
             alt="Stats Background"
-            class="h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-20" />
+            class="size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-20" />
           <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0" />
         </div>
 

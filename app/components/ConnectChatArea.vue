@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
-  activeContact: InboxContact | null
-  messages: InboxMessage[]
+  activeContact: ChatContact | null
+  messages: ChatMessage[]
 }>()
 
 const emit = defineEmits<{
@@ -32,8 +32,8 @@ const channelCounts = computed(() => {
 
   if (props.messages) {
     props.messages.forEach((msg) => {
-      if (counts[msg.channel] !== undefined) {
-        counts[msg.channel]++
+      if (counts[msg.channel!] !== undefined) {
+        counts[msg.channel!]++
       }
     })
   }
@@ -43,7 +43,7 @@ const channelCounts = computed(() => {
 const activeMessages = computed(() => {
   if (!props.messages) return []
   return props.messages.filter((msg) => {
-    return msg.channel.toLowerCase() === activeChannel.value
+    return msg.channel!.toLowerCase() === activeChannel.value
   })
 })
 
@@ -77,9 +77,9 @@ watch(
 
 <template>
   <div class="flex h-full flex-1 flex-col bg-dark-400">
-    <div v-if="!activeContact" class="flex h-full flex-col items-center justify-center text-light-500">
-      <NuxtIcon name="local:chat" class="mb-4 text-5xl opacity-50" />
-      <p class="text-sm font-bold">Select a conversation to start messaging</p>
+    <div v-if="!activeContact" class="flex h-full flex-col items-center justify-center gap-4 text-light-500">
+      <NuxtIcon name="local:chat" class="mb-4 text-[64px] opacity-50" />
+      <p class="text-lg">Select a conversation to start messaging</p>
     </div>
 
     <template v-else>

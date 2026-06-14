@@ -42,7 +42,7 @@ onMounted(() => {
     <div class="flex flex-col items-center text-center">
       <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-success-500/20 bg-success-500/5 px-4 py-2 text-sm backdrop-blur-sm">
         <span class="relative flex h-2 w-2">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success-500 opacity-75" />
+          <span class="absolute inline-flex size-full animate-ping rounded-full bg-success-500 opacity-75" />
           <span class="relative inline-flex h-2 w-2 rounded-full bg-success-500" />
         </span>
         <span class="text-white">Early Beta Release</span>

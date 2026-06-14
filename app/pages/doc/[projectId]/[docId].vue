@@ -95,7 +95,7 @@ function resetClick() {
         <NuxtIcon name="local:chevron-bold" class="text-xs" />
       </button>
 
-      <div ref="viewerContainer" class="flex h-full w-full overflow-auto p-4 md:p-8">
+      <div ref="viewerContainer" class="flex size-full overflow-auto p-4 md:p-8">
         <div class="m-auto flex items-center justify-center">
           <ClientOnly>
             <VuePDF class="shadow-2xl" :pdf="pdf" :page="viewerState.page" :scale="computedScale" :rotation="viewerState.rotation" />

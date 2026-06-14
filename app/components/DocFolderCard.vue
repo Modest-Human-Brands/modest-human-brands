@@ -34,7 +34,7 @@ const formatStatus = (status: string) => {
       <img src="/images/folder.png" class="h-auto w-full select-none object-contain" :alt="`${folder.contactName} folder`" draggable="false" loading="lazy" />
       <div class="absolute bottom-2.5 left-2.5 flex items-center gap-2">
         <div class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black text-center text-2xs font-bold leading-tight tracking-wide text-white ring-1 ring-white/10">
-          <img v-if="folder.contactAvatar" :src="folder.contactAvatar" class="h-full w-full object-cover" />
+          <img v-if="folder.contactAvatar" :src="folder.contactAvatar" class="size-full object-cover" />
           <span v-else>{{ folder.contactName.substring(0, 2).toUpperCase() }}</span>
         </div>
         <span class="text-sm font-bold text-white/80">{{ folder.contactName }}</span>

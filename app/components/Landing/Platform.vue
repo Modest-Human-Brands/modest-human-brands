@@ -15,7 +15,7 @@ const capabilities = [
   <section class="relative mx-auto max-w-7xl px-6 py-24">
     <div class="relative overflow-hidden rounded-3xl border border-white/10">
       <div class="absolute inset-0">
-        <NuxtImg src="https://viteplus.dev/feature-lib-background.jpg" alt="Platform Background" class="h-full w-full object-cover opacity-20" />
+        <NuxtImg src="https://viteplus.dev/feature-lib-background.jpg" alt="Platform Background" class="size-full object-cover opacity-20" />
         <div class="absolute inset-0 bg-gradient-to-br from-dark-500/95 via-black/90 to-dark-400/95" />
       </div>
 
