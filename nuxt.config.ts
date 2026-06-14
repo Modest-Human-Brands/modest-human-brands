@@ -112,6 +112,7 @@ export default defineNuxtConfig({
     },
     public: {
       siteUrl: '',
+      connectUrl: '',
       docUrl: '',
       matrixUrl: '',
       cdnUrl: '',

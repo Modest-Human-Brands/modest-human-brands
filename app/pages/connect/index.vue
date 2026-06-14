@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: rawContacts, pending: loadingContacts } = await useFetch<UIConnectCard[]>('/api/connect')
+const { data: rawContacts, pending: loadingContacts } = await useFetch('/api/connect')
 
 const contacts = computed<ChatContact[]>(() => {
   if (!rawContacts.value) return []

@@ -2,6 +2,8 @@ export default defineEventHandler(async (event) => {
   const channel = getRouterParam(event, 'channel')
   const { contactId, subject, text } = await readBody(event)
 
+  const config = useRuntimeConfig()
+
   if (!contactId || !text) {
     throw createError({ statusCode: 400, statusMessage: 'Missing contactId or message body' })
   }
@@ -12,7 +14,7 @@ export default defineEventHandler(async (event) => {
       interactionId?: string
       dispatchId?: string
     }>(`/api/connect/text/${channel}/send`, {
-      baseURL: 'http://localhost:3001',
+      baseURL: config.public.connectUrl,
       method: 'POST',
       body: {
         contactId,

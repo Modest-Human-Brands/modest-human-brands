@@ -1,37 +1,11 @@
-export interface MDocDocumentResponse {
-  results: {
-    id: string
-    templateId: string
-    name: string
-    mimeType: string
-    sizeBytes: number
-    status: string
-    contact?: {
-      name: string
-      avatar?: string
-    }
-    project?: {
-      index: number
-      name: string
-      slug: string
-      status: string
-    }
-    organizationId: string
-    previewUrl: string
-    createdAt: string
-    updatedAt: string
-  }[]
-  pagination: {
-    total: number
-    limit: number
-    offset: number
-  }
-}
+import type { MDocDocumentListResponse } from './[projectId]/index.get'
 
 export default defineEventHandler(async () => {
   try {
-    const response = await $fetch<MDocDocumentResponse>('/api/document', {
-      baseURL: 'http://localhost:3002',
+    const config = useRuntimeConfig()
+
+    const response = await $fetch<MDocDocumentListResponse>('/api/document', {
+      baseURL: config.public.docUrl,
     })
 
     const projectFolders = new Map<

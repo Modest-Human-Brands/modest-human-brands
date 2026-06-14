@@ -21,8 +21,10 @@ export interface MConnectContactResponse {
 
 export default defineEventHandler(async () => {
   try {
+    const config = useRuntimeConfig()
+
     const rawData = await $fetch<MConnectContactResponse>('/api/contacts', {
-      baseURL: 'http://localhost:3001',
+      baseURL: config.public.connectUrl,
     })
 
     return rawData.results.map((contact) => {

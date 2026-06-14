@@ -23,9 +23,11 @@ export interface MDocDocumentListResponse {
 export default defineEventHandler(async (event) => {
   const projectId = getRouterParam(event, 'projectId') || 'default'
 
+  const config = useRuntimeConfig()
+
   try {
     const response = await $fetch<MDocDocumentListResponse>('/api/document', {
-      baseURL: 'http://localhost:3002',
+      baseURL: config.public.docUrl,
     })
 
     const projectDocs = response.results.filter((doc) => (doc.project?.slug || 'unassigned') === projectId)

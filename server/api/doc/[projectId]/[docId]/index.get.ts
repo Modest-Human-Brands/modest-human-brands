@@ -30,9 +30,11 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Missing document ID' })
   }
 
+  const config = useRuntimeConfig()
+
   try {
     const doc = await $fetch<MDocDocument>(`/api/document/${docId}`, {
-      baseURL: 'http://localhost:3002',
+      baseURL: config.public.docUrl,
     })
 
     const mimeToExt: Record<string, string> = {

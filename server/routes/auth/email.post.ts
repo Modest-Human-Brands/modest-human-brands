@@ -19,11 +19,13 @@ export type EmailTemplateData = {
 export async function sendEmail<T extends keyof EmailTemplateData>(template: T, payload: EmailTemplateData[T][]) {
   let isSuccessful = true
 
+  const config = useRuntimeConfig()
+
   await Promise.allSettled(
     payload.map(async (payloadData) => {
       try {
         await $fetch('/api/connect/text/email/send', {
-          baseURL: 'http://localhost:3001',
+          baseURL: config.public.connectUrl,
           method: 'POST',
           body: {
             recipientEmail: payloadData.toEmail,

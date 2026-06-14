@@ -21,13 +21,15 @@ export interface MConnectTimelineResponse {
 export default defineEventHandler(async (event) => {
   const clientId = getRouterParam(event, 'id')
 
+  const config = useRuntimeConfig()
+
   if (!clientId || clientId === 'undefined') {
     throw createError({ statusCode: 400, statusMessage: 'Missing client ID' })
   }
 
   try {
     const rawTimeline = await $fetch<MConnectTimelineResponse>(`/api/contacts/${clientId}/timeline`, {
-      baseURL: 'http://localhost:3001',
+      baseURL: config.public.connectUrl,
     })
 
     return {
