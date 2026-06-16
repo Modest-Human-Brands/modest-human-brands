@@ -5,14 +5,14 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const matrixCredentialsStorage = useStorage<{ password: string; recoveryKey: string }>('data:matrix:cred')
 
-  // await matrixCredentialsStorage.setItem('test', {
-  //   password: 'test',
-  //   recoveryKey: 'test',
-  // },)
-
   const synapseUrl = config.public.matrixUrl
   const matrixUserId = `@${user.name.toLowerCase().replaceAll(' ', '.')}:synapse.modesthumanbrands.com`
   const matrixCredentialsData = await matrixCredentialsStorage.getItem(matrixUserId)
+
+  // await matrixCredentialsStorage.setItem(matrixUserId, {
+  //   password: 'test',
+  //   recoveryKey: 'test',
+  // },)
 
   const query = getQuery(event)
   const deviceId = (query.deviceId as string) || `WEB_${Date.now()}`

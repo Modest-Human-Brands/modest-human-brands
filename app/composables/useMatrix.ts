@@ -123,7 +123,7 @@ export const useMatrix = () => {
           if (error instanceof Error && error.message.includes("doesn't match the account")) {
             console.warn('Matrix: Store mismatch detected. Wiping corrupt databases and retrying...')
             await clearMatrixStores()
-            window.location.reload()
+            // window.location.reload()
           }
           initPromise = null
           throw error
