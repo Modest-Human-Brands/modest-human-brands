@@ -48,7 +48,7 @@ async function onEmailSignIn() {
       <NuxtLink
         to="/auth/google"
         external
-        class="focus:ring-yellow-300 flex w-full items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-3 text-black shadow-sm transition-shadow hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-1"
+        class="focus:ring-yellow-300 flex w-full items-center justify-center gap-1.5 rounded-lg bg-white fill-black px-4 py-3 text-black shadow-sm transition-shadow hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-1"
         aria-label="Sign in with Google"
         @click="onOauthSignIn">
         <!-- eslint-enable link-checker/valid-route -->
