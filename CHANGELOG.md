@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.2
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.1...v0.5.2)
+
+### 🩹 Fixes
+
+- Add usePdfViewer composable and improve signin.vue layout ([b1944a1](https://github.com/Modest-Human-Brands/modest-human-brands/commit/b1944a1))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.0...v0.5.1)
