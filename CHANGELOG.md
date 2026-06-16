@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.3
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.2...v0.5.3)
+
+### 💅 Refactors
+
+- Clean up commented code and improve progress callback formatting ([6e3cad7](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6e3cad7))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.2
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.1...v0.5.2)
