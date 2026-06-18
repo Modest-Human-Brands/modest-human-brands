@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.3...v0.5.4)
+
+### 💅 Refactors
+
+- Organization fetching and navigation structure ([2d468a5](https://github.com/Modest-Human-Brands/modest-human-brands/commit/2d468a5))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.2...v0.5.3)
