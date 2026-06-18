@@ -1,89 +1,78 @@
 <script setup lang="ts">
+import type { SendMessagePayload } from '~/components/ConnectChatArea.vue'
+
 definePageMeta({
   layout: 'navigation-header',
   middleware: ['auth'],
 })
 
 const route = useRoute()
-const activeContactId = route.params.id as string
+const activeContactId = String(route.params.id)
 
-const { data: rawContacts, pending: loadingContacts } = await useFetch('/api/connect')
+const { data: contacts, pending: loadingContacts } = await useFetch('/api/connect')
+const activeContact = computed(() => contacts.value?.find((c) => c.id === activeContactId) || null)
 
-const contacts = computed<ChatContact[]>(() => {
-  if (!rawContacts.value) return []
-  return rawContacts.value.map((c) => ({
-    id: c.id,
-    name: c.name,
-    initial: c.initial,
-    company: c.company,
-    lastActive: c.lastActive,
-    lastMessageSnippet: c.lastMessageSnippet,
-    activeChannel: (c.platforms[0] || 'email') as ChannelType,
-    availableChannels: c.platforms as ChannelType[],
-  }))
-})
-
-const activeContact = computed(() => contacts.value.find((c) => c.id === activeContactId) || null)
-
-const { data: timeline, pending: loadingTimeline } = await useFetch<UIConnectTimeline>(`/api/connect/${activeContactId}/timeline`)
+const { data: timeline, pending: loadingTimeline } = await useFetch(`/api/connect/${activeContactId}/timeline`)
+const { data: emailTemplates } = await useFetch('/api/connect/text/email/template')
 
 const messages = computed<ChatMessage[]>(() => {
   if (!timeline.value) return []
 
-  return timeline.value.interactions
+  return timeline.value
     .map((msg) => ({
-      id: msg.id,
-      text: msg.summary,
-      senderName: msg.direction === 'inbound' ? activeContact.value?.name || 'Client' : 'Me',
-      senderInitial: msg.direction === 'inbound' ? activeContact.value?.initial || 'C' : 'M',
-      time: msg.timestamp,
-      isOwn: msg.direction === 'outbound',
-      channel: msg.channel,
-      status: msg.status || 'sent',
+      ...msg,
+      senderName: msg.isOwn ? 'Me' : activeContact.value?.name || 'Client',
+      senderInitial: msg.isOwn ? 'M' : activeContact.value?.initial || 'C',
     }))
     .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
 })
 
-async function handleSendMessage({ text, channel }: { text: string; channel: ChannelType }) {
+async function handleSendMessage({ content, channel, template, variables }: SendMessagePayload) {
   const tempId = `temp-${Date.now()}`
 
   if (timeline.value) {
-    timeline.value = {
-      ...timeline.value,
-      interactions: [
-        ...timeline.value.interactions,
-        {
-          id: tempId,
-          summary: text,
-          direction: 'outbound',
-          timestamp: new Date().toISOString(),
-          channel,
-          status: 'sending',
-        },
-      ],
-    }
+    timeline.value.push({
+      id: tempId,
+      content: content,
+      time: new Date().toISOString(),
+      isOwn: true,
+      channel,
+      status: 'sending',
+      metadata: {
+        subject: template ? `Template: ${template.replace(/-/g, ' ')}` : 'New Message',
+      },
+    })
   }
 
   try {
+    const body: Record<string, unknown> = {
+      contactId: activeContactId,
+      orgId: 'modest-human-brands',
+    }
+
+    if (template && variables) {
+      body.template = template
+      body.variables = variables
+    } else {
+      body.template = 'none'
+      body.text = content
+      body.subject = 'New Message'
+    }
+
     await $fetch(`/api/connect/text/${channel}/send`, {
       method: 'POST',
-      body: { contactId: activeContactId, subject: 'New Message', text },
+      body,
     })
 
     if (timeline.value) {
-      timeline.value = {
-        ...timeline.value,
-        interactions: timeline.value.interactions.map((m) => (m.id === tempId ? { ...m, status: 'sent' } : m)),
-      }
+      const msg = timeline.value.find((m) => m.id === tempId)
+      if (msg) msg.status = 'sent'
     }
   } catch (error) {
     console.error(`Failed to send ${channel} message:`, error)
-
     if (timeline.value) {
-      timeline.value = {
-        ...timeline.value,
-        interactions: timeline.value.interactions.map((m) => (m.id === tempId ? { ...m, status: 'error' } : m)),
-      }
+      const msg = timeline.value.find((m) => m.id === tempId)
+      if (msg) msg.status = 'error'
     }
   }
 }
@@ -91,18 +80,20 @@ async function handleSendMessage({ text, channel }: { text: string; channel: Cha
 
 <template>
   <main class="flex size-full overflow-hidden">
-    <div class="flex h-full min-w-0 flex-1 flex-col transition-all duration-300">
+    <div class="relative flex h-full min-w-0 flex-1 flex-col transition-all duration-300">
       <div v-if="loadingTimeline && messages.length === 0" class="flex h-full items-center justify-center text-white/40">
         <div class="flex animate-pulse flex-col items-center gap-3">
           <NuxtIcon name="local:chat" class="text-3xl" />
           <span class="text-sm font-bold uppercase tracking-widest">Synchronizing Ledger...</span>
         </div>
       </div>
-      <ConnectChatArea v-else :active-contact="activeContact" :messages="messages" @send="handleSendMessage" />
+
+      <ConnectChatArea v-else class="min-h-0 flex-1" :active-contact="activeContact" :messages="messages" :templates="emailTemplates || []" @send="handleSendMessage" />
     </div>
+
     <div class="hidden h-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
       <div v-if="loadingContacts" class="size-full animate-pulse bg-white/5" />
-      <ConnectSidebar v-else :contacts="contacts" :active-id="activeContactId" />
+      <ConnectSidebar v-else :contacts="contacts || []" :active-id="activeContactId" />
     </div>
   </main>
 </template>

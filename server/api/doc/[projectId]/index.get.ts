@@ -21,6 +21,9 @@ export interface MDocDocumentListResponse {
 }
 
 export default defineEventHandler(async (event) => {
+  // const { user } =
+  await requireUserSession(event)
+
   const projectId = getRouterParam(event, 'projectId') || 'default'
 
   const config = useRuntimeConfig()

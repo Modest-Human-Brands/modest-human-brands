@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { CoordinateConversation } from '~/composables/useCoordinate'
-
 const props = defineProps<{
   activeId: string | null
   conversations: CoordinateConversation[]

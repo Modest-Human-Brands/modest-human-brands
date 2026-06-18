@@ -1,4 +1,10 @@
 <script setup lang="ts">
+const { loggedIn } = useUserSession()
+
+if (loggedIn.value) {
+  await navigateTo('/dashboard')
+}
+
 const title = 'Modest Human Brands'
 const description = 'Autonomous Next-Gen Media Operating System'
 
@@ -25,8 +31,6 @@ useSchemaOrg([
     itemListElement: [{ name: 'Home', item: '/' }],
   }),
 ])
-
-const { loggedIn } = useUserSession()
 </script>
 
 <template>

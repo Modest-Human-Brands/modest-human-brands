@@ -1,64 +1,13 @@
 <script setup lang="ts">
-const slug = 'red-cat-pictures'
-const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
+const { user } = useUserSession()
+const { data: organizationData } = await useFetch(`/api/organization/${user.value?.organizations[0]}`)
 
-const DEFAULT_ORG = {
-  name: 'Modest Human Brands',
-  website: 'https://modesthumanbrands.com',
-  branding: {
-    logo: 'https://modesthumanbrands.com/logo.svg',
-    color: { primary: '#4A85FF', accent: '' },
-    font: '',
-  },
-  phone: '+912269711501',
-  whatsapp: 'https://wa.me/912269711501',
-}
-
-const organization = computed(() => organizationData.value ?? (DEFAULT_ORG as Organization))
+const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
 const route = useRoute()
 const editedAt = 'Jan 17'
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 
-const tabs = [
-  {
-    id: 'website-app',
-    title: 'Website/App',
-    icon: 'local:app',
-    description: 'Manage all your website/app here',
-  },
-  {
-    id: 'connect',
-    title: 'Connect',
-    icon: 'local:network',
-    description: 'Manage all your connections/campaigns here',
-  },
-  {
-    id: 'doc',
-    title: 'Doc',
-    icon: 'local:document',
-    description: 'Manage all your documents here',
-  },
-  {
-    id: 'coordinate',
-    title: 'Coordinate',
-    icon: 'local:node',
-    description: 'Manage all your teams and clients communication here',
-  },
-  {
-    id: 'sync',
-    title: 'Sync',
-    icon: 'local:stream',
-    description: 'Manage all sync here',
-  },
-  {
-    id: 'drive',
-    title: 'Drive',
-    icon: 'local:hard-drive',
-    description: 'Manage all your assets here',
-  },
-]
-
-const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) ?? tabs[0]!)
+const activeTab = computed(() => PRIMARY_NAVIGATION_TABS.find(({ id }) => route.path.includes(id)) ?? PRIMARY_NAVIGATION_TABS[0]!)
 
 const dynamicBreadcrumbs = computed(() => {
   const pathSegments = route.path.split('/').filter((p) => p)
@@ -68,7 +17,7 @@ const dynamicBreadcrumbs = computed(() => {
   pathSegments.forEach((segment, index) => {
     pathAccumulator += `/${segment}`
 
-    const matchingTab = tabs.find((t) => t.id === segment)
+    const matchingTab = PRIMARY_NAVIGATION_TABS.find((t) => t.id === segment)
 
     if (matchingTab) {
       crumbs.push({

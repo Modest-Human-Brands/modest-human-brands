@@ -24,6 +24,9 @@ export interface MDocDocument {
 }
 
 export default defineEventHandler(async (event) => {
+  // const { user } =
+  await requireUserSession(event)
+
   const docId = getRouterParam(event, 'docId')
 
   if (!docId) {

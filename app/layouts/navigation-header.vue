@@ -2,62 +2,15 @@
 const { emitAction } = useLayoutActions()
 const route = useRoute()
 
-const slug = ref('red-cat-pictures')
-const { data: organizationData } = await useFetch(`/api/organization/${slug.value}`)
+const { user } = useUserSession()
+const { data: organizationData } = await useFetch(`/api/organization/${user.value?.organizations[0]}`)
 
-const organization = computed(() => {
-  if (organizationData.value) return organizationData.value
-  return {
-    name: 'Modest Human Brands',
-    branding: {
-      logo: 'https://modesthumanbrands.com/logo.svg',
-    },
-  }
-})
+const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
 
 const editedAt = ref('Jan 17')
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 
-const tabs = [
-  {
-    id: 'website-app',
-    title: 'Website/App',
-    icon: 'local:app',
-    description: 'Manage all your website/app here',
-  },
-  {
-    id: 'connect',
-    title: 'Connect',
-    icon: 'local:network',
-    description: 'Manage all your connections/campaigns here',
-  },
-  {
-    id: 'doc',
-    title: 'Doc',
-    icon: 'local:document',
-    description: 'Manage all your documents here',
-  },
-  {
-    id: 'coordinate',
-    title: 'Coordinate',
-    icon: 'local:node',
-    description: 'Manage all your teams and clients communication here',
-  },
-  {
-    id: 'sync',
-    title: 'Sync',
-    icon: 'local:stream',
-    description: 'Manage all sync here',
-  },
-  {
-    id: 'drive',
-    title: 'Drive',
-    icon: 'local:hard-drive',
-    description: 'Manage all your assets here',
-  },
-]
-
-const activeTab = computed(() => tabs.find(({ id }) => route.path.includes(id)) ?? tabs[0]!)
+const activeTab = computed(() => PRIMARY_NAVIGATION_TABS.find(({ id }) => route.path.includes(id)) ?? PRIMARY_NAVIGATION_TABS[0]!)
 </script>
 
 <template>

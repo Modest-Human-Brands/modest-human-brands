@@ -19,8 +19,11 @@ export interface MConnectContactResponse {
   }[]
 }
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   try {
+    // const { user } =
+    await requireUserSession(event)
+
     const config = useRuntimeConfig()
 
     const rawData = await $fetch<MConnectContactResponse>('/api/contacts', {
@@ -30,18 +33,17 @@ export default defineEventHandler(async () => {
     return rawData.results.map((contact) => {
       return {
         id: contact.id,
-        name: contact.name,
+        name: contact.name || 'Unknown',
         initial: contact.name ? contact.name.charAt(0).toUpperCase() : 'U',
-        status: contact.status,
-        platforms: contact.platforms,
         company: contact.company,
-        jobTitle: contact.jobTitle,
         lastActive: contact.lastActive,
         lastMessageSnippet: contact.lastMessageSnippet,
+        activeChannel: (contact.platforms[0] || 'email') as ChannelType,
+        availableChannels: contact.platforms as ChannelType[],
       }
     })
   } catch (error) {
-    console.error('MConnect Proxy Error:', error)
+    console.error('API GET connect/index:', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch contacts from MConnect',

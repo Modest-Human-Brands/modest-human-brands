@@ -24,12 +24,31 @@ export async function sendEmail<T extends keyof EmailTemplateData>(template: T, 
   await Promise.allSettled(
     payload.map(async (payloadData) => {
       try {
+        console.log(
+          JSON.stringify(
+            {
+              recipientEmail: payloadData.toEmail,
+              template: 'otp',
+              orgId: 'modest-human-brands',
+              variables: {
+                recipientEmail: payloadData.toEmail,
+                otpCode: payloadData.otp,
+                expiresIn: '5 minutes',
+                organization: mhbOrg,
+              },
+            },
+            null,
+            2
+          )
+        )
+
         await $fetch('/api/connect/text/email/send', {
           baseURL: config.public.connectUrl,
           method: 'POST',
           body: {
             recipientEmail: payloadData.toEmail,
             template: 'otp',
+            orgId: 'modest-human-brands',
             variables: {
               recipientEmail: payloadData.toEmail,
               otpCode: payloadData.otp,

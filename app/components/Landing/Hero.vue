@@ -51,15 +51,15 @@ onMounted(() => {
       <h1 class="md:text-7xl lg:text-8xl mb-6 block bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-5xl font-bold leading-tight text-transparent">Modest Human Brands</h1>
 
       <div class="mb-6 overflow-hidden">
-        <p class="animate-slide-up text-xl text-white/90 md:text-2xl lg:text-3xl" style="animation-delay: 0.2s">Autonomous</p>
-        <p class="animate-slide-up text-xl text-white/70 md:text-2xl lg:text-3xl" style="animation-delay: 0.4s">Next-Gen Media Operating System</p>
+        <p class="animate-slide-up text-xl text-white/90 delay-200 md:text-2xl lg:text-3xl">Autonomous</p>
+        <p class="animate-slide-up delay-400 text-xl text-white/70 md:text-2xl lg:text-3xl">Next-Gen Media Operating System</p>
       </div>
 
-      <p class="animate-slide-up mx-auto mb-10 max-w-2xl text-base text-white/50 md:text-lg" style="animation-delay: 0.6s">
+      <p class="animate-slide-up mx-auto mb-10 max-w-2xl text-base text-white/50 delay-500 md:text-lg">
         A unified platform for content creation, project management, and media delivery. Built for modern creative teams who demand speed, control, and scalability.
       </p>
 
-      <div class="animate-slide-up flex flex-col gap-4 md:flex-row" style="animation-delay: 0.8s">
+      <div class="animate-slide-up flex flex-col gap-4 delay-700 md:flex-row">
         <NuxtLink
           v-if="!loggedIn"
           to="/auth/signin"

@@ -44,7 +44,7 @@ function getChannelIcon(channel: ChannelType) {
         </span>
       </div>
       <div class="mt-1 flex items-center gap-1.5 opacity-60 transition-opacity group-hover:opacity-100">
-        <NuxtIcon v-for="ch in contact.availableChannels" :key="ch" :name="getChannelIcon(ch)" class="text-[14px] text-white" />
+        <NuxtIcon v-for="channel in contact.availableChannels" :key="channel" :name="getChannelIcon(channel)" class="text-[14px] text-white" />
       </div>
     </div>
   </NuxtLink>

@@ -1,24 +1,13 @@
 <script setup lang="ts">
-/* const slug = 'red-cat-pictures'
-const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
+/* const { user } = useUserSession()
+const { data: organizationData } = await useFetch(`/api/organization/${user.value?.organizations[0]}`)
 
-const DEFAULT_ORG = {
-  name: 'Modest Human Brands',
-  website: 'https://modesthumanbrands.com',
-  branding: {
-    logo: 'https://modesthumanbrands.com/logo.svg',
-    color: { primary: '#4A85FF', accent: '' },
-    font: '',
-  },
-  phone: '+912269711501',
-  whatsapp: 'https://wa.me/912269711501',
-}
-const organization = computed(() => organizationData.value ?? DEFAULT_ORG as Organization) */
+const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
+*/
 </script>
 
 <template>
   <div class="relative flex min-h-screen w-screen items-center justify-start overflow-hidden">
-    <!-- Large grid overlay with perspective -->
     <div class="pointer-events-none fixed inset-0 z-0">
       <div
         class="size-full"
@@ -27,7 +16,6 @@ const organization = computed(() => organizationData.value ?? DEFAULT_ORG as Org
           background-size: 300px 300px;
           background-position: center center;
         " />
-      <!-- Fade edges -->
       <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
       <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black" />
     </div>

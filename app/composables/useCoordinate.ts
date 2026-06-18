@@ -1,26 +1,6 @@
 import { RoomEvent, EventTimeline } from 'matrix-js-sdk'
 import type { MatrixEvent, Room, MatrixClient } from 'matrix-js-sdk'
 
-export interface CoordinateConversation {
-  id: string
-  type: 'people' | 'projects' | 'topics'
-  name: string
-  snippet: string
-  projectContext: string
-  lastActive: string
-  avatarUrl: string | null
-}
-
-export interface ChatMessage {
-  id: string
-  isOwn: boolean
-  senderInitial: string
-  senderName: string
-  time: string
-  status: 'sent' | 'sending' | 'error'
-  text: string
-}
-
 export const useCoordinate = (roomId?: string | Ref<string | null>) => {
   const { initClient, isReady } = useMatrix()
 
@@ -68,7 +48,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
       senderName: senderId,
       time: new Date(event.getTs() ?? Date.now()).toISOString(),
       status: 'sent',
-      text: event.getContent()?.body || '',
+      content: event.getContent()?.body || '',
     }
   }
 

@@ -1,21 +1,27 @@
 <script setup lang="ts">
+export interface SendMessagePayload {
+  content: string
+  channel: ChannelType
+  template?: string
+  variables?: Record<string, unknown>
+}
+
 const props = defineProps<{
   activeContact: ChatContact | null
   messages: ChatMessage[]
+  templates?: {
+    id: string
+    variables: Record<string, string | Record<string, unknown>>
+  }[]
 }>()
 
 const emit = defineEmits<{
-  send: [payload: { text: string; channel: ChannelType }]
+  send: [payload: SendMessagePayload]
 }>()
 
-const activeChannel = ref<ChannelType>('whatsapp')
-const channels = [
-  { id: 'email', name: 'Email', icon: 'local:email' },
-  { id: 'whatsapp', name: 'WhatsApp', icon: 'local:whatsapp' },
-  { id: 'instagram', name: 'Instagram', icon: 'local:instagram' },
-  { id: 'sms', name: 'SMS', icon: 'local:chat' },
-  { id: 'phone', name: 'Phone', icon: 'local:phone' },
-] as const
+const activeChannel = ref<ChannelType>('email')
+const isActionsOpen = ref(false)
+const drawerRef = useTemplateRef('drawerRef')
 
 const channelCounts = computed(() => {
   const counts: Record<ChannelType, number> = {
@@ -26,7 +32,7 @@ const channelCounts = computed(() => {
     phone: 0,
   }
 
-  channels.forEach((ch) => {
+  CONNECT_CHANNELS.forEach((ch) => {
     counts[ch.id] = 0
   })
 
@@ -62,13 +68,40 @@ watch(
 )
 
 function handleSend(text: string) {
-  emit('send', { text, channel: activeChannel.value })
+  if (isActionsOpen.value && drawerRef.value?.hasSelection) {
+    const success = drawerRef.value.submit()
+    if (success) isActionsOpen.value = false
+    return
+  }
+
+  if (text.trim()) {
+    emit('send', { content: text, channel: activeChannel.value })
+  }
 }
+
+function handleToggleActions() {
+  if (activeChannel.value === 'email') {
+    isActionsOpen.value = !isActionsOpen.value
+  } else {
+    alert('Templates are currently only supported for Email.')
+  }
+}
+
+function handleTemplateSubmit(payload: { templateId: string; variables: Record<string, unknown> }) {
+  emit('send', {
+    content: `[Dispatched Template: ${payload.templateId.replace(/-/g, ' ')}]`,
+    channel: 'email',
+    template: payload.templateId,
+    variables: payload.variables,
+  })
+}
+
 watch(
   () => props.activeContact,
   (newContact) => {
     if (newContact) {
       activeChannel.value = newContact.activeChannel || 'email'
+      isActionsOpen.value = false
     }
   },
   { immediate: true }
@@ -96,12 +129,12 @@ watch(
 
         <div class="scrollbar-hidden flex shrink-0 items-center gap-2 overflow-x-auto">
           <button
-            v-for="channel in channels"
+            v-for="channel in CONNECT_CHANNELS"
             :key="channel.id"
             class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold capitalize transition-colors"
             :class="[activeChannel === channel.id ? 'bg-white fill-dark-500 text-dark-500' : 'bg-dark-500 fill-light-400 text-light-400 hover:bg-dark-600 hover:fill-white hover:text-white']"
-            @click="activeChannel = channel.id as ChannelType">
-            <NuxtIcon :name="channel.icon" class="text-sm" />
+            @click="activeChannel = channel.id">
+            <NuxtIcon :name="channel.icon" class="text-[16px]" />
             <div class="flex items-center gap-1">
               {{ channel.name }}
               <span :class="activeChannel === channel.id ? 'opacity-70' : 'text-light-500 opacity-60'">({{ channelCounts[channel.id] }})</span>
@@ -110,13 +143,19 @@ watch(
         </div>
       </header>
 
-      <div ref="chatContainer" class="flex-1 overflow-y-auto p-2 md:px-6 md:py-4">
+      <div ref="chatContainer" class="scrollbar-hidden flex-1 overflow-y-auto p-2 md:px-6 md:py-4">
         <ChatMessageBubble v-for="message in activeMessages" :key="message.id" :message="message" />
       </div>
 
-      <div class="shrink-0 border-t border-dark-500">
+      <div v-if="templates" class="relative z-20 flex shrink-0 flex-col border-t border-dark-500 bg-dark-400 shadow-[0_-10px_30px_rgba(0,0,0,0.1)]">
+        <div class="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" :class="isActionsOpen ? 'grid-rows-1' : 'grid-rows-[0fr]'">
+          <div class="overflow-hidden">
+            <ConnectActionDrawer ref="drawerRef" :templates="templates" @submit="handleTemplateSubmit" @close="isActionsOpen = false" />
+          </div>
+        </div>
+
         <ChatVoiceInput v-if="activeChannel === 'phone'" @start-call="console.log('Call started')" />
-        <ChatMessageInput v-else @send="handleSend" />
+        <ChatMessageInput v-else :is-actions-open="isActionsOpen" @send="handleSend" @open-actions="handleToggleActions" />
       </div>
     </template>
   </div>

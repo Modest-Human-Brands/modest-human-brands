@@ -1,7 +1,10 @@
 import type { OrganizationBranding } from '~~/shared/types'
 
-export default defineEventHandler<Promise<Organization[]>>(async () => {
+export default defineEventHandler<Promise<Organization[]>>(async (event) => {
   try {
+    // const { user } =
+    await requireUserSession(event)
+
     const config = useRuntimeConfig()
     const notionDbId = config.private.notionDbId as unknown as NotionDB
 

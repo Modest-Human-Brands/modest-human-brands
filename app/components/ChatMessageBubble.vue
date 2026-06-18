@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{ message: ChatMessage }>()
 const timeAgo = useTimeAgo(new Date(props.message.time))
+
+function isHTML(str: string) {
+  const htmlRegex = /<[a-z][\s\S]*>/i
+  return htmlRegex.test(str)
+}
 </script>
 
 <template>
@@ -31,8 +36,22 @@ const timeAgo = useTimeAgo(new Date(props.message.time))
           </div>
         </div>
 
-        <p class="break-words rounded-2xl px-5 py-3 text-sm text-white" :class="[message.isOwn ? 'rounded-br-sm bg-dark-600' : 'rounded-bl-sm bg-dark-500']">
-          {{ message.text }}
+        <div
+          v-if="message.channel === 'email'"
+          class="flex flex-col gap-2 rounded-2xl p-4 text-sm text-white"
+          :class="[message.isOwn ? 'rounded-br-sm border border-dark-500 bg-dark-600' : 'rounded-bl-sm border border-dark-400 bg-dark-500']">
+          <div class="flex items-start justify-between gap-4 border-b border-white/10 pb-2">
+            <span class="line-clamp-1 font-bold" :title="message.metadata?.subject">
+              {{ message.metadata?.subject || '(No Subject)' }}
+            </span>
+            <NuxtIcon v-if="message.metadata?.hasAttachments" name="local:document" class="shrink-0 text-lg opacity-70" />
+          </div>
+
+          <div class="line-clamp-4 overflow-hidden leading-relaxed" :class="isHTML(message.content) ? 'bg-white px-4 md:px-8' : ''" v-html="message.content" />
+        </div>
+
+        <p v-else class="whitespace-pre-wrap break-words rounded-2xl px-5 py-3 text-sm text-white" :class="[message.isOwn ? 'rounded-br-sm bg-dark-600' : 'rounded-bl-sm bg-dark-500']">
+          {{ message.content }}
         </p>
       </div>
     </div>

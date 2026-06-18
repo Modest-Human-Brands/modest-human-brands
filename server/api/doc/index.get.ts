@@ -1,7 +1,10 @@
 import type { MDocDocumentListResponse } from './[projectId]/index.get'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   try {
+    // const { user } =
+    await requireUserSession(event)
+
     const config = useRuntimeConfig()
 
     const response = await $fetch<MDocDocumentListResponse>('/api/document', {

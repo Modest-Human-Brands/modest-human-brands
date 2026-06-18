@@ -40,13 +40,6 @@ export interface ProjectClient {
 
 export type ProjectStatus = 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'
 
-export type NavItem = {
-  id: string
-  label: string
-  icon: string
-  to?: string
-}
-
 export type Orientation = 'portrait' | 'landscape'
 
 export interface Photo {

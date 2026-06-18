@@ -2,13 +2,15 @@ export interface MConnectTimelineResponse {
   client_id: string
   results: {
     interactionId: string
-    channel: string
+    channel: ChannelType
     direction: string
     timestamp: string
-    summary: string
-    status: string
+    content: string
+    status: 'sending' | 'sent' | 'error'
     metadata: {
       recordingUrl?: string
+      subject?: string
+      hasAttachments?: boolean
     }
   }[]
   pagination: {
@@ -19,6 +21,9 @@ export interface MConnectTimelineResponse {
 }
 
 export default defineEventHandler(async (event) => {
+  // const { user } =
+  await requireUserSession(event)
+
   const clientId = getRouterParam(event, 'id')
 
   const config = useRuntimeConfig()
@@ -32,20 +37,19 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.connectUrl,
     })
 
-    return {
-      clientId,
-      interactions: rawTimeline.results.map((item) => ({
-        id: item.interactionId,
-        channel: item.channel,
-        direction: item.direction,
-        timestamp: item.timestamp,
-        summary: item.summary,
-        status: item.status,
-        metadata: {
-          recordingUrl: item.metadata?.recordingUrl,
-        },
-      })),
-    }
+    return rawTimeline.results.map((item) => ({
+      id: item.interactionId,
+      content: item.content,
+      time: item.timestamp,
+      isOwn: item.direction === 'outbound',
+      channel: item.channel,
+      status: item.status || 'sent',
+      metadata: {
+        subject: item.metadata?.subject,
+        recordingUrl: item.metadata?.recordingUrl,
+        hasAttachments: item.metadata?.hasAttachments,
+      },
+    }))
   } catch (error) {
     console.error(`Timeline Proxy Error for ${clientId}:`, error)
     throw createError({

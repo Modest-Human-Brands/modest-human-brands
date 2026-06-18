@@ -1,12 +1,11 @@
 export default defineEventHandler(async (event) => {
   const channel = getRouterParam(event, 'channel')
-  const { contactId, subject, text } = await readBody(event)
+  const body = await readBody(event)
+  const { user } = await requireUserSession(event)
 
   const config = useRuntimeConfig()
 
-  if (!contactId || !text) {
-    throw createError({ statusCode: 400, statusMessage: 'Missing contactId or message body' })
-  }
+  if (body.variables) body.variables.organization = await $fetch(`/api/organization/${user.organizations[0]}`)
 
   try {
     const response = await $fetch<{
@@ -17,10 +16,13 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.connectUrl,
       method: 'POST',
       body: {
-        contactId,
-        template: 'none',
-        subject,
-        text,
+        contactId: body.contactId,
+        userId: user.id,
+        orgId: user.organizations[0],
+        template: body.template ?? 'none',
+        subject: body.subject,
+        text: body.text,
+        variables: body.variables ?? {},
       },
     })
 
