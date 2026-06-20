@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
 
     return Array.from(projectFolders.values())
   } catch (error) {
-    console.error('MDoc Proxy Error:', error)
+    console.error('API /doc GET', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch document metadata',

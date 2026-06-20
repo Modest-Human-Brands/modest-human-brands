@@ -9,7 +9,7 @@ definePageMeta({
 const route = useRoute()
 const activeContactId = String(route.params.id)
 
-const { data: contacts, pending: loadingContacts } = await useFetch('/api/connect')
+const { data: contacts, pending: loadingContacts } = await useFetch('/api/connect', { default: () => [] as ChatContact[] })
 const activeContact = computed(() => contacts.value?.find((c) => c.id === activeContactId) || null)
 
 const { data: timeline, pending: loadingTimeline } = await useFetch(`/api/connect/${activeContactId}/timeline`)
@@ -84,7 +84,7 @@ async function handleSendMessage({ content, channel, template, variables }: Send
       <div v-if="loadingTimeline && messages.length === 0" class="flex h-full items-center justify-center text-white/40">
         <div class="flex animate-pulse flex-col items-center gap-3">
           <NuxtIcon name="local:chat" class="text-3xl" />
-          <span class="text-sm font-bold uppercase tracking-widest">Synchronizing Ledger...</span>
+          <span class="font-semibold text-sm uppercase tracking-widest">Synchronizing Ledger...</span>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ async function handleSendMessage({ content, channel, template, variables }: Send
 
     <div class="hidden h-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
       <div v-if="loadingContacts" class="size-full animate-pulse bg-white/5" />
-      <ConnectSidebar v-else :contacts="contacts || []" :active-id="activeContactId" />
+      <ConnectSidebar v-else :contacts="contacts" :active-id="activeContactId" />
     </div>
   </main>
 </template>

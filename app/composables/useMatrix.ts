@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import * as sdk from 'matrix-js-sdk'
 import { ClientEvent } from 'matrix-js-sdk'
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto-api'
@@ -8,6 +9,21 @@ logger.disableAll()
 
 const matrixClient = ref<sdk.MatrixClient | null>(null)
 const isReady = ref(false)
+
+// --- State Tracking for UI ---
+export interface SyncState {
+  stateName: string
+  totalStateCount: number
+  completedStateCount: number
+  progress: number // 0-100
+}
+
+const syncStatus = ref<SyncState>({
+  stateName: 'Idle',
+  totalStateCount: 6,
+  completedStateCount: 0,
+  progress: 0,
+})
 
 let initPromise: Promise<sdk.MatrixClient | null> | null = null
 
@@ -35,6 +51,10 @@ export const useMatrix = () => {
 
     if (!initPromise) {
       initPromise = (async () => {
+        syncStatus.value.completedStateCount = 1
+        syncStatus.value.stateName = 'Authenticating with Synapse'
+        syncStatus.value.progress = 0
+
         try {
           let deviceId = window.localStorage.getItem('matrix_device_id')
           if (!deviceId) {
@@ -64,16 +84,19 @@ export const useMatrix = () => {
             logger: undefined,
             cryptoCallbacks: {
               getSecretStorageKey: async ({ keys }) => {
-                if (!credentials.recoveryKey) {
-                  throw new Error('No recovery key provided by auth endpoint.')
+                const userInput = window.prompt('To decrypt historical messages, enter your Security Key.\n(Leave blank to use the automatic key provided by the server):')
+                const keyToUse = userInput && userInput.trim() !== '' ? userInput.trim() : credentials.recoveryKey
+
+                if (!keyToUse) {
+                  throw new Error('No recovery key provided.')
                 }
 
                 try {
-                  const keyBytes = decodeRecoveryKey(credentials.recoveryKey)
-                  const keyId = Object.keys(keys)[0]
+                  const keyBytes = decodeRecoveryKey(keyToUse)
+                  const keyId = Object.keys(keys)[0]!
                   return [keyId, keyBytes]
                 } catch (err) {
-                  console.error('Invalid recovery key', err)
+                  console.error('Invalid recovery key format', err)
                   throw err
                 }
               },
@@ -84,6 +107,10 @@ export const useMatrix = () => {
           await client.initRustCrypto()
           await client.startClient({ initialSyncLimit: 10 })
 
+          syncStatus.value.completedStateCount = 2
+          syncStatus.value.stateName = 'Fetching initial rooms and state'
+          syncStatus.value.progress = 0
+
           const onSync = async (state: string) => {
             if (state === 'PREPARED') {
               isReady.value = true
@@ -92,24 +119,57 @@ export const useMatrix = () => {
 
               const crypto = client.getCrypto()
               if (crypto) {
-                const check = await crypto.checkKeyBackupAndEnable()
-                if (check === null) {
-                  console.warn('No key backup found on the server.')
-                } else {
-                  console.log(`Using existing backup version ${check.backupInfo.version}`)
-                  try {
-                    console.log('Triggering Secret Storage unlock...')
-                    await crypto.bootstrapCrossSigning({ setupNewCrossSigning: false })
-                    await crypto.loadSessionBackupPrivateKeyFromSecretStorage()
-                    console.log('Secret Storage unlocked. Downloading historical keys...')
+                try {
+                  // 1. AWAIT PUBLIC KEYS (Fixes the first-load crash)
+                  syncStatus.value.completedStateCount = 3
+                  syncStatus.value.stateName = 'Downloading cryptographic identity'
+
+                  // Wait for the background out-of-band /keys/query to resolve
+                  await client.downloadKeys([credentials.userId])
+
+                  // 2. PROPER CROSS-SIGNING BOOTSTRAP
+                  syncStatus.value.completedStateCount = 4
+                  syncStatus.value.stateName = 'Unlocking Secret Storage & Cross-Signing'
+
+                  await crypto.bootstrapCrossSigning({ setupNewCrossSigning: false })
+
+                  // 3. SELF-VERIFICATION
+                  const currentDeviceId = client.getDeviceId()
+                  if (currentDeviceId) {
+                    await crypto.crossSignDevice(currentDeviceId)
+                  }
+
+                  // 4. CHECK BACKUP STATUS
+                  syncStatus.value.completedStateCount = 5
+                  syncStatus.value.stateName = 'Checking for server backups'
+
+                  const backupInfo = await crypto.checkKeyBackupAndEnable()
+
+                  // 5. RESTORE HISTORICAL KEYS
+                  syncStatus.value.completedStateCount = 6
+                  if (backupInfo) {
+                    syncStatus.value.stateName = `Restoring backup version ${backupInfo.backupInfo.version}`
+                    console.log(`Matrix: Found backup v${backupInfo.backupInfo.version}. Starting restore...`)
 
                     const result = await crypto.restoreKeyBackup({
-                      progressCallback: () => {},
+                      progressCallback: (progress) => {
+                        const percent = progress.total > 0 ? Math.round((progress.successes / progress.total) * 100) : 0
+                        syncStatus.value.progress = percent
+                      },
                     })
-                    console.log('Historical messages successfully restored!', result)
-                  } catch (e) {
-                    console.error('Failed to unlock Secret Storage or restore backup:', e)
+                    console.log('Matrix: Historical messages successfully restored!', result)
+
+                    syncStatus.value.stateName = 'End-to-End Encryption fully synchronized'
+                    syncStatus.value.progress = 100
+                  } else {
+                    console.warn('Matrix: No historical key backup found on the server.')
+                    syncStatus.value.stateName = 'No historical backup found. Ready.'
+                    syncStatus.value.progress = 100
                   }
+                } catch (e) {
+                  syncStatus.value.stateName = 'Encryption setup failed'
+                  syncStatus.value.progress = 0
+                  console.error('Matrix E2EE Setup Failed. Is the Recovery Key correct?', e)
                 }
               }
             }
@@ -123,9 +183,10 @@ export const useMatrix = () => {
           if (error instanceof Error && error.message.includes("doesn't match the account")) {
             console.warn('Matrix: Store mismatch detected. Wiping corrupt databases and retrying...')
             await clearMatrixStores()
-            // window.location.reload()
           }
           initPromise = null
+          syncStatus.value.stateName = 'Failed to initialize Matrix client'
+          syncStatus.value.progress = 0
           throw error
         }
       })()
@@ -133,5 +194,5 @@ export const useMatrix = () => {
     return initPromise
   }
 
-  return { client: matrixClient, isReady, initClient }
+  return { client: matrixClient, isReady, syncStatus, initClient }
 }

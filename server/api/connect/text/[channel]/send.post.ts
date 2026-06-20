@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
 
     return response
   } catch (error) {
-    console.error(`MConnect Outbound Dispatch Error [${channel}]:`, error)
+    console.error(`API connect/text/[channel]/send POST`, error)
     throw createError({
       statusCode: 500,
       statusMessage: `Failed to dispatch ${channel} payload to MConnect`,

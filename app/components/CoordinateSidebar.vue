@@ -27,7 +27,7 @@ const filteredConversations = computed(() => {
       <button
         v-for="tab in TABS"
         :key="tab.id"
-        class="flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-colors"
+        class="font-semibold flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors"
         :class="[activeTab === tab.id ? 'bg-dark-600 text-white' : 'bg-dark-500 text-light-500 hover:bg-dark-600 hover:text-white']"
         @click="activeTab = tab.id">
         <NuxtIcon :name="tab.icon" class="text-sm" />
@@ -38,7 +38,7 @@ const filteredConversations = computed(() => {
       <CoordinateContactCard v-for="conv in filteredConversations" :key="conv.id" :conversation="conv" :is-active="conv.id === activeId" @click="emit('select', conv.id)" />
       <div v-if="filteredConversations.length === 0" class="mt-10 flex flex-col items-center text-light-500">
         <NuxtIcon name="local:chat" class="mb-2 text-2xl opacity-50" />
-        <span class="text-xs font-bold">No {{ activeTab }} found</span>
+        <span class="font-semibold text-xs">No {{ activeTab }} found</span>
       </div>
     </div>
   </div>

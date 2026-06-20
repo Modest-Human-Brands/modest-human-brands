@@ -18,7 +18,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /root/modest-human-brands/mconnect/config:/app/config
+      - mconnect-config:/app/config
+      - mconnect-data:/app/.data
     networks:
       - internal
     deploy:
@@ -157,6 +158,12 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/mconnect/config
+  mconnect-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mconnect/.data
   mdoc-document:
     driver: local
     driver_opts:

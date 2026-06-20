@@ -117,12 +117,12 @@ defineExpose({
         <button
           v-for="tpl in templates"
           :key="tpl.id"
-          class="hover:border-dark-300 flex w-[160px] shrink-0 flex-col gap-4 rounded-xl border border-dark-400 bg-dark-500 p-4 text-left shadow-sm transition-all hover:bg-dark-600"
+          class="hover:border-dark-300 flex w-[160px] shrink-0 flex-col gap-4 rounded-xl border border-dark-400 bg-dark-500 p-4 text-left transition-all hover:bg-dark-600"
           @click="handleSelectTemplate(tpl)">
           <div class="flex size-10 items-center justify-center rounded-lg bg-dark-500 text-light-400">
             <NuxtIcon name="local:document" class="text-xl" />
           </div>
-          <span class="text-sm font-bold capitalize leading-tight text-white">{{ tpl.id.replace(/-/g, ' ') }}</span>
+          <span class="font-semibold text-sm capitalize leading-tight text-white">{{ tpl.id.replace(/-/g, ' ') }}</span>
         </button>
       </div>
 
@@ -131,7 +131,7 @@ defineExpose({
           <button class="flex items-center justify-center text-light-500 transition-colors hover:text-white" @click="selectedTemplate = null">
             <NuxtIcon name="local:chevron-bold" class="scale-x text-lg" />
           </button>
-          <h3 class="text-xl font-bold capitalize text-white">{{ selectedTemplate.id.replace(/-/g, ' ') }}</h3>
+          <h3 class="font-semibold text-xl capitalize text-white">{{ selectedTemplate.id.replace(/-/g, ' ') }}</h3>
         </div>
 
         <template v-for="(type, key) in selectedTemplate.variables" :key="key">

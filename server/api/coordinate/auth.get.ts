@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
       recoveryKey: matrixCredentialsData!.recoveryKey,
     }
   } catch (error) {
-    console.error('Matrix Auth Error:', error)
+    console.error('API coordinate/auth GET', error)
     throw createError({ statusCode: 500, statusMessage: 'Failed to negotiate Matrix session' })
   }
 })

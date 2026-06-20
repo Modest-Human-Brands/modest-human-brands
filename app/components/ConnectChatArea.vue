@@ -118,12 +118,12 @@ watch(
     <template v-else>
       <header class="flex shrink-0 flex-col gap-4 border-b border-dark-500 p-2 md:p-6">
         <div class="flex items-center gap-4">
-          <div class="flex size-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-bold text-dark-500">
+          <div class="font-semibold flex size-14 shrink-0 items-center justify-center rounded-full bg-white text-xl text-dark-500">
             {{ activeContact.initial }}
           </div>
           <div class="flex flex-col">
-            <h2 class="text-lg font-bold text-white">{{ activeContact.name }}</h2>
-            <span class="text-sm font-bold text-light-500">{{ activeContact.company }}</span>
+            <h2 class="font-semibold text-lg text-white">{{ activeContact.name }}</h2>
+            <span class="font-semibold text-sm text-light-500">{{ activeContact.company }}</span>
           </div>
         </div>
 
@@ -131,7 +131,7 @@ watch(
           <button
             v-for="channel in CONNECT_CHANNELS"
             :key="channel.id"
-            class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold capitalize transition-colors"
+            class="font-semibold flex items-center gap-2 rounded-full px-4 py-2 text-sm capitalize transition-colors"
             :class="[activeChannel === channel.id ? 'bg-white fill-dark-500 text-dark-500' : 'bg-dark-500 fill-light-400 text-light-400 hover:bg-dark-600 hover:fill-white hover:text-white']"
             @click="activeChannel = channel.id">
             <NuxtIcon :name="channel.icon" class="text-[16px]" />
@@ -143,11 +143,11 @@ watch(
         </div>
       </header>
 
-      <div ref="chatContainer" class="scrollbar-hidden flex-1 overflow-y-auto p-2 md:px-6 md:py-4">
+      <div ref="chatContainer" class="scrollbar-hidden flex-1 overflow-y-auto p-3 md:px-6 md:py-4">
         <ChatMessageBubble v-for="message in activeMessages" :key="message.id" :message="message" />
       </div>
 
-      <div v-if="templates" class="relative z-20 flex shrink-0 flex-col border-t border-dark-500 bg-dark-400 shadow-[0_-10px_30px_rgba(0,0,0,0.1)]">
+      <div v-if="templates" class="relative z-20 flex shrink-0 flex-col border-t border-dark-500 bg-dark-400">
         <div class="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" :class="isActionsOpen ? 'grid-rows-1' : 'grid-rows-[0fr]'">
           <div class="overflow-hidden">
             <ConnectActionDrawer ref="drawerRef" :templates="templates" @submit="handleTemplateSubmit" @close="isActionsOpen = false" />

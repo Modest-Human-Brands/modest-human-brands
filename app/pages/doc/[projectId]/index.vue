@@ -8,7 +8,22 @@ const route = useRoute()
 const projectId = route.params.projectId as string
 const selectedDocId = ref<string | null>(null)
 
-const { data: documents, pending } = await useFetch(`/api/doc/${projectId}`)
+const { data: documents, pending } = await useFetch<
+  {
+    id: string
+    name: string
+    sizeBytes: number
+    extension: string
+    uploadedBy: {
+      name: string | undefined
+      avatar: string | undefined
+    }
+    uploadedAt: string
+    project: string | undefined
+    source: string
+    previewUrl: string
+  }[]
+>(`/api/doc/${projectId}`)
 
 const activeDocument = computed(() => documents.value?.find((d) => d.id === selectedDocId.value) || null)
 
@@ -35,9 +50,9 @@ const getFileIcon = (ext: string) => {
 </script>
 
 <template>
-  <main class="flex size-full overflow-hidden bg-dark-400 font-main">
+  <main class="flex size-full overflow-hidden bg-dark-400">
     <div class="flex min-w-0 flex-1 flex-col border-r border-dark-500 bg-dark-400 transition-all duration-300">
-      <div class="grid grid-cols-[auto_2fr_1fr_1.5fr] items-center gap-4 border-y border-white/5 px-6 py-3 text-xs font-bold uppercase tracking-wider text-light-500">
+      <div class="font-semibold grid grid-cols-[auto_2fr_1fr_1.5fr] items-center gap-4 border-y border-white/5 px-6 py-3 text-xs uppercase tracking-wider text-light-500">
         <div class="w-5"></div>
         <span>Name</span>
         <div class="flex cursor-pointer items-center gap-1 transition-colors hover:text-white">
@@ -72,7 +87,7 @@ const getFileIcon = (ext: string) => {
                 <NuxtIcon :name="getFileIcon(doc.extension)" class="text-xl" />
               </div>
               <div class="flex min-w-0 flex-col gap-0.5">
-                <span class="truncate text-sm font-bold text-white">{{ doc.name }}</span>
+                <span class="font-semibold truncate text-sm text-white">{{ doc.name }}</span>
                 <span class="font-semibold truncate text-xs text-light-500">{{ formatBytes(doc.sizeBytes) }} • {{ doc.extension }}</span>
               </div>
             </div>
@@ -80,11 +95,11 @@ const getFileIcon = (ext: string) => {
             <span class="font-semibold text-sm text-white/80">{{ doc.uploadedAt }}</span>
 
             <div class="flex items-center gap-3">
-              <div class="flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-xs font-bold text-black">
-                <img v-if="doc.uploadedBy.avatar" :src="doc.uploadedBy.avatar" class="size-full object-cover" />
-                <span v-else>{{ doc.uploadedBy.name.charAt(0) }}</span>
+              <div class="font-semibold flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-xs text-black">
+                <img v-if="doc.uploadedBy?.avatar" :src="doc.uploadedBy?.avatar" class="size-full object-cover" />
+                <span v-else>{{ doc.uploadedBy?.name?.charAt(0) }}</span>
               </div>
-              <span class="truncate text-sm font-bold text-white">{{ doc.uploadedBy.name }}</span>
+              <span class="font-semibold truncate text-sm text-white">{{ doc.uploadedBy?.name }}</span>
             </div>
           </NuxtLink>
         </template>

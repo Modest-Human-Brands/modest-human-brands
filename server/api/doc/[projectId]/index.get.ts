@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
       }
     })
   } catch (error) {
-    console.error(`MDoc Proxy Error [Project: ${projectId}]:`, error)
+    console.error('API doc/[projectId] GET', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch project documents from MDoc',

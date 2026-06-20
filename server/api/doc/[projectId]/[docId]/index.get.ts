@@ -51,17 +51,17 @@ export default defineEventHandler(async (event) => {
 
     const formattedSize = formatBytes(doc.sizeBytes)
 
-    const timeline = [
-      { id: 't1', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: 'sent the document' },
-      { id: 't2', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-      { id: 't3', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-      { id: 't4', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-      { id: 't5', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-    ]
+    // const timeline = [
+    //   { id: 't1', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: 'sent the document' },
+    //   { id: 't2', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
+    //   { id: 't3', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
+    //   { id: 't4', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
+    //   { id: 't5', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
+    // ]
 
-    return { ...doc, extension, formattedSize, timeline }
+    return { ...doc, extension, formattedSize, timeline: [] }
   } catch (error) {
-    console.error(`MDoc Single Fetch Error [ID: ${docId}]:`, error)
+    console.error('API doc/[projectId]/[docId] GET', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch document metadata',

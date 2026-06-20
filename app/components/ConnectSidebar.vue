@@ -19,7 +19,7 @@ const filteredContacts = computed(() => {
       <button
         v-for="channel in channels"
         :key="channel.id"
-        class="flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-colors"
+        class="font-semibold flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors"
         :class="[activeChannel === channel.id ? 'bg-dark-600 text-white' : 'bg-dark-500 text-light-500 hover:bg-dark-600 hover:text-white']"
         @click="activeChannel = channel.id">
         <NuxtIcon :name="channel.icon" class="text-[16px]" />
@@ -27,7 +27,7 @@ const filteredContacts = computed(() => {
       </button>
     </div>
 
-    <div class="flex flex-1 flex-col gap-2 overflow-y-auto p-2">
+    <div class="scrollbar-hidden flex flex-1 flex-col gap-2 overflow-y-auto p-2">
       <ConnectContactCard v-for="contact in filteredContacts" :key="contact.id" :contact="contact" :is-active="contact.id === activeId" />
     </div>
   </div>

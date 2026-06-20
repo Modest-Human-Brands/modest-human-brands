@@ -16,6 +16,7 @@ export interface MConnectContactResponse {
     lastActive: string
     lastMessageSnippet: string
     platforms: string[]
+    unreadCount: number
   }[]
 }
 
@@ -40,10 +41,11 @@ export default defineEventHandler(async (event) => {
         lastMessageSnippet: contact.lastMessageSnippet,
         activeChannel: (contact.platforms[0] || 'email') as ChannelType,
         availableChannels: contact.platforms as ChannelType[],
+        unreadCount: contact.unreadCount,
       }
     })
   } catch (error) {
-    console.error('API GET connect/index:', error)
+    console.error('API connect/index GET', error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch contacts from MConnect',

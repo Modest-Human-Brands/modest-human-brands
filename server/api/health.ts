@@ -10,7 +10,7 @@ export default defineEventHandler(() => {
       throw error
     }
 
-    console.error('API health GET', error)
+    console.error('API /health GET', error)
 
     throw createError({
       statusCode: 500,

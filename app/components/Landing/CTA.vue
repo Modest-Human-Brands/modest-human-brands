@@ -20,7 +20,7 @@ defineProps<{
       <div class="relative p-12 text-center md:p-20">
         <div class="mb-6 inline-block animate-bounce rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semi-bold text-white backdrop-blur-sm">Join us today</div>
 
-        <h2 class="md:text-6xl mb-6 text-4xl font-bold leading-tight">
+        <h2 class="md:text-6xl font-semibold mb-6 text-4xl leading-tight">
           Ready to transform
           <br />
           <span class="bg-gradient-to-r from-white via-white to-white bg-clip-text text-transparent"> your workflow? </span>

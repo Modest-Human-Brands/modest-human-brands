@@ -108,7 +108,7 @@ export default defineEventHandler(async (event) => {
       throw error
     }
 
-    console.error('API user POST', error)
+    console.error('API /user POST', error)
 
     throw createError({
       statusCode: 500,

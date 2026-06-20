@@ -12,6 +12,12 @@ const props = withDefaults(
 
 const visibleCollaborators = computed(() => props.collaborators.slice(0, props.maxVisible))
 const extraCollaborators = computed(() => props.collaborators.length - visibleCollaborators.value.length)
+
+function getAvatar(avatar?: string, name?: string) {
+  const safeName = encodeURIComponent(name || 'U')
+
+  return `https://ui-avatars.com/api/?name=${safeName}&background=2B2B2B&color=FFFFFF&font-sze=0.3`
+}
 </script>
 
 <template>
@@ -21,7 +27,12 @@ const extraCollaborators = computed(() => props.collaborators.length - visibleCo
       <NuxtTime :datetime="editedAt" day="numeric" month="short" />
     </div>
     <div class="-space-x-3">
-      <NuxtImg v-for="{ id, avatar, name } in visibleCollaborators" :key="id" :src="avatar" :alt="name" class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
+      <NuxtImg
+        v-for="{ id, avatar, name } in visibleCollaborators"
+        :key="id"
+        :src="getAvatar(avatar, name)"
+        :alt="name"
+        class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
     </div>
     <span v-if="extraCollaborators > 0" class="p-1 text-xs text-white"> +{{ extraCollaborators }} </span>
     <button type="button" class="hidden p-1 md:block">Share</button>

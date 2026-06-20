@@ -51,8 +51,8 @@ const features = [
 
     <div class="mb-16 text-center">
       <div class="mb-4 inline-block rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-semi-bold text-white backdrop-blur-sm">INTEGRATED MODULES</div>
-      <h2 class="md:text-6xl mb-4 text-4xl font-bold">The Unified Platform</h2>
-      <p class="bg-gradient-to-r from-white to-white/60 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">for Creative Teams</p>
+      <h2 class="md:text-6xl font-semibold mb-4 text-4xl">The Unified Platform</h2>
+      <p class="font-semibold bg-gradient-to-r from-white to-white/60 bg-clip-text text-2xl text-transparent md:text-3xl">for Creative Teams</p>
       <p class="mx-auto mt-4 max-w-2xl text-lg text-white/60">Eight integrated modules working together seamlessly</p>
     </div>
 
@@ -72,7 +72,7 @@ const features = [
             <NuxtIcon :name="feature.icon" class="text-3xl text-white" />
           </div>
 
-          <h3 class="mb-3 text-xl font-bold">
+          <h3 class="font-semibold mb-3 text-xl">
             {{ feature.title }}
           </h3>
 

@@ -19,7 +19,7 @@ export default async function queryAllDataSource<T>(notion: Client, dataSourceId
       cursor = response.has_more ? (response.next_cursor ?? undefined) : undefined
     } while (cursor)
   } catch (error) {
-    console.error(error)
+    console.error('function queryAllDataSource', error)
   }
   return content
 }

@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: contacts, pending: loadingContacts } = await useFetch<ChatContact[]>('/api/connect')
+const { data: contacts, pending: loadingContacts } = await useFetch('/api/connect', { default: () => [] as ChatContact[] })
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const { data: contacts, pending: loadingContacts } = await useFetch<ChatContact[
 
     <div class="flex size-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
       <div v-if="loadingContacts" class="size-full animate-pulse bg-white/5" />
-      <ConnectSidebar v-else :contacts="contacts || []" :active-id="null" />
+      <ConnectSidebar v-else :contacts="contacts" :active-id="null" />
     </div>
   </main>
 </template>

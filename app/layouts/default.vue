@@ -1,11 +1,3 @@
-<script setup lang="ts">
-/* const { user } = useUserSession()
-const { data: organizationData } = await useFetch(`/api/organization/${user.value?.organizations[0]}`)
-
-const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
-*/
-</script>
-
 <template>
   <div class="relative flex min-h-screen w-screen items-center justify-start overflow-hidden">
     <div class="pointer-events-none fixed inset-0 z-0">

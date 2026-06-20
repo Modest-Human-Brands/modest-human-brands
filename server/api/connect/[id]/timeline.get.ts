@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
       },
     }))
   } catch (error) {
-    console.error(`Timeline Proxy Error for ${clientId}:`, error)
+    console.error(`API connect/[id]/timeline GET`, error)
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch timeline from MConnect',

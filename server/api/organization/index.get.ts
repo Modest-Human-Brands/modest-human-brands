@@ -14,6 +14,7 @@ export default defineEventHandler<Promise<Organization[]>>(async (event) => {
       return {
         id,
         name: notionTextStringify(properties.Name.title),
+        address: notionTextStringify(properties.Address.rich_text),
         website: properties.Website.url,
         branding: JSON.parse(notionTextStringify(properties.Branding.rich_text)) as OrganizationBranding,
         phone: properties.Phone.phone_number,
@@ -35,7 +36,7 @@ export default defineEventHandler<Promise<Organization[]>>(async (event) => {
       throw error
     }
 
-    console.error('API organization GET', error)
+    console.error('API /organization GET', error)
 
     throw createError({
       statusCode: 500,

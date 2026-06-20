@@ -10,6 +10,7 @@ export interface OrganizationBranding {
 export interface Organization {
   id: string
   name: string
+  address: string
   foundedYear: number
   branding: OrganizationBranding
   website?: string
@@ -96,7 +97,7 @@ export interface VideoDetails extends Video {
 }
 
 /* Server Only */
-export const resourceTypes = ['organization', 'user', 'client', 'project', 'document', 'stream', 'media'] as const
+export const resourceTypes = ['organization', 'user', 'contact', 'project', 'document', 'stream', 'media'] as const
 
 export type ResourceType = (typeof resourceTypes)[number]
 
@@ -105,7 +106,7 @@ export type NotionDB = { [K in ResourceType]: string }
 export interface ResourceRecordMap {
   organization: NotionOrganization
   user: NotionUser
-  client: NotionContact
+  contact: NotionContact
   project: NotionProject
   document: NotionDocument
   stream: NotionStream
@@ -150,6 +151,14 @@ export interface NotionOrganization {
       title: { plain_text: string }[]
     }
     Id: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    Address: {
       type: 'rich_text'
       rich_text: {
         text: {

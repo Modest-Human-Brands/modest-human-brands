@@ -31,7 +31,7 @@ export default defineEventHandler<Promise<User[]>>(async (event) => {
       throw error
     }
 
-    console.error('API user GET', error)
+    console.error('API /user GET', error)
 
     throw createError({
       statusCode: 500,

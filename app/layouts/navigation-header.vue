@@ -22,7 +22,7 @@ const activeTab = computed(() => PRIMARY_NAVIGATION_TABS.find(({ id }) => route.
         <div class="flex flex-col gap-2">
           <div class="flex items-center gap-4">
             <NuxtIcon :name="activeTab.icon" class="text-4xl md:text-5xl" />
-            <h1 class="hidden text-3xl font-bold tracking-tight md:inline">
+            <h1 class="font-semibold hidden text-3xl tracking-tight md:inline">
               {{ activeTab.title }}
             </h1>
           </div>

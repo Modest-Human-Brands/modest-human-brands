@@ -8,16 +8,6 @@ export const CONNECT_CHANNELS: { id: ChannelType; name: string; icon: string }[]
   { id: 'phone', name: 'Phone', icon: 'local:phone' },
 ]
 
-export interface CoordinateConversation {
-  id: string
-  type: 'people' | 'projects' | 'topics'
-  name: string
-  snippet: string
-  projectContext: string
-  lastActive: string
-  avatarUrl: string | null
-}
-
 export interface ChatMessage {
   id: string
   content: string
@@ -44,4 +34,5 @@ export interface ChatContact {
   lastMessageSnippet: string
   activeChannel: ChannelType
   availableChannels: ChannelType[]
+  unreadCount: number
 }

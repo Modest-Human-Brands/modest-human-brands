@@ -32,7 +32,7 @@ const actions = {
     viewerState.rotation = (viewerState.rotation + 90) % 360
   },
   setPage: (p: number) => {
-    viewerState.page = p
+    document.getElementById(`pdf-page-${p}`)?.scrollIntoView({ behavior: 'smooth' })
   },
 }
 
@@ -45,13 +45,13 @@ const baseScale = ref(1)
 watch([pdf, containerWidth, containerHeight], async () => {
   if (!pdf.value || !containerHeight.value || !containerWidth.value) return
   const docObj = await pdf.value.promise
-  const page = await docObj.getPage(viewerState.page)
+  const page = await docObj.getPage(1)
   const viewport = page.getViewport({ scale: 1 })
 
   const scaleHeight = (containerHeight.value - 64) / viewport.height
   const scaleWidth = (containerWidth.value - 32) / viewport.width
 
-  baseScale.value = Math.min(scaleHeight, scaleWidth)
+  baseScale.value = Math.min(scaleWidth, scaleHeight)
 })
 
 const computedScale = computed(() => baseScale.value * viewerState.scale)
@@ -62,6 +62,19 @@ const isRightOpen = ref(false)
 function resetClick() {
   isLeftOpen.value = false
   isRightOpen.value = false
+}
+
+function onScroll(e: Event) {
+  const target = e.target as HTMLElement
+  if (!pages.value || pages.value <= 1) {
+    viewerState.page = 1
+    return
+  }
+  const maxScroll = target.scrollHeight - target.clientHeight
+  if (maxScroll <= 0) return
+  const scrollProgress = target.scrollTop / maxScroll
+  const calculatedPage = Math.round(scrollProgress * (pages.value - 1)) + 1
+  viewerState.page = Math.min(Math.max(1, calculatedPage), pages.value)
 }
 </script>
 
@@ -88,30 +101,30 @@ function resetClick() {
     </aside>
 
     <section class="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-dark-400">
-      <button class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg bg-black/80 text-white shadow-lg lg:hidden" @click="isLeftOpen = true">
+      <button class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg bg-black/80 text-white lg:hidden" @click="isLeftOpen = true">
         <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
       </button>
-      <button class="absolute right-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-l-lg bg-black/80 text-white shadow-lg lg:hidden" @click="isRightOpen = true">
+      <button class="absolute right-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-l-lg bg-black/80 text-white lg:hidden" @click="isRightOpen = true">
         <NuxtIcon name="local:chevron-bold" class="text-xs" />
       </button>
 
-      <div ref="viewerContainer" class="flex size-full overflow-auto p-4 md:p-8">
-        <div class="m-auto flex items-center justify-center">
-          <ClientOnly>
-            <VuePDF class="shadow-2xl" :pdf="pdf" :page="viewerState.page" :scale="computedScale" :rotation="viewerState.rotation" />
-          </ClientOnly>
-        </div>
+      <div ref="viewerContainer" class="scrollbar-hidden flex size-full flex-col items-center gap-8 overflow-y-auto p-4 pb-32 md:p-8" @scroll="onScroll">
+        <ClientOnly>
+          <div v-for="p in pages" :id="`pdf-page-${p}`" :key="p" class="relative flex flex-col items-center shadow-xl transition-transform">
+            <VuePDF :pdf="pdf" :page="p" :scale="computedScale" :rotation="viewerState.rotation" />
+          </div>
+        </ClientOnly>
       </div>
 
       <div class="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center">
-        <div class="flex items-center gap-4 rounded-xl bg-dark-500 px-4 py-3 text-white shadow-2xl ring-1 ring-white/10 md:gap-6 md:px-6">
+        <div class="flex items-center gap-4 rounded-full bg-dark-500 px-4 py-3 text-white ring-1 ring-white/10 md:gap-6 md:px-6">
           <button class="shrink-0 transition-colors hover:text-primary-500" @click="actions.setPage(Math.max(1, viewerState.page - 1))">
             <NuxtIcon name="local:chevron-bold" class="text-lg" />
           </button>
-          <span class="shrink-0 whitespace-nowrap text-sm font-bold"
+          <span class="font-semibold shrink-0 whitespace-nowrap text-sm"
             >{{ viewerState.page }} <span class="text-white/40">/ {{ pages }}</span></span
           >
-          <button class="shrink-0 transition-colors hover:text-primary-500" @click="actions.setPage(Math.min(pages, viewerState.page + 1))">
+          <button class="shrink-0 transition-colors hover:text-primary-500" @click="actions.setPage(Math.min(pages || 1, viewerState.page + 1))">
             <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-lg" />
           </button>
 
@@ -126,7 +139,7 @@ function resetClick() {
 
           <div class="h-5 w-px shrink-0 bg-white/20" />
 
-          <button class="shrink-0 transition-colors hover:text-primary-500">
+          <button class="shrink-0 transition-colors hover:text-primary-500" @click="actions.rotate">
             <NuxtIcon name="local:print" class="text-xl" />
           </button>
           <a :href="`${config.public.docUrl}${doc.previewUrl}?download=true`" target="_blank" class="shrink-0 transition-colors hover:text-primary-500">
@@ -166,11 +179,11 @@ function resetClick() {
           </div>
 
           <div class="flex items-start gap-3 text-sm text-white">
-            <div class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black">
+            <div class="font-semibold mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white text-[10px] text-black">
               {{ item.userInitials }}
             </div>
             <p class="leading-tight">
-              <span class="font-bold">{{ item.userName }}</span> {{ item.action }}
+              <span class="font-semibold">{{ item.userName }}</span> {{ item.action }}
             </p>
           </div>
         </div>

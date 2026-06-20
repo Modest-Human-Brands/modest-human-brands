@@ -24,7 +24,7 @@ const capabilities = [
           <div>
             <div class="mb-6 inline-block rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semi-bold text-white backdrop-blur-sm">CORE PLATFORM</div>
 
-            <h2 class="mb-6 text-3xl font-bold leading-tight md:text-5xl">
+            <h2 class="font-semibold mb-6 text-3xl leading-tight md:text-5xl">
               Everything you need to
               <span class="bg-gradient-to-r from-white via-white/80 to-white/60 bg-clip-text text-transparent"> run your creative business </span>
             </h2>
