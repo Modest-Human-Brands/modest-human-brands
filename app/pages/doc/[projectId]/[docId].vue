@@ -169,8 +169,10 @@ async function copyLink() {
         <button
           class="font-semibold flex shrink-0 items-center gap-1.5 rounded-full bg-primary-500 px-4 py-1.5 text-xs text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
           @click="
-            rightPanelView = 'sign'
-            isRightDrawerOpen = true
+            () => {
+              rightPanelView = 'sign'
+              isRightDrawerOpen = true
+            }
           ">
           <NuxtIcon name="local:pen" class="text-sm" /> Sign
         </button>
