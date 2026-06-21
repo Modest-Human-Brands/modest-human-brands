@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.5.5
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.4...v0.5.5)
+
+### 🚀 Enhancements
+
+- Add document template creation and preview functionality ([9026d64](https://github.com/Modest-Human-Brands/modest-human-brands/commit/9026d64))
+- Document signing flow added ([0e27deb](https://github.com/Modest-Human-Brands/modest-human-brands/commit/0e27deb))
+
+### 🩹 Fixes
+
+- Javascript expression in [docId].vue ([4b1d2a6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4b1d2a6))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.4
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.3...v0.5.4)
