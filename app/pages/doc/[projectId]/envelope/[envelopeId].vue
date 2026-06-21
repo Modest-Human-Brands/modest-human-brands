@@ -1,0 +1,227 @@
+<script setup lang="ts">
+import { VuePDF } from '@tato30/vue-pdf'
+
+definePageMeta({ layout: false, auth: false })
+
+interface MDocDocument {
+  id: string
+  templateId: string
+  name: string
+  mimeType: string
+  sizeBytes: number
+  status: string
+  projectId: string | null
+  project: {
+    id: string
+    name: string
+    contact: {
+      id: string
+      name: string
+      email: string
+    }
+  } | null
+  organizationId: string | null
+  categories: string[]
+  previewUrl: string
+  createdAt: string
+  updatedAt: string
+  routingType?: string
+  nextSigner?: string
+  routingQueue?: {
+    order: number
+    name: string
+    email: string
+    role: string
+    status: string
+  }[]
+  extension?: string
+  formattedSize?: string
+  timeline?: {
+    id: string
+    date: string
+    time: string
+    userInitials: string
+    userName: string
+    action: string
+  }[]
+}
+
+const route = useRoute()
+const router = useRouter()
+const config = useRuntimeConfig()
+
+const projectId = route.params.projectId as string
+const envelopeId = route.params.envelopeId as string
+const token = route.query.token as string
+
+const viewerRef = ref()
+const isLeftOpen = ref(false)
+const isSignDrawerOpen = ref(false)
+const isSubmitting = ref(false)
+const isSuccess = ref(false)
+
+const { data: doc } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${envelopeId}`)
+const pdfUrl = computed(() => (doc.value?.previewUrl ? `${config.public.docUrl}${doc.value.previewUrl}` : ''))
+
+const { data: template } = await useFetch(`/api/doc/template/${doc.value?.templateId}`)
+
+// TODO: NEXT
+const originalSignerFields = computed(() => {
+  if (!template.value) return []
+  const schema = Array.isArray(template.value) ? template.value[0] : template.value
+  return schema?.signerFields || []
+})
+
+const currentSignerFields = computed(() => originalSignerFields.value.filter((f) => f.signerOrder === 1))
+const textFields = computed(() => currentSignerFields.value.filter((f) => f.type !== 'SIGNATURE'))
+const signatureFields = computed(() => currentSignerFields.value.filter((f) => f.type === 'SIGNATURE'))
+
+const formData = ref<Record<string, string>>({})
+const masterSignature = ref<string | null>(null)
+
+function getFieldsForPage(pageIndex: number, totalPages: number) {
+  return originalSignerFields.value.filter((f) => {
+    if (f.pageIndex === -1 && pageIndex === totalPages) return true
+    if (f.pageIndex === 'all-except-last' && pageIndex < totalPages) return true
+    if (f.pageIndex === pageIndex) return true
+    return false
+  })
+}
+
+async function submitSignature() {
+  isSubmitting.value = true
+  const finalFields: Record<string, string> = { ...formData.value }
+  signatureFields.value.forEach((f) => {
+    if (masterSignature.value) finalFields[f.id] = masterSignature.value
+  })
+
+  try {
+    await $fetch(`/api/document/${envelopeId}/sign`, {
+      method: 'POST',
+      body: { sessionToken: token, fields: finalFields, telemetry: { userAgent: navigator.userAgent } },
+    })
+    isSuccess.value = true
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isSubmitting.value = false
+  }
+}
+</script>
+
+<template>
+  <main class="relative flex size-full h-dvh flex-col overflow-hidden bg-dark-500 md:flex-row">
+    <div v-if="isLeftOpen" class="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden" @click="isLeftOpen = false" />
+    <aside
+      :class="[
+        isLeftOpen ? 'translate-x-0' : '-translate-x-full',
+        'scrollbar-hidden absolute inset-y-0 left-0 z-40 flex w-36 shrink-0 flex-col overflow-y-auto border-r border-white/5 bg-dark-400 p-4 transition-transform duration-300 lg:relative lg:translate-x-0',
+      ]">
+      <ClientOnly>
+        <div v-for="p in viewerRef?.pages" :key="p" class="mb-6 flex flex-col items-center">
+          <div
+            :class="viewerRef?.viewerState.page === p ? 'border-primary-500' : 'border-transparent'"
+            class="aspect-[3/4] w-full shrink-0 cursor-pointer border-2 bg-white transition-all hover:border-primary-500/50"
+            @click="viewerRef?.setPage(p)">
+            <VuePDF :pdf="viewerRef?.pdf" :page="p" fit-parent />
+          </div>
+          <span class="font-semibold mt-2 shrink-0 text-xs text-light-500">{{ p }}</span>
+        </div>
+      </ClientOnly>
+    </aside>
+
+    <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }">
+      <template #page-overlay="{ page, scale, viewportHeight, totalPages }">
+        <div
+          v-for="f in getFieldsForPage(page, totalPages)"
+          :key="f.id"
+          class="absolute z-10 flex items-center justify-center overflow-hidden border border-primary-500/50 bg-primary-500/10 text-black transition-colors"
+          :style="{ top: `${(viewportHeight - f.y - f.height) * scale}px`, left: `${f.x * scale}px`, width: `${f.width * scale}px`, height: `${f.height * scale}px` }">
+          <img v-if="f.type === 'SIGNATURE' && masterSignature" :src="masterSignature" class="size-full object-contain p-1" />
+          <span v-else-if="f.type !== 'SIGNATURE' && formData[f.id]" :style="{ fontSize: `${(f.fontSize || 12) * scale}px` }" class="font-semibold px-2 text-center tracking-wide">
+            {{ formData[f.id] }}
+          </span>
+          <span v-else class="text-[8px] font-bold uppercase tracking-widest opacity-60 md:text-[10px]">
+            {{ f.type }}
+          </span>
+        </div>
+      </template>
+
+      <template #floating-actions>
+        <button class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg bg-black/80 text-white lg:hidden" @click="isLeftOpen = true">
+          <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
+        </button>
+
+        <div v-if="!isSignDrawerOpen && !isSuccess" class="absolute bottom-[88px] left-1/2 z-30 flex -translate-x-1/2 items-center md:hidden">
+          <button class="flex items-center gap-2 rounded-full bg-primary-500 px-6 py-3 text-sm font-bold text-white shadow-xl transition-transform hover:scale-105" @click="isSignDrawerOpen = true">
+            <NuxtIcon name="local:pen" class="text-[18px]" /> Adopt & Sign
+          </button>
+        </div>
+      </template>
+    </PdfDocumentViewer>
+
+    <BaseDrawerSidebar v-model="isSignDrawerOpen">
+      <template #header>
+        <h2 class="text-xl font-bold tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
+      </template>
+      <template #actions>
+        <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isSignDrawerOpen = false">
+          <NuxtIcon name="local:cross" class="hidden text-sm md:block" />
+          <NuxtIcon name="local:chevron-bold" class="rotate-90 text-sm md:hidden" />
+        </button>
+      </template>
+
+      <div v-if="isSuccess" class="animate-fade-in flex h-full flex-col justify-center gap-6 pb-20 text-center">
+        <div class="mx-auto flex size-24 items-center justify-center rounded-full bg-success-500/20 text-success-500">
+          <NuxtIcon name="local:check-circle" class="text-6xl" />
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-white">Document Signed!</h2>
+          <p class="mt-2 px-4 text-sm leading-relaxed text-light-400">Your signature has been securely applied and the document has been sealed. A final copy will be emailed to you shortly.</p>
+        </div>
+        <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-[200px] rounded-full bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors" @click="router.push('/')">
+          Close Window
+        </button>
+      </div>
+
+      <div v-else class="animate-fade-in flex flex-col gap-6">
+        <div class="flex flex-col gap-6">
+          <FormField v-for="field in textFields" :key="field.id" v-model="formData[field.id]" :label="formatKeyToLabel(field.id)" :schema-type="field.type" />
+
+          <div v-if="signatureFields.length" class="flex flex-col gap-1">
+            <FormField v-model="masterSignature" label="Your Signature" schema-type="SIGNATURE" />
+            <p class="mt-1 text-center text-[10px] text-light-500">Signature will be legally bound to {{ signatureFields.length }} fields.</p>
+          </div>
+        </div>
+
+        <div class="mt-4 border-t border-dark-500/50 pt-6">
+          <button
+            :disabled="isSubmitting || (!masterSignature && signatureFields.length > 0)"
+            class="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-base font-bold text-dark-500 shadow-sm transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-50"
+            @click="submitSignature">
+            <NuxtIcon v-if="isSubmitting" name="local:loader" class="animate-spin text-lg" />
+            {{ isSubmitting ? 'Sealing Document...' : 'I Agree & Sign' }}
+          </button>
+        </div>
+      </div>
+    </BaseDrawerSidebar>
+  </main>
+</template>
+
+<style scoped>
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+</style>

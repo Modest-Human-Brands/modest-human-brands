@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useWindowSize } from '@vueuse/core'
-
 const props = withDefaults(
   defineProps<{
     modelValue?: boolean
@@ -53,7 +50,7 @@ const backdropOpacity = computed(() => {
     @click="isOpen = false"></div>
 
   <div
-    class="absolute inset-x-0 bottom-0 z-50 flex h-[85dvh] w-full flex-col rounded-t-3xl border-t border-dark-500 bg-dark-400 transition-transform duration-300 ease-in-out md:relative md:h-full md:max-w-[512px] md:translate-y-0 md:rounded-none md:border-l md:border-t-0"
+    class="absolute inset-x-0 bottom-0 z-50 flex max-h-[85dvh] w-full max-w-[400px] flex-col rounded-t-3xl border-t border-dark-500 bg-dark-400 transition-transform duration-300 ease-in-out md:relative md:max-h-full md:translate-y-0 md:rounded-none md:border-l md:border-t-0"
     :class="desktopWidthClass"
     :style="drawerStyle">
     <header class="flex shrink-0 items-start justify-between border-b border-dark-500 p-4 pt-6 md:p-6" :class="{ 'cursor-pointer md:cursor-auto': !isOpen }" @click="!isOpen && (isOpen = true)">

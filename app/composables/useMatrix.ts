@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import * as sdk from 'matrix-js-sdk'
 import { ClientEvent } from 'matrix-js-sdk'
 import { decodeRecoveryKey } from 'matrix-js-sdk/lib/crypto-api'

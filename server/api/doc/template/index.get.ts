@@ -1,3 +1,5 @@
+import { cleanTemplateVariables } from './[id].get'
+
 export default defineEventHandler(async () => {
   try {
     const config = useRuntimeConfig()
@@ -11,12 +13,7 @@ export default defineEventHandler(async () => {
       baseURL: config.public.docUrl,
     })
 
-    const cleanedTemplates = response.map((template) => {
-      if (template.variables?.organization) {
-        delete template.variables.organization
-      }
-      return template
-    })
+    const cleanedTemplates = response.map(cleanTemplateVariables)
 
     return cleanedTemplates
   } catch (error: unknown) {

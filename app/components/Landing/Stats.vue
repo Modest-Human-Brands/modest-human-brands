@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
 const stats = [
   { label: 'Projects Delivered', value: 70, suffix: '+', icon: 'local:target-fill' },
   { label: 'Active Teams', value: 2, suffix: '+', icon: 'local:person' },

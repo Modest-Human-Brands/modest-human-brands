@@ -11,6 +11,8 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.docUrl,
     })
 
+    console.log({ response })
+
     const projectFolders = new Map<
       string,
       {
@@ -43,10 +45,15 @@ export default defineEventHandler(async (event) => {
 
     return Array.from(projectFolders.values())
   } catch (error) {
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
     console.error('API /doc GET', error)
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch document metadata',
+      statusMessage: 'Some Unknown Error Found',
     })
   }
 })

@@ -135,7 +135,7 @@ defineExpose({
         </div>
 
         <template v-for="(type, key) in selectedTemplate.variables" :key="key">
-          <ConnectFormField v-if="key !== 'organization'" v-model="templateForm[String(key)]" :label="String(key)" :schema-type="String(type)" :error-message="getFieldError(String(key))" />
+          <FormField v-if="key !== 'organization'" v-model="templateForm[String(key)]" :label="String(key)" :schema-type="String(type)" :error-message="getFieldError(String(key))" />
         </template>
       </div>
     </div>

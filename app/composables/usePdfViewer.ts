@@ -1,11 +1,16 @@
-export async function usePdfViewer(pdfUrl: MaybeRef<string>) {
-  const pdf = shallowRef<PDFDocumentLoadingTask | undefined>(undefined)
+import type { MaybeRefOrGetter } from 'vue'
+
+export function usePdfViewer(pdfUrl: MaybeRefOrGetter<string>) {
+  const pdf = shallowRef(undefined)
   const pages = ref(0)
-  // const { VuePDF } = import.meta.client ? await import('@tato30/vue-pdf') : { VuePDF: undefined }
 
   onMounted(async () => {
     const { usePDF } = await import('@tato30/vue-pdf')
-    const { pdf: _pdf, pages: _pages } = usePDF(pdfUrl)
+
+    const urlRef = toRef(pdfUrl)
+
+    const { pdf: _pdf, pages: _pages } = usePDF(urlRef)
+
     watchEffect(() => {
       pdf.value = _pdf.value
       pages.value = _pages.value

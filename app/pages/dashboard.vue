@@ -47,13 +47,11 @@ const activeRooms = [
 <template>
   <main class="flex size-full flex-col overflow-y-auto bg-dark-400 p-6 md:p-10">
     <div class="mx-auto flex w-full max-w-7xl flex-col gap-8">
-      <!-- Dynamic Header -->
-      <header class="flex flex-col gap-1">
+      <header class="flex flex-col justify-center gap-1 text-center">
         <h1 class="font-semibold text-2xl text-white md:text-3xl">{{ greeting }}, {{ user?.name.split(' ')[0] || 'there' }}</h1>
         <p class="font-medium text-sm text-light-500 md:text-base">{{ currentDate }}</p>
       </header>
 
-      <!-- Pulse Metrics -->
       <section class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div v-for="metric in metrics" :key="metric.label" class="flex items-center gap-4 rounded-2xl border border-dark-500 bg-dark-500/50 p-6 transition-all hover:bg-dark-500">
           <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-dark-600">

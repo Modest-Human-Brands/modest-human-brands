@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { VuePDF } from '@tato30/vue-pdf'
 
@@ -16,134 +17,81 @@ const uiStyles = {
     'flex w-full items-center justify-center gap-2 rounded-full border border-dark-400 bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-dark-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
 }
 
-interface DocumentMeta {
-  id: string
-  name: string
-  fileName: string
-  extension: string
-  sizeBytes: number
-  templateId: string
-  previewUrl: string
-  createdAt: string
-  updatedAt: string
-}
+const { data: template } = await useFetch(`/api/doc/template/${templateId}`)
 
-interface TemplateSchema {
-  id: string
-  variables: Record<string, unknown>
-}
-
-interface FormField {
-  path: string
-  label: string
-  type: string
-  groupName: string
-}
-
-const { data: templates } = await useFetch('/api/doc/template')
-
-const selectedTemplate = computed(() => templates.value?.find((t: TemplateSchema) => t.id === templateId) || null)
 const formData = ref<Record<string, unknown>>({})
 const pdfPreviewBase64 = ref<string | null>(null)
 const isPreviewLoading = ref(false)
 const isGenerating = ref(false)
 
 const isMobileDrawerOpen = ref(false)
+const isLeftOpen = ref(false)
+const viewerRef = ref()
 
 const pdfDataUri = computed(() => (pdfPreviewBase64.value ? `data:application/pdf;base64,${pdfPreviewBase64.value}` : ''))
 
-const { pdf, pages } = await usePdfViewer(pdfDataUri)
-const viewerContainer = ref<HTMLElement>()
-const { width: containerWidth, height: containerHeight } = useElementSize(viewerContainer)
-const baseScale = ref(1)
-
-const viewerState = reactive({
-  page: 1,
-  scale: 1,
-})
-
-watch([pdf, containerWidth, containerHeight], async () => {
-  if (!pdf.value || !containerHeight.value || !containerWidth.value) return
-  try {
-    const docObj = await pdf.value.promise
-    const pageObj = await docObj.getPage(1)
-    const viewport = pageObj.getViewport({ scale: 1 })
-
-    const scaleHeight = (containerHeight.value - 64) / viewport.height
-    const scaleWidth = (containerWidth.value - 64) / viewport.width
-    baseScale.value = Math.min(scaleWidth, scaleHeight)
-  } catch {
-    /* silent catch for rapid typing interruptions */
-  }
-})
-
-const computedScale = computed(() => baseScale.value * viewerState.scale)
-
-function setPage(p: number) {
-  document.getElementById(`pdf-page-${p}`)?.scrollIntoView({ behavior: 'smooth' })
-}
-
-function onScroll(e: Event) {
-  const target = e.target as HTMLElement
-  if (!pages.value || pages.value <= 1) {
-    viewerState.page = 1
-    return
-  }
-  const maxScroll = target.scrollHeight - target.clientHeight
-  if (maxScroll <= 0) return
-  const scrollProgress = target.scrollTop / maxScroll
-  const calculatedPage = Math.round(scrollProgress * (pages.value - 1)) + 1
-  viewerState.page = Math.min(Math.max(1, calculatedPage), pages.value)
-}
-
-function zoomIn() {
-  viewerState.scale += 0.05
-}
-
-function zoomOut() {
-  if (viewerState.scale > 0.3) {
-    viewerState.scale -= 0.05
-  }
-}
-
-function resetZoom() {
-  viewerState.scale = 1
-}
-
-function formatKeyToLabel(key: string): string {
-  const spaced = key.replace(/([A-Z])/g, ' $1').trim()
-  return spaced.charAt(0).toUpperCase() + spaced.slice(1)
-}
-
 const currentSchema = computed(() => {
-  if (!selectedTemplate.value) return []
-  const fields: FormField[] = []
+  if (!template.value) return []
+  const fields: any[] = []
 
-  function traverse(obj: Record<string, unknown>, currentPath = '', parentName = 'General Details') {
+  function traverse(obj: Record<string, unknown>, currentPath = '', parentGroupName = 'General Details', labelPrefix = '') {
     for (const [key, type] of Object.entries(obj)) {
       const path = currentPath ? `${currentPath}.${key}` : key
+      const formattedKey = formatKeyToLabel(key)
+      const fullLabel = labelPrefix ? `${labelPrefix} ${formattedKey}` : formattedKey
 
-      if (typeof type === 'object' && type !== null) {
-        traverse(type as Record<string, unknown>, path, formatKeyToLabel(key))
-      } else {
+      // 1. Intercept Arrays of Objects
+      if (Array.isArray(type)) {
+        if (typeof type[0] === 'object' && type[0] !== null) {
+          fields.push({
+            path,
+            label: fullLabel,
+            type: 'array<object>',
+            groupName: parentGroupName,
+            schemaBlueprint: type[0], // Save the inner object schema for the UI
+          })
+        } else {
+          // Standard primitive arrays (e.g. ['string'])
+          fields.push({
+            path,
+            label: fullLabel,
+            type: `array<${typeof type[0]}>`,
+            groupName: parentGroupName,
+          })
+        }
+      }
+      // 2. Standard Nested Objects
+      else if (typeof type === 'object' && type !== null) {
+        traverse(type as Record<string, unknown>, path, formattedKey, fullLabel)
+      }
+      // 3. Primitives
+      else {
         fields.push({
           path,
-          label: formatKeyToLabel(key),
+          label: fullLabel,
           type: String(type),
-          groupName: parentName,
+          groupName: parentGroupName,
         })
       }
     }
   }
 
-  traverse(selectedTemplate.value.variables)
+  traverse(template.value.variables)
   return fields
 })
 
 onMounted(() => {
   if (currentSchema.value.length) {
     currentSchema.value.forEach((field) => {
-      if (field.type === 'array<string>') formData.value[field.path] = ['']
+      if (field.type === 'array<object>') {
+        const initialItem: Record<string, any> = {}
+        if (field.schemaBlueprint) {
+          for (const [subKey, subType] of Object.entries(field.schemaBlueprint)) {
+            initialItem[subKey] = subType === 'number' ? null : subType === 'array<string>' ? [''] : ''
+          }
+        }
+        formData.value[field.path] = [initialItem]
+      } else if (field.type === 'array<string>') formData.value[field.path] = ['']
       else if (field.type === 'boolean') formData.value[field.path] = false
       else if (field.type === 'number') formData.value[field.path] = null
       else formData.value[field.path] = ''
@@ -151,23 +99,6 @@ onMounted(() => {
     triggerPreview()
   }
 })
-
-function unflattenPayload(flatData: Record<string, unknown>) {
-  const result: Record<string, unknown> = {}
-  for (const [path, value] of Object.entries(flatData)) {
-    const keys = path.split('.')
-    let current = result
-    keys.forEach((key, index) => {
-      if (index === keys.length - 1) {
-        current[key] = Array.isArray(value) ? value.filter((v: unknown) => String(v).trim() !== '') : value
-      } else {
-        current[key] = (current[key] || {}) as Record<string, unknown>
-        current = current[key] as Record<string, unknown>
-      }
-    })
-  }
-  return result
-}
 
 const triggerPreview = useDebounceFn(async () => {
   isPreviewLoading.value = true
@@ -203,7 +134,7 @@ async function onGenerate() {
   const nestedPayload = unflattenPayload(formData.value)
 
   try {
-    const response = await $fetch<DocumentMeta>('/api/doc/template', {
+    const response = await $fetch('/api/doc/template', {
       method: 'POST',
       body: {
         template: templateId,
@@ -221,63 +152,49 @@ async function onGenerate() {
   }
 }
 
-// --- Wizard State ---
 const wizardStep = ref(0)
-const totalSteps = 3 // 0: Select, 1: Fill Form, 2: Review
+const totalSteps = 3
 
 function nextStep() {
   if (wizardStep.value < totalSteps - 1) wizardStep.value++
 }
-
 function prevStep() {
   if (wizardStep.value > 0) {
-    if (wizardStep.value === 1) {
-      navigateTo('/doc')
-    }
+    if (wizardStep.value === 1) navigateTo('/doc')
     wizardStep.value--
   }
 }
 </script>
 
 <template>
-  <main class="relative flex size-full flex-col overflow-hidden md:flex-row">
-    <div class="relative flex h-full w-full flex-1 overflow-hidden">
-      <div ref="viewerContainer" class="scrollbar-hidden relative flex h-full w-full flex-col items-center overflow-y-auto p-4 pb-32 md:p-6" @scroll="onScroll">
-        <div v-if="!pdfPreviewBase64 && isPreviewLoading" class="m-auto flex flex-col items-center gap-4 text-light-500">
-          <NuxtIcon name="local:loader" class="animate-spin text-4xl" />
-          <span class="text-sm font-bold uppercase tracking-widest">Rendering initial preview...</span>
+  <main class="relative flex size-full h-full flex-col overflow-hidden bg-dark-500 md:flex-row">
+    <div v-if="isLeftOpen" class="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden" @click="isLeftOpen = false" />
+
+    <aside
+      :class="[
+        isLeftOpen ? 'translate-x-0' : '-translate-x-full',
+        'scrollbar-hidden absolute inset-y-0 left-0 z-40 flex w-36 shrink-0 flex-col overflow-y-auto border-r border-white/5 bg-dark-400 p-4 transition-transform duration-300 lg:relative lg:translate-x-0',
+      ]">
+      <ClientOnly>
+        <div v-for="p in viewerRef?.pages" :key="p" class="mb-6 flex flex-col items-center">
+          <div
+            :class="viewerRef?.viewerState.page === p ? 'border-primary-500' : 'border-transparent'"
+            class="aspect-[3/4] w-full shrink-0 cursor-pointer border-2 bg-white transition-all hover:border-primary-500/50"
+            @click="viewerRef?.setPage(p)">
+            <VuePDF :pdf="viewerRef?.pdf" :page="p" fit-parent />
+          </div>
+          <span class="font-semibold mt-2 shrink-0 text-xs text-light-500">{{ p }}</span>
         </div>
+      </ClientOnly>
+    </aside>
 
-        <div v-else-if="pdf && pages" class="flex w-full flex-col items-center gap-8 pb-28 transition-all duration-300" :class="{ 'opacity-40 blur-[1px]': isPreviewLoading }">
-          <ClientOnly>
-            <div v-for="p in pages" :id="`pdf-page-${p}`" :key="p" class="relative flex flex-col items-center shadow-2xl">
-              <VuePDF :pdf="pdf" :page="p" :scale="computedScale" />
-            </div>
-          </ClientOnly>
-        </div>
-      </div>
-
-      <div
-        v-if="pdf && pages"
-        class="absolute bottom-[15%] left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-full border border-white/10 bg-dark-500/90 px-6 py-3 text-white shadow-2xl backdrop-blur-md md:bottom-6">
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.max(1, viewerState.page - 1))">
-          <NuxtIcon name="local:chevron-bold" class="text-lg" />
+    <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1">
+      <template #floating-actions>
+        <button class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg bg-black/80 text-white lg:hidden" @click="isLeftOpen = true">
+          <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
         </button>
-        <span class="w-16 text-center text-xs font-bold text-light-400">{{ viewerState.page }} / {{ pages }}</span>
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.min(pages || 1, viewerState.page + 1))">
-          <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-lg" />
-        </button>
-
-        <div class="h-4 w-px bg-white/20" />
-        <button type="button" class="transition-colors hover:text-primary-500" @click="zoomIn">
-          <NuxtIcon name="local:plus" class="text-lg" />
-        </button>
-        <button type="button" class="transition-colors hover:text-primary-500" @click="zoomOut">
-          <NuxtIcon name="local:minus" class="text-lg" />
-        </button>
-        <button v-if="viewerState.scale !== 1" type="button" class="text-xs font-bold text-light-500 transition-colors hover:text-white" @click="resetZoom">Reset</button>
-      </div>
-    </div>
+      </template>
+    </PdfDocumentViewer>
 
     <BaseDrawerSidebar v-model="isMobileDrawerOpen">
       <template #header>
@@ -289,7 +206,7 @@ function prevStep() {
 
       <template #actions>
         <NuxtLink to="/doc/new" class="hidden size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white md:flex">
-          <NuxtIcon name="local:chevron-bold" class="text-sm" />
+          <NuxtIcon name="local:cross" class="text-sm" />
         </NuxtLink>
         <button
           class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white md:hidden"
@@ -299,7 +216,7 @@ function prevStep() {
       </template>
 
       <div v-if="wizardStep === 0 || wizardStep === 1" class="flex flex-col gap-6">
-        <ConnectFormField v-for="field in currentSchema" :key="field.path" v-model="formData[field.path]" :label="field.label" :schema-type="field.type" />
+        <FormField v-for="field in currentSchema" :key="field.path" v-model="formData[field.path]" :label="field.label" :schema-type="field.type" :schema-blueprint="field.schemaBlueprint" />
       </div>
 
       <div v-else-if="wizardStep === 2" class="flex flex-col gap-6">
@@ -308,7 +225,7 @@ function prevStep() {
           <p class="text-sm text-light-500">Please review the captured information before finalizing the document.</p>
         </div>
 
-        <div class="flex flex-col gap-0 overflow-hidden border border-dark-400 bg-dark-500/50">
+        <div class="flex flex-col gap-0 overflow-hidden rounded-2xl border border-dark-400 bg-dark-500/50">
           <div v-for="field in currentSchema" :key="field.path" class="flex flex-col gap-1 border-b border-dark-400 p-4 last:border-0 md:flex-row md:items-start md:justify-between">
             <span class="pt-1 text-xs font-bold uppercase tracking-wider text-light-500 md:w-1/3">
               {{ field.groupName === 'General Details' ? field.label : `${field.groupName} → ${field.label}` }}
@@ -322,6 +239,23 @@ function prevStep() {
               <span v-for="(item, i) in formData[field.path] as string[]" :key="i" class="font-semibold text-sm text-white">{{ item || '—' }}</span>
             </div>
 
+            <div v-else-if="field.type === 'array<object>'" class="mt-2 flex w-full flex-col gap-3 md:mt-0 md:w-2/3 md:items-end">
+              <div v-for="(item, i) in formData[field.path] as any[]" :key="i" class="flex w-full flex-col gap-2 rounded border border-dark-400 bg-dark-500/80 p-3 text-left">
+                <span class="border-b border-dark-400 pb-1 text-xs font-bold uppercase tracking-wider text-light-500">Item {{ i + 1 }}</span>
+                <div v-for="(val, k) in item" :key="k" class="flex items-start justify-between gap-4">
+                  <span class="text-xs capitalize text-light-400">{{
+                    String(k)
+                      .replace(/([A-Z])/g, ' $1')
+                      .trim()
+                  }}</span>
+                  <div v-if="Array.isArray(val)" class="flex flex-col items-end">
+                    <span v-for="(v, vi) in val" :key="vi" class="font-semibold break-words text-right text-xs text-white">{{ v || '—' }}</span>
+                  </div>
+                  <span v-else class="font-semibold break-words text-right text-xs text-white">{{ String(val || '—') }}</span>
+                </div>
+              </div>
+            </div>
+
             <span v-else class="font-semibold whitespace-pre-wrap break-words text-sm text-white md:w-2/3 md:text-right">
               {{ String(formData[field.path] || 'Not provided') }}
             </span>
@@ -329,7 +263,7 @@ function prevStep() {
         </div>
       </div>
 
-      <div class="mt-8 flex flex-col items-center justify-end gap-6 border-t border-dark-500/50 pt-6 md:flex-row">
+      <div class="flex flex-col items-center justify-end gap-6 border-t border-dark-500/50 py-6 md:flex-row">
         <div class="flex w-full flex-col-reverse gap-3 md:w-auto md:flex-row md:items-center">
           <button v-if="wizardStep === 2" type="button" :disabled="isGenerating" :class="uiStyles.btnSecondary" @click="prevStep">Back</button>
 
@@ -349,7 +283,6 @@ function prevStep() {
 </template>
 
 <style scoped>
-/* Required to ensure transparent PDF canvas backgrounds render purely white */
 :deep(.vp-container) {
   background: transparent !important;
 }

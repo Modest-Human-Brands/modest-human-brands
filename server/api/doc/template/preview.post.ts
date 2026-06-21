@@ -10,6 +10,12 @@ export default defineEventHandler(async (event) => {
 
     if (!body.data) body.data = {}
     body.data.organization = organization
+    body.data.accountDetails = {
+      accountName: 'RED CAT PICTURES',
+      accountNumber: 1234567890,
+      bankName: 'AXIS Bank',
+      ifscCode: 'AXS00001234',
+    }
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,
@@ -26,11 +32,15 @@ export default defineEventHandler(async (event) => {
 
     return { pdfBase64: response.pdfBase64 }
   } catch (error) {
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
     console.error('API /doc/template/preview POST', error)
 
     throw createError({
-      statusCode: error?.statusCode || 500,
-      statusMessage: error?.statusMessage || 'Unknown error occurred generating preview',
+      statusCode: 500,
+      statusMessage: 'Some Unknown Error Found',
     })
   }
 })

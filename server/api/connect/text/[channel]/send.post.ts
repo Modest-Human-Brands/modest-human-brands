@@ -28,10 +28,15 @@ export default defineEventHandler(async (event) => {
 
     return response
   } catch (error) {
-    console.error(`API connect/text/[channel]/send POST`, error)
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
+    console.error('API connect/text/[channel]/send POST', error)
+
     throw createError({
       statusCode: 500,
-      statusMessage: `Failed to dispatch ${channel} payload to MConnect`,
+      statusMessage: 'Some Unknown Error Found',
     })
   }
 })

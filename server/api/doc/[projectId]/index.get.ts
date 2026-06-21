@@ -50,11 +50,7 @@ export default defineEventHandler(async (event) => {
 
       const ext = mimeToExt[doc.mimeType] || doc.mimeType.split('/').pop()?.toUpperCase() || 'FILE'
 
-      const formattedDate = new Date(doc.createdAt).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      const formattedDate = new Date(doc.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })
 
       const friendlyName = doc.name !== 'Empty' && doc.name ? doc.name : doc.templateId.split('-').join(' ')
 
@@ -74,10 +70,15 @@ export default defineEventHandler(async (event) => {
       }
     })
   } catch (error) {
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
     console.error('API doc/[projectId] GET', error)
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch project documents from MDoc',
+      statusMessage: 'Some Unknown Error Found',
     })
   }
 })

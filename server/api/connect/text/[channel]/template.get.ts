@@ -12,10 +12,15 @@ export default defineEventHandler(async (event) => {
 
     return data
   } catch (error) {
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
     console.error('API connect/text/[channel]/template GET', error)
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch contacts from MConnect',
+      statusMessage: 'Some Unknown Error Found',
     })
   }
 })

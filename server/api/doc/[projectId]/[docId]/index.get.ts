@@ -1,4 +1,4 @@
-export interface MDocDocument {
+interface MDocDocument {
   id: string
   templateId: string
   name: string
@@ -6,11 +6,29 @@ export interface MDocDocument {
   sizeBytes: number
   status: string
   projectId: string | null
+  project: {
+    id: string
+    name: string
+    contact: {
+      id: string
+      name: string
+      email: string
+    }
+  } | null
   organizationId: string | null
   categories: string[]
   previewUrl: string
   createdAt: string
   updatedAt: string
+  routingType?: string
+  nextSigner?: string
+  routingQueue?: {
+    order: number
+    name: string
+    email: string
+    role: string
+    status: string
+  }[]
   extension?: string
   formattedSize?: string
   timeline?: {
@@ -51,20 +69,17 @@ export default defineEventHandler(async (event) => {
 
     const formattedSize = formatBytes(doc.sizeBytes)
 
-    // const timeline = [
-    //   { id: 't1', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: 'sent the document' },
-    //   { id: 't2', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-    //   { id: 't3', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-    //   { id: 't4', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-    //   { id: 't5', date: '31 Jan, 2021', time: '6:36 pm', userInitials: 'J', userName: 'Person 1', action: "add comment 'What does the line 22 means'" },
-    // ]
-
     return { ...doc, extension, formattedSize, timeline: [] }
   } catch (error) {
-    console.error('API doc/[projectId]/[docId] GET', error)
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
+    console.error(`API doc/[projectId]/[docId] POST`, error)
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to fetch document metadata',
+      statusMessage: 'Some Unknown Error Found',
     })
   }
 })

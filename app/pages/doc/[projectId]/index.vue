@@ -53,7 +53,7 @@ const getFileIcon = (ext: string) => {
   <main class="flex size-full overflow-hidden bg-dark-400">
     <div class="flex min-w-0 flex-1 flex-col border-r border-dark-500 bg-dark-400 transition-all duration-300">
       <div class="font-semibold grid grid-cols-[auto_2fr_1fr_1.5fr] items-center gap-4 border-y border-white/5 px-6 py-3 text-xs uppercase tracking-wider text-light-500">
-        <div class="w-5"></div>
+        <div class="w-5" />
         <span>Name</span>
         <div class="flex cursor-pointer items-center gap-1 transition-colors hover:text-white">
           Date

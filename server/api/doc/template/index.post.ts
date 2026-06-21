@@ -1,8 +1,9 @@
 export default defineEventHandler(async (event) => {
   try {
+    const { user } = await requireUserSession(event)
+
     const config = useRuntimeConfig()
     const body = await readBody(event)
-    const { user } = await requireUserSession(event)
 
     const orgId = user.organizations[0]
     const organization = await $fetch(`/api/organization/${orgId}`)
@@ -17,6 +18,12 @@ export default defineEventHandler(async (event) => {
 
     if (!body.data) body.data = {}
     body.data.organization = organization
+    body.data.accountDetails = {
+      accountName: 'RED CAT PICTURES',
+      accountNumber: 1234567890,
+      bankName: 'AXIS Bank',
+      ifscCode: 'AXS00001234',
+    }
 
     const response = await $fetch<{
       id: string
