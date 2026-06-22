@@ -1,10 +1,12 @@
+import type { MDocDocument } from './index.get'
+
 export default defineEventHandler(async (event) => {
   try {
     const docId = getRouterParam(event, 'docId')
-    const body = await readBody(event)
+    const body = await readBody<{ signerEmail: string; expiresInMinutes: number }>(event)
     const config = useRuntimeConfig()
 
-    const response = await $fetch<{
+    const sessionRes = await $fetch<{
       signer: string
       expiresAt: string
       token: string
@@ -15,7 +17,51 @@ export default defineEventHandler(async (event) => {
       body: body || {},
     })
 
-    return response
+    const docDetails = await $fetch<MDocDocument>(`/api/document/${docId}`, {
+      baseURL: config.public.docUrl,
+    })
+
+    // console.log({
+    //   data: {
+    //     ...docDetails.rawData,
+    //     link: sessionRes.magicLink,
+    //   },
+    // })
+
+    console.log({
+      // userId,
+      contactId: docDetails.project?.contact?.id,
+      recipientEmail: body.signerEmail,
+      template: docDetails.templateId,
+      variables: {
+        ...docDetails.rawData,
+        link: sessionRes.magicLink,
+      },
+      orgId: docDetails.organizationId,
+      projectId: docDetails.projectId,
+    })
+    try {
+      await $fetch('/api/connect/text/email/send', {
+        baseURL: config.public.connectUrl,
+        method: 'POST',
+        body: {
+          // userId,
+          contactId: docDetails.project?.contact?.id,
+          recipientEmail: body.signerEmail,
+          template: docDetails.templateId,
+          variables: {
+            ...docDetails.rawData,
+            link: sessionRes.magicLink,
+          },
+          orgId: docDetails.organizationId,
+          projectId: docDetails.projectId,
+        },
+      })
+    } catch (emailError) {
+      console.error('Automated MConnect Email Dispatch Failed:', emailError)
+    }
+
+    return sessionRes
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

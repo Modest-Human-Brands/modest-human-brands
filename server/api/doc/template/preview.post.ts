@@ -8,14 +8,12 @@ export default defineEventHandler(async (event) => {
     const orgId = user.organizations[0]
     const organization = await $fetch(`/api/organization/${orgId}`)
 
+    const organizationStorage = useStorage<Resource<'organization'>>('data:resource:organization')
+
     if (!body.data) body.data = {}
     body.data.organization = organization
-    body.data.accountDetails = {
-      accountName: 'RED CAT PICTURES',
-      accountNumber: 1234567890,
-      bankName: 'AXIS Bank',
-      ifscCode: 'AXS00001234',
-    }
+    const organizationContent = await organizationStorage.get(orgId!)
+    body.data.accountDetails = organizationContent?.record.properties['Account Details']
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,

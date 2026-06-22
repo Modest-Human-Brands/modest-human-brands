@@ -166,6 +166,14 @@ export interface NotionOrganization {
         }
       }[]
     }
+    'Account Details': {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
     Phone: {
       type: 'phone_number'
       phone_number: string

@@ -1,16 +1,16 @@
 export default defineEventHandler(async (event) => {
   try {
     const docId = getRouterParam(event, 'docId')
-    const body = await readBody(event)
+    const body = await readBody<{ expiresInDays: number; routingType: string; signers: { order: number; name: string; email: string; role: string; status: string }[] }>(event)
     const config = useRuntimeConfig()
 
-    const response = await $fetch(`/api/document/${docId}/envelope`, {
+    const envelopeRes = await $fetch<{ status: string; nextSigner: string; queueSize: number }>(`/api/document/${docId}/envelope`, {
       baseURL: config.public.docUrl,
       method: 'POST',
-      body: body || {},
+      body,
     })
 
-    return response
+    return envelopeRes
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

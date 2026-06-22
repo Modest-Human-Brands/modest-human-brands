@@ -1,4 +1,4 @@
-interface MDocDocument {
+export interface MDocDocument {
   id: string
   templateId: string
   name: string
@@ -39,11 +39,12 @@ interface MDocDocument {
     userName: string
     action: string
   }[]
+  rawData: Record<string, string>
 }
 
 export default defineEventHandler(async (event) => {
   // const { user } =
-  await requireUserSession(event)
+  // await requireUserSession(event)
 
   const docId = getRouterParam(event, 'docId')
 
