@@ -162,7 +162,7 @@ async function generateSessionLink(signerEmail: string) {
       body: { signerEmail, expiresInMinutes: 60 },
     })
 
-    magicLink.value = `/doc/${projectId}${res.magicLink}`
+    magicLink.value = res.magicLink
   } catch (error) {
     console.error('Failed to generate session link:', error)
   } finally {

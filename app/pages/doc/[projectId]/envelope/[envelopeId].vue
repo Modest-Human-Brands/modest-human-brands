@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VuePDF } from '@tato30/vue-pdf'
 
-definePageMeta({ layout: false, auth: false })
+definePageMeta({ layout: false })
 
 interface MDocDocument {
   id: string

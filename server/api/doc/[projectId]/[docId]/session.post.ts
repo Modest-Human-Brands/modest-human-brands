@@ -2,6 +2,7 @@ import type { MDocDocument } from './index.get'
 
 export default defineEventHandler(async (event) => {
   try {
+    const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
     const body = await readBody<{ signerEmail: string; expiresInMinutes: number }>(event)
     const config = useRuntimeConfig()
@@ -10,41 +11,28 @@ export default defineEventHandler(async (event) => {
       signer: string
       expiresAt: string
       token: string
-      magicLink: string
     }>(`/api/document/${docId}/session`, {
       baseURL: config.public.docUrl,
       method: 'POST',
       body: body || {},
     })
+    const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.token}`
 
     const docDetails = await $fetch<MDocDocument>(`/api/document/${docId}`, {
       baseURL: config.public.docUrl,
     })
 
-    console.log({
-      // userId,
-      contactId: docDetails.project?.contact?.id,
-      recipientEmail: body.signerEmail,
-      template: docDetails.templateId,
-      variables: {
-        ...docDetails.rawData,
-        link: sessionRes.magicLink,
-      },
-      orgId: docDetails.organizationId,
-      projectId: docDetails.projectId,
-    })
     try {
       await $fetch('/api/connect/text/email/send', {
         baseURL: config.public.connectUrl,
         method: 'POST',
         body: {
-          // userId,
           contactId: docDetails.project?.contact?.id,
           recipientEmail: body.signerEmail,
           template: docDetails.templateId,
           variables: {
             ...docDetails.rawData,
-            link: sessionRes.magicLink,
+            link: magicLink,
           },
           orgId: docDetails.organizationId,
           projectId: docDetails.projectId,
@@ -54,7 +42,10 @@ export default defineEventHandler(async (event) => {
       console.error('Automated MConnect Email Dispatch Failed:', emailError)
     }
 
-    return sessionRes
+    return {
+      ...sessionRes,
+      magicLink,
+    }
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

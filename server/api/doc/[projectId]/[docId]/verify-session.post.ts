@@ -1,8 +1,6 @@
 export default defineEventHandler(async (event) => {
   const docId = getRouterParam(event, 'docId')
 
-  console.log({ docId })
-
   if (!docId) {
     throw createError({ statusCode: 400, statusMessage: 'Document ID is strictly required' })
   }
