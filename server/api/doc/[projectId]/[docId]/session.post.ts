@@ -1,11 +1,9 @@
 export default defineEventHandler(async (event) => {
-  const docId = getRouterParam(event, 'docId')
-  const body = await readBody(event)
-  const config = useRuntimeConfig()
-
-  console.log({ docId })
-
   try {
+    const docId = getRouterParam(event, 'docId')
+    const body = await readBody(event)
+    const config = useRuntimeConfig()
+
     const response = await $fetch<{
       signer: string
       expiresAt: string
@@ -16,8 +14,6 @@ export default defineEventHandler(async (event) => {
       method: 'POST',
       body: body || {},
     })
-
-    console.log({ response })
 
     return response
   } catch (error: unknown) {

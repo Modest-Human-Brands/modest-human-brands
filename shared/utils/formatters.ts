@@ -1,6 +1,6 @@
 export function formatKeyToLabel(key: string): string {
   if (!key) return ''
-  // Strip out backend IDs if they exist (e.g. "contractor-city" -> "city")
+
   const cleanKey = key.split('-').pop() || key
   const spaced = cleanKey.replace(/([A-Z])/g, ' $1').trim()
   return spaced.charAt(0).toUpperCase() + spaced.slice(1)

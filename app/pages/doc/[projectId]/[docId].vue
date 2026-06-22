@@ -49,6 +49,23 @@ interface MDocDocument {
   }[]
 }
 
+interface MDocTemplateResponse {
+  id: string
+  variables: Record<string, string>
+  signerFields: {
+    id: string
+    type: string
+    signerOrder: number
+    pageIndex: string
+    x: number
+    y: number
+    width: number
+    height: number
+    required: boolean
+    fontSize?: string
+  }[]
+}
+
 const route = useRoute()
 const config = useRuntimeConfig()
 const projectId = route.params.projectId as string
@@ -68,6 +85,37 @@ const magicLink = ref('')
 const isGeneratingLink = ref<string | null>(null)
 const isCopied = ref(false)
 
+if (!doc.value?.templateId) throw createError({ status: 404, message: 'Template not found' })
+
+const { data: template } = await useFetch<MDocTemplateResponse>(`/api/doc/template/${doc.value.templateId}`)
+
+const requiredSignerOrders = computed(() => {
+  if (!template.value) return [1]
+  if (!template.value?.signerFields) return [1]
+
+  const orders = new Set<number>()
+  template.value.signerFields.forEach((f) => orders.add(f.signerOrder))
+  return Array.from(orders).sort((a, b) => a - b)
+})
+
+const envelopeSigners = ref<{ order: number; name: string; email: string; role: string }[]>([])
+
+watchEffect(() => {
+  if (doc.value && requiredSignerOrders.value.length > 0 && envelopeSigners.value.length === 0) {
+    envelopeSigners.value = requiredSignerOrders.value.map((order, index) => {
+      if (index === 0 && doc.value?.project?.contact) {
+        return {
+          order,
+          name: doc.value.project.contact.name || '',
+          email: doc.value.project.contact.email || '',
+          role: 'Client',
+        }
+      }
+      return { order, name: '', email: '', role: 'Signer' }
+    })
+  }
+})
+
 function resetClick() {
   isLeftOpen.value = false
 }
@@ -82,32 +130,21 @@ function getInitials(name?: string) {
     .toUpperCase()
 }
 
+const isEnvelopeValid = computed(() => {
+  return envelopeSigners.value.every((s) => s.name.trim() !== '' && s.email.trim() !== '' && s.email.includes('@'))
+})
+
 async function sendForSignature() {
   isSendingEnvelope.value = true
   try {
-    const signerEmail = doc.value?.project?.contact?.email
-    const signerName = doc.value?.project?.contact?.name || 'Primary Signer'
-
     await $fetch(`/api/doc/${projectId}/${docId}/envelope`, {
       method: 'POST',
       body: {
         expiresInDays: 7,
         routingType: 'SEQUENTIAL',
-        signers: [{ order: 1, name: signerName, email: signerEmail, role: 'Client' }],
+        signers: envelopeSigners.value,
       },
     })
-
-    // const res = await $fetch<{
-    //   signer: string;
-    //   expiresAt: string;
-    //   token: string;
-    //   magicLink: string;
-    // }>(`/api/doc/${projectId}/${docId}/session`, {
-    //   method: 'POST',
-    //   body: { signerEmail, expiresInMinutes: 10080 }
-    // })
-
-    // magicLink.value = `/doc/${projectId}/${res.magicLink}`
 
     await refresh()
   } catch (error) {
@@ -122,7 +159,7 @@ async function generateSessionLink(signerEmail: string) {
   try {
     const res = await $fetch(`/api/doc/${projectId}/${docId}/session`, {
       method: 'POST',
-      body: { signerEmail, expiresInMinutes: 60 }, // Requested 60 mins expiry
+      body: { signerEmail, expiresInMinutes: 60 },
     })
 
     magicLink.value = `/doc/${projectId}${res.magicLink}`
@@ -276,7 +313,7 @@ async function copyLink() {
                   <p class="truncate text-xs text-light-400">{{ signer.email }}</p>
                 </div>
                 <div class="flex flex-col items-end gap-2">
-                  <span class="text-[10px] font-bold uppercase tracking-wider" :class="signer.status === 'COMPLETED' ? 'text-success-500' : 'text-alert-500'">
+                  <span class="text-[10px] font-bold uppercase tracking-wider" :class="signer.status === 'SIGNED' ? 'text-success-500' : 'text-alert-500'">
                     {{ signer.status }}
                   </span>
 
@@ -323,17 +360,25 @@ async function copyLink() {
         </div>
 
         <div v-else class="flex flex-col gap-6">
-          <div class="flex flex-col gap-2">
-            <h3 class="font-semibold text-sm text-white">Signer</h3>
-            <div class="mt-1 flex items-center gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
-              <div class="font-semibold flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-500 text-sm text-white">
-                {{ getInitials(doc.project?.contact?.name) }}
-              </div>
-              <div class="overflow-hidden">
-                <p class="font-semibold truncate text-sm text-white">
-                  {{ doc.project?.contact?.name || 'No Contact Assigned' }}
-                </p>
-                <p class="truncate text-xs text-light-400">{{ doc.project?.contact?.email || 'No email available' }}</p>
+          <div v-if="!magicLink" class="flex flex-col gap-4">
+            <div v-for="signer in envelopeSigners" :key="signer.order" class="flex flex-col gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-light-500">Signer {{ signer.order }}</h4>
+              <div class="flex flex-col gap-2">
+                <input
+                  v-model="signer.name"
+                  type="text"
+                  placeholder="Full Name"
+                  class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                <input
+                  v-model="signer.email"
+                  type="email"
+                  placeholder="Email Address"
+                  class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                <input
+                  v-model="signer.role"
+                  type="text"
+                  placeholder="Role (e.g. Client, Contractor)"
+                  class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
               </div>
             </div>
           </div>
@@ -368,8 +413,8 @@ async function copyLink() {
           <div class="mt-8 flex flex-col gap-3 border-t border-dark-500/50 pt-6">
             <button
               v-if="!magicLink"
-              :disabled="isSendingEnvelope"
-              class="font-semibold flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm text-dark-500 transition-colors hover:bg-light-400 disabled:opacity-60"
+              :disabled="isSendingEnvelope || !isEnvelopeValid"
+              class="font-semibold flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm text-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60"
               @click="sendForSignature">
               <NuxtIcon v-if="isSendingEnvelope" name="local:loader" class="animate-spin text-lg" />
               {{ isSendingEnvelope ? 'Generating Envelope...' : 'Create Envelope & Get Link' }}

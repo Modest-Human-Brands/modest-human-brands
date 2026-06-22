@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
       body: body || {},
     })
 
-    console.log({ response })
-
     return response
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {

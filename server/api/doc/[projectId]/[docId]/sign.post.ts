@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, 'id')
-  if (!id) {
+  const docId = getRouterParam(event, 'docId')
+  if (!docId) {
     throw createError({ statusCode: 400, statusMessage: 'Document/Envelope ID is strictly required' })
   }
 
@@ -13,14 +13,14 @@ export default defineEventHandler(async (event) => {
 
   const config = useRuntimeConfig()
 
-  const clientIp = getRequestIP(event, { xForwardedFor: true }) || '127.0.0.1'
+  const clientIp = getRequestIP(event, { xForwardedFor: true })
   const enrichedTelemetry = {
     ...(telemetry || {}),
     ipAddress: clientIp,
   }
 
   try {
-    const response = await $fetch(`/api/document/${id}/sign`, {
+    const response = await $fetch(`/api/document/${docId}/sign`, {
       baseURL: config.public.docUrl,
       method: 'POST',
       body: {

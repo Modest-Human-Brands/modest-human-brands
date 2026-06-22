@@ -40,7 +40,6 @@ const currentSchema = computed(() => {
       const formattedKey = formatKeyToLabel(key)
       const fullLabel = labelPrefix ? `${labelPrefix} ${formattedKey}` : formattedKey
 
-      // 1. Intercept Arrays of Objects
       if (Array.isArray(type)) {
         if (typeof type[0] === 'object' && type[0] !== null) {
           fields.push({
@@ -48,10 +47,9 @@ const currentSchema = computed(() => {
             label: fullLabel,
             type: 'array<object>',
             groupName: parentGroupName,
-            schemaBlueprint: type[0], // Save the inner object schema for the UI
+            schemaBlueprint: type[0],
           })
         } else {
-          // Standard primitive arrays (e.g. ['string'])
           fields.push({
             path,
             label: fullLabel,
@@ -59,13 +57,9 @@ const currentSchema = computed(() => {
             groupName: parentGroupName,
           })
         }
-      }
-      // 2. Standard Nested Objects
-      else if (typeof type === 'object' && type !== null) {
+      } else if (typeof type === 'object' && type !== null) {
         traverse(type as Record<string, unknown>, path, formattedKey, fullLabel)
-      }
-      // 3. Primitives
-      else {
+      } else {
         fields.push({
           path,
           label: fullLabel,
@@ -153,16 +147,13 @@ async function onGenerate() {
 }
 
 const wizardStep = ref(0)
-const totalSteps = 3
+const totalSteps = 2
 
 function nextStep() {
   if (wizardStep.value < totalSteps - 1) wizardStep.value++
 }
 function prevStep() {
-  if (wizardStep.value > 0) {
-    if (wizardStep.value === 1) navigateTo('/doc')
-    wizardStep.value--
-  }
+  if (wizardStep.value > 0) wizardStep.value--
 }
 </script>
 
@@ -215,11 +206,11 @@ function prevStep() {
         </button>
       </template>
 
-      <div v-if="wizardStep === 0 || wizardStep === 1" class="flex flex-col gap-6">
+      <div v-if="wizardStep === 0" class="flex flex-col gap-6">
         <FormField v-for="field in currentSchema" :key="field.path" v-model="formData[field.path]" :label="field.label" :schema-type="field.type" :schema-blueprint="field.schemaBlueprint" />
       </div>
 
-      <div v-else-if="wizardStep === 2" class="flex flex-col gap-6">
+      <div v-else-if="wizardStep === 1" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
           <h2 class="text-2xl font-bold text-white">Review & Generate</h2>
           <p class="text-sm text-light-500">Please review the captured information before finalizing the document.</p>
@@ -265,9 +256,9 @@ function prevStep() {
 
       <div class="flex flex-col items-center justify-end gap-6 border-t border-dark-500/50 py-6 md:flex-row">
         <div class="flex w-full flex-col-reverse gap-3 md:w-auto md:flex-row md:items-center">
-          <button v-if="wizardStep === 2" type="button" :disabled="isGenerating" :class="uiStyles.btnSecondary" @click="prevStep">Back</button>
+          <button v-if="wizardStep === 1" type="button" :disabled="isGenerating" :class="uiStyles.btnSecondary" @click="prevStep">Back</button>
 
-          <button v-if="wizardStep === 0 || wizardStep === 1" type="button" :class="uiStyles.btnPrimary" @click="nextStep">
+          <button v-if="wizardStep === 0" type="button" :class="uiStyles.btnPrimary" @click="nextStep">
             Review
             <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
           </button>

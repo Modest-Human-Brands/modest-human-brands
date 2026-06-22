@@ -11,8 +11,6 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.docUrl,
     })
 
-    console.log({ response })
-
     const projectFolders = new Map<
       string,
       {

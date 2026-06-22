@@ -327,8 +327,6 @@ export interface NotionContact {
       type: 'multi_select'
       multi_select: { name: string }[]
     }
-
-    // --- Point of Contact Details ---
     'PoC Person': {
       type: 'rich_text'
       rich_text: { plain_text: string; text: { content: string } }[]
@@ -349,8 +347,6 @@ export interface NotionContact {
       type: 'phone_number'
       phone_number: string | null
     }
-
-    // --- Dates & Project ---
     Project: {
       type: 'relation'
       relation: { id: string }[]
@@ -359,8 +355,6 @@ export interface NotionContact {
       type: 'date'
       date: { start: string; end?: string | null } | null
     }
-
-    // --- Relations (Omnichannel Linking) ---
     Organization: {
       type: 'relation'
       relation: { id: string }[]
@@ -377,8 +371,6 @@ export interface NotionContact {
       type: 'relation'
       relation: { id: string }[]
     }
-
-    // --- Dynamic/Rollup fields for the UI Queue ---
     'Last Active'?: {
       type: 'date'
       date: { start: string; end?: string | null } | null

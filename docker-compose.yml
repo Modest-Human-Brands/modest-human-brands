@@ -1,316 +1,204 @@
-name: 'modest-human-brands-dev'
 services:
   app:
-    build: .
-    restart: on-failure:3
+    image: ghcr.io/modest-human-brands/modest-human-brands:latest
     env_file:
-      - .env.prod
-    ports:
-      - 4000:3000
-    networks:
-      - internal
-
-  assist:
-    build: ../code-assist
-    restart: on-failure:3
-    env_file:
-      - ../code-assist/.env.prod
+      - .env
     volumes:
-      - ../code-assist/artifact:/artifact
-    ports:
-      - 6000:3111
-    networks:
-      - internal
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: all
-    #           capabilities: [ gpu ]
-
-    # model-init:
-    #   image: python:3.11-slim
-    #   volumes:
-    #     - D:/Models/huggingface:/hf_cache
-    #   environment:
-    #     - HF_TOKEN=${HF_TOKEN} # optional — OmniVoice is public
-    #     - HF_ENDPOINT=${HF_ENDPOINT:-https://huggingface.co}
-    #   command: >
-    #     bash -c "
-    #       pip install -q huggingface_hub &&
-    #       python -c \"
-    #       from huggingface_hub import snapshot_download
-    #       snapshot_download('k2-fsa/OmniVoice', cache_dir='/hf_cache')
-    #       print('Model ready.')
-    #       \"
-    #     "
-
-  assist-triton:
-    build: ../code-assist/inference
-    volumes:
-      - ../code-assist/inference/model_repository:/models
-      - ../code-assist/artifact:/artifact
-      - D:/Models/huggingface:/root/.cache/huggingface/hub
-    ports:
-      - '8000:8000' # HTTP
-      - '8001:8001' # gRPC
-      - '8002:8002' # metrics
+      - modest-human-brands_data:/app/.data
     networks:
       - internal
     deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   connect:
-    build: ../code-connect
-    restart: on-failure:3
+    image: ghcr.io/modest-human-brands/mconnect:latest
     env_file:
-      - ../code-connect/.env.prod
+      - .env
     volumes:
-      - mconnect-data:/app/data
-    ports:
-      - 5000:3111
+      - mconnect-config:/app/config
+      - mconnect-data:/app/.data
     networks:
       - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   connect-livekit:
     image: livekit/livekit-server:latest
-    restart: on-failure:3
     command: --config /etc/livekit.yaml
+    # ports:
+    #   - "7881:7881/tcp"
+    #   - "7882:7882/udp"
+    #   - "50000-60000:50000-60000/udp"
     volumes:
-      - ../code-connect/config/livekit.yaml:/etc/livekit.yaml
-    ports:
-      - 7880:7880
+      - /root/modest-human-brands/mconnect/config/livekit.yaml:/etc/livekit.yaml
     networks:
       - internal
     depends_on:
       - connect-livekit-redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   connect-livekit-egress:
     image: livekit/egress:latest
-    restart: on-failure:3
     environment:
       - EGRESS_CONFIG_FILE=/etc/egress.yaml
     volumes:
-      - ../code-connect/config/egress.yaml:/etc/egress.yaml
-      - ../code-connect/static/recordings:/recordings
+      - /root/modest-human-brands/mconnect/config/egress.yaml:/etc/egress.yaml
+      - /root/modest-human-brands/mconnect/recordings:/recordings
     networks:
       - internal
     depends_on:
       - connect-livekit
       - connect-livekit-redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   connect-livekit-sip:
     image: livekit/sip:latest
-    restart: on-failure:3
+    ports:
+      - '5060:5060/udp'
+      - '5060:5060/tcp'
+      - '10000-10100:10000-10100/udp'
     volumes:
-      - ../code-connect/config/sip.yaml:/sip/config.yaml
+      - /root/modest-human-brands/mconnect/config/sip.yaml:/sip/config.yaml
     networks:
       - internal
     depends_on:
       - connect-livekit
       - connect-livekit-redis
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   connect-livekit-redis:
     image: redis:7-alpine
-    restart: on-failure:3
     networks:
       - internal
-
-  # Smart Orchestration with Profiles
-  # ===== CORE: Traefik Reverse Proxy =====
-  traefik:
-    image: traefik:v3.0
-    profiles: ['with-proxy', 'full']
-    restart: unless-stopped
-    ports:
-      - '127.0.0.1:${DASHBOARD_PORT:-2886}:80'
-      - '127.0.0.1:8080:8080' # Traefik dashboard
-    volumes:
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
-    labels:
-      - 'com.openwa.service=proxy'
-      - 'com.openwa.core=true'
-
-  # ===== CORE: OpenWA Backend API =====
-  openwa-api:
-    image: ghcr.io/rmyndharis/openwa:0fbee7f
-    restart: unless-stopped
-    ports:
-      - '127.0.0.1:${API_PORT:-2785}:2785'
-    expose:
-      - '2785'
-    environment:
-      # Core
-      - NODE_ENV=${NODE_ENV:-production}
-      - PORT=2785
-      - LOG_LEVEL=${LOG_LEVEL:-info}
-      # Database
-      - DATABASE_TYPE=${DATABASE_TYPE:-sqlite}
-      - DATABASE_NAME=${DATABASE_NAME:-/app/data/openwa.sqlite}
-      - DATABASE_HOST=${DATABASE_HOST:-postgres}
-      - DATABASE_PORT=${DATABASE_PORT:-5432}
-      - DATABASE_USERNAME=${DATABASE_USERNAME:-openwa}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-openwa}
-      - DATABASE_SYNCHRONIZE=${DATABASE_SYNCHRONIZE:-false}
-      # Engine
-      - ENGINE_TYPE=${ENGINE_TYPE:-whatsapp-web.js}
-      - SESSION_DATA_PATH=/app/data/sessions
-      - PUPPETEER_HEADLESS=${PUPPETEER_HEADLESS:-true}
-      - PUPPETEER_ARGS=${PUPPETEER_ARGS:---no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu}
-      # Storage
-      - STORAGE_TYPE=${STORAGE_TYPE:-local}
-      - STORAGE_LOCAL_PATH=/app/data/media
-      - S3_ENDPOINT=${S3_ENDPOINT:-http://minio:9000}
-      - S3_ACCESS_KEY=${S3_ACCESS_KEY:-minioadmin}
-      - S3_SECRET_KEY=${S3_SECRET_KEY:-minioadmin}
-      - S3_BUCKET=${S3_BUCKET:-openwa}
-      # Redis
-      - REDIS_ENABLED=${REDIS_ENABLED:-false}
-      - REDIS_HOST=${REDIS_HOST:-redis}
-      - REDIS_PORT=${REDIS_PORT:-6379}
-      # Webhook
-      - WEBHOOK_TIMEOUT=${WEBHOOK_TIMEOUT:-10000}
-      - WEBHOOK_MAX_RETRIES=${WEBHOOK_MAX_RETRIES:-3}
-      - WEBHOOK_RETRY_DELAY=${WEBHOOK_RETRY_DELAY:-5000}
-      # Rate Limit
-      - RATE_LIMIT_TTL=${RATE_LIMIT_TTL:-60}
-      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-100}
-      # Plugins
-      - PLUGINS_ENABLED=${PLUGINS_ENABLED:-true}
-      - PLUGINS_DIR=/app/data/plugins
-      # Security
-      - API_MASTER_KEY=${API_MASTER_KEY:-}
-    volumes:
-      - openwa-data:/app/data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./docker-compose.yml:/app/docker-compose.yml:ro
-    healthcheck:
-      test: ['CMD', 'node', '-e', "require('http').get('http://localhost:2785/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    labels:
-      - 'com.openwa.service=api'
-      - 'com.openwa.core=true'
-
-  # ===== CORE: Dashboard Frontend =====
-  openwa-dashboard:
-    build:
-      context: ./dashboard
-      dockerfile: Dockerfile.traefik
-    profiles: ['with-dashboard', 'full']
-    restart: unless-stopped
-    expose:
-      - '80'
-    depends_on:
-      - openwa-api
-    labels:
-      - 'com.openwa.service=dashboard'
-      - 'com.openwa.core=true'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   doc:
-    build: ../code-doc
-    restart: on-failure:3
+    image: ghcr.io/modest-human-brands/mdoc:latest
     env_file:
-      - ../code-doc/.env.prod
-    ports:
-      - 4700:3000
-    networks:
-      - internal
-
-  coordinate-synapse:
-    image: matrixdotorg/synapse:latest
-    restart: on-failure:3
+      - .env
     volumes:
-      - /root/synapse/data:/data
-    expose:
-      - 8008
+      - mdoc-asset:/app/asset
+      - mdoc-document:/app/document
+      - mdoc-static:/app/static
     networks:
       - internal
-    depends_on:
-      coordinate-synapse-postgres:
-        condition: service_healthy
-
-  coordinate-synapse-postgres:
-    image: postgres:latest
-    restart: on-failure:3
-    environment:
-      - POSTGRES_USER=synapse_user
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=synapse
-      - POSTGRES_INITDB_ARGS=--encoding='UTF8' --lc-collate='C' --lc-ctype='C'
-    volumes:
-      - /root/synapse/postgres:/var/lib/postgresql/data
-    networks:
-      - internal
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U synapse_user -d synapse']
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   drive:
-    build: ../code-drive
-    restart: on-failure:3
+    image: ghcr.io/modest-human-brands/mdrive:latest
     env_file:
-      - ../code-drive/.env.prod
-    ports:
-      - 4600:3000
+      - .env
+    volumes:
+      - mdrive-data:/app/data
+      - mdrive-static:/app/static
     networks:
       - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   media:
-    build: ../code-media
-    restart: on-failure:3
+    image: ghcr.io/modest-human-brands/mmedia:latest
     env_file:
-      - ../code-media/.env.prod
+      - .env
     volumes:
-      - mmedia-data:/app/data
-      - mmedia-static:/app/static
+      - mdrive-static:/app/static
     networks:
       - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2048M
+        reservations:
+          cpus: '1'
+          memory: 1024M
 
 volumes:
+  modest-human-brands_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/.data
+
+  mconnect-config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mconnect/config
   mconnect-data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../code-connect/data
-  mmedia-data:
+      device: /root/modest-human-brands/mconnect/.data
+
+  mdoc-asset:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../code-media/data
-  mmedia-static:
+      device: /root/modest-human-brands/mdoc/asset
+  mdoc-document:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../code-media/static
-      # device: ../code-media/static/red-cat-pictures
-      # device: ../code-media/static/gold-fish-talents
-      # redis-data:
-  openwa-data:
+      device: /root/modest-human-brands/mdoc/document
+  mdoc-static:
     driver: local
-  postgres-data:
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdoc/static
+
+  mdrive-data:
     driver: local
-  redis-data:
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdrive/data
+  mdrive-static:
     driver: local
-  minio-data:
-    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdrive/static
 
 networks:
   internal:
-    driver: bridge
-  default:
-    name: openwa-network
+    driver: overlay

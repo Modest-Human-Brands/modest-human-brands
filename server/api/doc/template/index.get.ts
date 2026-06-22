@@ -1,15 +1,11 @@
+import type { MDocTemplateResponse } from './[id].get'
 import { cleanTemplateVariables } from './[id].get'
 
 export default defineEventHandler(async () => {
   try {
     const config = useRuntimeConfig()
 
-    const response = await $fetch<
-      {
-        id: string
-        variables: Record<string, string>
-      }[]
-    >('/api/document/template', {
+    const response = await $fetch<MDocTemplateResponse[]>('/api/document/template', {
       baseURL: config.public.docUrl,
     })
 

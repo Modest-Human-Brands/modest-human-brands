@@ -48,7 +48,7 @@ const formatStatus = (status: string) => {
           <div :class="['size-2.5 rounded-full', getStatusColor(folder.status)]"></div>
           <span class="font-semibold text-sm text-white/60">{{ formatStatus(folder.status) }}</span>
         </div>
-        <span class="font-semibold text-sm text-white/40">{{ folder.itemCount }} Items</span>
+        <span class="font-semibold whitespace-nowrap text-sm text-white/40">{{ folder.itemCount }} Items</span>
       </div>
     </div>
   </NuxtLink>

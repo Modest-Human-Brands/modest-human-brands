@@ -26,7 +26,6 @@ export function createToken(identity: string, name: string, room: string, canPub
   return token.toJwt()
 }
 
-// Global singleton — persists across requests, resets on server restart
 const streams = new Map<string, StreamMeta>()
 
 export const streamStore = {

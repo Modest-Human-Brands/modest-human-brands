@@ -1,4 +1,21 @@
-export function cleanTemplateVariables(template: { id: string; variables: object }) {
+export interface MDocTemplateResponse {
+  id: string
+  variables: Record<string, string>
+  signerFields: {
+    id: string
+    type: string
+    signerOrder: number
+    pageIndex: string
+    x: number
+    y: number
+    width: number
+    height: number
+    required: boolean
+    fontSize?: string
+  }[]
+}
+
+export function cleanTemplateVariables(template: MDocTemplateResponse) {
   const vs = ['organization', 'accountDetails']
   for (const v of vs) {
     if (template.variables[v]) {
@@ -15,7 +32,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const id = getRouterParam(event, 'id')
 
-    const response = await $fetch<{ id: string; variables: Record<string, string> }[]>('/api/document/template', {
+    const response = await $fetch<MDocTemplateResponse[]>('/api/document/template', {
       baseURL: config.public.docUrl,
     })
 
