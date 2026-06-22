@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.5.6
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.5...v0.5.6)
+
+### 🚀 Enhancements
+
+- Enhance document management UI and API ([89c623c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/89c623c))
+- Enhance API request handling and data structure for document sessions and templates ([d1bb84a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/d1bb84a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.5
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.4...v0.5.5)
