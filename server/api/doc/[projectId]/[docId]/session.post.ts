@@ -21,13 +21,6 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.docUrl,
     })
 
-    // console.log({
-    //   data: {
-    //     ...docDetails.rawData,
-    //     link: sessionRes.magicLink,
-    //   },
-    // })
-
     console.log({
       // userId,
       contactId: docDetails.project?.contact?.id,

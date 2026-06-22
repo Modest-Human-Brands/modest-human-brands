@@ -47,14 +47,13 @@ interface MDocDocument {
 }
 
 const route = useRoute()
-const router = useRouter()
 const config = useRuntimeConfig()
 
 const projectId = route.params.projectId as string
 const envelopeId = route.params.envelopeId as string
 const token = route.query.token as string
 
-const viewerRef = ref()
+const viewerRef = useTemplateRef('viewerRef')
 const isLeftOpen = ref(false)
 const isSignDrawerOpen = ref(false)
 const isSubmitting = ref(false)
@@ -218,7 +217,7 @@ async function submitSignature() {
             <h2 class="text-2xl font-bold text-white">Document Signed!</h2>
             <p class="mt-2 px-4 text-sm leading-relaxed text-light-400">Your signature has been securely applied and the document has been sealed. A final copy will be emailed to you shortly.</p>
           </div>
-          <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-[200px] rounded-full bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors" @click="router.push('/')">
+          <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-[200px] rounded-full bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors" @click="navigateTo('/doc')">
             Close Window
           </button>
         </div>
