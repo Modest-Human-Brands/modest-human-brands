@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.7
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.6...v0.5.7)
+
+### 💅 Refactors
+
+- Clean up unused code and improve readability in session handler ([ed4ee86](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ed4ee86))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.6
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.5...v0.5.6)
