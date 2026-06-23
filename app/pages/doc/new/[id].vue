@@ -78,13 +78,7 @@ onMounted(() => {
   if (currentSchema.value.length) {
     currentSchema.value.forEach((field) => {
       if (field.type === 'array<object>') {
-        const initialItem: Record<string, any> = {}
-        if (field.schemaBlueprint) {
-          for (const [subKey, subType] of Object.entries(field.schemaBlueprint)) {
-            initialItem[subKey] = subType === 'number' ? null : subType === 'array<string>' ? [''] : ''
-          }
-        }
-        formData.value[field.path] = [initialItem]
+        formData.value[field.path] = []
       } else if (field.type === 'array<string>') formData.value[field.path] = ['']
       else if (field.type === 'boolean') formData.value[field.path] = false
       else if (field.type === 'number') formData.value[field.path] = null

@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
 
     if (!body.data) body.data = {}
     body.data.organization = organization
-    const organizationContent = await organizationStorage.get(orgId!)
-    body.data.accountDetails = organizationContent?.record.properties['Account Details']
+    const organizationContent = await organizationStorage.get(notionNormalizeId(orgId!))
+    body.data.accountDetails = JSON.parse(notionTextStringify(organizationContent!.record.properties['Account Details'].rich_text))
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,

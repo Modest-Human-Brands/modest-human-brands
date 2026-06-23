@@ -10,6 +10,7 @@ export default defineTask({
   async run() {
     const config = useRuntimeConfig()
     const notionDbId = config.private.notionDbId as unknown as NotionDB
+
     const resources: ResourceQueries = {
       organization: (await notionQueryDb<NotionOrganization>(notion, notionDbId.organization)).filter((a) => !!a),
       user: (await notionQueryDb<NotionUser>(notion, notionDbId.user)).filter((a) => !!a),
