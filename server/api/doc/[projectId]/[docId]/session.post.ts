@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   try {
     const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
-    const body = await readBody<{ signerEmail: string; expiresInMinutes: number }>(event)
+    const body = await readBody<{ signerEmail: string; expiresInDays: number }>(event)
     const config = useRuntimeConfig()
 
     const sessionRes = await $fetch<{

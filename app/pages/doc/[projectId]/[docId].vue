@@ -159,7 +159,7 @@ async function generateSessionLink(signerEmail: string) {
   try {
     const res = await $fetch(`/api/doc/${projectId}/${docId}/session`, {
       method: 'POST',
-      body: { signerEmail, expiresInMinutes: 60 },
+      body: { signerEmail, expiresInDays: 7 },
     })
 
     magicLink.value = res.magicLink

@@ -88,7 +88,7 @@ if (!doc.value || !doc.value?.templateId) {
   throw createError({ statusCode: 404, statusMessage: 'Template not found' })
 }
 
-const { data: template } = await useFetch(() => `/api/doc/template/${doc.value.templateId}`)
+const { data: template } = await useFetch(`/api/doc/template/${doc.value.templateId}`)
 
 const originalSignerFields = computed(() => {
   if (!template.value) return []
