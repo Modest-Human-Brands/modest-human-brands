@@ -154,12 +154,12 @@ async function sendForSignature() {
   }
 }
 
-async function generateSessionLink(signerEmail: string) {
+async function generateSessionLink(signerName: string, signerEmail: string, signerIsContact: boolean) {
   isGeneratingLink.value = signerEmail
   try {
     const res = await $fetch(`/api/doc/${projectId}/${docId}/session`, {
       method: 'POST',
-      body: { signerEmail },
+      body: { signerName, signerEmail, signerIsContact },
     })
 
     magicLink.value = res.magicLink
@@ -301,7 +301,7 @@ async function copyLink() {
             </div>
 
             <div class="mt-1 flex flex-col gap-3">
-              <div v-for="signer in doc.routingQueue" :key="signer.email" class="flex items-center gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
+              <div v-for="(signer, index) in doc.routingQueue" :key="signer.email" class="flex items-center gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
                 <div
                   class="font-semibold flex size-10 shrink-0 items-center justify-center rounded-full text-sm text-white"
                   :class="signer.status === 'COMPLETED' ? 'bg-success-500' : 'border border-dark-400 bg-dark-600'">
@@ -321,7 +321,7 @@ async function copyLink() {
                     v-if="signer.status !== 'COMPLETED'"
                     :disabled="isGeneratingLink === signer.email"
                     class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-bold text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
-                    @click="generateSessionLink(signer.email)">
+                    @click="generateSessionLink(signer.name, signer.email, index !== doc.routingQueue.length - 1)">
                     <NuxtIcon v-if="isGeneratingLink === signer.email" name="local:loader" class="animate-spin text-sm" />
                     <NuxtIcon v-else name="local:connect" class="text-sm" />
                     Get Link

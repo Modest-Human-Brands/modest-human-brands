@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
 
-    const { signerEmail } = await readBody<{ signerEmail: string }>(event)
+    const { signerName, signerEmail, signerIsContact } = await readBody<{ signerName: string; signerEmail: string; signerIsContact: boolean }>(event)
     const config = useRuntimeConfig()
 
     const docDetails = await $fetch<MDocDocument>(`/api/document/${docId}`, {
@@ -33,6 +33,11 @@ export default defineEventHandler(async (event) => {
           template: docDetails.templateId,
           variables: {
             ...docDetails.rawData,
+            recipient: {
+              name: signerName,
+              isContact: signerIsContact,
+              isSigned: false,
+            },
             link: magicLink,
           },
           orgId: docDetails.organizationId,
