@@ -1,7 +1,5 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { computed } from 'vue'
-
 const props = defineProps<{
   label: string
   schemaType: string
@@ -23,6 +21,12 @@ const isBoolean = computed(() => typeLower.value === 'boolean')
 const isDate = computed(() => typeLower.value === 'date')
 const isEmail = computed(() => typeLower.value === 'email')
 const isSignature = computed(() => typeLower.value === 'signature')
+const isEnum = computed(() => props.schemaType.startsWith('enum:'))
+
+const enumOptions = computed(() => {
+  if (!isEnum.value) return []
+  return props.schemaType.split(':')[1]?.split(',') || []
+})
 
 const inputType = computed(() => {
   if (isNumber.value) return 'number'
@@ -32,7 +36,7 @@ const inputType = computed(() => {
 })
 
 function onInput(event: Event) {
-  const target = event.target as HTMLInputElement | HTMLTextAreaElement
+  const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
   let val: string | number | boolean = target.value
 
   if (isNumber.value) {
@@ -184,6 +188,20 @@ function handleFileUpload(event: Event) {
             <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
           </label>
         </div>
+      </div>
+
+      <div v-else-if="isEnum" class="relative w-full">
+        <select
+          :value="modelValue"
+          class="w-full appearance-none rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 pr-10 text-sm text-white outline-none transition-colors focus:border-white focus:bg-dark-400"
+          required
+          @change="onInput">
+          <option value="" disabled :selected="!modelValue">Select an option</option>
+          <option v-for="opt in enumOptions" :key="opt" :value="opt">
+            {{ formatKeyToLabel(opt) }}
+          </option>
+        </select>
+        <NuxtIcon name="local:chevron-bold" class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-light-500" />
       </div>
 
       <input

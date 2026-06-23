@@ -4,8 +4,13 @@ export default defineEventHandler(async (event) => {
   try {
     const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
-    const body = await readBody<{ signerEmail: string; expiresInDays: number }>(event)
+
+    const { signerEmail } = await readBody<{ signerEmail: string }>(event)
     const config = useRuntimeConfig()
+
+    const docDetails = await $fetch<MDocDocument>(`/api/document/${docId}`, {
+      baseURL: config.public.docUrl,
+    })
 
     const sessionRes = await $fetch<{
       signer: string
@@ -14,13 +19,9 @@ export default defineEventHandler(async (event) => {
     }>(`/api/document/${docId}/session`, {
       baseURL: config.public.docUrl,
       method: 'POST',
-      body: body || {},
+      body: { signerEmail, expiresIn: docDetails.rawData.expiresIn },
     })
     const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.token}`
-
-    const docDetails = await $fetch<MDocDocument>(`/api/document/${docId}`, {
-      baseURL: config.public.docUrl,
-    })
 
     try {
       await $fetch('/api/connect/text/email/send', {
@@ -28,7 +29,7 @@ export default defineEventHandler(async (event) => {
         method: 'POST',
         body: {
           contactId: docDetails.project?.contact?.id,
-          recipientEmail: body.signerEmail,
+          recipientEmail: signerEmail,
           template: docDetails.templateId,
           variables: {
             ...docDetails.rawData,
