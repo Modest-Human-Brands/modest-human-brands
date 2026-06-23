@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.10
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.9...v0.5.10)
+
+### 🩹 Fixes
+
+- Update session expiration from minutes to days ([9b63760](https://github.com/Modest-Human-Brands/modest-human-brands/commit/9b63760))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.9
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.8...v0.5.9)
