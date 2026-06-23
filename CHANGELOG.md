@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.5.11
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.10...v0.5.11)
+
+### 🚀 Enhancements
+
+- Enhance FormField component with enum support and input type adjustments ([76ce09c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/76ce09c))
+- Update session link generation to include signer details ([6e72ef8](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6e72ef8))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.10
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.9...v0.5.10)
