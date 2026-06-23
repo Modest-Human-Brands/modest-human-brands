@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.9
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.8...v0.5.9)
+
+### 💅 Refactors
+
+- Simplify formData initialization and improve code readability ([5ad695c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5ad695c))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.8
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.7...v0.5.8)
