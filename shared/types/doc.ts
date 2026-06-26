@@ -19,8 +19,8 @@ export interface UIDocument {
 export interface DocFolder {
   id: string
   title: string
-  clientName: string
-  clientInitials: string
+  contactName: string
+  contactAvatar?: string | null
   status: string
   itemCount: number
 }

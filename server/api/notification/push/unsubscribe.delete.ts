@@ -1,14 +1,11 @@
-import type { NotificationSubscription } from '../subscribe.post'
-import { z } from 'zod'
-
-const pathParamsSchema = z.object({ id: z.string() })
+import type { NotificationSubscription } from './subscribe.post'
 
 export default defineEventHandler(async (event) => {
   try {
-    const { id } = await getValidatedRouterParams(event, pathParamsSchema.parse)
+    const { user } = await requireUserSession(event)
     const pushStorage = useStorage<NotificationSubscription>('data:subscription:notification')
 
-    const result = await pushStorage.removeItem(id)
+    const result = await pushStorage.removeItem(user.id)
 
     return { success: result }
   } catch (error: unknown) {
@@ -16,7 +13,7 @@ export default defineEventHandler(async (event) => {
       throw error
     }
 
-    console.error('API notification/push/[id]/unsubscribe DELETE', error)
+    console.error('API notification/push/unsubscribe DELETE', error)
 
     throw createError({
       statusCode: 500,

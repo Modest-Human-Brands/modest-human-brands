@@ -5,19 +5,19 @@ export interface NotificationSubscription {
     p256dh: string
     auth: string
   }
+  organizations?: string[]
 }
 
 export default defineEventHandler(async (event) => {
   try {
-    const notificationStorage = useStorage<NotificationSubscription>('data:subscription:notification')
+    const { user } = await requireUserSession(event)
+    const pushStorage = useStorage<NotificationSubscription>('data:subscription:notification')
 
     const body = await readBody<NotificationSubscription>(event)
+    console.log({ user })
+    body.organizations = user?.organizations || []
 
-    if (await notificationStorage.getItem(body.keys.auth)) {
-      return { success: true }
-    }
-
-    await notificationStorage.setItem(body.keys.auth, body)
+    await pushStorage.setItem(user.id, body)
 
     return { success: true }
   } catch (error: unknown) {

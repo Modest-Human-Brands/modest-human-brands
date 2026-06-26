@@ -46,22 +46,40 @@ const { $api } = useNuxtApp()
 const { isSupported, permissionGranted } = useWebNotification()
 
 async function getExistingSubscription() {
-  const registration = await navigator.serviceWorker.ready
-  let subscription = await registration.pushManager.getSubscription()
-
-  if (!subscription) {
-    subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: vapidKey,
-    })
+  console.log({ vapidKey })
+  if (!('serviceWorker' in navigator)) {
+    console.warn('Service Workers are not supported in this browser.')
+    return
   }
 
-  await $api('/api/notification/push/subscribe', {
-    method: 'POST',
-    body: subscription.toJSON(),
-  })
+  try {
+    const registration = await navigator.serviceWorker.getRegistration()
 
-  return subscription
+    if (!registration) {
+      console.warn('No Service Worker is registered. Push notifications aborted.')
+      return
+    }
+
+    const activeRegistration = await navigator.serviceWorker.ready
+
+    let subscription = await activeRegistration.pushManager.getSubscription()
+
+    if (!subscription) {
+      subscription = await activeRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidKey,
+      })
+    }
+
+    await $api('/api/notification/push/subscribe', {
+      method: 'POST',
+      body: subscription.toJSON(),
+    })
+
+    return subscription
+  } catch (error) {
+    console.warn('Push subscription failed or was denied:', error)
+  }
 }
 
 onMounted(async () => {

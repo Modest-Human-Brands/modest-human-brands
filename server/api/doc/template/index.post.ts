@@ -15,21 +15,28 @@ export default defineEventHandler(async (event) => {
       .flatMap(({ value }) => value?.record || [])
       .filter((record) => record.properties.Organization.relation[0]?.id === orgId)
 
-    const organizationStorage = useStorage<Resource<'organization'>>('data:resource:organization')
-
     body.name = `${organization.name.replaceAll(' ', '-').toLowerCase()}-${body.template.toUpperCase()[0]}-${documents.length}-1`
     body.orgId = orgId
 
     if (!body.data) body.data = {}
     body.data.organization = organization
-    const organizationContent = await organizationStorage.get(notionNormalizeId(orgId!))
-    body.data.accountDetails = JSON.parse(notionTextStringify(organizationContent!.record.properties['Account Details'].rich_text))
 
-    const response = await $fetch<{ id: string; variables: Record<string, string> }>('/api/document/create', {
+    const response = await $fetch<{ id: string; templateId: string; name: string; sizeBytes: number }>('/api/document/template', {
       baseURL: config.public.docUrl,
       method: 'POST',
       body,
     })
+
+    notify(
+      event,
+      'DOCUMENT_CREATED',
+      {
+        documentId: response.id,
+        templateId: response.templateId,
+        fileName: response.name,
+      },
+      orgId
+    )
 
     return response
   } catch (error: unknown) {

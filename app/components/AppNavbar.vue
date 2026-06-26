@@ -16,7 +16,7 @@ const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TA
 </script>
 
 <template>
-  <aside class="scrollbar-hidden z-50 flex h-screen shrink-0 flex-col gap-4 overflow-y-auto border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
+  <aside class="z-50 flex h-screen shrink-0 flex-col gap-4 overflow-y-auto border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
     <!-- Brand -->
     <div class="flex items-center gap-2 pl-1">
       <div class="grid shrink-0 place-items-center rounded-full transition-transform hover:scale-110">
@@ -39,10 +39,6 @@ const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TA
           <span class="hidden truncate md:block">{{ item.title }}</span>
           <span v-if="item.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-primary-500 md:block" />
           <span v-if="item.id === activeKey" class="absolute -right-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-primary-500 md:hidden" />
-          <div
-            class="pointer-events-none absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-dark-500 px-3 py-2 text-sm opacity-0 transition-opacity group-hover:opacity-100 md:hidden">
-            {{ item.title }}
-          </div>
         </NuxtLink>
       </div>
     </nav>

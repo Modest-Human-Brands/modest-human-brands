@@ -29,7 +29,7 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
       createdAt: data.created_time || new Date().toISOString(),
       updatedAt: data.last_edited_time || new Date().toISOString(),
       isProfileComplete: data.properties.Status.status.name !== 'Unfilled',
-      organizations: data.properties.Organization.relation.map((o) => o.id),
+      organizations: data.properties.Organization.rollup.array.map(({ relation }) => relation[0]!.id),
     }
   }
 

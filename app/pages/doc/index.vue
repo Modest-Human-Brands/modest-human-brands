@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: folders, pending } = await useFetch<DocFolder[]>('/api/doc')
+const { data: folders, pending } = await useFetch('/api/doc')
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const { data: folders, pending } = await useFetch<DocFolder[]>('/api/doc')
         <DocFolderCard v-for="folder in folders" :key="folder.id" :folder="folder" />
       </div>
 
-      <div v-else class="flex h-64 flex-col items-center justify-center text-white/40">
+      <div v-else class="flex h-full flex-col items-center justify-center text-white/40">
         <NuxtIcon name="local:folder" class="mb-4 text-4xl opacity-50" />
         <p class="font-semibold text-sm">No documents found.</p>
       </div>
