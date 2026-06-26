@@ -72,7 +72,15 @@ export const SECONDARY_NAVIGATION_TABS = [
   //   icon: 'local:target-fill',
   //   description: 'Manage all your projects here',
   //   to: '/project'
-  // }, {
+  // },
+  // {
+  //   id: 'complience',
+  //   title: 'Complicence',
+  //   icon: 'local:target-fill',
+  //   description: 'Manage all your projects here',
+  //   to: '/project'
+  // },
+  // {
   //   id: 'content',
   //   title: 'Content',
   //   icon: 'local:book',

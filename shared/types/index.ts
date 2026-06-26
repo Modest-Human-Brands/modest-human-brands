@@ -7,22 +7,44 @@ export interface OrganizationBranding {
   font: string
 }
 
+export interface OrganizationAccountDetails {
+  accountName: string
+  accountNumber: number
+  bankName: string
+  ifscCode: string
+}
+
+export interface OrganizationSocials {
+  instagram: string
+  facebook: string
+  linkedin: string
+  youtube: string
+}
+
 export interface Organization {
   id: string
   name: string
+  legalName: string
+  entityType: 'LLP' | 'Private Limited' | 'Proprietorship'
+  tradeRelationship: 'Primary' | 'Trading As' | 'Operating Division' | 'Wholly-Owned Subsidiary' | 'Special Purpose Vehicle'
+  gstin?: string
+  pan?: string
   address: string
   foundedYear: number
+  accountDetails: OrganizationAccountDetails
   branding: OrganizationBranding
   website?: string
   phone?: string
+  contactEmail: string
+  billingEmail: string
   whatsapp?: string
   socials?: {
     instagram?: string
     facebook?: string
     youtube?: string
   }
-  invites: string[]
-  ownerId: string
+  primaryContactId: string
+  organizationMemberIds: string[]
   createdAt: string
   updatedAt: string
 }
@@ -158,22 +180,6 @@ export interface NotionOrganization {
         }
       }[]
     }
-    Address: {
-      type: 'rich_text'
-      rich_text: {
-        text: {
-          content: string
-        }
-      }[]
-    }
-    'Account Details': {
-      type: 'rich_text'
-      rich_text: {
-        text: {
-          content: string
-        }
-      }[]
-    }
     Phone: {
       type: 'phone_number'
       phone_number: string
@@ -194,9 +200,101 @@ export interface NotionOrganization {
         }
       }[]
     }
+    'Legal Name': {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    'Entity Type': {
+      type: 'select'
+      select: { name: string } | null
+    }
+    'Trade Relationship': {
+      type: 'select'
+      select: { name: string } | null
+    }
+    GSTIN: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    PAN: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    Address: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    'Account Details': {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    'Contact Email': {
+      type: 'email'
+      email: string | null
+    }
+    'Billing Email': {
+      type: 'email'
+      email: string | null
+    }
     'Founded Year': {
       type: 'number'
       number: number
+    }
+    'Social Links': {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    'Primary Contact': {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    'Organization Members': {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Contact: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Interactions: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Project: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Document: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+    Asset: {
+      type: 'relation'
+      relation: { id: string }[]
     }
   }
 }
@@ -213,8 +311,14 @@ export interface NotionUser {
       title: { plain_text: string }[]
     }
     Organization: {
-      type: 'relation'
-      relation: { id: string }[]
+      type: 'rollup'
+      rollup: {
+        type: 'array'
+        array: {
+          type: 'relation'
+          relation: { id: string }[]
+        }[]
+      }
     }
     Role: {
       type: 'select'

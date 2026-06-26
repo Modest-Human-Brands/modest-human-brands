@@ -13,8 +13,12 @@ export default defineEventHandler<Promise<User[]>>(async (event) => {
       await notionQueryDb<NotionUser>(notion, notionDbId.user, {
         filter: {
           property: 'Organization',
-          relation: {
-            contains: activeOrg,
+          rollup: {
+            any: {
+              relation: {
+                contains: activeOrg,
+              },
+            },
           },
         },
       })

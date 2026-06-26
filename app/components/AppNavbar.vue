@@ -20,7 +20,7 @@ const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TA
     <!-- Brand -->
     <div class="flex items-center gap-2 pl-1">
       <div class="grid shrink-0 place-items-center rounded-full transition-transform hover:scale-110">
-        <NuxtImg :src="organizationLogo" :alt="organizationName" class="relative size-[32px] object-contain" />
+        <NuxtImg :src="organizationLogo" :alt="organizationName" class="relative size-8 object-contain" />
       </div>
       <div class="font-semibold hidden min-w-0 overflow-hidden truncate text-sm md:block">
         {{ organizationName }}

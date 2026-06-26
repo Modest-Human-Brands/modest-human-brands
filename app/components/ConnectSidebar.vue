@@ -14,7 +14,7 @@ const filteredContacts = computed(() => {
 </script>
 
 <template>
-  <div class="flex size-full flex-col border-l border-dark-500 bg-dark-400 md:w-[400px]">
+  <div class="flex size-full flex-col border-l border-dark-500 bg-dark-400 md:max-w-md">
     <div class="scrollbar-hidden flex shrink-0 items-center gap-2 overflow-x-auto p-2">
       <button
         v-for="channel in channels"

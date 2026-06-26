@@ -60,7 +60,7 @@ const features = [
       <div
         v-for="(feature, idx) in features"
         :key="feature.key"
-        class="group relative overflow-hidden rounded-2xl border border-white/10 bg-dark-500/50 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:border-white/30 hover:shadow-2xl hover:shadow-white/10"
+        class="group relative overflow-hidden rounded-2xl border border-white/10 bg-dark-500/50 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-white/30 hover:shadow-2xl hover:shadow-white/10"
         :style="{ animationDelay: `${idx * 0.1}s` }">
         <div class="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <NuxtImg :src="feature.background" :alt="feature.title" class="size-full object-cover" />

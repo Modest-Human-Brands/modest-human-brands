@@ -117,7 +117,7 @@ defineExpose({
         <button
           v-for="tpl in templates"
           :key="tpl.id"
-          class="hover:border-dark-300 flex w-[160px] shrink-0 flex-col gap-4 rounded-xl border border-dark-400 bg-dark-500 p-4 text-left transition-all hover:bg-dark-600"
+          class="hover:border-dark-300 flex w-40 shrink-0 flex-col gap-4 rounded-xl border border-dark-400 bg-dark-500 p-4 text-left transition-all hover:bg-dark-600"
           @click="handleSelectTemplate(tpl)">
           <div class="flex size-10 items-center justify-center rounded-lg bg-dark-500 text-light-400">
             <NuxtIcon name="local:document" class="text-xl" />

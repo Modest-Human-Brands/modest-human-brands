@@ -190,7 +190,7 @@ async function submitSignature() {
             <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
           </button>
 
-          <div v-if="!isSignDrawerOpen && !isSuccess" class="absolute bottom-[88px] left-1/2 z-30 flex -translate-x-1/2 items-center md:hidden">
+          <div v-if="!isSignDrawerOpen && !isSuccess" class="absolute bottom-20 left-1/2 z-30 flex -translate-x-1/2 items-center md:hidden">
             <button class="flex items-center gap-2 rounded-full bg-primary-500 px-6 py-3 text-sm font-bold text-white shadow-xl transition-transform hover:scale-105" @click="isSignDrawerOpen = true">
               <NuxtIcon name="local:pen" class="text-[18px]" /> Adopt & Sign
             </button>
@@ -217,7 +217,7 @@ async function submitSignature() {
             <h2 class="text-2xl font-bold text-white">Document Signed!</h2>
             <p class="mt-2 px-4 text-sm leading-relaxed text-light-400">Your signature has been securely applied and the document has been sealed. A final copy will be emailed to you shortly.</p>
           </div>
-          <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-[200px] rounded-full bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors" @click="navigateTo('/doc')">
+          <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-52 rounded-full bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors" @click="navigateTo('/doc')">
             Close Window
           </button>
         </div>

@@ -84,7 +84,7 @@ function rotate() {
     <div ref="viewerContainer" class="scrollbar-hidden relative flex h-full w-full flex-col items-center overflow-y-auto p-4 pb-32 md:p-6" @scroll="onScroll">
       <div v-if="isLoading || (!pdf && props.src)" class="m-auto flex flex-col items-center gap-4 text-light-500">
         <NuxtIcon name="local:loader" class="animate-spin text-4xl" />
-        <span class="text-sm font-bold uppercase tracking-widest">Loading Secure Document...</span>
+        <span class="text-sm font-bold uppercase tracking-widest">Loading Document...</span>
       </div>
 
       <div v-else-if="pdf && pages" class="flex w-full flex-col items-center gap-8 pb-28 transition-all duration-300">
@@ -98,7 +98,7 @@ function rotate() {
       </div>
     </div>
 
-    <div v-if="pdf && pages" class="absolute bottom-[128px] left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-full border border-white/10 bg-dark-400 px-6 py-3 text-white md:bottom-6">
+    <div v-if="pdf && pages" class="absolute bottom-32 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-full border border-white/10 bg-dark-400 px-6 py-3 text-white md:bottom-6">
       <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.max(1, viewerState.page - 1))">
         <NuxtIcon name="local:chevron-bold" class="text-lg" />
       </button>
