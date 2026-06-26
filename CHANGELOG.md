@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.13
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.12...v0.5.13)
+
+### 🚀 Enhancements
+
+- Implement push notification unsubscribe endpoint ([eefb739](https://github.com/Modest-Human-Brands/modest-human-brands/commit/eefb739))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.12
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.11...v0.5.12)
