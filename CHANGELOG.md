@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.12
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.11...v0.5.12)
+
+### 🏡 Chore
+
+- Update dependencies and improve organization API structure ([59b22d1](https://github.com/Modest-Human-Brands/modest-human-brands/commit/59b22d1))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.11
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.10...v0.5.11)
