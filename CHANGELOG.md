@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.15
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.14...v0.5.15)
+
+### 🩹 Fixes
+
+- **api:** Handle missing user.id or deviceId in notification subscription ([5155d46](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5155d46))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.14
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.13...v0.5.14)
