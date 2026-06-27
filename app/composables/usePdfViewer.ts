@@ -1,7 +1,7 @@
 import type { MaybeRefOrGetter } from 'vue'
 
 export function usePdfViewer(pdfUrl: MaybeRefOrGetter<string>) {
-  const pdf = shallowRef(undefined)
+  const pdf = shallowRef<PDFDocumentLoadingTask | undefined>(undefined)
   const pages = ref(0)
 
   onMounted(async () => {

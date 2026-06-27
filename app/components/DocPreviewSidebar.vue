@@ -4,74 +4,68 @@ export interface DocumentDetail {
   name: string
   sizeBytes: number
   extension: string
-  uploadedBy: { name: string; avatar?: string }
+  uploadedBy?: { name: string; avatar?: string }
   uploadedAt: string
-  project: string
-  source: string
+  project?: string
+  source?: string
   previewUrl?: string
+  openedAt?: string
+  filePath?: string
 }
 
 defineProps<{ document: DocumentDetail | null }>()
+
+interface SidebarAction {
+  id: string
+  label: string
+  icon: string
+}
+
+const sidebarActions: readonly SidebarAction[] = [
+  { id: 'comment', label: 'Add comments', icon: 'local:chat' },
+  { id: 'sign', label: 'Fill & Sign', icon: 'local:signature' },
+  { id: 'edit', label: 'Edit PDF', icon: 'local:edit' },
+  { id: 'download', label: 'Download PDF', icon: 'local:download' },
+  { id: 'print', label: 'Print PDF', icon: 'local:print' },
+] as const
 </script>
 
 <template>
-  <div class="flex size-full flex-col overflow-y-auto bg-dark-400 p-6 md:w-[380px]">
+  <aside class="flex size-full flex-col overflow-y-auto border-l border-dark-500 bg-dark-400 p-6 md:w-[360px]">
     <div v-if="!document" class="flex h-full flex-col items-center justify-center text-white/40">
       <NuxtIcon name="local:document" class="mb-4 text-4xl opacity-50" />
       <p class="font-semibold text-sm">Select a document to preview</p>
     </div>
 
-    <div v-else class="flex flex-col gap-8">
-      <div class="flex items-start justify-between gap-4">
-        <div class="flex flex-col gap-1">
-          <h2 class="font-semibold text-lg text-white">{{ document.name }}</h2>
-          <p class="font-semibold text-sm uppercase tracking-wider text-light-500">{{ formatBytes(document.sizeBytes) }} • {{ document.extension }}</p>
-        </div>
-        <button class="flex size-10 shrink-0 items-center justify-center rounded-lg border border-white/10 text-white transition-colors hover:bg-white/5">
-          <NuxtIcon name="local:download" class="text-lg" />
+    <div v-else class="flex flex-col gap-6">
+      <!-- Top: Large Document Preview Canvas -->
+      <div class="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-dark-500 p-4 shadow-inner">
+        <img v-if="document.previewUrl" :src="document.previewUrl" :alt="document.name" class="size-full object-contain shadow-md" />
+        <NuxtIcon v-else name="local:file-pdf" class="text-7xl text-light-500/40" />
+      </div>
+
+      <!-- Middle: Metadata Block -->
+      <div class="flex flex-col gap-1 border-b border-white/5 pb-5">
+        <h2 class="font-semibold truncate text-base text-white" :title="document.name">{{ document.name }}</h2>
+        <p class="text-xs text-light-500">
+          <span class="uppercase">{{ document.extension }}</span> • Opened {{ document.openedAt || document.uploadedAt }}
+        </p>
+        <p class="font-mono truncate text-[11px] text-light-500/70" :title="document.filePath || document.source">
+          {{ document.filePath || document.source || 'Cloud Workspace' }}
+        </p>
+      </div>
+
+      <!-- Bottom: Action Menu List -->
+      <nav class="flex flex-col gap-1">
+        <button
+          v-for="action in sidebarActions"
+          :key="action.id"
+          type="button"
+          class="font-medium group flex w-full items-center gap-3.5 rounded-lg px-3 py-2.5 text-left text-sm text-light-400 transition-colors hover:bg-white/5 hover:text-white">
+          <NuxtIcon :name="action.icon" class="text-lg text-light-500 transition-colors group-hover:text-primary-400" />
+          <span class="truncate">{{ action.label }}</span>
         </button>
-      </div>
-
-      <div class="flex flex-col gap-4 text-sm">
-        <div class="flex items-center gap-4">
-          <span class="font-semibold flex w-24 shrink-0 items-center gap-2 text-light-500"> <NuxtIcon name="local:chevron-bold" /> Created by: </span>
-          <div class="flex items-center gap-2 text-white">
-            <div class="font-semibold flex size-6 items-center justify-center overflow-hidden rounded-full bg-white text-xs text-black">
-              <img v-if="document.uploadedBy?.avatar" :src="document.uploadedBy?.avatar" class="size-full object-cover" />
-              <span v-else>{{ document.uploadedBy?.name?.charAt(0) }}</span>
-            </div>
-            <span class="font-semibold">{{ document.uploadedBy?.name }}</span>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <span class="font-semibold flex w-24 shrink-0 items-center gap-2 text-light-500"> <NuxtIcon name="local:person" /> Source: </span>
-          <span class="font-semibold rounded bg-white/10 px-2 py-0.5 text-xs text-white">{{ document.source }}</span>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <span class="font-semibold flex w-24 shrink-0 items-center gap-2 text-light-500"> <NuxtIcon name="local:chevron-bold" /> Uploaded: </span>
-          <span class="font-semibold text-white">{{ document.uploadedAt }}</span>
-        </div>
-      </div>
-
-      <div class="group relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-white/10">
-        <!-- <div class="absolute inset-0 p-4 opacity-50 transition-opacity group-hover:opacity-100">
-            <div class="mb-6 h-3 w-3/4 rounded bg-dark-500/20"></div>
-            <div class="mb-2 h-2 w-full rounded bg-dark-500/10"></div>
-            <div class="mb-2 h-2 w-5/6 rounded bg-dark-500/10"></div>
-            <div class="mb-6 h-2 w-full rounded bg-dark-500/10"></div>
-            <div class="mb-6 h-px w-full bg-dark-500/20"></div>
-            <div class="mb-2 flex items-start gap-2">
-              <div class="mt-1 h-2 w-2 rounded-full bg-dark-500/30"></div>
-              <div class="h-2 w-5/6 rounded bg-dark-500/10"></div>
-            </div>
-          </div>
-
-          <button class="absolute bottom-4 right-4 flex size-10 items-center justify-center rounded-full bg-white text-dark-500 ring-1 ring-dark-500/10 transition-transform hover:scale-110">
-            <NuxtIcon name="local:expand" class="text-lg" />
-          </button> -->
-      </div>
+      </nav>
     </div>
-  </div>
+  </aside>
 </template>

@@ -1,7 +1,5 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { VuePDF } from '@tato30/vue-pdf'
-
 definePageMeta({
   layout: 'navigation',
   middleware: ['auth'],
@@ -25,8 +23,6 @@ const isPreviewLoading = ref(false)
 const isGenerating = ref(false)
 
 const isMobileDrawerOpen = ref(false)
-const isLeftOpen = ref(false)
-const viewerRef = ref()
 
 const pdfDataUri = computed(() => (pdfPreviewBase64.value ? `data:application/pdf;base64,${pdfPreviewBase64.value}` : ''))
 
@@ -153,33 +149,7 @@ function prevStep() {
 
 <template>
   <main class="relative flex size-full h-full flex-col overflow-hidden bg-dark-500 md:flex-row">
-    <div v-if="isLeftOpen" class="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden" @click="isLeftOpen = false" />
-
-    <aside
-      :class="[
-        isLeftOpen ? 'translate-x-0' : '-translate-x-full',
-        'scrollbar-hidden absolute inset-y-0 left-0 z-40 flex w-36 shrink-0 flex-col overflow-y-auto border-r border-white/5 bg-dark-400 p-4 transition-transform duration-300 lg:relative lg:translate-x-0',
-      ]">
-      <ClientOnly>
-        <div v-for="p in viewerRef?.pages" :key="p" class="mb-6 flex flex-col items-center">
-          <div
-            :class="viewerRef?.viewerState.page === p ? 'border-primary-500' : 'border-transparent'"
-            class="aspect-[3/4] w-full shrink-0 cursor-pointer border-2 bg-white transition-all hover:border-primary-500/50"
-            @click="viewerRef?.setPage(p)">
-            <VuePDF :pdf="viewerRef?.pdf" :page="p" fit-parent />
-          </div>
-          <span class="font-semibold mt-2 shrink-0 text-xs text-light-500">{{ p }}</span>
-        </div>
-      </ClientOnly>
-    </aside>
-
-    <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1">
-      <template #floating-actions>
-        <button class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg bg-black/80 text-white lg:hidden" @click="isLeftOpen = true">
-          <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
-        </button>
-      </template>
-    </PdfDocumentViewer>
+    <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1"> </PdfDocumentViewer>
 
     <BaseDrawerSidebar v-model="isMobileDrawerOpen">
       <template #header>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { VuePDF } from '@tato30/vue-pdf'
-
 definePageMeta({
   layout: false,
   middleware: ['auth'],
@@ -74,9 +72,6 @@ const docId = route.params.docId as string
 const { data: doc, refresh } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${docId}`)
 const pdfUrl = computed(() => (!doc.value ? '' : `${config.public.docUrl}${doc.value.previewUrl}`))
 
-const viewerRef = ref()
-
-const isLeftOpen = ref(false)
 const isRightDrawerOpen = ref(false)
 const rightPanelView = ref<'metadata' | 'sign'>('metadata')
 
@@ -115,10 +110,6 @@ watchEffect(() => {
     })
   }
 })
-
-function resetClick() {
-  isLeftOpen.value = false
-}
 
 function getInitials(name?: string) {
   if (!name) return 'C'
@@ -182,42 +173,18 @@ async function copyLink() {
 
 <template>
   <main v-if="doc" class="relative flex h-dvh w-full flex-row overflow-hidden bg-dark-500">
-    <div v-if="isLeftOpen" class="absolute inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden" @click="resetClick" />
-    <aside
-      :class="[
-        isLeftOpen ? 'translate-x-0' : '-translate-x-full',
-        'scrollbar-hidden absolute inset-y-0 left-0 z-40 flex w-36 shrink-0 flex-col overflow-y-auto border-r border-white/5 bg-dark-400 p-4 transition-transform duration-300 lg:relative lg:translate-x-0',
-      ]">
-      <ClientOnly>
-        <div v-for="p in viewerRef?.pages" :key="p" class="mb-6 flex flex-col items-center">
-          <div
-            :class="viewerRef?.viewerState.page === p ? 'border-primary-500' : 'border-transparent'"
-            class="aspect-[3/4] w-full shrink-0 cursor-pointer border-2 bg-white transition-all hover:border-primary-500/50"
-            @click="viewerRef?.setPage(p)">
-            <VuePDF :pdf="viewerRef?.pdf" :page="p" fit-parent />
-          </div>
-          <span class="font-semibold mt-2 shrink-0 text-xs text-light-500">{{ p }}</span>
-        </div>
-      </ClientOnly>
-    </aside>
-
     <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }">
       <template #toolbar-actions>
         <button
-          class="font-semibold flex shrink-0 items-center gap-1.5 rounded-full bg-primary-500 px-4 py-1.5 text-xs text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+          type="button"
+          class="transition-colors hover:text-primary-500"
           @click="
             () => {
               rightPanelView = 'sign'
               isRightDrawerOpen = true
             }
           ">
-          <NuxtIcon name="local:pen" class="text-sm" /> Sign
-        </button>
-      </template>
-
-      <template #floating-actions>
-        <button class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg bg-black/80 text-white lg:hidden" @click="isLeftOpen = true">
-          <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
+          <NuxtIcon name="local:signature" class="text-lg" />
         </button>
       </template>
     </PdfDocumentViewer>
