@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.16
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.15...v0.5.16)
+
+### 💅 Refactors
+
+- Pdf viewer and document handling components ([8465bc1](https://github.com/Modest-Human-Brands/modest-human-brands/commit/8465bc1))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.15
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.14...v0.5.15)
