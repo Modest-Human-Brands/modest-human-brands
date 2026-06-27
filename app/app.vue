@@ -55,7 +55,7 @@ async function syncVisitorFingerprint() {
     const fp = await FingerprintJS.load()
     const { visitorId } = await fp.get()
 
-    await $api('/api/auth/device', {
+    await $api('/auth/device', {
       method: 'PATCH',
       body: { deviceId: visitorId },
     })

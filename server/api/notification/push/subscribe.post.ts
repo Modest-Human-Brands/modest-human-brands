@@ -13,6 +13,8 @@ export default defineEventHandler(async (event) => {
     const { user, deviceId } = await requireUserSession(event)
     const pushStorage = useStorage<NotificationSubscription>('data:subscription:notification')
 
+    if (!user.id && deviceId) throw createError({ statusCode: 400, statusMessage: 'user.id or deviceId is undefined' })
+
     const body = await readBody<NotificationSubscription>(event)
     body.organizations = user?.organizations || []
 
