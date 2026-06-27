@@ -2,10 +2,10 @@ import type { NotificationSubscription } from './subscribe.post'
 
 export default defineEventHandler(async (event) => {
   try {
-    const { user } = await requireUserSession(event)
+    const { user, deviceId } = await requireUserSession(event)
     const pushStorage = useStorage<NotificationSubscription>('data:subscription:notification')
 
-    const result = await pushStorage.removeItem(user.id)
+    const result = await pushStorage.removeItem(`${user.id}-${deviceId}`)
 
     return { success: result }
   } catch (error: unknown) {

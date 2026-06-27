@@ -38,6 +38,7 @@
     "tauri:build:mobile": "tauri android build"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^5.2.0",
     "@notionhq/client": "^5.22.0",
     "@nuxt/eslint": "^1.16.0",
     "@nuxt/fonts": "^0.14.0",

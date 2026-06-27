@@ -10,14 +10,13 @@ export interface NotificationSubscription {
 
 export default defineEventHandler(async (event) => {
   try {
-    const { user } = await requireUserSession(event)
+    const { user, deviceId } = await requireUserSession(event)
     const pushStorage = useStorage<NotificationSubscription>('data:subscription:notification')
 
     const body = await readBody<NotificationSubscription>(event)
-    console.log({ user })
     body.organizations = user?.organizations || []
 
-    await pushStorage.setItem(user.id, body)
+    await pushStorage.setItem(`${user.id}-${deviceId}`, body)
 
     return { success: true }
   } catch (error: unknown) {

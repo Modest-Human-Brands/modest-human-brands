@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
+
 const title = `Modest Human Brands`
 const description = `Autonomous Next-Gen Media Operating System`
 
@@ -31,7 +33,7 @@ useSeoMeta({
 
 useSchemaOrg([
   defineWebPage({
-    datePublished: new Date(2024, 10, 4).toISOString(),
+    datePublished: new Date(2026, 1, 1).toISOString(),
     dateModified: buildTime,
     author: 'Shirsendu Bairagi',
   }),
@@ -43,10 +45,26 @@ useSchemaOrg([
 ])
 
 const { $api } = useNuxtApp()
+const { loggedIn, session } = useUserSession()
 const { isSupported, permissionGranted } = useWebNotification()
 
+async function syncVisitorFingerprint() {
+  if (!loggedIn.value || session.value?.deviceId) return
+
+  try {
+    const fp = await FingerprintJS.load()
+    const { visitorId } = await fp.get()
+
+    await $api('/api/auth/device', {
+      method: 'PATCH',
+      body: { deviceId: visitorId },
+    })
+  } catch (error) {
+    console.warn('[Fingerprint] Failed to attach visitor ID:', error)
+  }
+}
+
 async function getExistingSubscription() {
-  console.log({ vapidKey })
   if (!('serviceWorker' in navigator)) {
     console.warn('Service Workers are not supported in this browser.')
     return
@@ -83,7 +101,12 @@ async function getExistingSubscription() {
 }
 
 onMounted(async () => {
+  syncVisitorFingerprint()
   if (isSupported.value && permissionGranted.value) await getExistingSubscription()
+})
+
+watch(loggedIn, (isLoggedIn) => {
+  if (isLoggedIn) syncVisitorFingerprint()
 })
 
 watch(permissionGranted, async (value) => {
