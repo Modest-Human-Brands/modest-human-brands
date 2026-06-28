@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.18
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.17...v0.5.18)
+
+### 🚀 Enhancements
+
+- **api:** Add compliance document management endpoints ([c39d344](https://github.com/Modest-Human-Brands/modest-human-brands/commit/c39d344))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.17
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.16...v0.5.17)
