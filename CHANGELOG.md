@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.17
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.16...v0.5.17)
+
+### 💅 Refactors
+
+- Enhance FormField component with additional date and time handling ([5623443](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5623443))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.16
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.15...v0.5.16)
