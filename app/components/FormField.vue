@@ -19,6 +19,8 @@ const isArrayOfObjects = computed(() => typeLower.value === 'array<object>')
 const isNumber = computed(() => typeLower.value === 'number')
 const isBoolean = computed(() => typeLower.value === 'boolean')
 const isDate = computed(() => typeLower.value === 'date')
+const isTime = computed(() => typeLower.value === 'time')
+const isDateTime = computed(() => typeLower.value === 'datetime' || typeLower.value === 'datetime-local')
 const isEmail = computed(() => typeLower.value === 'email')
 const isSignature = computed(() => typeLower.value === 'signature')
 const isEnum = computed(() => props.schemaType.startsWith('enum:'))
@@ -28,9 +30,13 @@ const enumOptions = computed(() => {
   return props.schemaType.split(':')[1]?.split(',') || []
 })
 
+const hasNativePicker = computed(() => isDate.value || isTime.value || isDateTime.value)
+
 const inputType = computed(() => {
   if (isNumber.value) return 'number'
   if (isDate.value) return 'date'
+  if (isTime.value) return 'time'
+  if (isDateTime.value) return 'datetime-local'
   if (isEmail.value) return 'email'
   return 'text'
 })
@@ -208,7 +214,7 @@ function handleFileUpload(event: Event) {
         v-else
         :type="inputType"
         :value="modelValue"
-        :placeholder="isDate ? '' : 'Enter data'"
+        :placeholder="hasNativePicker ? '' : 'Enter data'"
         class="w-full rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-white focus:bg-dark-400"
         required
         @input="onInput" />
