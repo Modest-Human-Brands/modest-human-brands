@@ -184,7 +184,7 @@ async function print() {
       <div ref="viewerContainer" class="scrollbar-hidden relative grid size-full overflow-auto p-4 pb-32 md:p-6" @scroll="onScroll">
         <div v-if="isLoading || (!pdf && props.src)" class="m-auto flex flex-col items-center gap-4 text-light-500">
           <NuxtIcon name="local:loader" class="animate-spin text-4xl" />
-          <span class="text-sm font-bold uppercase tracking-widest">Loading Document...</span>
+          <span class="font-semibold text-sm uppercase tracking-widest">Loading Document...</span>
         </div>
 
         <div v-else-if="pdf && pages" class="m-auto flex w-full max-w-fit flex-col items-center gap-8 pb-16 transition-all duration-300">
@@ -202,7 +202,7 @@ async function print() {
         <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.max(1, viewerState.page - 1))">
           <NuxtIcon name="local:chevron-bold" class="text-lg" />
         </button>
-        <span class="whitespace-nowrap text-center text-xs font-bold text-light-400"> {{ viewerState.page }} / {{ pages }} </span>
+        <span class="font-semibold whitespace-nowrap text-center text-xs text-light-400"> {{ viewerState.page }} / {{ pages }} </span>
         <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.min(pages || 1, viewerState.page + 1))">
           <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-lg" />
         </button>

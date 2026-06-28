@@ -10,7 +10,9 @@ const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
 const editedAt = ref('Jan 17')
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 
-const activeTab = computed(() => PRIMARY_NAVIGATION_TABS.find(({ id }) => route.path.includes(id)) ?? PRIMARY_NAVIGATION_TABS[0]!)
+const activeTab = computed(
+  () => PRIMARY_NAVIGATION_TABS.find(({ id }) => route.path.includes(id)) ?? SECONDARY_NAVIGATION_TABS.find(({ id }) => route.path.includes(id)) ?? PRIMARY_NAVIGATION_TABS[0]!
+)
 </script>
 
 <template>

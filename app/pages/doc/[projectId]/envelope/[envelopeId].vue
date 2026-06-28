@@ -138,7 +138,7 @@ async function submitSignature() {
       <div class="mx-auto mb-6 flex size-24 items-center justify-center rounded-full bg-alert-500/20 text-alert-500">
         <NuxtIcon name="local:cross" class="text-5xl" />
       </div>
-      <h2 class="text-2xl font-bold text-white">Access Denied</h2>
+      <h2 class="font-semibold text-2xl text-white">Access Denied</h2>
       <p class="mt-2 max-w-md px-4 text-sm leading-relaxed text-light-400">
         {{ verificationError }}
       </p>
@@ -156,16 +156,16 @@ async function submitSignature() {
             <span v-else-if="f.type !== 'SIGNATURE' && formData[f.id]" :style="{ fontSize: `${(f.fontSize || 12) * scale}px` }" class="font-semibold px-2 text-center tracking-wide">
               {{ formData[f.id] }}
             </span>
-            <span v-else class="text-[8px] font-bold uppercase tracking-widest opacity-60 md:text-[10px]">
+            <span v-else class="font-semibold text-[8px] uppercase tracking-widest opacity-60 md:text-[10px]">
               {{ f.type }}
             </span>
           </div>
         </template>
       </PdfDocumentViewer>
 
-      <BaseDrawerSidebar v-model="isSignDrawerOpen">
+      <AppSidebar v-model="isSignDrawerOpen">
         <template #header>
-          <h2 class="text-xl font-bold tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
+          <h2 class="font-semibold text-xl tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
         </template>
         <template #actions>
           <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isSignDrawerOpen = false">
@@ -179,10 +179,10 @@ async function submitSignature() {
             <NuxtIcon name="local:check-circle" class="text-6xl" />
           </div>
           <div>
-            <h2 class="text-2xl font-bold text-white">Document Signed!</h2>
+            <h2 class="font-semibold text-2xl text-white">Document Signed!</h2>
             <p class="mt-2 px-4 text-sm leading-relaxed text-light-400">Your signature has been securely applied and the document has been sealed. A final copy will be emailed to you shortly.</p>
           </div>
-          <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-52 rounded-full bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors" @click="navigateTo('/doc')">
+          <button class="hover:bg-dark-300 font-semibold mx-auto mt-4 w-full max-w-52 rounded-full bg-dark-500 px-6 py-3 text-sm text-white transition-colors" @click="navigateTo('/doc')">
             Close Window
           </button>
         </div>
@@ -199,14 +199,14 @@ async function submitSignature() {
           <div class="mt-4 border-t border-dark-500/50 pt-6">
             <button
               :disabled="isSubmitting || (!masterSignature && signatureFields.length > 0)"
-              class="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-base font-bold text-dark-500 shadow-sm transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-50"
+              class="font-semibold flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-base text-dark-500 shadow-sm transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-50"
               @click="submitSignature">
               <NuxtIcon v-if="isSubmitting" name="local:loader" class="animate-spin text-lg" />
               {{ isSubmitting ? 'Sealing Document...' : 'I Agree & Sign' }}
             </button>
           </div>
         </div>
-      </BaseDrawerSidebar>
+      </AppSidebar>
     </template>
   </main>
 </template>

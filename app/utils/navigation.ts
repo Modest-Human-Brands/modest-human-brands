@@ -73,13 +73,20 @@ export const SECONDARY_NAVIGATION_TABS = [
   //   description: 'Manage all your projects here',
   //   to: '/project'
   // },
-  // {
-  //   id: 'complience',
-  //   title: 'Complicence',
-  //   icon: 'local:target-fill',
-  //   description: 'Manage all your projects here',
-  //   to: '/project'
-  // },
+  {
+    id: 'transaction',
+    title: 'Transaction',
+    icon: 'local:journal',
+    description: 'Manage all your transactions here',
+    to: '/transaction',
+  },
+  {
+    id: 'compliance',
+    title: 'Compliance',
+    icon: 'local:court-hammer',
+    description: 'Manage all your compliances here',
+    to: '/compliance',
+  },
   // {
   //   id: 'content',
   //   title: 'Content',

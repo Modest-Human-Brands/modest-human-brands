@@ -154,7 +154,7 @@ function handleFileUpload(event: Event) {
       <div v-else-if="isArrayOfObjects" class="flex w-full flex-col gap-6">
         <div v-for="(item, index) in Array.isArray(modelValue) ? modelValue : []" :key="index" class="relative flex flex-col gap-4 rounded-xl border border-dark-400 bg-dark-500/30 p-4">
           <div class="flex items-center justify-between border-b border-dark-400/50 pb-3">
-            <span class="text-xs font-bold uppercase tracking-wider text-light-500">Item {{ index + 1 }}</span>
+            <span class="font-semibold text-xs uppercase tracking-wider text-light-500">Item {{ index + 1 }}</span>
             <button type="button" class="font-semibold text-xs text-alert-500 transition-colors hover:text-alert-400" @click="removeArrayItem(index)">Remove</button>
           </div>
 
@@ -183,13 +183,13 @@ function handleFileUpload(event: Event) {
           class="border-dark-300 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed bg-dark-500/30 text-light-500 transition-colors hover:border-primary-500 hover:bg-primary-500/10 hover:text-primary-400">
           <div class="flex items-center gap-2">
             <NuxtIcon name="local:upload" class="text-xl" />
-            <span class="text-xs font-bold uppercase tracking-wider">Upload Signature</span>
+            <span class="font-semibold text-xs uppercase tracking-wider">Upload Signature</span>
           </div>
           <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
         </label>
         <div v-else class="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-xl border border-success-500/30 bg-success-500/10">
           <img :src="modelValue as string" class="h-full object-contain p-2" />
-          <label class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/50 text-xs font-bold text-white opacity-0 transition-opacity hover:opacity-100">
+          <label class="font-semibold absolute inset-0 flex cursor-pointer items-center justify-center bg-black/50 text-xs text-white opacity-0 transition-opacity hover:opacity-100">
             Change Signature
             <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
           </label>

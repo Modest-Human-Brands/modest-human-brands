@@ -189,14 +189,14 @@ async function copyLink() {
       </template>
     </PdfDocumentViewer>
 
-    <BaseDrawerSidebar v-model="isRightDrawerOpen">
+    <AppSidebar v-model="isRightDrawerOpen">
       <template #header>
         <div v-if="rightPanelView === 'metadata'">
-          <h2 class="text-xl font-bold tracking-tight text-white">Document Info</h2>
+          <h2 class="font-semibold text-xl tracking-tight text-white">Document Info</h2>
           <p class="mt-0.5 text-xs text-light-500">Metadata and history</p>
         </div>
         <div v-else>
-          <h2 class="text-xl font-bold capitalize tracking-tight text-white">
+          <h2 class="font-semibold text-xl capitalize tracking-tight text-white">
             {{ doc?.routingQueue?.length ? 'Envelope Details' : 'Send to Sign' }}
           </h2>
           <p class="mt-0.5 text-xs text-light-500">
@@ -208,7 +208,7 @@ async function copyLink() {
       <template #actions>
         <button
           v-if="rightPanelView === 'sign'"
-          class="mr-2 flex items-center gap-2 rounded-lg bg-dark-500 px-3 py-1.5 text-xs font-bold text-light-400 transition-colors hover:text-white"
+          class="font-semibold mr-2 flex items-center gap-2 rounded-lg bg-dark-500 px-3 py-1.5 text-xs text-light-400 transition-colors hover:text-white"
           @click="rightPanelView = 'metadata'">
           Back
         </button>
@@ -261,7 +261,7 @@ async function copyLink() {
             <div class="flex items-center justify-between">
               <h3 class="font-semibold text-sm text-white">Signer Queue</h3>
               <span
-                class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                class="font-semibold rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wider"
                 :class="doc.status === 'Completed' ? 'bg-success-500/20 text-success-500' : 'bg-primary-500/20 text-primary-500'">
                 {{ doc.status }}
               </span>
@@ -280,14 +280,14 @@ async function copyLink() {
                   <p class="truncate text-xs text-light-400">{{ signer.email }}</p>
                 </div>
                 <div class="flex flex-col items-end gap-2">
-                  <span class="text-[10px] font-bold uppercase tracking-wider" :class="signer.status === 'SIGNED' ? 'text-success-500' : 'text-alert-500'">
+                  <span class="font-semibold text-[10px] uppercase tracking-wider" :class="signer.status === 'SIGNED' ? 'text-success-500' : 'text-alert-500'">
                     {{ signer.status }}
                   </span>
 
                   <button
                     v-if="signer.status !== 'COMPLETED'"
                     :disabled="isGeneratingLink === signer.email"
-                    class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-bold text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
+                    class="font-semibold flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
                     @click="generateSessionLink(signer.name, signer.email, index !== doc.routingQueue.length - 1)">
                     <NuxtIcon v-if="isGeneratingLink === signer.email" name="local:loader" class="animate-spin text-sm" />
                     <NuxtIcon v-else name="local:connect" class="text-sm" />
@@ -307,7 +307,7 @@ async function copyLink() {
                   class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
                 <div class="flex items-center gap-3 pt-1">
                   <button
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-primary-500"
+                    class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-colors hover:border-primary-500"
                     @click="copyLink">
                     <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
                     <span v-else>Copy Link</span>
@@ -316,7 +316,7 @@ async function copyLink() {
                   <a
                     :href="magicLink"
                     target="_blank"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
+                    class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
                     Open Link
                     <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
                   </a>
@@ -329,7 +329,7 @@ async function copyLink() {
         <div v-else class="flex flex-col gap-6">
           <div v-if="!magicLink" class="flex flex-col gap-4">
             <div v-for="signer in envelopeSigners" :key="signer.order" class="flex flex-col gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
-              <h4 class="text-xs font-bold uppercase tracking-wider text-light-500">Signer {{ signer.order }}</h4>
+              <h4 class="font-semibold text-xs uppercase tracking-wider text-light-500">Signer {{ signer.order }}</h4>
               <div class="flex flex-col gap-2">
                 <input
                   v-model="signer.name"
@@ -360,7 +360,7 @@ async function copyLink() {
                 class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
               <div class="flex items-center gap-3 pt-1">
                 <button
-                  class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white transition-colors hover:border-primary-500"
+                  class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-colors hover:border-primary-500"
                   @click="copyLink">
                   <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
                   <span v-else>Copy Link</span>
@@ -369,7 +369,7 @@ async function copyLink() {
                 <a
                   :href="magicLink"
                   target="_blank"
-                  class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
+                  class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
                   Open Link
                   <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
                 </a>
@@ -395,7 +395,7 @@ async function copyLink() {
           </div>
         </div>
       </div>
-    </BaseDrawerSidebar>
+    </AppSidebar>
   </main>
 </template>
 

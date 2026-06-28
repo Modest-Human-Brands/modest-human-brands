@@ -10,9 +10,9 @@ const templateId = route.params.id as string
 
 const uiStyles = {
   btnPrimary:
-    'flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-dark-500 fill-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
+    'flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-dark-500 fill-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
   btnSecondary:
-    'flex w-full items-center justify-center gap-2 rounded-full border border-dark-400 bg-dark-500 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-dark-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
+    'flex w-full items-center justify-center gap-2 rounded-full border border-dark-400 bg-dark-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-dark-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
 }
 
 const { data: template } = await useFetch(`/api/doc/template/${templateId}`)
@@ -151,9 +151,9 @@ function prevStep() {
   <main class="relative flex size-full h-full flex-col overflow-hidden bg-dark-500 md:flex-row">
     <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1"> </PdfDocumentViewer>
 
-    <BaseDrawerSidebar v-model="isMobileDrawerOpen">
+    <AppSidebar v-model="isMobileDrawerOpen">
       <template #header>
-        <h1 class="text-xl font-bold capitalize tracking-tight text-white">
+        <h1 class="font-semibold text-xl capitalize tracking-tight text-white">
           {{ templateId.replace(/-/g, ' ') }}
         </h1>
         <p class="mt-0.5 text-xs text-light-500">Fill details to update preview</p>
@@ -176,13 +176,13 @@ function prevStep() {
 
       <div v-else-if="wizardStep === 1" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
-          <h2 class="text-2xl font-bold text-white">Review & Generate</h2>
+          <h2 class="font-semibold text-2xl text-white">Review & Generate</h2>
           <p class="text-sm text-light-500">Please review the captured information before finalizing the document.</p>
         </div>
 
         <div class="flex flex-col gap-0 overflow-hidden rounded-2xl border border-dark-400 bg-dark-500/50">
           <div v-for="field in currentSchema" :key="field.path" class="flex flex-col gap-1 border-b border-dark-400 p-4 last:border-0 md:flex-row md:items-start md:justify-between">
-            <span class="pt-1 text-xs font-bold uppercase tracking-wider text-light-500 md:w-1/3">
+            <span class="font-semibold pt-1 text-xs uppercase tracking-wider text-light-500 md:w-1/3">
               {{ field.groupName === 'General Details' ? field.label : `${field.groupName} → ${field.label}` }}
             </span>
 
@@ -196,7 +196,7 @@ function prevStep() {
 
             <div v-else-if="field.type === 'array<object>'" class="mt-2 flex w-full flex-col gap-3 md:mt-0 md:w-2/3 md:items-end">
               <div v-for="(item, i) in formData[field.path] as any[]" :key="i" class="flex w-full flex-col gap-2 rounded border border-dark-400 bg-dark-500/80 p-3 text-left">
-                <span class="border-b border-dark-400 pb-1 text-xs font-bold uppercase tracking-wider text-light-500">Item {{ i + 1 }}</span>
+                <span class="font-semibold border-b border-dark-400 pb-1 text-xs uppercase tracking-wider text-light-500">Item {{ i + 1 }}</span>
                 <div v-for="(val, k) in item" :key="k" class="flex items-start justify-between gap-4">
                   <span class="text-xs capitalize text-light-400">{{
                     String(k)
@@ -233,7 +233,7 @@ function prevStep() {
           </button>
         </div>
       </div>
-    </BaseDrawerSidebar>
+    </AppSidebar>
   </main>
 </template>
 

@@ -51,8 +51,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/test-utils/module',
-    '@nuxtjs/color-mode',
-    // '@nuxtjs/i18n',
+    '@nuxtjs/color-mode', // '@nuxtjs/i18n',
     '@nuxtjs/mcp-toolkit',
     '@nuxtjs/seo',
     '@nuxtjs/tailwindcss',
@@ -61,6 +60,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@vueuse/nuxt',
     'nuxt-auth-utils',
+    'nuxt-tiptap-editor',
   ],
   vite: {
     optimizeDeps: {
@@ -341,6 +341,9 @@ export default defineNuxtConfig({
       enabled: false,
       suppressWarnings: false,
     },
+  },
+  tiptap: {
+    prefix: 'Tiptap',
   },
   ...nativeConfig,
 })
