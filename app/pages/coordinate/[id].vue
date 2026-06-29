@@ -7,7 +7,7 @@ definePageMeta({
 const route = useRoute()
 const activeConversationId = route.params.id as string
 
-const { conversations, messages, inboxPending, chatPending, isPaginating, sendMessage, loadMoreMessages } = useCoordinate(activeConversationId)
+const { conversations, messages, pending, chatPending, isPaginating, sendMessage, loadMoreMessages } = useCoordinate(activeConversationId)
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const { conversations, messages, inboxPending, chatPending, isPaginating, sendMe
     </div>
 
     <div class="hidden h-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
-      <div v-if="inboxPending" class="size-full animate-pulse bg-white/5" />
+      <div v-if="pending" class="size-full animate-pulse bg-white/5" />
       <CoordinateSidebar v-else-if="conversations" :conversations="conversations" :active-id="activeConversationId" />
     </div>
   </main>

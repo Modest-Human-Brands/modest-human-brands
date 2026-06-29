@@ -96,8 +96,8 @@ watch(
 </script>
 
 <template>
-  <div ref="containerRef" class="group/editor relative left-10 w-[calc(100%-2.5rem)]" @mousemove="onEditorMouseMove" @mouseleave="!isDragging ? (isHandleVisible = false) : ''">
-    <div v-show="isHandleVisible" class="absolute -left-14 z-10 flex items-center gap-0.5 transition-all duration-75 ease-out" :style="{ top: `${handleTop}px` }">
+  <div ref="containerRef" class="group/editor relative" @mousemove="onEditorMouseMove" @mouseleave="!isDragging ? (isHandleVisible = false) : ''">
+    <div v-show="isHandleVisible" class="absolute -left-14 z-10 hidden items-center gap-0.5 transition-all duration-75 ease-out md:flex" :style="{ top: `${handleTop}px` }">
       <button
         type="button"
         class="flex items-center justify-center rounded p-1 text-light-400 transition-colors hover:bg-light-600/40 hover:text-black dark:hover:bg-dark-600 dark:hover:text-white"

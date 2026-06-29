@@ -4,18 +4,26 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: contacts, pending: loadingContacts } = await useFetch('/api/connect', { default: () => [] as ChatContact[] })
+const { data: contacts, pending } = await useFetch('/api/connect', { default: () => [] as ChatContact[] })
 </script>
 
 <template>
-  <main class="flex size-full overflow-hidden">
-    <div class="hidden h-full min-w-0 flex-1 flex-col transition-all duration-300 md:flex">
+  <main class="flex size-full select-none overflow-hidden bg-dark-400">
+    <div class="hidden h-full min-w-0 flex-1 flex-col md:flex">
       <ConnectChatArea :active-contact="null" :messages="[]" />
     </div>
 
-    <div class="flex size-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
-      <div v-if="loadingContacts" class="size-full animate-pulse bg-white/5" />
-      <ConnectSidebar v-else :contacts="contacts" :active-id="null" />
-    </div>
+    <aside class="flex size-full shrink-0 border-l border-white/5 md:w-[400px]">
+      <div v-if="pending" class="flex size-full flex-col gap-2.5 p-4">
+        <div v-for="i in 8" :key="i" class="h-16 w-full animate-pulse rounded-xl bg-white/5" />
+      </div>
+
+      <ConnectSidebar v-else-if="contacts?.length" :contacts="contacts" :active-id="null" class="size-full" />
+
+      <div v-else class="my-auto flex w-full flex-col items-center justify-center text-light-500/40">
+        <NuxtIcon name="local:folder" class="mb-3 text-4xl" />
+        <p class="font-semibold text-xs">No connects found.</p>
+      </div>
+    </aside>
   </main>
 </template>

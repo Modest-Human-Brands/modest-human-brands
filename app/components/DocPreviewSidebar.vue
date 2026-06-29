@@ -31,21 +31,18 @@ const sidebarActions: readonly SidebarAction[] = [
 </script>
 
 <template>
-  <aside class="flex size-full flex-col overflow-y-auto border-l border-dark-500 bg-dark-400 p-6 md:w-[360px]">
+  <aside class="flex size-full flex-col overflow-y-auto border-l border-dark-500 bg-dark-400 p-4 md:w-[400px]">
     <div v-if="!document" class="flex h-full flex-col items-center justify-center text-white/40">
       <NuxtIcon name="local:document" class="mb-4 text-4xl opacity-50" />
       <p class="font-semibold text-sm">Select a document to preview</p>
     </div>
 
-    <div v-else class="flex flex-col gap-6">
-      <!-- Top: Large Document Preview Canvas -->
-      <div class="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-dark-500 p-4 shadow-inner">
+    <div v-else class="flex flex-col gap-4">
+      <div class="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-dark-500 p-4 shadow-inner">
         <img v-if="document.previewUrl" :src="document.previewUrl" :alt="document.name" class="size-full object-contain shadow-md" />
         <NuxtIcon v-else name="local:file-pdf" class="text-7xl text-light-500/40" />
       </div>
-
-      <!-- Middle: Metadata Block -->
-      <div class="flex flex-col gap-1 border-b border-white/5 pb-5">
+      <div class="flex flex-col gap-1">
         <h2 class="font-semibold truncate text-base text-white" :title="document.name">{{ document.name }}</h2>
         <p class="text-xs text-light-500">
           <span class="uppercase">{{ document.extension }}</span> • Opened {{ document.openedAt || document.uploadedAt }}
@@ -55,8 +52,7 @@ const sidebarActions: readonly SidebarAction[] = [
         </p>
       </div>
 
-      <!-- Bottom: Action Menu List -->
-      <nav class="flex flex-col gap-1">
+      <nav class="flex flex-col gap-1 border-t border-white/5">
         <button
           v-for="action in sidebarActions"
           :key="action.id"

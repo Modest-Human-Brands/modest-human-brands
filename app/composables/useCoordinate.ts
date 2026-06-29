@@ -1,4 +1,4 @@
-import { RoomEvent, EventTimeline } from 'matrix-js-sdk'
+import { RoomEvent, EventTimeline, EventType, MsgType } from 'matrix-js-sdk'
 import type { MatrixEvent, Room, MatrixClient } from 'matrix-js-sdk'
 
 export const useCoordinate = (roomId?: string | Ref<string | null>) => {
@@ -6,7 +6,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
 
   const conversations = ref<CoordinateConversation[]>([])
   const messages = ref<ChatMessage[]>([])
-  const inboxPending = ref(true)
+  const pending = ref(true)
   const chatPending = ref(true)
   const isPaginating = ref(false)
 
@@ -18,7 +18,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
     let lastEvent = null
 
     for (let i = events.length - 1; i >= 0; i--) {
-      if (events[i].getType() === 'm.room.message') {
+      if (events[i]!.getType() === EventType.RoomMessage) {
         lastEvent = events[i]
         break
       }
@@ -59,7 +59,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
       messages.value = room
         .getLiveTimeline()
         .getEvents()
-        .filter((event) => event.getType() === 'm.room.message')
+        .filter((event) => event.getType() === EventType.RoomMessage)
         .map(buildMessage)
     } else {
       messages.value = []
@@ -75,7 +75,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
   }
 
   const handleTimeline = (event: MatrixEvent, room: Room | undefined, toStartOfTimeline: boolean | undefined) => {
-    if (toStartOfTimeline || !room || event.getType() !== 'm.room.message') return
+    if (toStartOfTimeline || !room || event.getType() !== EventType.RoomMessage) return
 
     const index = conversations.value.findIndex((c) => c.id === room.roomId)
     const updatedConvo = buildConversation(room)
@@ -101,8 +101,8 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
     if (!text.trim() || !localClient || !currentRoomId) return
 
     try {
-      await localClient.sendEvent(currentRoomId, 'm.room.message', {
-        msgtype: 'm.text',
+      await localClient.sendEvent(currentRoomId, EventType.RoomMessage, {
+        msgtype: MsgType.Text,
         body: text,
       })
     } catch (err) {
@@ -135,7 +135,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
     localClient = await initClient()
 
     if (!localClient || isUnmounted) {
-      inboxPending.value = false
+      pending.value = false
       chatPending.value = false
       return
     }
@@ -143,7 +143,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
     const loadInitialData = () => {
       if (isUnmounted) return
       updateRooms()
-      inboxPending.value = false
+      pending.value = false
 
       const currentRoomId = unref(roomId)
       if (currentRoomId) {
@@ -185,7 +185,7 @@ export const useCoordinate = (roomId?: string | Ref<string | null>) => {
   return {
     conversations,
     messages,
-    inboxPending,
+    pending,
     chatPending,
     isPaginating,
     sendMessage,

@@ -67,10 +67,8 @@ const activeRooms = [
         </div>
       </section>
 
-      <!-- Main Dual-Column Feed -->
       <section class="grid grid-cols-1 gap-12 lg:grid-cols-3">
         <div class="flex flex-col gap-8 lg:col-span-2">
-          <!-- MDoc: Recently Visited Cards (Notion Style) -->
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
               <h2 class="font-semibold text-base text-white">Recently Visited Docs</h2>
@@ -87,7 +85,6 @@ const activeRooms = [
             </div>
           </div>
 
-          <!-- Connect: Recent Activity List -->
           <div class="flex flex-col gap-2">
             <div class="flex items-center justify-between px-1">
               <h2 class="font-semibold text-base text-white">Recent Activity</h2>
@@ -108,7 +105,6 @@ const activeRooms = [
           </div>
         </div>
 
-        <!-- Coordinate: Active Rooms List -->
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between px-1">
             <h2 class="font-semibold text-base text-white">Active Rooms</h2>

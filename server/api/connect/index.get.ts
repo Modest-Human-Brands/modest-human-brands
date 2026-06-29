@@ -31,19 +31,21 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.connectUrl,
     })
 
-    return rawData.results.map((contact) => {
-      return {
-        id: contact.id,
-        name: contact.name || 'Unknown',
-        initial: contact.name ? contact.name.charAt(0).toUpperCase() : 'U',
-        company: contact.company,
-        lastActive: contact.lastActive,
-        lastMessageSnippet: contact.lastMessageSnippet,
-        activeChannel: (contact.platforms[0] || 'email') as ChannelType,
-        availableChannels: contact.platforms as ChannelType[],
-        unreadCount: contact.unreadCount,
-      }
-    })
+    return rawData.results
+      .map((contact) => {
+        return {
+          id: contact.id,
+          name: contact.name || 'Unknown',
+          initial: contact.name ? contact.name.charAt(0).toUpperCase() : 'U',
+          company: contact.company,
+          lastActive: contact.lastActive,
+          lastMessageSnippet: contact.lastMessageSnippet,
+          activeChannel: (contact.platforms[0] || 'email') as ChannelType,
+          availableChannels: contact.platforms as ChannelType[],
+          unreadCount: contact.unreadCount,
+        }
+      })
+      .toSorted((a, b) => new Date(b.lastActive).getTime() - new Date(a.lastActive).getTime())
   } catch (error) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

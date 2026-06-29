@@ -34,7 +34,7 @@ const filteredConversations = computed(() => {
         {{ tab.label }}
       </button>
     </div>
-    <div class="flex flex-1 flex-col gap-2 overflow-y-auto px-4 pb-4">
+    <div class="scrollbar-hidden flex flex-1 flex-col gap-2 overflow-y-auto p-2">
       <CoordinateContactCard v-for="conv in filteredConversations" :key="conv.id" :conversation="conv" :is-active="conv.id === activeId" @click="emit('select', conv.id)" />
       <div v-if="filteredConversations.length === 0" class="mt-10 flex flex-col items-center text-light-500">
         <NuxtIcon name="local:chat" class="mb-2 text-2xl opacity-50" />

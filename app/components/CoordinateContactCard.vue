@@ -11,8 +11,8 @@ const initials = computed(() => props.conversation.name.charAt(0).toUpperCase())
 <template>
   <NuxtLink
     :to="`/coordinate/${conversation.id}`"
-    class="flex cursor-pointer items-center gap-4 rounded-xl p-4 transition-colors"
-    :class="[isActive ? 'bg-dark-600' : 'bg-dark-500 hover:bg-dark-600']">
+    class="group flex cursor-pointer items-center gap-3 rounded-xl border p-2 transition-all md:p-3"
+    :class="[isActive ? 'border-dark-600 bg-dark-500' : 'border-transparent bg-dark-400 hover:bg-dark-500']">
     <div class="font-semibold flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-lg text-dark-500">
       <img v-if="conversation.avatarUrl" :src="conversation.avatarUrl" class="h-full w-full object-cover" />
       <span v-else>{{ initials }}</span>

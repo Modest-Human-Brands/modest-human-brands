@@ -58,20 +58,16 @@ watch(
 
 <template>
   <main class="relative flex size-full flex-col overflow-hidden overflow-y-auto bg-dark-400 p-4 md:p-6">
-    <!-- Document Hydration Skeleton -->
     <div v-if="pending" class="mx-auto flex w-full max-w-4xl flex-col gap-6">
       <div class="h-10 w-64 animate-pulse rounded-lg bg-white/5" />
       <div class="mt-4 h-96 w-full animate-pulse rounded-xl bg-white/5" />
     </div>
 
-    <!-- Flat Notion Canvas Viewport -->
     <article v-else-if="doc" class="mx-auto flex w-full max-w-4xl select-text flex-col gap-4">
       <h1 class="font-extrabold select-none text-2xl tracking-tight text-white md:text-3xl">{{ doc.title }}</h1>
-
       <AppEditor v-if="draftContent" v-model="draftContent" :editable="true" />
     </article>
 
-    <!-- Ledger Missing Fallback -->
     <div v-else class="my-auto flex flex-col items-center justify-center text-center text-light-500">
       <NuxtIcon name="local:cross" class="mb-3 text-5xl text-alert-500/50" />
       <h2 class="font-semibold text-lg text-white">Policy Not Found</h2>

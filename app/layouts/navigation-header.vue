@@ -20,7 +20,7 @@ const activeTab = computed(
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
 
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
-      <div class="flex shrink-0 items-start justify-between px-2 pr-4 pt-6 md:gap-6 md:px-4 md:pr-6">
+      <div class="flex shrink-0 items-start justify-between px-2 pb-2 pr-4 pt-6 md:gap-6 md:px-4 md:pr-6">
         <div class="flex flex-col gap-2">
           <div class="flex items-center gap-4">
             <NuxtIcon :name="activeTab.icon" class="text-4xl md:text-5xl" />

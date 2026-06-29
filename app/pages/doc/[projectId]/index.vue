@@ -58,7 +58,6 @@ function handleRowClick(docId: string) {
 <template>
   <main class="relative flex size-full overflow-hidden bg-dark-400 pt-2 md:pt-4">
     <div class="flex min-w-0 flex-1 flex-col border-r border-dark-500 bg-dark-400 transition-all duration-300">
-      <!-- Table Header -->
       <div
         class="font-semibold grid select-none grid-cols-[2.25rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 border-y border-white/5 px-4 py-3 text-[11px] uppercase tracking-wider text-light-500 md:grid-cols-[2.5rem_minmax(0,1fr)_9rem_6rem] md:gap-4 md:px-6">
         <input type="checkbox" class="size-4 cursor-pointer rounded border-white/10 bg-dark-500 accent-primary-500" @change="toggleSelectAll" />
@@ -84,12 +83,10 @@ function handleRowClick(docId: string) {
               selectedDocId === doc.id ? 'bg-primary-500/10 text-white' : 'text-light-400 hover:bg-white/[0.03]',
             ]"
             @click="handleRowClick(doc.id)">
-            <!-- Col 1: Checkbox -->
             <div class="flex size-7 items-center justify-start" @click.stop>
               <input type="checkbox" :checked="selectedDocIds.has(doc.id)" class="size-4 cursor-pointer rounded border-white/10 bg-dark-500 accent-primary-500" @change="toggleRowSelection(doc.id)" />
             </div>
 
-            <!-- Col 2: Thumbnail & Name -->
             <div class="flex min-w-0 items-center gap-3.5">
               <div class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded bg-white shadow-sm">
                 <img v-if="doc.previewUrl" :src="doc.previewUrl" class="size-full object-cover" />
@@ -105,22 +102,18 @@ function handleRowClick(docId: string) {
               </div>
             </div>
 
-            <!-- Col 3: Opened Timestamp -->
             <span class="hidden truncate text-xs text-light-500 md:block">{{ doc.openedAt || doc.uploadedAt }}</span>
 
-            <!-- Col 4: Formatted Size -->
             <span class="font-mono text-right text-xs text-light-500">{{ formatBytes(doc.sizeBytes) }}</span>
           </NuxtLink>
         </template>
       </div>
     </div>
 
-    <!-- Desktop Sidebar -->
     <div class="hidden shrink-0 transition-all duration-300 md:block">
       <DocPreviewSidebar :document="activeDocument" />
     </div>
 
-    <!-- Mobile Bottom Sheet Drawer -->
     <Teleport to="body">
       <div v-if="showMobileDrawer && activeDocument" class="backdrop-blur-xs fixed inset-0 z-50 flex flex-col justify-end bg-black/60 md:hidden" @click="showMobileDrawer = false">
         <div class="max-h-[85vh] w-full overflow-hidden rounded-t-2xl border-t border-white/10 bg-dark-400 shadow-2xl transition-transform duration-300" @click.stop>
