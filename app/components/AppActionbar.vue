@@ -29,7 +29,7 @@ const emit = defineEmits<{
     </button>
     <button
       type="button"
-      class="font-semibold ml-1.5 inline-flex items-center gap-1 rounded-full bg-white fill-black px-2 py-1 text-xs text-black hover:bg-white/90 md:gap-2 md:px-3 md:text-sm"
+      class="ml-1.5 inline-flex items-center gap-1 rounded-full bg-white fill-black px-2 py-1 text-xs font-semi-bold text-black hover:bg-white/90 md:gap-2 md:px-3 md:text-sm"
       @click="emit('create')">
       <NuxtIcon name="local:plus" class="text-[22px]" />
       New

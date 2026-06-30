@@ -24,7 +24,7 @@ const { data: compliances, pending } = await useFetch('/api/compliance')
 
         <div v-else-if="!compliances?.length" class="flex flex-col items-center justify-center py-16 text-light-500/40">
           <NuxtIcon name="local:folder" class="mb-3 text-4xl" />
-          <p class="font-semibold text-xs">No compliance records found.</p>
+          <p class="text-xs font-semi-bold">No compliance records found.</p>
         </div>
 
         <div v-else class="flex flex-col">

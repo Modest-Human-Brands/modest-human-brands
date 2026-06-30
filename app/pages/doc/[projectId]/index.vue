@@ -29,10 +29,10 @@ function getFileIcon(ext?: string): string {
     PDF: 'local:file-pdf',
     'Excel Sheet': 'local:file-excel',
     PowerPoint: 'local:file-powerpoint',
-    'Word Document': 'local:file-document',
+    'Word Document': 'local:photo',
     PNG: 'local:file-image',
   }
-  return map[ext?.toUpperCase() ?? ''] ?? 'local:file-document'
+  return map[ext?.toUpperCase() ?? ''] ?? 'local:photo'
 }
 
 function toggleSelectAll(event: Event) {
@@ -59,7 +59,7 @@ function handleRowClick(docId: string) {
   <main class="relative flex size-full overflow-hidden bg-dark-400 pt-2 md:pt-4">
     <div class="flex min-w-0 flex-1 flex-col border-r border-dark-500 bg-dark-400 transition-all duration-300">
       <div
-        class="font-semibold grid select-none grid-cols-[2.25rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 border-y border-white/5 px-4 py-3 text-[11px] uppercase tracking-wider text-light-500 md:grid-cols-[2.5rem_minmax(0,1fr)_9rem_6rem] md:gap-4 md:px-6">
+        class="grid select-none grid-cols-[2.25rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 border-y border-white/5 px-4 py-3 text-[11px] font-semi-bold uppercase tracking-wider text-light-500 md:grid-cols-[2.5rem_minmax(0,1fr)_9rem_6rem] md:gap-4 md:px-6">
         <input type="checkbox" class="size-4 cursor-pointer rounded border-white/10 bg-dark-500 accent-primary-500" @change="toggleSelectAll" />
         <span>Name</span>
         <span class="hidden md:block">Opened</span>
@@ -98,7 +98,7 @@ function handleRowClick(docId: string) {
                   <span class="font-medium truncate text-white" :title="doc.name">{{ doc.name }}</span>
                   <NuxtIcon name="local:star" class="shrink-0 text-base text-light-600 opacity-100 transition-opacity hover:text-warning-400 md:text-[20px] md:opacity-0 md:group-hover:opacity-100" />
                 </div>
-                <span class="font-semibold text-[10px] uppercase tracking-wider text-light-500">{{ doc.extension }}</span>
+                <span class="text-[10px] font-semi-bold uppercase tracking-wider text-light-500">{{ doc.extension }}</span>
               </div>
             </div>
 
@@ -118,7 +118,7 @@ function handleRowClick(docId: string) {
       <div v-if="showMobileDrawer && activeDocument" class="backdrop-blur-xs fixed inset-0 z-50 flex flex-col justify-end bg-black/60 md:hidden" @click="showMobileDrawer = false">
         <div class="max-h-[85vh] w-full overflow-hidden rounded-t-2xl border-t border-white/10 bg-dark-400 shadow-2xl transition-transform duration-300" @click.stop>
           <div class="flex items-center justify-between border-b border-white/5 px-6 py-4">
-            <span class="font-semibold text-xs uppercase tracking-wider text-light-500">Document Actions</span>
+            <span class="text-xs font-semi-bold uppercase tracking-wider text-light-500">Document Actions</span>
             <button type="button" class="rounded-lg p-1 text-light-500 hover:bg-white/5 hover:text-white" @click="showMobileDrawer = false">
               <NuxtIcon name="local:cross" class="text-lg" />
             </button>

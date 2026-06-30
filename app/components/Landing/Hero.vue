@@ -48,7 +48,7 @@ onMounted(() => {
         <span class="text-white">Early Beta Release</span>
       </div>
 
-      <h1 class="md:text-7xl lg:text-8xl font-semibold mb-6 block bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-5xl leading-tight text-transparent">Modest Human Brands</h1>
+      <h1 class="md:text-7xl lg:text-8xl mb-6 block bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-5xl font-semi-bold leading-tight text-transparent">Modest Human Brands</h1>
 
       <div class="mb-6 overflow-hidden">
         <p class="animate-slide-up text-xl text-white/90 delay-200 md:text-2xl lg:text-3xl">Autonomous</p>

@@ -50,8 +50,8 @@ watch(
     <header class="flex shrink-0 items-center justify-between border-b border-dark-500 bg-dark-400 p-4 md:px-6 md:py-5">
       <div class="flex items-center gap-4">
         <div class="flex flex-col">
-          <h2 class="font-semibold text-base text-white">Project Chat: {{ roomId }}</h2>
-          <span class="font-semibold text-xs text-light-500">Encrypted Matrix Room</span>
+          <h2 class="text-base font-semi-bold text-white">Project Chat: {{ roomId }}</h2>
+          <span class="text-xs font-semi-bold text-light-500">Encrypted Matrix Room</span>
         </div>
       </div>
     </header>

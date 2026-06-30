@@ -1,72 +1,72 @@
 <script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
+
+defineOptions({ inheritAttrs: false })
+
 const props = withDefaults(
   defineProps<{
-    modelValue?: boolean
+    open?: boolean
+    asDrawerOnMobile?: boolean
     peekHeight?: number
-    desktopWidthClass?: string
   }>(),
   {
-    modelValue: true,
+    open: true,
+    asDrawerOnMobile: false,
     peekHeight: 15,
-    desktopWidthClass: 'md:w-[45%] lg:w-[40%]',
   }
 )
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
+  (e: 'update:open', value: boolean): void
 }>()
 
-const isOpen = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
-})
-
 const isMounted = ref(false)
-onMounted(() => {
-  isMounted.value = true
-})
+onMounted(() => (isMounted.value = true))
 
-const { width: windowWidth } = useWindowSize()
-const isDesktop = computed(() => windowWidth.value >= 768)
+const { width } = useWindowSize()
+const isDesktop = computed(() => width.value >= 768)
+
+const isOpen = computed({
+  get: () => {
+    if (isMounted.value && isDesktop.value) return true
+    return props.open
+  },
+  set: (val) => emit('update:open', val),
+})
 
 const drawerStyle = computed(() => {
-  if (!isMounted.value || isDesktop.value) return {}
+  if (!props.asDrawerOnMobile || !isMounted.value || isDesktop.value) return {}
   return {
     transform: isOpen.value ? 'translateY(0)' : `translateY(calc(100% - ${props.peekHeight}%))`,
   }
-})
-
-const backdropOpacity = computed(() => {
-  if (!isMounted.value || isDesktop.value) return 0
-  return isOpen.value ? 0.6 : 0
 })
 </script>
 
 <template>
   <div
-    class="absolute inset-0 z-40 bg-black transition-opacity duration-300 md:hidden"
-    :class="isOpen ? 'pointer-events-auto backdrop-blur-sm' : 'pointer-events-none'"
-    :style="!isMounted ? { display: 'none' } : { opacity: backdropOpacity }"
-    @click="isOpen = false"></div>
+    v-if="asDrawerOnMobile"
+    class="fixed inset-0 bg-black transition-opacity duration-300 md:hidden"
+    :class="isOpen ? 'pointer-events-auto backdrop-blur-sm' : ''"
+    :style="!isMounted ? { display: 'none' } : { opacity: isOpen ? 0.6 : 0 }"
+    @click="isOpen = false" />
 
-  <div
-    class="absolute inset-x-0 bottom-0 z-50 flex max-h-[85dvh] w-full flex-col rounded-t-3xl border-t border-dark-500 bg-dark-400 transition-transform duration-300 ease-in-out md:relative md:max-h-full md:max-w-md md:translate-y-0 md:rounded-none md:border-l md:border-t-0"
-    :class="desktopWidthClass"
+  <aside
+    v-show="isDesktop || isOpen || asDrawerOnMobile"
+    v-bind="$attrs"
+    :class="[
+      'flex shrink-0 flex-col overflow-y-auto bg-dark-400 p-2 transition-all duration-300',
+      'md:!flex md:!translate-y-0',
+      asDrawerOnMobile
+        ? 'fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] w-full rounded-t-3xl border-t border-white/5 shadow-2xl md:relative md:h-full md:max-h-full md:w-[400px] md:translate-y-0 md:rounded-none md:border-l md:border-t-0 md:shadow-none'
+        : 'size-full md:w-[400px] md:border-l md:border-white/5',
+      $attrs.class,
+    ]"
     :style="drawerStyle">
-    <header class="flex shrink-0 items-start justify-between border-b border-dark-500 p-4 pt-6 md:p-6" :class="{ 'cursor-pointer md:cursor-auto': !isOpen }" @click="!isOpen && (isOpen = true)">
-      <div class="bg-dark-300 absolute left-1/2 top-2 h-1 w-12 -translate-x-1/2 rounded-full md:hidden"></div>
-
-      <div>
-        <slot name="header" />
-      </div>
-
-      <div class="flex items-center gap-2">
-        <slot name="actions" />
-      </div>
-    </header>
-
-    <div class="scrollbar-hidden flex-1 overflow-y-auto p-4 md:p-6">
-      <slot />
+    <div v-if="asDrawerOnMobile" class="flex w-full shrink-0 cursor-pointer items-center justify-center pb-1 pt-3 md:hidden" @click="isOpen = !isOpen">
+      <div class="h-1.5 w-12 rounded-full bg-white/20" />
     </div>
-  </div>
+
+    <slot name="header" />
+    <slot />
+  </aside>
 </template>

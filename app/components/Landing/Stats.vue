@@ -26,7 +26,7 @@ onMounted(() => {
 <template>
   <section id="stats" class="relative mx-auto max-w-7xl px-6 py-24">
     <div class="mb-16 text-center">
-      <h2 class="font-semibold mb-4 text-3xl md:text-5xl">
+      <h2 class="mb-4 text-3xl font-semi-bold md:text-5xl">
         Trusted by creative teams
         <br />
         <span class="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent"> worldwide </span>
@@ -54,7 +54,7 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="md:text-6xl font-semibold mb-2 text-5xl text-white">
+          <div class="md:text-6xl mb-2 text-5xl font-semi-bold text-white">
             <AnimatedCounter v-if="isVisible" :target="stat.value" :suffix="stat.suffix" />
             <span v-else>0{{ stat.suffix }}</span>
           </div>

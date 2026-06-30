@@ -49,13 +49,13 @@ export const PRIMARY_NAVIGATION_TABS = [
   //   description: 'Manage all sync here',
   //   to: '/sync'
   // },
-  // {
-  //   id: 'drive',
-  //   title: 'Drive',
-  //   icon: 'local:hard-drive',
-  //   description: 'Manage all your assets here',
-  //   to: '/drive'
-  // },
+  {
+    id: 'drive',
+    title: 'Drive',
+    icon: 'local:hard-drive',
+    description: 'Manage all your assets here',
+    to: '/drive',
+  },
 ] as NavItem[]
 
 export const SECONDARY_NAVIGATION_TABS = [

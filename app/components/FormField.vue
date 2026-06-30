@@ -114,7 +114,7 @@ function handleFileUpload(event: Event) {
 
 <template>
   <div class="group flex flex-col rounded-2xl border border-dark-400 bg-dark-500/50 p-5 shadow-sm transition-colors hover:border-dark-400">
-    <h3 class="font-semibold mb-1 text-lg capitalize text-white">{{ label }}</h3>
+    <h3 class="mb-1 text-lg font-semi-bold capitalize text-white">{{ label }}</h3>
 
     <p v-if="isArray || isArrayOfObjects" class="mb-4 text-sm text-light-500">(Respondents can add multiple items)</p>
     <p v-else-if="isSignature" class="mb-4 text-sm text-light-500">(Please upload an image of your signature)</p>
@@ -146,7 +146,7 @@ function handleFileUpload(event: Event) {
             <NuxtIcon name="local:cross" />
           </button>
         </div>
-        <button type="button" class="font-semibold mt-1 flex w-fit items-center gap-2 text-sm text-primary-400 transition-colors hover:text-primary-500" @click="addArrayItem">
+        <button type="button" class="mt-1 flex w-fit items-center gap-2 text-sm font-semi-bold text-primary-400 transition-colors hover:text-primary-500" @click="addArrayItem">
           <NuxtIcon name="local:plus" /> Add Item
         </button>
       </div>
@@ -154,8 +154,8 @@ function handleFileUpload(event: Event) {
       <div v-else-if="isArrayOfObjects" class="flex w-full flex-col gap-6">
         <div v-for="(item, index) in Array.isArray(modelValue) ? modelValue : []" :key="index" class="relative flex flex-col gap-4 rounded-xl border border-dark-400 bg-dark-500/30 p-4">
           <div class="flex items-center justify-between border-b border-dark-400/50 pb-3">
-            <span class="font-semibold text-xs uppercase tracking-wider text-light-500">Item {{ index + 1 }}</span>
-            <button type="button" class="font-semibold text-xs text-alert-500 transition-colors hover:text-alert-400" @click="removeArrayItem(index)">Remove</button>
+            <span class="text-xs font-semi-bold uppercase tracking-wider text-light-500">Item {{ index + 1 }}</span>
+            <button type="button" class="text-xs font-semi-bold text-alert-500 transition-colors hover:text-alert-400" @click="removeArrayItem(index)">Remove</button>
           </div>
 
           <FormField
@@ -167,14 +167,14 @@ function handleFileUpload(event: Event) {
             @update:model-value="updateObjectItem(index, String(subKey), $event)" />
         </div>
 
-        <button type="button" class="font-semibold flex w-fit items-center gap-2 text-sm text-primary-400 transition-colors hover:text-primary-500" @click="addBlueprintItem">
+        <button type="button" class="flex w-fit items-center gap-2 text-sm font-semi-bold text-primary-400 transition-colors hover:text-primary-500" @click="addBlueprintItem">
           <NuxtIcon name="local:plus" /> Add Item
         </button>
       </div>
 
       <label v-else-if="isBoolean" class="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 transition-colors hover:bg-dark-400">
         <input type="checkbox" :checked="modelValue as boolean" class="accent-blue-500 size-5 cursor-pointer" @change="onCheckboxChange" />
-        <span class="font-semibold text-sm text-white">{{ label }}</span>
+        <span class="text-sm font-semi-bold text-white">{{ label }}</span>
       </label>
 
       <div v-else-if="isSignature" class="flex w-full flex-col gap-2">
@@ -183,13 +183,13 @@ function handleFileUpload(event: Event) {
           class="border-dark-300 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed bg-dark-500/30 text-light-500 transition-colors hover:border-primary-500 hover:bg-primary-500/10 hover:text-primary-400">
           <div class="flex items-center gap-2">
             <NuxtIcon name="local:upload" class="text-xl" />
-            <span class="font-semibold text-xs uppercase tracking-wider">Upload Signature</span>
+            <span class="text-xs font-semi-bold uppercase tracking-wider">Upload Signature</span>
           </div>
           <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
         </label>
         <div v-else class="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-xl border border-success-500/30 bg-success-500/10">
           <img :src="modelValue as string" class="h-full object-contain p-2" />
-          <label class="font-semibold absolute inset-0 flex cursor-pointer items-center justify-center bg-black/50 text-xs text-white opacity-0 transition-opacity hover:opacity-100">
+          <label class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/50 text-xs font-semi-bold text-white opacity-0 transition-opacity hover:opacity-100">
             Change Signature
             <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
           </label>
@@ -220,6 +220,6 @@ function handleFileUpload(event: Event) {
         @input="onInput" />
     </div>
 
-    <span v-if="errorMessage" class="font-semibold mt-2 text-xs text-alert-500">{{ errorMessage }}</span>
+    <span v-if="errorMessage" class="mt-2 text-xs font-semi-bold text-alert-500">{{ errorMessage }}</span>
   </div>
 </template>

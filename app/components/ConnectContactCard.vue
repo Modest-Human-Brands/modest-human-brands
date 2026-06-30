@@ -24,7 +24,7 @@ function getChannelIcon(channel: ChannelType) {
     class="group flex cursor-pointer items-center gap-3 rounded-xl border p-2 transition-all md:p-3"
     :class="[isActive ? 'border-dark-600 bg-dark-500' : 'border-transparent bg-dark-400 hover:bg-dark-500']">
     <div class="relative shrink-0">
-      <div class="font-semibold flex size-12 items-center justify-center rounded-full bg-white text-lg text-dark-500">
+      <div class="flex size-12 items-center justify-center rounded-full bg-white text-lg font-semi-bold text-dark-500">
         {{ contact.initial }}
       </div>
       <div class="absolute -bottom-1 -right-1 flex items-center justify-center rounded-full bg-dark-500 p-1">
@@ -33,11 +33,11 @@ function getChannelIcon(channel: ChannelType) {
     </div>
 
     <div class="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1">
-      <span class="font-semibold truncate text-sm text-white md:text-base">{{ contact.name }}</span>
+      <span class="truncate text-sm font-semi-bold text-white md:text-base">{{ contact.name }}</span>
       <span class="justify-self-end text-xs font-light text-light-400 md:text-base">{{ timeAgo }}</span>
 
       <span class="truncate text-xs text-light-500 md:text-base">{{ contact.lastMessageSnippet }}</span>
-      <span class="font-semibold justify-self-end text-2xs uppercase tracking-wider text-light-600 md:text-sm">{{ contact.company }}</span>
+      <span class="justify-self-end text-2xs font-semi-bold uppercase tracking-wider text-light-600 md:text-sm">{{ contact.company }}</span>
 
       <div class="flex items-center gap-1.5">
         <NuxtIcon v-for="channel in contact.availableChannels" :key="channel" :name="getChannelIcon(channel)" class="text-[14px] text-white md:text-[16px]" />

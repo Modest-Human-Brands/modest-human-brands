@@ -36,12 +36,12 @@ async function handleCreatePolicy() {
 <template>
   <div class="flex size-full items-center justify-center">
     <div class="max-w-md rounded-2xl bg-dark-500 p-6" @click.stop>
-      <h3 class="font-semibold mb-1 text-lg text-white">Create Compliance Policy</h3>
+      <h3 class="mb-1 text-lg font-semi-bold text-white">Create Compliance Policy</h3>
       <p class="mb-5 text-xs text-light-500">Draft a new governing document in the system ledger.</p>
 
       <form class="flex flex-col gap-4" @submit.prevent="handleCreatePolicy">
         <div class="flex flex-col gap-1.5">
-          <label class="font-semibold text-[11px] uppercase tracking-wider text-light-500">Document Title</label>
+          <label class="text-[11px] font-semi-bold uppercase tracking-wider text-light-500">Document Title</label>
           <input
             v-model="newTitle"
             type="text"
@@ -52,7 +52,7 @@ async function handleCreatePolicy() {
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="font-semibold text-[11px] uppercase tracking-wider text-light-500">URL Slug</label>
+          <label class="text-[11px] font-semi-bold uppercase tracking-wider text-light-500">URL Slug</label>
           <input
             v-model="newSlug"
             type="text"
@@ -64,7 +64,7 @@ async function handleCreatePolicy() {
 
         <div class="mt-4 flex items-center justify-end gap-3">
           <button type="button" class="px-4 py-2 text-xs text-light-500 hover:text-white">Cancel</button>
-          <button type="submit" :disabled="isCreating" class="font-semibold rounded-xl bg-primary-500 px-5 py-2.5 text-xs text-white disabled:opacity-50">
+          <button type="submit" :disabled="isCreating" class="rounded-xl bg-primary-500 px-5 py-2.5 text-xs font-semi-bold text-white disabled:opacity-50">
             {{ isCreating ? 'Creating...' : 'Initialize Document' }}
           </button>
         </div>

@@ -70,9 +70,9 @@ watch(
 
     <div v-else class="my-auto flex flex-col items-center justify-center text-center text-light-500">
       <NuxtIcon name="local:cross" class="mb-3 text-5xl text-alert-500/50" />
-      <h2 class="font-semibold text-lg text-white">Policy Not Found</h2>
+      <h2 class="text-lg font-semi-bold text-white">Policy Not Found</h2>
       <p class="mt-1 max-w-xs text-xs">The requested compliance slug "{{ slug }}" does not exist in the system index.</p>
-      <NuxtLink to="/compliance" class="font-semibold mt-4 rounded-full bg-white/10 px-4 py-2 text-xs text-white transition-colors hover:bg-white/20"> Return to Directory </NuxtLink>
+      <NuxtLink to="/compliance" class="mt-4 rounded-full bg-white/10 px-4 py-2 text-xs font-semi-bold text-white transition-colors hover:bg-white/20"> Return to Directory </NuxtLink>
     </div>
   </main>
 </template>

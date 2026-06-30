@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useEventListener } from '@vueuse/core'
+
 definePageMeta({
   layout: false,
   middleware: ['auth'],
@@ -72,8 +74,7 @@ const docId = route.params.docId as string
 const { data: doc, refresh } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${docId}`)
 const pdfUrl = computed(() => (!doc.value ? '' : `${config.public.docUrl}${doc.value.previewUrl}`))
 
-const isRightDrawerOpen = ref(false)
-const rightPanelView = ref<'metadata' | 'sign'>('metadata')
+const isDrawerOpen = ref(false)
 
 const isSendingEnvelope = ref(false)
 const magicLink = ref('')
@@ -169,125 +170,93 @@ async function copyLink() {
     isCopied.value = false
   }, 2000)
 }
+
+function toggleDrawer() {
+  isDrawerOpen.value = !isDrawerOpen.value
+}
+
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    isDrawerOpen.value = false
+  }
+})
 </script>
 
 <template>
-  <main v-if="doc" class="relative flex h-dvh w-full flex-row overflow-hidden bg-dark-500">
+  <main v-if="doc" class="relative flex h-dvh w-full flex-row overflow-hidden bg-dark-400">
     <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }">
       <template #toolbar-actions>
-        <button
-          type="button"
-          class="transition-colors hover:text-primary-500"
-          @click="
-            () => {
-              rightPanelView = 'sign'
-              isRightDrawerOpen = true
-            }
-          ">
-          <NuxtIcon name="local:signature" class="text-lg" />
+        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="isDrawerOpen ? 'text-primary-500' : 'text-white'" @click="toggleDrawer">
+          <NuxtIcon name="local:signature" class="text-xl" />
         </button>
+        <div class="h-4 w-px bg-white/20" />
       </template>
     </PdfDocumentViewer>
 
-    <AppSidebar v-model="isRightDrawerOpen">
+    <AppSidebar v-model:open="isDrawerOpen" as-drawer-on-mobile :class="!isDrawerOpen ? 'md:hidden' : 'md:flex'">
       <template #header>
-        <div v-if="rightPanelView === 'metadata'">
-          <h2 class="font-semibold text-xl tracking-tight text-white">Document Info</h2>
-          <p class="mt-0.5 text-xs text-light-500">Metadata and history</p>
-        </div>
-        <div v-else>
-          <h2 class="font-semibold text-xl capitalize tracking-tight text-white">
-            {{ doc?.routingQueue?.length ? 'Envelope Details' : 'Send to Sign' }}
-          </h2>
-          <p class="mt-0.5 text-xs text-light-500">
-            {{ doc?.routingQueue?.length ? 'Track signer progress' : 'Lock document and prepare envelope' }}
-          </p>
+        <div class="flex items-start justify-between px-2 pb-4 pt-2">
+          <div>
+            <h2 class="text-xl font-semi-bold tracking-tight text-white">Document Details</h2>
+            <p class="mt-0.5 text-sm text-light-500">Properties & signatures</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isDrawerOpen = false">
+              <NuxtIcon name="local:cross" class="text-sm" />
+            </button>
+          </div>
         </div>
       </template>
 
-      <template #actions>
-        <button
-          v-if="rightPanelView === 'sign'"
-          class="font-semibold mr-2 flex items-center gap-2 rounded-lg bg-dark-500 px-3 py-1.5 text-xs text-light-400 transition-colors hover:text-white"
-          @click="rightPanelView = 'metadata'">
-          Back
-        </button>
-        <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isRightDrawerOpen = false">
-          <NuxtIcon name="local:cross" class="hidden text-sm md:block" />
-          <NuxtIcon name="local:chevron-bold" class="rotate-90 text-sm md:hidden" />
-        </button>
-      </template>
-
-      <div v-if="rightPanelView === 'metadata'" class="animate-fade-in flex flex-col gap-6">
-        <div class="mb-6 flex w-full justify-center">
-          <NuxtIcon :name="`local:file-${doc.extension}`" class="text-[200px]" />
-        </div>
-
-        <div class="flex flex-col gap-5">
-          <div>
-            <h4 class="mb-1 text-xs text-light-500">File Name</h4>
-            <p class="text-sm text-white">{{ doc.name }}</p>
-          </div>
-          <div>
-            <h4 class="mb-1 text-xs text-light-500">Size</h4>
-            <p class="text-sm text-white">{{ doc.formattedSize }}</p>
-          </div>
-        </div>
-
-        <div class="my-6 h-px w-full shrink-0 bg-white/10"></div>
-
-        <div class="relative ml-2 flex flex-col gap-8 border-l border-white/10 pb-8 pl-6">
-          <div v-for="item in doc.timeline" :key="item.id" class="relative">
-            <div class="absolute -left-[30px] top-1 h-2.5 w-2.5 rounded-full bg-primary-500 ring-[6px] ring-dark-500" />
-            <div class="mb-2 flex items-center justify-between text-xs text-light-500">
-              <span>{{ item.date }}</span>
-              <span>{{ item.time }}</span>
-            </div>
-            <div class="flex items-start gap-3 text-sm text-white">
-              <div class="font-semibold mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white text-[10px] text-black">
-                {{ item.userInitials }}
-              </div>
-              <p class="leading-tight">
-                <span class="font-semibold">{{ item.userName }}</span> {{ item.action }}
-              </p>
+      <div class="animate-fade-in flex flex-col gap-8 px-2 pb-6">
+        <!-- Merged View: Metadata Section -->
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-4">
+            <NuxtIcon :name="`local:file-${doc.extension?.toLowerCase() || 'pdf'}`" class="text-4xl text-white/20" />
+            <div class="flex flex-col overflow-hidden">
+              <h4 class="truncate text-base font-semi-bold text-white" :title="doc.name">{{ doc.name }}</h4>
+              <p class="text-sm text-light-500">{{ doc.formattedSize || 'Unknown Size' }}</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-else class="animate-fade-in flex flex-col gap-6">
-        <div v-if="doc?.routingQueue?.length" class="flex flex-col gap-6">
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold text-sm text-white">Signer Queue</h3>
-              <span
-                class="font-semibold rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wider"
-                :class="doc.status === 'Completed' ? 'bg-success-500/20 text-success-500' : 'bg-primary-500/20 text-primary-500'">
-                {{ doc.status }}
-              </span>
-            </div>
+        <div class="h-px w-full bg-white/10" />
 
-            <div class="mt-1 flex flex-col gap-3">
+        <!-- Merged View: Signatures Section -->
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semi-bold text-white">Signature Routing</h3>
+            <span
+              v-if="doc?.routingQueue?.length"
+              class="rounded-full px-2 py-0.5 text-[10px] font-semi-bold uppercase tracking-wider"
+              :class="doc.status === 'Completed' ? 'bg-success-500/20 text-success-500' : 'bg-primary-500/20 text-primary-500'">
+              {{ doc.status }}
+            </span>
+          </div>
+
+          <div v-if="doc?.routingQueue?.length" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-3">
               <div v-for="(signer, index) in doc.routingQueue" :key="signer.email" class="flex items-center gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
                 <div
-                  class="font-semibold flex size-10 shrink-0 items-center justify-center rounded-full text-sm text-white"
+                  class="flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-semi-bold text-white"
                   :class="signer.status === 'COMPLETED' ? 'bg-success-500' : 'border border-dark-400 bg-dark-600'">
                   <span v-if="signer.status === 'COMPLETED'">✓</span>
                   <span v-else>{{ getInitials(signer.name) }}</span>
                 </div>
                 <div class="flex-1 overflow-hidden">
-                  <p class="font-semibold truncate text-sm text-white">{{ signer.name }}</p>
-                  <p class="truncate text-xs text-light-400">{{ signer.email }}</p>
+                  <p class="truncate text-base font-semi-bold text-white">{{ signer.name }}</p>
+                  <p class="truncate text-sm text-light-400">{{ signer.email }}</p>
                 </div>
                 <div class="flex flex-col items-end gap-2">
-                  <span class="font-semibold text-[10px] uppercase tracking-wider" :class="signer.status === 'SIGNED' ? 'text-success-500' : 'text-alert-500'">
+                  <span class="text-xs font-semi-bold uppercase tracking-wider" :class="signer.status === 'SIGNED' ? 'text-success-500' : 'text-alert-500'">
                     {{ signer.status }}
                   </span>
 
                   <button
                     v-if="signer.status !== 'COMPLETED'"
                     :disabled="isGeneratingLink === signer.email"
-                    class="font-semibold flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
+                    class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-semi-bold text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
                     @click="generateSessionLink(signer.name, signer.email, index !== doc.routingQueue.length - 1)">
                     <NuxtIcon v-if="isGeneratingLink === signer.email" name="local:loader" class="animate-spin text-sm" />
                     <NuxtIcon v-else name="local:connect" class="text-sm" />
@@ -297,8 +266,8 @@ async function copyLink() {
               </div>
             </div>
 
-            <div v-if="magicLink" class="animate-fade-in mt-4 flex flex-col gap-2">
-              <h3 class="font-semibold text-sm text-success-500">Magic Link Generated ✓</h3>
+            <div v-if="magicLink" class="animate-fade-in flex flex-col gap-2 pt-2">
+              <h3 class="text-sm font-semi-bold text-success-500">Magic Link Generated ✓</h3>
               <div class="flex flex-col gap-3 rounded-xl border border-success-500/30 bg-success-500/10 p-4">
                 <p class="text-xs leading-relaxed text-light-400">Share this secure magic link with the signer. The link expires in 60 minutes.</p>
                 <input
@@ -307,7 +276,7 @@ async function copyLink() {
                   class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
                 <div class="flex items-center gap-3 pt-1">
                   <button
-                    class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-colors hover:border-primary-500"
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-primary-500"
                     @click="copyLink">
                     <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
                     <span v-else>Copy Link</span>
@@ -316,7 +285,7 @@ async function copyLink() {
                   <a
                     :href="magicLink"
                     target="_blank"
-                    class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
                     Open Link
                     <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
                   </a>
@@ -324,74 +293,92 @@ async function copyLink() {
               </div>
             </div>
           </div>
+
+          <div v-else class="flex flex-col gap-4">
+            <div v-if="!magicLink" class="flex flex-col gap-3">
+              <div v-for="signer in envelopeSigners" :key="signer.order" class="flex flex-col gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
+                <h4 class="text-xs font-semi-bold uppercase tracking-wider text-light-500">Signer {{ signer.order }}</h4>
+                <div class="flex flex-col gap-2">
+                  <input
+                    v-model="signer.name"
+                    type="text"
+                    placeholder="Full Name"
+                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                  <input
+                    v-model="signer.email"
+                    type="email"
+                    placeholder="Email Address"
+                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                  <input
+                    v-model="signer.role"
+                    type="text"
+                    placeholder="Role (e.g. Client, Contractor)"
+                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                </div>
+              </div>
+            </div>
+
+            <div v-if="magicLink" class="animate-fade-in flex flex-col gap-2">
+              <h3 class="text-sm font-semi-bold text-success-500">Envelope Sent ✓</h3>
+              <div class="flex flex-col gap-3 rounded-xl border border-success-500/30 bg-success-500/10 p-4">
+                <p class="text-xs leading-relaxed text-light-400">Share this secure magic link with the signer. The link expires in 7 days.</p>
+                <input
+                  readonly
+                  :value="magicLink"
+                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
+                <div class="flex items-center gap-3 pt-1">
+                  <button
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-primary-500"
+                    @click="copyLink">
+                    <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
+                    <span v-else>Copy Link</span>
+                  </button>
+
+                  <a
+                    :href="magicLink"
+                    target="_blank"
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
+                    Open Link
+                    <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-2 flex flex-col gap-3">
+              <button
+                v-if="!magicLink"
+                :disabled="isSendingEnvelope || !isEnvelopeValid"
+                class="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semi-bold text-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60"
+                @click="sendForSignature">
+                <NuxtIcon v-if="isSendingEnvelope" name="local:loader" class="animate-spin text-lg" />
+                {{ isSendingEnvelope ? 'Generating Envelope...' : 'Create Envelope & Get Link' }}
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div v-else class="flex flex-col gap-6">
-          <div v-if="!magicLink" class="flex flex-col gap-4">
-            <div v-for="signer in envelopeSigners" :key="signer.order" class="flex flex-col gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
-              <h4 class="font-semibold text-xs uppercase tracking-wider text-light-500">Signer {{ signer.order }}</h4>
-              <div class="flex flex-col gap-2">
-                <input
-                  v-model="signer.name"
-                  type="text"
-                  placeholder="Full Name"
-                  class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
-                <input
-                  v-model="signer.email"
-                  type="email"
-                  placeholder="Email Address"
-                  class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
-                <input
-                  v-model="signer.role"
-                  type="text"
-                  placeholder="Role (e.g. Client, Contractor)"
-                  class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+        <div class="h-px w-full bg-white/10" />
+
+        <!-- Merged View: Timeline Section -->
+        <div class="flex flex-col gap-4">
+          <h3 class="text-sm font-semi-bold text-white">Document History</h3>
+          <div class="relative ml-2 mt-2 flex flex-col gap-8 border-l border-white/10 pb-4 pl-6">
+            <div v-for="item in doc.timeline" :key="item.id" class="relative">
+              <div class="absolute -left-[30px] top-1 h-2.5 w-2.5 rounded-full bg-primary-500 ring-[6px] ring-dark-500" />
+              <div class="mb-2 flex items-center justify-between text-xs text-light-500">
+                <span>{{ item.date }}</span>
+                <span>{{ item.time }}</span>
+              </div>
+              <div class="flex items-start gap-3 text-sm text-white">
+                <div class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white text-[10px] font-semi-bold text-black">
+                  {{ item.userInitials }}
+                </div>
+                <p class="leading-tight">
+                  <span class="font-semi-bold">{{ item.userName }}</span> {{ item.action }}
+                </p>
               </div>
             </div>
-          </div>
-
-          <div v-if="magicLink" class="animate-fade-in flex flex-col gap-2">
-            <h3 class="font-semibold text-sm text-success-500">Envelope Sent ✓</h3>
-            <div class="flex flex-col gap-3 rounded-xl border border-success-500/30 bg-success-500/10 p-4">
-              <p class="text-xs leading-relaxed text-light-400">Share this secure magic link with the signer. The link expires in 7 days.</p>
-              <input
-                readonly
-                :value="magicLink"
-                class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
-              <div class="flex items-center gap-3 pt-1">
-                <button
-                  class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-colors hover:border-primary-500"
-                  @click="copyLink">
-                  <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
-                  <span v-else>Copy Link</span>
-                </button>
-
-                <a
-                  :href="magicLink"
-                  target="_blank"
-                  class="font-semibold flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
-                  Open Link
-                  <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-8 flex flex-col gap-3 border-t border-dark-500/50 pt-6">
-            <button
-              v-if="!magicLink"
-              :disabled="isSendingEnvelope || !isEnvelopeValid"
-              class="font-semibold flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm text-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60"
-              @click="sendForSignature">
-              <NuxtIcon v-if="isSendingEnvelope" name="local:loader" class="animate-spin text-lg" />
-              {{ isSendingEnvelope ? 'Generating Envelope...' : 'Create Envelope & Get Link' }}
-            </button>
-            <button
-              v-else
-              class="font-semibold flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm text-dark-500 transition-colors hover:bg-light-400"
-              @click="isRightDrawerOpen = false">
-              Done
-            </button>
           </div>
         </div>
       </div>

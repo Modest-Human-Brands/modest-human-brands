@@ -11,14 +11,13 @@ const { conversations, messages, pending, chatPending, isPaginating, sendMessage
 </script>
 
 <template>
-  <main class="flex size-full overflow-hidden">
+  <main class="relative flex size-full overflow-hidden">
     <div class="flex h-full min-w-0 flex-1 flex-col transition-all duration-300">
       <CoordinateChatArea :room-id="activeConversationId" :messages="messages" :pending="chatPending" :is-paginating="isPaginating" @send="sendMessage" @load-more="loadMoreMessages" />
     </div>
 
-    <div class="hidden h-full shrink-0 border-l border-dark-500 transition-all duration-300 md:flex md:w-[400px]">
-      <div v-if="pending" class="size-full animate-pulse bg-white/5" />
-      <CoordinateSidebar v-else-if="conversations" :conversations="conversations" :active-id="activeConversationId" />
-    </div>
+    <CoordinateSidebar v-if="conversations && !pending" :conversations="conversations" :active-id="activeConversationId" />
+
+    <div v-else-if="pending" class="hidden h-full w-[400px] shrink-0 animate-pulse border-l border-dark-500 bg-white/5 md:block" />
   </main>
 </template>

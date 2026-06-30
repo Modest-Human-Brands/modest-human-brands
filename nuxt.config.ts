@@ -115,16 +115,18 @@ export default defineNuxtConfig({
       connectUrl: '',
       docUrl: '',
       matrixUrl: '',
+      driveUrl: '',
+      //
       cdnUrl: '',
       turnUrl: '',
       livekitUrl: '',
       llhlsUrl: '',
+      vapidKey: '',
       scripts: {
         googleAnalytics: {
           id: '',
         },
       },
-      vapidKey: '',
     },
     private: {
       livekitApiKey: '',

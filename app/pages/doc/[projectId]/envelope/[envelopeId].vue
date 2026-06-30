@@ -138,7 +138,7 @@ async function submitSignature() {
       <div class="mx-auto mb-6 flex size-24 items-center justify-center rounded-full bg-alert-500/20 text-alert-500">
         <NuxtIcon name="local:cross" class="text-5xl" />
       </div>
-      <h2 class="font-semibold text-2xl text-white">Access Denied</h2>
+      <h2 class="text-2xl font-semi-bold text-white">Access Denied</h2>
       <p class="mt-2 max-w-md px-4 text-sm leading-relaxed text-light-400">
         {{ verificationError }}
       </p>
@@ -153,10 +153,10 @@ async function submitSignature() {
             class="absolute z-10 flex items-center justify-center overflow-hidden border border-primary-500/50 bg-primary-500/10 text-black transition-colors"
             :style="{ top: `${(viewportHeight - f.y - f.height) * scale}px`, left: `${f.x * scale}px`, width: `${f.width * scale}px`, height: `${f.height * scale}px` }">
             <img v-if="f.type === 'SIGNATURE' && masterSignature" :src="masterSignature" class="size-full object-contain p-1" />
-            <span v-else-if="f.type !== 'SIGNATURE' && formData[f.id]" :style="{ fontSize: `${(f.fontSize || 12) * scale}px` }" class="font-semibold px-2 text-center tracking-wide">
+            <span v-else-if="f.type !== 'SIGNATURE' && formData[f.id]" :style="{ fontSize: `${(f.fontSize || 12) * scale}px` }" class="px-2 text-center font-semi-bold tracking-wide">
               {{ formData[f.id] }}
             </span>
-            <span v-else class="font-semibold text-[8px] uppercase tracking-widest opacity-60 md:text-[10px]">
+            <span v-else class="text-[8px] font-semi-bold uppercase tracking-widest opacity-60 md:text-[10px]">
               {{ f.type }}
             </span>
           </div>
@@ -165,7 +165,7 @@ async function submitSignature() {
 
       <AppSidebar v-model="isSignDrawerOpen">
         <template #header>
-          <h2 class="font-semibold text-xl tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
+          <h2 class="text-xl font-semi-bold tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
         </template>
         <template #actions>
           <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isSignDrawerOpen = false">
@@ -179,10 +179,10 @@ async function submitSignature() {
             <NuxtIcon name="local:check-circle" class="text-6xl" />
           </div>
           <div>
-            <h2 class="font-semibold text-2xl text-white">Document Signed!</h2>
+            <h2 class="text-2xl font-semi-bold text-white">Document Signed!</h2>
             <p class="mt-2 px-4 text-sm leading-relaxed text-light-400">Your signature has been securely applied and the document has been sealed. A final copy will be emailed to you shortly.</p>
           </div>
-          <button class="hover:bg-dark-300 font-semibold mx-auto mt-4 w-full max-w-52 rounded-full bg-dark-500 px-6 py-3 text-sm text-white transition-colors" @click="navigateTo('/doc')">
+          <button class="hover:bg-dark-300 mx-auto mt-4 w-full max-w-52 rounded-full bg-dark-500 px-6 py-3 text-sm font-semi-bold text-white transition-colors" @click="navigateTo('/doc')">
             Close Window
           </button>
         </div>
@@ -199,7 +199,7 @@ async function submitSignature() {
           <div class="mt-4 border-t border-dark-500/50 pt-6">
             <button
               :disabled="isSubmitting || (!masterSignature && signatureFields.length > 0)"
-              class="font-semibold flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-base text-dark-500 shadow-sm transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-50"
+              class="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-base font-semi-bold text-dark-500 shadow-sm transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-50"
               @click="submitSignature">
               <NuxtIcon v-if="isSubmitting" name="local:loader" class="animate-spin text-lg" />
               {{ isSubmitting ? 'Sealing Document...' : 'I Agree & Sign' }}

@@ -48,7 +48,7 @@ const steps = reactive([
       <nav class="mb-12">
         <ol class="flex items-center justify-between">
           <li v-for="(step, index) in steps" :key="step.id" class="relative flex grow items-center gap-3">
-            <div class="font-semibold flex h-8 w-8 items-center justify-center rounded-full text-sm" :class="currentStep >= step.id ? 'bg-primary-500 text-white' : 'bg-dark-500 text-white'">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semi-bold" :class="currentStep >= step.id ? 'bg-primary-500 text-white' : 'bg-dark-500 text-white'">
               {{ step.id }}
             </div>
             <span class="text-sm font-semi-bold" :class="currentStep >= step.id ? 'text-white' : 'text-white'">
@@ -62,7 +62,7 @@ const steps = reactive([
       <div class="flex flex-col gap-10">
         <section class="flex flex-col gap-6">
           <div class="flex flex-col gap-1">
-            <h2 class="font-semibold text-lg">Choose Channel</h2>
+            <h2 class="text-lg font-semi-bold">Choose Channel</h2>
             <p class="text-sm text-white">Select how you want to connect</p>
           </div>
 
@@ -75,7 +75,7 @@ const steps = reactive([
               @click="selectedChannelId = channel.id">
               <div class="flex items-center gap-4">
                 <NuxtIcon :name="channel.icon" class="text-xl text-primary-500" />
-                <span class="font-semibold text-sm text-white">{{ channel.name }}</span>
+                <span class="text-sm font-semi-bold text-white">{{ channel.name }}</span>
               </div>
               <div class="flex h-5 w-5 items-center justify-center rounded-full border" :class="selectedChannelId === channel.id ? 'border-primary-500' : 'border-dark-600'">
                 <div v-if="selectedChannelId === channel.id" class="h-2.5 w-2.5 rounded-full bg-primary-500" />
@@ -86,7 +86,7 @@ const steps = reactive([
 
         <section class="flex flex-col gap-6">
           <div class="flex flex-col gap-1">
-            <h2 class="font-semibold text-lg">Select Recipient</h2>
+            <h2 class="text-lg font-semi-bold">Select Recipient</h2>
             <p class="text-sm text-white">Choose whom you want to connect</p>
           </div>
 
@@ -115,7 +115,7 @@ const steps = reactive([
               :class="selectedRecipientId === person.id ? 'border-primary-500 bg-dark-500' : 'border-dark-600 bg-dark-400'"
               @click="selectedRecipientId = person.id">
               <div class="flex items-center gap-4">
-                <div class="font-semibold flex h-10 w-10 items-center justify-center rounded-full bg-dark-600 text-sm uppercase text-white">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-dark-600 text-sm font-semi-bold uppercase text-white">
                   {{
                     person.name
                       .split(' ')
@@ -124,7 +124,7 @@ const steps = reactive([
                   }}
                 </div>
                 <div class="flex min-w-0 flex-col">
-                  <span class="font-semibold text-sm text-white">{{ person.name }}</span>
+                  <span class="text-sm font-semi-bold text-white">{{ person.name }}</span>
                   <span class="truncate text-sm text-white">{{ person.email }}</span>
                 </div>
               </div>
@@ -140,7 +140,7 @@ const steps = reactive([
               <div class="flex items-center gap-4">
                 <NuxtIcon name="local:person" class="text-xl text-white" />
                 <div class="flex flex-col items-start">
-                  <span class="font-semibold text-sm text-white">Add New Contact</span>
+                  <span class="text-sm font-semi-bold text-white">Add New Contact</span>
                   <span class="text-sm text-white">Add a new recipient manually</span>
                 </div>
               </div>
@@ -150,7 +150,7 @@ const steps = reactive([
         </section>
 
         <footer class="flex justify-end">
-          <button class="font-semibold flex items-center gap-2 rounded-lg bg-white px-8 py-2.5 text-sm text-black transition-transform hover:scale-105 active:scale-95">
+          <button class="flex items-center gap-2 rounded-lg bg-white px-8 py-2.5 text-sm font-semi-bold text-black transition-transform hover:scale-105 active:scale-95">
             Continue
             <NuxtIcon name="local:chevron-bold" class="scale-[-1] fill-black" />
           </button>

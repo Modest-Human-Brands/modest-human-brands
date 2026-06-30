@@ -17,8 +17,8 @@ definePageMeta({
       </div> -->
 
       <div class="flex h-full flex-col items-center justify-center text-white/40">
-        <NuxtIcon name="local:folder" class="mb-4 text-4xl opacity-50" />
-        <p class="font-semibold text-sm">No transactions found.</p>
+        <NuxtIcon name="local:journal" class="mb-4 text-4xl opacity-50" />
+        <p class="text-sm font-semi-bold">No transactions found.</p>
       </div>
     </div>
   </main>

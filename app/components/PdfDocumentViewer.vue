@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VuePDF } from '@tato30/vue-pdf'
+import type { PDFDocumentLoadingTask } from 'pdfjs-dist'
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +18,20 @@ const props = withDefaults(
   }
 )
 
-const { pdf, pages } = usePdfViewer(() => props.src)
+const VuePDF = defineAsyncComponent(() => import('@tato30/vue-pdf').then((m) => m.VuePDF))
+
+const pdf = shallowRef<PDFDocumentLoadingTask | undefined>(undefined)
+const pages = ref(0)
+
+onMounted(async () => {
+  const { usePDF } = await import('@tato30/vue-pdf')
+  const { pdf: _pdf, pages: _pages } = usePDF(toRef(() => props.src))
+
+  watchEffect(() => {
+    pdf.value = _pdf.value
+    pages.value = _pages.value
+  })
+})
 
 const viewerState = reactive({
   page: 1,
@@ -28,7 +41,7 @@ const viewerState = reactive({
 const isSidebarOpen = ref(false)
 const fitMode = ref<'auto' | 'width' | 'height'>('auto')
 
-defineExpose({ pdf, pages, zoomIn, zoomOut, resetZoom: fitBy, rotate, setPage, viewerState, isSidebarOpen, fitMode })
+defineExpose({ pdf, pages, zoomIn, zoomOut, resetZoom: fitBy, rotate, setPage, viewerState, isSidebarOpen: isSidebarOpen, fitMode })
 
 const config = useRuntimeConfig()
 
@@ -48,7 +61,7 @@ watch(
       pdfViewportHeight.value = viewport.height
       rawPageDimensions.value = { width: viewport.width, height: viewport.height }
     } catch {
-      // Silently handle viewport computation fallback
+      //
     }
   },
   { immediate: true }
@@ -119,7 +132,6 @@ function rotate() {
 
 async function print() {
   if (!props.src) return
-
   let blobUrl: string | null = null
 
   try {
@@ -140,7 +152,7 @@ async function print() {
         iframe.contentWindow?.focus()
         iframe.contentWindow?.print()
       } catch (error) {
-        console.error('[PDFViewer] Print execution failed:', error)
+        console.error(error)
       } finally {
         setTimeout(() => {
           iframe.remove()
@@ -149,7 +161,7 @@ async function print() {
       }
     }
   } catch (error) {
-    console.error('[PDFViewer] Failed to load PDF for printing:', error)
+    console.error(error)
     if (blobUrl) URL.revokeObjectURL(blobUrl)
   }
 }
@@ -157,26 +169,25 @@ async function print() {
 
 <template>
   <div class="relative flex size-full flex-1 flex-row overflow-hidden">
-    <div v-if="isSidebarOpen" class="backdrop-blur-xs absolute inset-0 z-30 bg-black/60 transition-opacity lg:hidden" @click="isSidebarOpen = false" />
-
-    <aside
+    <AppSidebarPreviewList
       v-if="pdf && pages && pages > 1 && showSidebar"
-      :class="[
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
-        'scrollbar-hidden absolute inset-y-0 left-0 z-40 flex w-36 shrink-0 select-none flex-col overflow-y-auto border-r border-white/5 p-4 transition-transform duration-300 lg:relative lg:translate-x-0',
-      ]">
-      <ClientOnly>
-        <div v-for="p in pages" :key="p" class="mb-6 flex flex-col items-center">
-          <div
-            :class="viewerState.page === p ? 'border-primary-500 ring-2 ring-primary-500/20' : 'border-transparent'"
-            class="aspect-[3/4] w-full shrink-0 cursor-pointer rounded border-2 bg-white transition-all hover:border-primary-500/50"
-            @click="setPage(p)">
-            <VuePDF :pdf="pdf" :page="p" fit-parent />
+      v-model:drawer-open="isSidebarOpen"
+      :items="Array.from({ length: pages }, (_, i) => i + 1)"
+      :active-id="viewerState.page"
+      @select="setPage">
+      <template #item="{ item: p, isActive }">
+        <ClientOnly>
+          <div class="flex w-full flex-col items-center">
+            <div
+              :class="isActive ? 'border-primary-500 ring-2 ring-primary-500/20' : 'border-transparent'"
+              class="aspect-[3/4] w-full shrink-0 rounded border-2 bg-white transition-all hover:border-primary-500/50">
+              <VuePDF :pdf="pdf" :page="p" fit-parent />
+            </div>
+            <span class="mt-2 shrink-0 text-xs font-semi-bold text-light-500">{{ p }}</span>
           </div>
-          <span class="font-semibold mt-2 shrink-0 text-xs text-light-500">{{ p }}</span>
-        </div>
-      </ClientOnly>
-    </aside>
+        </ClientOnly>
+      </template>
+    </AppSidebarPreviewList>
 
     <div class="relative flex size-full flex-1 flex-col overflow-hidden">
       <slot name="header" />
@@ -184,7 +195,7 @@ async function print() {
       <div ref="viewerContainer" class="scrollbar-hidden relative grid size-full overflow-auto p-4 pb-32 md:p-6" @scroll="onScroll">
         <div v-if="isLoading || (!pdf && props.src)" class="m-auto flex flex-col items-center gap-4 text-light-500">
           <NuxtIcon name="local:loader" class="animate-spin text-4xl" />
-          <span class="font-semibold text-sm uppercase tracking-widest">Loading Document...</span>
+          <span class="text-sm font-semi-bold uppercase tracking-widest">Loading Document...</span>
         </div>
 
         <div v-else-if="pdf && pages" class="m-auto flex w-full max-w-fit flex-col items-center gap-8 pb-16 transition-all duration-300">
@@ -198,45 +209,29 @@ async function print() {
         </div>
       </div>
 
-      <div v-if="pdf && pages" class="absolute bottom-32 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-full border border-white/10 bg-dark-400 px-6 py-3 text-white md:bottom-6">
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.max(1, viewerState.page - 1))">
-          <NuxtIcon name="local:chevron-bold" class="text-lg" />
-        </button>
-        <span class="font-semibold whitespace-nowrap text-center text-xs text-light-400"> {{ viewerState.page }} / {{ pages }} </span>
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="setPage(Math.min(pages || 1, viewerState.page + 1))">
-          <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-lg" />
-        </button>
-        <div class="h-4 w-px bg-white/20" />
-
-        <button type="button" class="transition-colors hover:text-primary-500" @click="zoomIn">
-          <NuxtIcon name="local:plus" class="text-lg" />
-        </button>
-        <button type="button" class="transition-colors hover:text-primary-500" @click="zoomOut">
-          <NuxtIcon name="local:minus" class="text-lg" />
-        </button>
-        <button type="button" class="transition-colors hover:text-primary-500" :title="fitMode === 'width' ? 'Toggle Fit Height' : 'Toggle Fit Width'" @click="fitBy">
-          <NuxtIcon name="local:zoom-fit" class="text-lg" />
-        </button>
-
-        <div class="h-4 w-px bg-white/20" />
-
-        <slot name="toolbar-actions" />
-
-        <a v-if="doc" :href="`${config.public.docUrl}${doc.previewUrl}?download=true`" target="_blank" class="shrink-0 transition-colors hover:text-primary-500">
-          <NuxtIcon name="local:download" class="text-xl" />
-        </a>
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="print()">
-          <NuxtIcon name="local:print" class="text-xl" />
-        </button>
-      </div>
+      <AppFloatingActionToolbar
+        v-if="pdf && pages"
+        :page="viewerState.page"
+        :total-pages="pages"
+        :fit-mode="fitMode"
+        :download-url="doc ? `${config.public.docUrl}${doc.previewUrl}?download=true` : undefined"
+        @update:page="setPage"
+        @zoom-in="zoomIn"
+        @zoom-out="zoomOut"
+        @fit-by="fitBy"
+        @print="print">
+        <template #custom-actions>
+          <slot name="toolbar-actions" />
+        </template>
+      </AppFloatingActionToolbar>
     </div>
 
     <button
       v-if="pdf && pages && pages > 1 && showSidebar"
       type="button"
-      class="backdrop-blur-xs absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-white/10 bg-dark-400 text-white shadow-md transition-transform active:scale-95 lg:hidden"
-      @click="isSidebarOpen = true">
-      <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-xs" />
+      class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-white/10 bg-dark-400/80 text-white shadow-md backdrop-blur-md transition-transform active:scale-95 md:hidden"
+      @click="isSidebarOpen = !isSidebarOpen">
+      <NuxtIcon name="local:chevron-bold" class="text-xs" :class="{ 'scale-x-[-1]': !isSidebarOpen }" />
     </button>
 
     <slot name="floating-actions" />

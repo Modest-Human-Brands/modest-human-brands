@@ -20,7 +20,7 @@ const { data: folders, pending } = await useFetch('/api/doc')
 
       <div v-else class="my-auto flex h-full flex-col items-center justify-center text-light-500/40">
         <NuxtIcon name="local:folder" class="mb-3 text-4xl" />
-        <p class="font-semibold text-xs">No documents found.</p>
+        <p class="text-xs font-semi-bold">No documents found.</p>
       </div>
     </div>
   </main>

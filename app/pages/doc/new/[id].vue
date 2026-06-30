@@ -10,9 +10,9 @@ const templateId = route.params.id as string
 
 const uiStyles = {
   btnPrimary:
-    'flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-dark-500 fill-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
+    'flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semi-bold text-dark-500 fill-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
   btnSecondary:
-    'flex w-full items-center justify-center gap-2 rounded-full border border-dark-400 bg-dark-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-dark-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
+    'flex w-full items-center justify-center gap-2 rounded-full border border-dark-400 bg-dark-500 px-6 py-3 text-sm font-semi-bold text-white transition-colors hover:bg-dark-400 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto',
 }
 
 const { data: template } = await useFetch(`/api/doc/template/${templateId}`)
@@ -153,7 +153,7 @@ function prevStep() {
 
     <AppSidebar v-model="isMobileDrawerOpen">
       <template #header>
-        <h1 class="font-semibold text-xl capitalize tracking-tight text-white">
+        <h1 class="text-xl font-semi-bold capitalize tracking-tight text-white">
           {{ templateId.replace(/-/g, ' ') }}
         </h1>
         <p class="mt-0.5 text-xs text-light-500">Fill details to update preview</p>
@@ -176,27 +176,27 @@ function prevStep() {
 
       <div v-else-if="wizardStep === 1" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
-          <h2 class="font-semibold text-2xl text-white">Review & Generate</h2>
+          <h2 class="text-2xl font-semi-bold text-white">Review & Generate</h2>
           <p class="text-sm text-light-500">Please review the captured information before finalizing the document.</p>
         </div>
 
         <div class="flex flex-col gap-0 overflow-hidden rounded-2xl border border-dark-400 bg-dark-500/50">
           <div v-for="field in currentSchema" :key="field.path" class="flex flex-col gap-1 border-b border-dark-400 p-4 last:border-0 md:flex-row md:items-start md:justify-between">
-            <span class="font-semibold pt-1 text-xs uppercase tracking-wider text-light-500 md:w-1/3">
+            <span class="pt-1 text-xs font-semi-bold uppercase tracking-wider text-light-500 md:w-1/3">
               {{ field.groupName === 'General Details' ? field.label : `${field.groupName} → ${field.label}` }}
             </span>
 
-            <span v-if="field.type === 'boolean'" class="font-semibold text-sm md:w-2/3 md:text-right" :class="formData[field.path] ? 'text-success-500' : 'text-light-600'">
+            <span v-if="field.type === 'boolean'" class="text-sm font-semi-bold md:w-2/3 md:text-right" :class="formData[field.path] ? 'text-success-500' : 'text-light-600'">
               {{ formData[field.path] ? 'Enabled' : 'Disabled' }}
             </span>
 
             <div v-else-if="field.type === 'array<string>'" class="flex flex-col gap-1 md:w-2/3 md:items-end md:text-right">
-              <span v-for="(item, i) in formData[field.path] as string[]" :key="i" class="font-semibold text-sm text-white">{{ item || '—' }}</span>
+              <span v-for="(item, i) in formData[field.path] as string[]" :key="i" class="text-sm font-semi-bold text-white">{{ item || '—' }}</span>
             </div>
 
             <div v-else-if="field.type === 'array<object>'" class="mt-2 flex w-full flex-col gap-3 md:mt-0 md:w-2/3 md:items-end">
               <div v-for="(item, i) in formData[field.path] as any[]" :key="i" class="flex w-full flex-col gap-2 rounded border border-dark-400 bg-dark-500/80 p-3 text-left">
-                <span class="font-semibold border-b border-dark-400 pb-1 text-xs uppercase tracking-wider text-light-500">Item {{ i + 1 }}</span>
+                <span class="border-b border-dark-400 pb-1 text-xs font-semi-bold uppercase tracking-wider text-light-500">Item {{ i + 1 }}</span>
                 <div v-for="(val, k) in item" :key="k" class="flex items-start justify-between gap-4">
                   <span class="text-xs capitalize text-light-400">{{
                     String(k)
@@ -204,14 +204,14 @@ function prevStep() {
                       .trim()
                   }}</span>
                   <div v-if="Array.isArray(val)" class="flex flex-col items-end">
-                    <span v-for="(v, vi) in val" :key="vi" class="font-semibold break-words text-right text-xs text-white">{{ v || '—' }}</span>
+                    <span v-for="(v, vi) in val" :key="vi" class="break-words text-right text-xs font-semi-bold text-white">{{ v || '—' }}</span>
                   </div>
-                  <span v-else class="font-semibold break-words text-right text-xs text-white">{{ String(val || '—') }}</span>
+                  <span v-else class="break-words text-right text-xs font-semi-bold text-white">{{ String(val || '—') }}</span>
                 </div>
               </div>
             </div>
 
-            <span v-else class="font-semibold whitespace-pre-wrap break-words text-sm text-white md:w-2/3 md:text-right">
+            <span v-else class="whitespace-pre-wrap break-words text-sm font-semi-bold text-white md:w-2/3 md:text-right">
               {{ String(formData[field.path] || 'Not provided') }}
             </span>
           </div>

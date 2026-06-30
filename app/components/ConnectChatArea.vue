@@ -118,12 +118,12 @@ watch(
     <template v-else>
       <header class="flex shrink-0 flex-col gap-4 border-b border-dark-500 p-2 md:p-6">
         <div class="flex items-center gap-4">
-          <div class="font-semibold flex size-14 shrink-0 items-center justify-center rounded-full bg-white text-xl text-dark-500">
+          <div class="flex size-14 shrink-0 items-center justify-center rounded-full bg-white text-xl font-semi-bold text-dark-500">
             {{ activeContact.initial }}
           </div>
           <div class="flex flex-col">
-            <h2 class="font-semibold text-lg text-white">{{ activeContact.name }}</h2>
-            <span class="font-semibold text-sm text-light-500">{{ activeContact.company }}</span>
+            <h2 class="text-lg font-semi-bold text-white">{{ activeContact.name }}</h2>
+            <span class="text-sm font-semi-bold text-light-500">{{ activeContact.company }}</span>
           </div>
         </div>
 
@@ -131,7 +131,7 @@ watch(
           <button
             v-for="channel in CONNECT_CHANNELS"
             :key="channel.id"
-            class="font-semibold flex items-center gap-2 rounded-full px-4 py-2 text-sm capitalize transition-colors"
+            class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semi-bold capitalize transition-colors"
             :class="[activeChannel === channel.id ? 'bg-white fill-dark-500 text-dark-500' : 'bg-dark-500 fill-light-400 text-light-400 hover:bg-dark-600 hover:fill-white hover:text-white']"
             @click="activeChannel = channel.id">
             <NuxtIcon :name="channel.icon" class="text-[16px]" />

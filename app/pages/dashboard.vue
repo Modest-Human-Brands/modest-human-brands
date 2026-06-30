@@ -48,7 +48,7 @@ const activeRooms = [
   <main class="flex size-full flex-col overflow-y-auto bg-dark-400 p-6 md:p-10">
     <div class="mx-auto flex w-full max-w-7xl flex-col gap-8">
       <header class="flex flex-col justify-center gap-1 text-center">
-        <h1 class="font-semibold text-2xl text-white md:text-3xl">{{ greeting }}, {{ user?.name.split(' ')[0] || 'there' }}</h1>
+        <h1 class="text-2xl font-semi-bold text-white md:text-3xl">{{ greeting }}, {{ user?.name.split(' ')[0] || 'there' }}</h1>
         <p class="font-medium text-sm text-light-500 md:text-base">{{ currentDate }}</p>
       </header>
 
@@ -58,10 +58,10 @@ const activeRooms = [
             <NuxtIcon :name="metric.icon" class="text-xl" :class="metric.color" />
           </div>
           <div class="flex flex-col">
-            <span class="font-semibold text-2xl text-white">{{ metric.value }}</span>
+            <span class="text-2xl font-semi-bold text-white">{{ metric.value }}</span>
             <div class="flex items-center gap-2">
-              <span class="font-semibold text-xs text-light-500">{{ metric.label }}</span>
-              <span class="font-semibold text-xs" :class="metric.trend.startsWith('+') ? 'text-success-500' : 'text-light-600'">{{ metric.trend }}</span>
+              <span class="text-xs font-semi-bold text-light-500">{{ metric.label }}</span>
+              <span class="text-xs font-semi-bold" :class="metric.trend.startsWith('+') ? 'text-success-500' : 'text-light-600'">{{ metric.trend }}</span>
             </div>
           </div>
         </div>
@@ -71,14 +71,14 @@ const activeRooms = [
         <div class="flex flex-col gap-8 lg:col-span-2">
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
-              <h2 class="font-semibold text-base text-white">Recently Visited Docs</h2>
-              <NuxtLink to="/doc" class="font-semibold text-sm text-light-500 transition-colors hover:text-white">View Doc </NuxtLink>
+              <h2 class="text-base font-semi-bold text-white">Recently Visited Docs</h2>
+              <NuxtLink to="/doc" class="text-sm font-semi-bold text-light-500 transition-colors hover:text-white">View Doc </NuxtLink>
             </div>
             <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
               <div v-for="doc in recentDocs" :key="doc.id" class="group flex cursor-pointer flex-col gap-3 rounded-xl border border-dark-500 bg-dark-500/30 p-4 transition-colors hover:bg-dark-500">
                 <NuxtIcon :name="doc.icon" class="text-2xl text-light-400 transition-colors group-hover:text-white" />
                 <div class="flex flex-col">
-                  <span class="font-semibold truncate text-sm text-white">{{ doc.title }}</span>
+                  <span class="truncate text-sm font-semi-bold text-white">{{ doc.title }}</span>
                   <span class="font-medium text-xs text-light-600">{{ doc.updated }}</span>
                 </div>
               </div>
@@ -87,8 +87,8 @@ const activeRooms = [
 
           <div class="flex flex-col gap-2">
             <div class="flex items-center justify-between px-1">
-              <h2 class="font-semibold text-base text-white">Recent Activity</h2>
-              <NuxtLink to="/connect" class="font-semibold text-sm text-light-500 transition-colors hover:text-white"> View Connect</NuxtLink>
+              <h2 class="text-base font-semi-bold text-white">Recent Activity</h2>
+              <NuxtLink to="/connect" class="text-sm font-semi-bold text-light-500 transition-colors hover:text-white"> View Connect</NuxtLink>
             </div>
             <div class="flex flex-col">
               <div v-for="act in recentActivity" :key="act.id" class="group flex cursor-pointer items-center gap-4 rounded-lg p-3 transition-colors hover:bg-dark-500">
@@ -96,10 +96,10 @@ const activeRooms = [
                   <NuxtIcon :name="act.icon" class="text-base text-white/80" />
                 </div>
                 <div class="flex flex-1 flex-col">
-                  <span class="font-semibold text-sm text-white/90">{{ act.name }}</span>
+                  <span class="text-sm font-semi-bold text-white/90">{{ act.name }}</span>
                   <span class="text-sm text-light-500">{{ act.title }}</span>
                 </div>
-                <span class="font-semibold text-xs text-light-600">{{ act.time }}</span>
+                <span class="text-xs font-semi-bold text-light-600">{{ act.time }}</span>
               </div>
             </div>
           </div>
@@ -107,16 +107,16 @@ const activeRooms = [
 
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between px-1">
-            <h2 class="font-semibold text-base text-white">Active Rooms</h2>
-            <NuxtLink to="/coordinate" class="font-semibold text-sm text-light-500 transition-colors hover:text-white"> View Coordinate</NuxtLink>
+            <h2 class="text-base font-semi-bold text-white">Active Rooms</h2>
+            <NuxtLink to="/coordinate" class="text-sm font-semi-bold text-light-500 transition-colors hover:text-white"> View Coordinate</NuxtLink>
           </div>
           <div class="flex flex-col">
             <div v-for="room in activeRooms" :key="room.id" class="flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors hover:bg-dark-500">
-              <div class="font-semibold flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-xs text-dark-500">
+              <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-xs font-semi-bold text-dark-500">
                 {{ room.initial }}
               </div>
               <div class="flex min-w-0 flex-1 flex-col">
-                <span class="font-semibold truncate text-sm text-white/90">{{ room.name }}</span>
+                <span class="truncate text-sm font-semi-bold text-white/90">{{ room.name }}</span>
                 <span class="text-xs text-light-500">{{ room.context }}</span>
               </div>
               <span class="shrink-0 text-xs text-light-600">{{ room.time }}</span>
