@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.0...v0.7.1)
+
+### 🩹 Fixes
+
+- Refactor projectSlug usage and improve API stream handling ([457e16a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/457e16a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.6.1...v0.7.0)
