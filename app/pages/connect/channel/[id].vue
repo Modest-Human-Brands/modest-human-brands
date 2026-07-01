@@ -12,7 +12,7 @@ const activeContactId = String(route.params.id)
 const { data: contacts, pending: loadingContacts } = await useFetch('/api/connect', { default: () => [] as ChatContact[] })
 const activeContact = computed(() => contacts.value?.find((c) => c.id === activeContactId) || null)
 
-const { data: timeline, pending: loadingTimeline } = await useFetch(`/api/connect/${activeContactId}/timeline`)
+const { data: timeline, pending } = await useFetch(`/api/connect/${activeContactId}/timeline`)
 const { data: emailTemplates } = await useFetch('/api/connect/text/email/template')
 
 const messages = computed<ChatMessage[]>(() => {
@@ -79,20 +79,13 @@ async function handleSendMessage({ content, channel, template, variables }: Send
 </script>
 
 <template>
-  <main class="relative flex size-full overflow-hidden bg-dark-400">
-    <div class="relative flex h-full min-w-0 flex-1 flex-col transition-all duration-300">
-      <div v-if="loadingTimeline && messages.length === 0" class="flex h-full items-center justify-center text-white/40">
-        <div class="flex animate-pulse flex-col items-center gap-3">
-          <NuxtIcon name="local:chat" class="text-3xl" />
-          <span class="text-sm font-semi-bold uppercase tracking-widest">Synchronizing Ledger...</span>
-        </div>
-      </div>
-
-      <ConnectChatArea v-else class="min-h-0 flex-1" :active-contact="activeContact" :messages="messages" :templates="emailTemplates || []" @send="handleSendMessage" />
+  <main class="relative flex size-full overflow-hidden">
+    <div class="flex h-full min-w-0 flex-1 flex-col transition-all duration-300">
+      <ConnectChatArea class="min-h-0 flex-1" :active-contact="activeContact" :messages="messages" :templates="emailTemplates || []" @send="handleSendMessage" />
     </div>
 
     <ConnectSidebar v-if="!loadingContacts" :contacts="contacts" :active-id="activeContactId" />
 
-    <div v-else class="hidden h-full w-[400px] shrink-0 animate-pulse border-l border-dark-500 bg-white/5 md:block" />
+    <div v-else-if="pending" class="hidden h-full w-[400px] shrink-0 animate-pulse border-l border-dark-500 bg-white/5 md:block" />
   </main>
 </template>

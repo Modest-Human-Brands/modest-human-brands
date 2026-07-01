@@ -4,7 +4,7 @@ const props = defineProps<{
   contacts: ChatContact[]
 }>()
 
-const isOpen = ref(false)
+const isOpen = ref(true)
 const activeChannel = ref<ChannelType | 'all'>('all')
 const channels: { id: ChannelType | 'all'; name: string; icon: string }[] = [{ id: 'all', name: 'All', icon: 'local:kanban' }, ...CONNECT_CHANNELS]
 
@@ -15,7 +15,7 @@ const filteredContacts = computed(() => {
 </script>
 
 <template>
-  <AppSidebar v-model:open="isOpen" as-drawer-on-mobile>
+  <AppSidebar v-model:open="isOpen">
     <template #header>
       <div class="scrollbar-hidden -mx-2 flex shrink-0 items-center gap-2 overflow-x-auto px-2 pb-2 md:pb-0">
         <button

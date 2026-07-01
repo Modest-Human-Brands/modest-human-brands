@@ -114,7 +114,7 @@ services:
     env_file:
       - .env
     volumes:
-      - mdrive-data:/app/data
+      - mdrive-data:/app/.data
       - mdrive-static:/app/static
     networks:
       - internal
@@ -181,7 +181,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mdrive/data
+      device: /root/modest-human-brands/mdrive/.data
   mdrive-static:
     driver: local
     driver_opts:

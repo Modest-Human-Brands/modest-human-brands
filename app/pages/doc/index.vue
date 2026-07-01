@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: folders, pending } = await useFetch('/api/doc')
+const { data: folders, pending } = await useFetch('/api/doc', { default: () => [] })
 </script>
 
 <template>

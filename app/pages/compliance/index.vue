@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: compliances, pending } = await useFetch('/api/compliance')
+const { data: compliances, pending } = await useFetch('/api/compliance', { default: () => [] })
 </script>
 
 <template>

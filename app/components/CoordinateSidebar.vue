@@ -8,7 +8,7 @@ const emit = defineEmits<{
   (e: 'select', id: string): void
 }>()
 
-const isOpen = ref(false)
+const isOpen = ref(true)
 const activeTab = ref<'people' | 'projects' | 'topics'>('people')
 
 const TABS = [
@@ -23,7 +23,7 @@ const filteredConversations = computed(() => {
 </script>
 
 <template>
-  <AppSidebar v-model="isOpen">
+  <AppSidebar v-model:open="isOpen">
     <template #header>
       <div class="scrollbar-hidden mb-2 flex shrink-0 items-center gap-2 overflow-x-auto">
         <button

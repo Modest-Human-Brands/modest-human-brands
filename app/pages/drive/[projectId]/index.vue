@@ -86,9 +86,9 @@ const isHeaderCollapsed = computed(() => y.value > 50)
     <div class="relative shrink-0 overflow-hidden border-b border-white/5 bg-dark-500/20 transition-all duration-500 ease-in-out" :class="isHeaderCollapsed ? 'h-16' : 'h-64'">
       <div class="absolute inset-0 z-10 bg-gradient-to-t from-dark-400 via-dark-400/40 to-transparent" />
 
-      <div class="relative z-20 mx-auto flex h-full w-full items-end justify-between px-8 pb-6">
+      <div class="relative z-20 mx-auto flex h-full w-full items-end justify-between px-4 pb-4 md:px-8 md:pb-6">
         <div>
-          <h1 class="font-semi-bold tracking-tight transition-all duration-300" :class="isHeaderCollapsed ? 'text-xl' : 'text-4xl'">
+          <h1 class="font-semi-bold tracking-tight transition-all duration-300" :class="isHeaderCollapsed ? 'tex-base md:text-xl' : 'text-lg md:text-2xl'">
             {{ projectSummary?.name ?? projectId }}
           </h1>
           <p v-if="!isHeaderCollapsed" class="font-mono mt-2 text-xs text-light-500">
@@ -99,26 +99,26 @@ const isHeaderCollapsed = computed(() => y.value > 50)
 
         <div class="flex items-center gap-3">
           <button class="flex items-center gap-2 rounded-xl bg-primary-500/80 px-4 py-2 text-xs font-semi-bold text-white shadow-lg hover:bg-primary-500" @click="isUploadStudioOpen = true">
-            <NuxtIcon name="local:upload" class="text-base" />
-            <span>Upload Assets</span>
+            <NuxtIcon name="local:upload" class="text-lg md:text-base" />
+            <span class="hidden md:inline">Upload Assets</span>
           </button>
           <button
             :disabled="isExporting"
             class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semi-bold transition-colors hover:bg-white/10"
             @click="triggerProjectZIP">
-            <NuxtIcon name="local:download" class="text-base" />
-            <span>{{ isExporting ? 'Packaging...' : 'Export View ZIP' }}</span>
+            <NuxtIcon name="local:download" class="text-lg md:text-base" />
+            <span class="hidden md:inline">{{ isExporting ? 'Packaging...' : 'Export View ZIP' }}</span>
           </button>
         </div>
       </div>
     </div>
 
-    <nav class="sticky top-0 z-30 flex items-center justify-between border-b border-white/10 bg-dark-400/90 p-3 backdrop-blur-md">
-      <div class="flex gap-2">
+    <nav class="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-white/10 bg-dark-400/90 py-2 backdrop-blur-md md:px-3">
+      <div class="scrollbar-hidden flex gap-2 overflow-x-auto pr-4">
         <button
           v-for="tab in tabs"
           :key="tab.id"
-          class="rounded-full px-4 py-1.5 text-xs font-semi-bold transition-all"
+          class="shrink-0 rounded-full px-4 py-1.5 text-xs font-semi-bold transition-all"
           :class="activeTab === tab.id ? 'bg-primary-500 text-white shadow-md' : 'text-light-500 hover:bg-white/5 hover:text-white'"
           @click="
             () => {
@@ -130,10 +130,10 @@ const isHeaderCollapsed = computed(() => y.value > 50)
         </button>
       </div>
 
-      <div class="font-mono text-xs text-light-500">Page {{ currentPage }}</div>
+      <div class="font-mono shrink-0 text-xs text-light-500">Page {{ currentPage }}</div>
     </nav>
 
-    <main class="mx-auto w-full grow overflow-y-scroll">
+    <main class="mx-auto w-full grow pt-1">
       <div v-if="isRegistryLoading" class="grid grid-cols-2 gap-1 md:grid-cols-4 lg:grid-cols-6">
         <div v-for="i in 18" :key="i" class="aspect-square animate-pulse rounded-xl bg-white/5" />
       </div>
@@ -154,13 +154,13 @@ const isHeaderCollapsed = computed(() => y.value > 50)
       <Transition name="slide-up">
         <div
           v-if="selectedIds.size"
-          class="fixed bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-4 rounded-2xl border border-white/15 bg-dark-500/95 px-6 py-3.5 font-main text-xs text-white shadow-2xl backdrop-blur-xl">
-          <div class="flex items-center gap-2 border-r border-white/10 pr-3 font-semi-bold">
+          class="fixed bottom-4 left-1/2 z-50 flex w-[90vw] -translate-x-1/2 flex-wrap items-center justify-center gap-3 rounded-2xl border border-white/15 bg-dark-500/95 px-4 py-3.5 font-main text-xs text-white shadow-2xl backdrop-blur-xl md:bottom-8 md:w-auto md:flex-nowrap md:gap-4 md:px-6">
+          <div class="flex items-center gap-2 font-semi-bold md:border-r md:border-white/10 md:pr-3">
             <span class="flex size-5 items-center justify-center rounded-full bg-primary-500 text-[11px]">{{ selectedIds.size }}</span>
             <span>Selected</span>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 overflow-x-auto">
             <button
               class="rounded-lg border border-success-500/30 bg-success-600/20 px-3 py-1.5 font-semi-bold text-success-400 transition-all hover:bg-success-500 hover:text-black"
               @click="executeBulkRPC('approve', 'approved')">
@@ -180,7 +180,7 @@ const isHeaderCollapsed = computed(() => y.value > 50)
             </button>
           </div>
 
-          <button class="ml-2 pr-1 text-light-500 hover:text-white" @click="selectedIds.clear()">Deselect</button>
+          <button class="pl-2 pr-1 text-light-500 transition-colors hover:text-white md:ml-2 md:pl-0" @click="selectedIds.clear()">Deselect</button>
         </div>
       </Transition>
     </Teleport>

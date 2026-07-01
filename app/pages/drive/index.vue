@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: mediaCollections, pending } = await useFetch('/api/drive')
+const { data: mediaCollections, pending } = await useFetch('/api/drive', { default: () => [] })
 const orgSlug = 'red-cat-pictures'
 </script>
 
