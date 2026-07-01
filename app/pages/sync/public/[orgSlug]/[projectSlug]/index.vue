@@ -6,13 +6,14 @@ const {
 } = useRuntimeConfig()
 
 const route = useRoute()
-const slug = route.params.projectSlug!.toString()
+const orgSlug = route.params.orgSlug!.toString()
+const projectSlug = route.params.projectSlug!.toString()
 
-const { data: organizationData } = await useFetch(`/api/organization/${slug}`)
+const { data: organizationData } = await useFetch(`/api/organization/${orgSlug}`)
 
 const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
 
-const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${slug}`)
+const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${projectSlug}`)
 const { resume } = useIntervalFn(refresh, 5000, { immediate: false })
 
 const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId)
@@ -31,9 +32,9 @@ onMounted(async () => {
 
   if (!videoEl.value) return
   try {
-    const { streams } = await $fetch(`/api/stream/${slug}`, {
+    const { streams } = await $fetch(`/api/stream/${projectSlug}`, {
       method: 'POST',
-      body: { deviceId: slug },
+      body: { deviceId: projectSlug },
     })
 
     if (streams && streams.length > 0) {

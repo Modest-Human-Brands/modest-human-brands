@@ -4,7 +4,7 @@ export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(
   try {
     const { user } = await getUserSession(event)
 
-    const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
+    const slug = getRouterParam(event, 'projectId')!.toString().replace(/,$/, '')
     const { deviceId } = await readBody<{ deviceId: string }>(event)
 
     const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)

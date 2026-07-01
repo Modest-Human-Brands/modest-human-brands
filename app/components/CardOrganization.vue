@@ -6,12 +6,12 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
 </script>
 
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center text-white">
     <div
       ref="card"
       class="relative flex items-center overflow-hidden bg-dark-400/95 p-2 shadow-xl backdrop-blur-md transition-all duration-300 ease-in-out"
       :class="open ? 'gap-1 rounded-full py-2 md:pr-8' : 'rounded-full'"
-      :style="{ boxShadow: `0 0 0 2px color-mix(in srgb, ${organization.branding.color.primary} 80%, transparent)` }">
+      :style="{ boxShadow: `0 0 0 2px color-mix(in srgb, ${organization.branding.color.accent} 80%, transparent)` }">
       <!-- Shimmer sweep -->
       <div class="shimmer pointer-events-none absolute inset-0 rounded-full transition-opacity duration-500" />
       <!-- Glow pulse -->
@@ -46,12 +46,12 @@ const open = useElementHover(cardRef, { delayLeave: 700 })
             rel="noopener"
             class="flex items-center gap-1 whitespace-nowrap rounded-full border px-2.5 py-1 text-xs transition-colors"
             :style="{
-              color: organization.branding.color.primary,
-              backgroundColor: `color-mix(in srgb, ${organization.branding.color.primary} 15%, transparent)`,
-              borderColor: `color-mix(in srgb, ${organization.branding.color.primary} 30%, transparent)`,
+              color: organization.branding.color.accent,
+              backgroundColor: `color-mix(in srgb, ${organization.branding.color.accent} 15%, transparent)`,
+              borderColor: `color-mix(in srgb, ${organization.branding.color.accent} 30%, transparent)`,
             }"
-            @mouseover="(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = `color-mix(in srgb, ${organization.branding.color.primary} 25%, transparent)`)"
-            @mouseleave="(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = `color-mix(in srgb, ${organization.branding.color.primary} 15%, transparent)`)">
+            @mouseover="(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = `color-mix(in srgb, ${organization.branding.color.accent} 25%, transparent)`)"
+            @mouseleave="(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = `color-mix(in srgb, ${organization.branding.color.accent} 15%, transparent)`)">
             <NuxtIcon name="local:link" class="text-[14px]" />
             Visit Us
           </NuxtLink>

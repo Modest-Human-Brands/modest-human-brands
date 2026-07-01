@@ -2,7 +2,7 @@ import { generateCover } from '../index.get'
 
 export default defineEventHandler<Promise<ProjectStreamCollection | undefined>>(async (event) => {
   try {
-    const slug = getRouterParam(event, 'projectSlug')!.toString().replace(/,$/, '')
+    const slug = getRouterParam(event, 'projectId')!.toString().replace(/,$/, '')
 
     const projectStorage = useStorage<Resource<'project'>>(`data:resource:project`)
     const color = { primary: 'CD2D2D', accent: '262626' }
