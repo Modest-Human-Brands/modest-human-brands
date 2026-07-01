@@ -24,8 +24,10 @@ const filteredContacts = computed(() => {
           class="flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semi-bold transition-colors"
           :class="[activeChannel === channel.id ? 'bg-dark-600 text-white' : 'bg-dark-500 text-light-500 hover:bg-dark-600 hover:text-white']"
           @click.stop="
-            activeChannel = channel.id
-            isOpen = true
+            () => {
+              activeChannel = channel.id
+              isOpen = true
+            }
           ">
           <NuxtIcon :name="channel.icon" class="text-[16px]" />
           {{ channel.name }}

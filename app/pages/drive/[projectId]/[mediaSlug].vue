@@ -206,8 +206,10 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                 <div
                   class="flex size-6 items-center justify-center rounded-bl-none rounded-br-full rounded-tl-full rounded-tr-full bg-success-500 text-[10px] font-semi-bold text-black shadow-lg transition-transform hover:scale-110"
                   @click.stop="
-                    focusedCommentId = thread.commentId
-                    isDrawerOpen = true
+                    () => {
+                      focusedCommentId = thread.commentId
+                      isDrawerOpen = true
+                    }
                   ">
                   {{ thread.author.name[0] }}
                 </div>

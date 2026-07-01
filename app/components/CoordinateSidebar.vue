@@ -32,8 +32,10 @@ const filteredConversations = computed(() => {
           class="flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semi-bold transition-colors"
           :class="[activeTab === tab.id ? 'bg-dark-600 text-white' : 'bg-dark-500 text-light-500 hover:bg-dark-600 hover:text-white']"
           @click.stop="
-            activeTab = tab.id
-            isOpen = true
+            () => {
+              activeTab = tab.id
+              isOpen = true
+            }
           ">
           <NuxtIcon :name="tab.icon" class="text-sm" />
           {{ tab.label }}
@@ -43,13 +45,15 @@ const filteredConversations = computed(() => {
 
     <div class="flex flex-col gap-2">
       <CoordinateContactCard
-        v-for="conv in filteredConversations"
-        :key="conv.id"
-        :conversation="conv"
-        :is-active="conv.id === activeId"
+        v-for="conversation in filteredConversations"
+        :key="conversation.id"
+        :conversation="conversation"
+        :is-active="conversation.id === activeId"
         @click="
-          emit('select', conv.id)
-          isOpen = false
+          () => {
+            emit('select', conversation.id)
+            isOpen = false
+          }
         " />
 
       <div v-if="filteredConversations.length === 0" class="mt-10 flex flex-col items-center text-light-500">

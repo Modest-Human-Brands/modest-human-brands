@@ -121,8 +121,10 @@ const isHeaderCollapsed = computed(() => y.value > 50)
           class="rounded-full px-4 py-1.5 text-xs font-semi-bold transition-all"
           :class="activeTab === tab.id ? 'bg-primary-500 text-white shadow-md' : 'text-light-500 hover:bg-white/5 hover:text-white'"
           @click="
-            activeTab = tab.id
-            currentPage = 1
+            () => {
+              activeTab = tab.id
+              currentPage = 1
+            }
           ">
           {{ tab.label }} ({{ tab.count }})
         </button>
