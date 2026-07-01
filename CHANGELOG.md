@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.6.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.6.0...v0.6.1)
+
+### 🩹 Fixes
+
+- Update useFetch calls to include default empty array for compliance and doc pages refactor: change isOpen state to true in sidebar components ([989a991](https://github.com/Modest-Human-Brands/modest-human-brands/commit/989a991))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.6.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.18...v0.6.0)
