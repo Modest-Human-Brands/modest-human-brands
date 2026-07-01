@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.7.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.6.1...v0.7.0)
+
+### 🚀 Enhancements
+
+- ⚠️ Add live streaming functionality with device selection and modal components ([1fff4e6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1fff4e6))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Add live streaming functionality with device selection and modal components ([1fff4e6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1fff4e6))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.6.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.6.0...v0.6.1)
