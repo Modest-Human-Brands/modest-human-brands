@@ -42,13 +42,13 @@ export const PRIMARY_NAVIGATION_TABS = [
     description: 'Manage all your teams and clients communication here',
     to: '/coordinate',
   },
-  // {
-  //   id: 'sync',
-  //   title: 'Sync',
-  //   icon: 'local:stream',
-  //   description: 'Manage all sync here',
-  //   to: '/sync'
-  // },
+  {
+    id: 'sync',
+    title: 'Sync',
+    icon: 'local:stream',
+    description: 'Manage all sync here',
+    to: '/sync',
+  },
   {
     id: 'drive',
     title: 'Drive',
