@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.6.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.18...v0.6.0)
+
+### 🚀 Enhancements
+
+- **drive:** Implement project and media management pages ([ab81160](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ab81160))
+- **drive:** ⚠️ New drive implementated ([3c0fe8a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/3c0fe8a))
+
+### 💅 Refactors
+
+- Connect and coordinate pages for improved loading states and UI consistency ([36190d8](https://github.com/Modest-Human-Brands/modest-human-brands/commit/36190d8))
+- Clean up button formatting and improve readability in sidebar components ([9909797](https://github.com/Modest-Human-Brands/modest-human-brands/commit/9909797))
+
+#### ⚠️ Breaking Changes
+
+- **drive:** ⚠️ New drive implementated ([3c0fe8a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/3c0fe8a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.5.18
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.5.17...v0.5.18)
