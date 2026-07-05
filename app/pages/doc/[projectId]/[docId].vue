@@ -47,6 +47,12 @@ interface MDocDocument {
     userName: string
     action: string
   }[]
+  rawData: Record<string, string>
+  verificationData?: {
+    isIntact: boolean
+    signer: string
+    message: string
+  } | null
 }
 
 interface MDocTemplateResponse {
@@ -211,6 +217,28 @@ useEventListener('keydown', (e: KeyboardEvent) => {
       </template>
 
       <div class="animate-fade-in flex flex-col gap-8 px-2 pb-6">
+        <div
+          v-if="doc.verificationData"
+          class="flex flex-col gap-2 rounded-xl p-4 transition-colors"
+          :class="doc.verificationData.isIntact ? 'border border-success-500/30 bg-success-500/10' : 'border border-alert-500/30 bg-alert-500/10'">
+          <div class="flex items-center gap-3">
+            <div class="flex size-8 shrink-0 items-center justify-center rounded-full text-white" :class="doc.verificationData.isIntact ? 'bg-success-500' : 'bg-alert-500'">
+              <NuxtIcon :name="doc.verificationData.isIntact ? 'local:check' : 'local:cross'" class="text-sm" />
+            </div>
+            <div class="flex flex-col">
+              <h3 class="text-sm font-bold" :class="doc.verificationData.isIntact ? 'text-success-500' : 'text-alert-500'">
+                {{ doc.verificationData.isIntact ? 'Signed and all signatures are valid.' : 'Signature Validation Failed' }}
+              </h3>
+              <p class="text-[11px] font-semi-bold text-light-400">
+                {{ doc.verificationData.message }}
+              </p>
+            </div>
+          </div>
+          <p v-if="doc.verificationData.signer !== 'Unknown'" class="font-medium mt-2 border-t border-white/5 pt-2 text-xs text-light-500">
+            Signed by: <span class="text-white">{{ doc.verificationData.signer }}</span>
+          </p>
+        </div>
+
         <!-- Merged View: Metadata Section -->
         <div class="flex flex-col gap-4">
           <div class="flex items-center gap-4">

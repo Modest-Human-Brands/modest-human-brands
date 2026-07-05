@@ -40,6 +40,11 @@ export interface MDocDocument {
     action: string
   }[]
   rawData: Record<string, string>
+  verificationData?: {
+    isIntact: boolean
+    signer: string
+    message: string
+  } | null
 }
 
 export default defineEventHandler(async (event) => {
@@ -70,7 +75,25 @@ export default defineEventHandler(async (event) => {
 
     const formattedSize = formatBytes(doc.sizeBytes)
 
-    return { ...doc, extension, formattedSize, timeline: [] }
+    let verificationData = null
+    if (doc.status === 'Completed') {
+      try {
+        const pdfBlob = await $fetch<Blob>(`/api/document/${docId}/content?download`, { baseURL: config.public.docUrl })
+        const formData = new FormData()
+        formData.append('pdf', pdfBlob, doc.name)
+
+        verificationData = await $fetch<{ isIntact: boolean; signer: string; message: string }>(`/api/document/${docId}/verify-signature`, {
+          baseURL: config.public.docUrl,
+          method: 'POST',
+          body: formData,
+        })
+      } catch (err) {
+        console.error('Signature verification failed:', err)
+        verificationData = { isIntact: false, signer: 'Unknown', message: 'Could not verify signature mathematically.' }
+      }
+    }
+
+    return { ...doc, extension, formattedSize, timeline: [], verificationData }
   } catch (error) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

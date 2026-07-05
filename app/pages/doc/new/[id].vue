@@ -149,7 +149,7 @@ function prevStep() {
 
 <template>
   <main class="relative flex size-full h-full flex-col overflow-hidden bg-dark-500 md:flex-row">
-    <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1"> </PdfDocumentViewer>
+    <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1" />
 
     <AppSidebar v-model="isMobileDrawerOpen">
       <template #header>
