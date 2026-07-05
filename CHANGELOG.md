@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.7.2
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.1...v0.7.2)
+
+### 🚀 Enhancements
+
+- Add verification data to document interface and implement signature verification logic ([6e03ad0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6e03ad0))
+
+### 💅 Refactors
+
+- Media display and sidebar components for improved responsiveness and code clarity ([6b1dff6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6b1dff6))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.0...v0.7.1)
