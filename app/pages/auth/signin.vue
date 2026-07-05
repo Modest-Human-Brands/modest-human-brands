@@ -17,22 +17,29 @@ function onOauthSignIn() {
   console.log('Google sign in requested')
 }
 
-const { status, data, error, execute } = useFetch('/auth/email', {
-  method: 'POST',
-  body: r$.$value,
-  immediate: false,
-  watch: false,
-})
-
-const isOTPSent = computed(() => data.value?.isSuccess)
+const status = ref<'idle' | 'pending'>('idle')
+const error = ref<{ message?: string } | null>(null)
+const isOTPSent = ref(false)
 
 async function onEmailSignIn() {
   const { valid } = await r$.$validate()
   if (!valid || status.value === 'pending') return
 
-  await execute()
+  status.value = 'pending'
+  error.value = null
 
-  if (data.value?.navigateTo) window.location.href = data.value.navigateTo
+  try {
+    const res = await $fetch('/auth/email', {
+      method: 'POST',
+      body: r$.$value,
+    })
+    if (res.isSuccess && !r$.$value.otp) isOTPSent.value = true
+    if (res.navigateTo) window.location.href = res.navigateTo
+  } catch (err) {
+    error.value = err.data || { message: err.message }
+  } finally {
+    status.value = 'idle'
+  }
 }
 </script>
 
@@ -81,7 +88,7 @@ async function onEmailSignIn() {
           <input
             id="otp"
             v-model="r$.$value.otp"
-            type="password"
+            type="text"
             class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
             :aria-invalid="r$.$invalid ? 'true' : 'false'" />
           <p v-if="showError('otp') || error" class="text-xs text-alert-500">

@@ -29,6 +29,7 @@ const sidebarActions: readonly SidebarAction[] = [
   { id: 'edit', label: 'Edit PDF', icon: 'local:edit' },
   { id: 'download', label: 'Download PDF', icon: 'local:download' },
   { id: 'print', label: 'Print PDF', icon: 'local:print' },
+  { id: 'summary', label: 'Show Summary', icon: 'local:notepad-sparkle' },
 ] as const
 </script>
 
@@ -56,7 +57,7 @@ const sidebarActions: readonly SidebarAction[] = [
           </p>
         </div>
 
-        <nav class="mt-2 flex flex-col gap-1 border-t border-white/5 pt-4">
+        <nav class="mt-2 flex flex-col gap-1 border-t border-white/5 py-4">
           <button
             v-for="action in sidebarActions"
             :key="action.id"

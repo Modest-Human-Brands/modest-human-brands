@@ -264,7 +264,7 @@ const streamDuration = computed(() => {
       </div>
     </div>
 
-    <ModalDeviceSelect
+    <ModalStream
       v-if="showDeviceModal && loggedIn"
       :is-open="showDeviceModal"
       :video-inputs="videoInputs"

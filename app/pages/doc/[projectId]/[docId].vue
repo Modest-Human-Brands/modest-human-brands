@@ -189,7 +189,6 @@ useEventListener('keydown', (e: KeyboardEvent) => {
         <button type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="isDrawerOpen ? 'text-primary-500' : 'text-white'" @click="toggleDrawer">
           <NuxtIcon name="local:signature" class="text-xl" />
         </button>
-        <div class="h-4 w-px bg-white/20" />
       </template>
     </PdfDocumentViewer>
 
@@ -201,11 +200,13 @@ useEventListener('keydown', (e: KeyboardEvent) => {
             <p class="mt-0.5 text-sm text-light-500">Properties & signatures</p>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isDrawerOpen = false">
+          <!-- <div class="flex items-center gap-2">
+            <button
+              class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white"
+              @click="isDrawerOpen = false">
               <NuxtIcon name="local:cross" class="text-sm" />
             </button>
-          </div>
+          </div> -->
         </div>
       </template>
 
@@ -259,7 +260,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                     class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-semi-bold text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
                     @click="generateSessionLink(signer.name, signer.email, index !== doc.routingQueue.length - 1)">
                     <NuxtIcon v-if="isGeneratingLink === signer.email" name="local:loader" class="animate-spin text-sm" />
-                    <NuxtIcon v-else name="local:connect" class="text-sm" />
+                    <NuxtIcon v-else name="local:node" class="text-sm" />
                     Get Link
                   </button>
                 </div>

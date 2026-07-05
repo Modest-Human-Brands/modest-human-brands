@@ -42,7 +42,7 @@ const emit = defineEmits<{
 
 <template>
   <div
-    class="absolute bottom-32 left-1/2 z-20 flex -translate-x-1/2 select-none items-center gap-4 rounded-full border border-white/10 bg-dark-400/95 px-6 py-3 text-white shadow-2xl backdrop-blur-md md:bottom-6">
+    class="absolute bottom-28 left-1/2 z-20 flex -translate-x-1/2 select-none items-center gap-2.5 rounded-full border border-white/10 bg-dark-400/95 px-6 py-3 text-white shadow-2xl backdrop-blur-md md:bottom-6 md:gap-4">
     <template v-if="showPagination">
       <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('update:page', Math.max(1, page - 1))">
         <NuxtIcon name="local:chevron-bold" class="text-lg" />

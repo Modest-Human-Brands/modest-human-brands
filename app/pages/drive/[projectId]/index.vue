@@ -148,7 +148,7 @@ const isHeaderCollapsed = computed(() => y.value > 50)
       </div>
     </main>
 
-    <ModalUploadStudio v-model:open="isUploadStudioOpen" :project-id="projectId" @refresh="refresh" />
+    <ModalUpload v-model:open="isUploadStudioOpen" :project-id="projectId" @refresh="refresh" />
 
     <Teleport to="body">
       <Transition name="slide-up">

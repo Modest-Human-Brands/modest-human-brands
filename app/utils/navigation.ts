@@ -66,13 +66,13 @@ export const SECONDARY_NAVIGATION_TABS = [
   //   description: 'Manage all your clients here',
   //   to: '/client'
   // },
-  // {
-  //   id: 'project',
-  //   title: 'Project',
-  //   icon: 'local:target-fill',
-  //   description: 'Manage all your projects here',
-  //   to: '/project'
-  // },
+  {
+    id: 'project',
+    title: 'Project',
+    icon: 'local:target-fill',
+    description: 'Manage all your projects here',
+    to: '/project',
+  },
   {
     id: 'transaction',
     title: 'Transaction',

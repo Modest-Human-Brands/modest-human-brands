@@ -220,7 +220,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                 </div>
               </div>
 
-              <MediaSpatialCommentBox v-if="draftPin" :x="draftPin.x" :y="draftPin.y" :is-submitting="isSubmittingComment" @submit="commitSpatialComment" />
+              <FloatingCommentBox v-if="draftPin" :x="draftPin.x" :y="draftPin.y" :is-submitting="isSubmittingComment" @submit="commitSpatialComment" />
             </div>
           </Transition>
 

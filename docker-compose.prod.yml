@@ -7,11 +7,23 @@ services:
       - modest-human-brands_data:/app/.data
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://localhost:3000/api/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - connect
+      - doc
+      - drive
+      - media
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   connect:
     image: ghcr.io/modest-human-brands/mconnect:latest
@@ -22,11 +34,20 @@ services:
       - mconnect-data:/app/.data
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://localhost:3000/api/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - connect-livekit
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   connect-livekit:
     image: livekit/livekit-server:latest
@@ -39,13 +60,21 @@ services:
       - /root/modest-human-brands/mconnect/config/livekit.yaml:/etc/livekit.yaml
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://localhost:7880/ || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     depends_on:
       - connect-livekit-redis
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   connect-livekit-egress:
     image: livekit/egress:latest
@@ -56,6 +85,12 @@ services:
       - /root/modest-human-brands/mconnect/recordings:/recordings
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://localhost:7980/ || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     depends_on:
       - connect-livekit
       - connect-livekit-redis
@@ -63,7 +98,9 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   connect-livekit-sip:
     image: livekit/sip:latest
@@ -75,6 +112,12 @@ services:
       - /root/modest-human-brands/mconnect/config/sip.yaml:/sip/config.yaml
     networks:
       - internal
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "exec 6<>/dev/tcp/localhost/5060 || exit 1" ]
+    #   interval: 30s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 15s
     depends_on:
       - connect-livekit
       - connect-livekit-redis
@@ -82,32 +125,49 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   connect-livekit-redis:
     image: redis:7-alpine
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli ping']
+      interval: 30s
+      timeout: 5s
+      retries: 3
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   doc:
     image: ghcr.io/modest-human-brands/mdoc:latest
     env_file:
       - .env
     volumes:
+      - mdoc-asset:/app/asset
       - mdoc-document:/app/document
       - mdoc-static:/app/static
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://localhost:3000/api/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   drive:
     image: ghcr.io/modest-human-brands/mdrive:latest
@@ -118,11 +178,18 @@ services:
       - mdrive-static:/app/static
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://localhost:3000/api/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
         max_attempts: 3
+        window: 120s
 
   media:
     image: ghcr.io/modest-human-brands/mmedia:latest
@@ -132,6 +199,11 @@ services:
       - mdrive-static:/app/static
     networks:
       - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --spider -q http://127.0.0.1:3111/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
     deploy:
       replicas: 1
       restart_policy:
@@ -164,6 +236,12 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/mconnect/.data
+  mdoc-asset:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /root/modest-human-brands/mdoc/asset
   mdoc-document:
     driver: local
     driver_opts:
