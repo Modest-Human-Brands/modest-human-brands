@@ -4,26 +4,22 @@ withDefaults(
     page?: number
     totalPages?: number
     fitMode?: 'auto' | 'width' | 'height'
-    downloadUrl?: string
     showPagination?: boolean
     showZoom?: boolean
+    showComments?: boolean
     showDownload?: boolean
     showPrint?: boolean
-    showSign?: boolean
-    showComments?: boolean
     commentsActive?: boolean
   }>(),
   {
     page: 1,
     totalPages: 1,
     fitMode: 'auto',
-    downloadUrl: undefined,
-    showPagination: true,
-    showZoom: true,
-    showDownload: true,
-    showPrint: true,
-    showSign: false,
+    showPagination: false,
+    showZoom: false,
     showComments: false,
+    showDownload: false,
+    showPrint: false,
     commentsActive: false,
   }
 )
@@ -33,10 +29,9 @@ const emit = defineEmits<{
   zoomIn: []
   zoomOut: []
   fitBy: []
-  print: []
-  sign: []
+  comment: []
   download: []
-  toggleComments: []
+  print: []
 }>()
 </script>
 
@@ -75,23 +70,16 @@ const emit = defineEmits<{
 
     <slot name="custom-actions" />
 
-    <a v-if="showDownload && downloadUrl" :href="downloadUrl" target="_blank" class="shrink-0 transition-colors hover:text-primary-500">
-      <NuxtIcon name="local:download" class="text-xl" />
-    </a>
-    <button v-else-if="showDownload" type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('download')">
+    <button v-if="showComments" type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="commentsActive ? 'text-primary-500' : 'text-white'" @click="emit('comment')">
+      <NuxtIcon name="local:comment" class="text-xl" />
+    </button>
+
+    <button v-if="showDownload" type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('download')">
       <NuxtIcon name="local:download" class="text-xl" />
     </button>
 
     <button v-if="showPrint" type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('print')">
       <NuxtIcon name="local:print" class="text-xl" />
-    </button>
-
-    <button v-if="showSign" type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('sign')">
-      <NuxtIcon name="local:edit" class="text-xl" />
-    </button>
-
-    <button v-if="showComments" type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="commentsActive ? 'text-primary-500' : 'text-white'" @click="emit('toggleComments')">
-      <NuxtIcon name="local:comment" class="text-xl" />
     </button>
   </div>
 </template>

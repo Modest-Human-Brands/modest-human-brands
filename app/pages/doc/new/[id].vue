@@ -22,7 +22,7 @@ const pdfPreviewBase64 = ref<string | null>(null)
 const isPreviewLoading = ref(false)
 const isGenerating = ref(false)
 
-const isMobileDrawerOpen = ref(false)
+const isDrawerOpen = ref(false)
 
 const pdfDataUri = computed(() => (pdfPreviewBase64.value ? `data:application/pdf;base64,${pdfPreviewBase64.value}` : ''))
 
@@ -148,33 +148,22 @@ function prevStep() {
 </script>
 
 <template>
-  <main class="relative flex size-full h-full flex-col overflow-hidden bg-dark-500 md:flex-row">
+  <main class="relative flex size-full flex-row overflow-hidden bg-dark-400">
     <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1" />
 
-    <AppSidebar v-model="isMobileDrawerOpen">
+    <AppSidebar v-model:open="isDrawerOpen" as-drawer-on-mobile :class="!isDrawerOpen ? 'md:hidden' : 'md:flex'">
       <template #header>
         <h1 class="text-xl font-semi-bold capitalize tracking-tight text-white">
           {{ templateId.replace(/-/g, ' ') }}
         </h1>
-        <p class="mt-0.5 text-xs text-light-500">Fill details to update preview</p>
+        <p class="my-1 mb-3 text-xs text-light-500">Fill details to update preview</p>
       </template>
 
-      <template #actions>
-        <NuxtLink to="/doc/new" class="hidden size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white md:flex">
-          <NuxtIcon name="local:cross" class="text-sm" />
-        </NuxtLink>
-        <button
-          class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white md:hidden"
-          @click.stop="isMobileDrawerOpen = !isMobileDrawerOpen">
-          <NuxtIcon name="local:chevron-bold" class="text-sm transition-transform duration-300" :class="isMobileDrawerOpen ? '-rotate-90' : 'rotate-90'" />
-        </button>
-      </template>
-
-      <div v-if="wizardStep === 0" class="flex flex-col gap-6">
+      <div v-if="wizardStep === 0" class="flex flex-col gap-4">
         <FormField v-for="field in currentSchema" :key="field.path" v-model="formData[field.path]" :label="field.label" :schema-type="field.type" :schema-blueprint="field.schemaBlueprint" />
       </div>
 
-      <div v-else-if="wizardStep === 1" class="flex flex-col gap-6">
+      <div v-else-if="wizardStep === 1" class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
           <h2 class="text-2xl font-semi-bold text-white">Review & Generate</h2>
           <p class="text-sm text-light-500">Please review the captured information before finalizing the document.</p>
@@ -233,6 +222,15 @@ function prevStep() {
           </button>
         </div>
       </div>
+
+      <template #actions>
+        <NuxtLink to="/doc/new" class="hidden size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white md:flex">
+          <NuxtIcon name="local:cross" class="text-sm" />
+        </NuxtLink>
+        <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white md:hidden" @click.stop="isDrawerOpen = !isDrawerOpen">
+          <NuxtIcon name="local:chevron-bold" class="text-sm transition-transform duration-300" :class="isDrawerOpen ? '-rotate-90' : 'rotate-90'" />
+        </button>
+      </template>
     </AppSidebar>
   </main>
 </template>

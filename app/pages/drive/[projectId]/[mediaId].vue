@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { useMouseInElement, useEventListener, useSwipe, onKeyStroke } from '@vueuse/core'
 import type { UseSwipeDirection } from '@vueuse/core'
 
 definePageMeta({
   layout: false,
 })
 
+const config = useRuntimeConfig()
 const route = useRoute()
-const router = useRouter()
 const projectId = computed(() => route.params.projectId as string)
-const mediaSlug = computed(() => route.params.mediaSlug as string)
+const mediaId = computed(() => route.params.mediaId as string)
 
 const { data: projectMedia } = await useFetch(`/api/drive/${projectId.value}/media`)
 
 const mediaItems = computed(() => projectMedia.value?.data ?? [])
-const currentIndex = computed(() => mediaItems.value.findIndex((m) => m.id === mediaSlug.value))
+const currentIndex = computed(() => mediaItems.value.findIndex((m) => m.id === mediaId.value))
 const isFirst = computed(() => currentIndex.value <= 0)
 const isLast = computed(() => currentIndex.value >= mediaItems.value.length - 1)
 const currentItem = computed(() => mediaItems.value[currentIndex.value])
@@ -23,15 +22,15 @@ const backUrl = computed(() => `/drive/${projectId.value}`)
 
 async function navigateToIndex(index: number) {
   const slug = mediaItems.value[index]?.id
-  if (slug) await router.push(`/drive/${projectId.value}/${slug}`)
+  if (slug) await navigateTo(`/drive/${projectId.value}/${slug}`)
 }
 
 async function prev() {
-  return await (isFirst.value ? router.push(backUrl.value) : navigateToIndex(currentIndex.value - 1))
+  return await (isFirst.value ? navigateTo(backUrl.value) : navigateToIndex(currentIndex.value - 1))
 }
 
 async function next() {
-  return await (isLast.value ? router.push(backUrl.value) : navigateToIndex(currentIndex.value + 1))
+  return await (isLast.value ? navigateTo(backUrl.value) : navigateToIndex(currentIndex.value + 1))
 }
 
 onKeyStroke('ArrowLeft', prev)
@@ -67,10 +66,10 @@ const isDispatchingReply = ref(false)
 
 const { data: timelineData, refresh: refreshComments } = await useFetch(`/api/drive/${projectId.value}/media/comments/query`, {
   method: 'POST',
-  body: computed(() => ({ mediaIds: [mediaSlug.value] })),
+  body: computed(() => ({ mediaIds: [mediaId.value] })),
 })
 
-const activeThreads = computed(() => timelineData.value?.timelines?.[mediaSlug.value] ?? [])
+const activeThreads = computed(() => timelineData.value?.timelines?.[mediaId.value] ?? [])
 
 watch(isDrawerOpen, (isOpen) => {
   if (!isOpen) draftPin.value = null
@@ -95,7 +94,7 @@ async function commitSpatialComment(text: string) {
     await $fetch(`/api/drive/${projectId.value}/media/comments`, {
       method: 'POST',
       body: {
-        mediaIds: [mediaSlug.value],
+        mediaIds: [mediaId.value],
         parentId: null,
         text: text,
         coordinates: draftPin.value,
@@ -121,7 +120,7 @@ async function commitThreadReply(targetParentId: string) {
     await $fetch(`/api/drive/${projectId.value}/media/comments`, {
       method: 'POST',
       body: {
-        mediaIds: [mediaSlug.value],
+        mediaIds: [mediaId.value],
         parentId: targetParentId,
         text: replyText.value,
         coordinates: null,
@@ -138,10 +137,6 @@ async function commitThreadReply(targetParentId: string) {
   }
 }
 
-function toggleDrawer() {
-  isDrawerOpen.value = !isDrawerOpen.value
-}
-
 useEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
     if (draftPin.value) {
@@ -151,10 +146,91 @@ useEventListener('keydown', (e: KeyboardEvent) => {
       isDrawerOpen.value = false
       e.stopPropagation()
     } else {
-      router.push(backUrl.value)
+      navigateTo(backUrl.value)
     }
   }
 })
+
+function comment() {}
+
+async function download() {
+  const id = currentItem.value?.id
+  if (!id) return
+
+  const imageUrl = `${config.public.cdnUrl}/media/image/f_auto&q_80/${id}`
+
+  try {
+    const response = await fetch(imageUrl)
+    if (!response.ok) throw new Error('Network response was not ok')
+
+    const blob = await response.blob()
+    const blobUrl = window.URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = blobUrl
+    a.download = currentItem.value?.filename
+
+    document.body.appendChild(a)
+    a.click()
+
+    a.remove()
+    window.URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function print() {
+  const id = currentItem.value?.id
+  if (!id) return
+
+  const imageUrl = `${config.public.cdnUrl}/media/image/f_auto&q_80/${id}`
+
+  const iframe = document.createElement('iframe')
+  iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0'
+  document.body.appendChild(iframe)
+
+  const iframeWindow = iframe.contentWindow
+  const iframeDoc = iframeWindow?.document
+  if (!iframeWindow || !iframeDoc) return
+
+  iframeDoc.title = 'Print Image'
+
+  const style = iframeDoc.createElement('style')
+  style.textContent = `
+    @media print {
+      @page { margin: 0; }
+      body { 
+        margin: 0; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh; 
+        background: white;
+      }
+      img { 
+        max-width: 100%; 
+        max-height: 100%; 
+        object-fit: contain; 
+      }
+    }
+  `
+  iframeDoc.head.appendChild(style)
+
+  const img = iframeDoc.createElement('img')
+  img.onload = () => {
+    iframeWindow.focus()
+    iframeWindow.print()
+  }
+
+  img.src = imageUrl
+  iframeDoc.body.appendChild(img)
+
+  setTimeout(() => {
+    iframe.remove()
+  }, 2000)
+}
 </script>
 
 <template>
@@ -227,14 +303,16 @@ useEventListener('keydown', (e: KeyboardEvent) => {
           <AppFloatingActionToolbar
             :page="currentIndex + 1"
             :total-pages="mediaItems.length"
-            :show-zoom="false"
-            :show-print="false"
-            :show-download="true"
-            :download-url="currentItem.type === 'photo' ? currentItem.id : (currentItem as any).media"
-            :show-comments="true"
+            show-pagination
+            show-zoom
+            show-comments
+            show-download
+            show-print
             :comments-active="isDrawerOpen"
             @update:page="navigateToIndex($event - 1)"
-            @toggle-comments="toggleDrawer">
+            @comment="comment"
+            @download="download"
+            @print="print">
             <template #custom-actions> </template>
           </AppFloatingActionToolbar>
         </div>
@@ -245,12 +323,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
           <div class="flex items-start justify-between px-2 pb-4 pt-2">
             <div>
               <h2 class="text-xl font-semi-bold tracking-tight text-white">Media Details</h2>
-              <p class="mt-0.5 text-sm text-light-500">Properties & spatial feedback</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <button class="flex size-9 items-center justify-center rounded-lg bg-dark-500 text-light-400 transition-colors hover:text-white" @click="isDrawerOpen = false">
-                <NuxtIcon name="local:cross" class="text-sm" />
-              </button>
+              <p class="mt-0.5 text-sm text-light-500">Properties & feedback</p>
             </div>
           </div>
         </template>

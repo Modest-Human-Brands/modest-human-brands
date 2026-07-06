@@ -26,7 +26,7 @@ interface SidebarAction {
 const sidebarActions: readonly SidebarAction[] = [
   { id: 'comment', label: 'Add comments', icon: 'local:chat' },
   { id: 'sign', label: 'Fill & Sign', icon: 'local:signature' },
-  { id: 'edit', label: 'Edit PDF', icon: 'local:edit' },
+  { id: 'edit', label: 'Edit PDF', icon: 'local:pen' },
   { id: 'download', label: 'Download PDF', icon: 'local:download' },
   { id: 'print', label: 'Print PDF', icon: 'local:print' },
   { id: 'summary', label: 'Show Summary', icon: 'local:notepad-sparkle' },

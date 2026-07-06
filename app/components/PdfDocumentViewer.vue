@@ -18,6 +18,8 @@ const props = withDefaults(
   }
 )
 
+const config = useRuntimeConfig()
+
 const VuePDF = defineAsyncComponent(() => import('@tato30/vue-pdf').then((m) => m.VuePDF))
 
 const pdf = shallowRef<PDFDocumentLoadingTask | undefined>(undefined)
@@ -41,9 +43,7 @@ const viewerState = reactive({
 const isSidebarOpen = ref(false)
 const fitMode = ref<'auto' | 'width' | 'height'>('auto')
 
-defineExpose({ pdf, pages, zoomIn, zoomOut, resetZoom: fitBy, rotate, setPage, viewerState, isSidebarOpen: isSidebarOpen, fitMode })
-
-const config = useRuntimeConfig()
+defineExpose({ pdf, pages, zoomIn, zoomOut, resetZoom: fitBy, setPage, viewerState, isSidebarOpen: isSidebarOpen, fitMode })
 
 const viewerContainer = ref<HTMLElement>()
 const { width: containerWidth, height: containerHeight } = useElementSize(viewerContainer)
@@ -93,19 +93,6 @@ function setPage(p: number) {
   isSidebarOpen.value = false
 }
 
-function onScroll(e: Event) {
-  const target = e.target as HTMLElement
-  if (!pages.value || pages.value <= 1) {
-    viewerState.page = 1
-    return
-  }
-  const maxScroll = target.scrollHeight - target.clientHeight
-  if (maxScroll <= 0) return
-  const scrollProgress = target.scrollTop / maxScroll
-  const calculatedPage = Math.round(scrollProgress * (pages.value - 1)) + 1
-  viewerState.page = Math.min(Math.max(1, calculatedPage), pages.value)
-}
-
 function zoomIn() {
   viewerState.scale += 0.05
 }
@@ -126,8 +113,37 @@ function fitBy() {
   }
 }
 
-function rotate() {
-  viewerState.rotation = (viewerState.rotation + 90) % 360
+// function rotate() {
+//   viewerState.rotation = (viewerState.rotation + 90) % 360
+// }
+
+function comment() {}
+
+async function download() {
+  if (!props.doc?.previewUrl) return
+
+  const downloadUrl = `${config.public.docUrl}${props.doc?.previewUrl}?download=true`
+
+  try {
+    const response = await fetch(downloadUrl)
+    if (!response.ok) throw new Error('Network response was not ok')
+
+    const blob = await response.blob()
+    const blobUrl = window.URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = blobUrl
+    a.download = props.doc?.name
+
+    document.body.appendChild(a)
+    a.click()
+
+    a.remove()
+    window.URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 async function print() {
@@ -192,7 +208,7 @@ async function print() {
     <div class="relative flex size-full flex-1 flex-col overflow-hidden">
       <slot name="header" />
 
-      <div ref="viewerContainer" class="scrollbar-hidden relative grid size-full overflow-auto p-4 pb-32 md:p-6" @scroll="onScroll">
+      <div ref="viewerContainer" class="scrollbar-hidden relative grid size-full overflow-auto p-4 pb-28 md:p-6">
         <div v-if="isLoading || (!pdf && props.src)" class="m-auto flex flex-col items-center gap-4 text-light-500">
           <NuxtIcon name="local:loader" class="animate-spin text-4xl" />
           <span class="text-sm font-semi-bold uppercase tracking-widest">Loading Document...</span>
@@ -214,11 +230,17 @@ async function print() {
         :page="viewerState.page"
         :total-pages="pages"
         :fit-mode="fitMode"
-        :download-url="doc ? `${config.public.docUrl}${doc.previewUrl}?download=true` : undefined"
+        show-pagination
+        show-zoom
+        show-comments
+        show-download
+        show-print
         @update:page="setPage"
         @zoom-in="zoomIn"
         @zoom-out="zoomOut"
         @fit-by="fitBy"
+        @comment="comment"
+        @download="download"
         @print="print">
         <template #custom-actions>
           <slot name="toolbar-actions" />

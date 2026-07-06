@@ -46,7 +46,7 @@ const drawerStyle = computed(() => {
   <div
     v-if="asDrawerOnMobile"
     class="bg-black transition-opacity duration-300"
-    :class="isOpen ? 'pointer-events-auto fixed inset-0 backdrop-blur-sm md:hidden' : ''"
+    :class="isOpen ? 'pointer-events-auto absolute inset-0 backdrop-blur-sm md:hidden' : ''"
     :style="!isMounted ? { display: 'none' } : { opacity: isOpen ? 0.6 : 0 }"
     @click="isOpen = false" />
 
@@ -54,10 +54,9 @@ const drawerStyle = computed(() => {
     v-show="isDesktop || isOpen || asDrawerOnMobile"
     v-bind="$attrs"
     :class="[
-      'scrollbar-hidden flex shrink-0 flex-col overflow-y-auto bg-dark-400 p-2 transition-all duration-300',
-      'md:!flex md:!translate-y-0',
+      'scrollbar-hidden flex shrink-0 flex-col overflow-y-auto bg-dark-400 p-2 transition-all duration-300 md:!flex md:!translate-y-0',
       asDrawerOnMobile
-        ? 'fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] w-full rounded-t-3xl border-t border-white/5 shadow-2xl md:relative md:h-full md:max-h-full md:w-[400px] md:translate-y-0 md:rounded-none md:border-l md:border-t-0 md:shadow-none'
+        ? 'absolute inset-x-0 bottom-0 z-50 max-h-[70dvh] w-full rounded-t-3xl border-t border-white/5 md:relative md:h-full md:max-h-full md:w-[400px] md:translate-y-0 md:rounded-none md:border-l md:border-t-0'
         : 'size-full md:w-[400px] md:border-l md:border-white/5',
       $attrs.class,
     ]"

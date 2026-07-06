@@ -177,10 +177,6 @@ async function copyLink() {
   }, 2000)
 }
 
-function toggleDrawer() {
-  isDrawerOpen.value = !isDrawerOpen.value
-}
-
 useEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
     isDrawerOpen.value = false
@@ -189,10 +185,10 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <main v-if="doc" class="relative flex h-dvh w-full flex-row overflow-hidden bg-dark-400">
-    <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }">
+  <main v-if="doc" class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
+    <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }" class="flex-1">
       <template #toolbar-actions>
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="isDrawerOpen ? 'text-primary-500' : 'text-white'" @click="toggleDrawer">
+        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="isDrawerOpen ? 'text-primary-500' : 'text-white'" @click="isDrawerOpen = true">
           <NuxtIcon name="local:signature" class="text-xl" />
         </button>
       </template>
