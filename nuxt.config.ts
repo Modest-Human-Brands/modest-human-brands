@@ -141,7 +141,7 @@ export default defineNuxtConfig({
   },
   icon: {
     componentName: 'NuxtIcon',
-    provider: 'none',
+    provider: 'server',
     mode: 'svg',
     customCollections: [
       {

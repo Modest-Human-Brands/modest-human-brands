@@ -22,7 +22,7 @@ const backUrl = computed(() => `/drive/${projectId.value}`)
 
 async function navigateToIndex(index: number) {
   const slug = mediaItems.value[index]?.id
-  if (slug) await navigateTo(`/drive/${projectId.value}/${slug}`)
+  if (slug) await navigateTo(`/drive/${projectId.value}/${slug}`, { replace: true })
 }
 
 async function prev() {
@@ -56,6 +56,8 @@ interface SpatialCoordinate {
   x: number
   y: number
 }
+
+const isCommentMode = ref(false)
 const draftPin = ref<SpatialCoordinate | null>(null)
 const isSubmittingComment = ref(false)
 const isSidebarOpen = ref(false)
@@ -76,7 +78,7 @@ watch(isDrawerOpen, (isOpen) => {
 })
 
 function onCanvasClick() {
-  if (!isDrawerOpen.value) return
+  if (!isCommentMode.value) return
 
   if (!elementWidth.value || !elementHeight.value) return
   draftPin.value = {
@@ -151,7 +153,9 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   }
 })
 
-function comment() {}
+function comment() {
+  isCommentMode.value = true
+}
 
 async function download() {
   const id = currentItem.value?.id
@@ -247,7 +251,7 @@ async function print() {
       <div class="flex grow flex-col overflow-hidden" :style="{ aspectRatio: calculateAspectRatio(currentItem.metadata.aspectRatio) }">
         <div ref="imageEl" class="relative flex grow items-center justify-center overflow-hidden">
           <Transition name="media-fade" mode="out-in">
-            <div ref="mediaRef" :key="currentItem.id" class="relative flex size-full cursor-crosshair items-center justify-center" @click.exact="onCanvasClick">
+            <div ref="mediaRef" :key="currentItem.id" class="relative flex size-full items-center justify-center" :class="{ 'cursor-comment': isCommentMode }" @click.exact="onCanvasClick">
               <NuxtImg
                 v-if="currentItem.type === 'photo'"
                 :src="currentItem.id"
@@ -331,7 +335,7 @@ async function print() {
         <div class="animate-fade-in flex flex-col gap-8 px-2 pb-6">
           <div class="flex flex-col gap-4">
             <div class="flex items-center gap-4">
-              <NuxtIcon :name="currentItem.type === 'video' ? 'local:video' : 'local:image'" class="text-4xl text-white/20" />
+              <NuxtIcon :name="currentItem.type === 'video' ? 'local:video' : 'local:photo'" class="text-4xl text-white/20" />
               <div class="flex flex-col overflow-hidden">
                 <h4 class="truncate text-base font-semi-bold text-white" :title="currentItem.filename">
                   {{ currentItem.filename }}
@@ -370,7 +374,7 @@ async function print() {
 
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
-              <h3 class="text-base font-semi-bold text-white">Discussion</h3>
+              <h3 class="text-base font-semi-bold text-white">Timeline</h3>
               <span class="flex size-5 items-center justify-center rounded-full bg-white/10 text-[10px] font-semi-bold text-white">{{ activeThreads.length }}</span>
             </div>
 
@@ -459,5 +463,9 @@ async function print() {
   .imageEl {
     view-transition-name: vtn-image;
   }
+}
+
+.cursor-comment {
+  cursor: url('/icons/comment.svg'), pointer;
 }
 </style>

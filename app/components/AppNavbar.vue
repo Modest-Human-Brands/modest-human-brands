@@ -34,7 +34,8 @@ const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TA
           :key="item.id"
           :to="item.to"
           class="group relative flex items-center gap-3 rounded-xl p-2 text-base transition-all md:w-56"
-          :class="item.id === activeKey ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'">
+          :class="item.id === activeKey ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'"
+          replace>
           <NuxtIcon :name="item.icon" class="shrink-0 text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />
           <span class="hidden truncate md:block">{{ item.title }}</span>
           <span v-if="item.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-primary-500 md:block" />

@@ -5,6 +5,8 @@ definePageMeta({
   middleware: ['guest'],
 })
 
+const { fetch: refreshSession } = useUserSession()
+
 type EmailFormSchema = z.infer<typeof emailFormSchema>
 
 const { r$ } = useRegleSchema({ email: '', otp: undefined }, emailFormSchema)
@@ -34,7 +36,9 @@ async function onEmailSignIn() {
       body: r$.$value,
     })
     if (res.isSuccess && !r$.$value.otp) isOTPSent.value = true
-    if (res.navigateTo) window.location.href = res.navigateTo
+
+    await refreshSession()
+    if (res.navigateTo) await navigateTo(res.navigateTo)
   } catch (err) {
     error.value = err.data || { message: err.message }
   } finally {

@@ -387,7 +387,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 
         <!-- Merged View: Timeline Section -->
         <div class="flex flex-col gap-4">
-          <h3 class="text-sm font-semi-bold text-white">Document History</h3>
+          <h3 class="text-sm font-semi-bold text-white">Timeline</h3>
           <div class="relative ml-2 mt-2 flex flex-col gap-8 border-l border-white/10 pb-4 pl-6">
             <div v-for="item in doc.timeline" :key="item.id" class="relative">
               <div class="absolute -left-[30px] top-1 h-2.5 w-2.5 rounded-full bg-primary-500 ring-[6px] ring-dark-500" />

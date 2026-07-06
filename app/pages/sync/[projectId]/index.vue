@@ -9,11 +9,11 @@ const {
 } = useRuntimeConfig()
 
 const route = useRoute()
-const projectSlug = route.params.projectSlug!.toString()
+const projectId = route.params.projectId!.toString()
 
 const { loggedIn } = useUserSession()
 
-const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${projectSlug}`)
+const { data: streamCollection, refresh } = await useFetch<ProjectStreamCollection>(`/api/stream/${projectId}`)
 const { resume } = useIntervalFn(refresh, 5000, { immediate: false })
 
 const activeDeviceId = ref(streamCollection.value?.streams[0]?.deviceId)
@@ -67,9 +67,9 @@ onMounted(async () => {
 
   if (!videoEl.value) return
   try {
-    const { streams } = await $fetch(`/api/stream/${projectSlug}`, {
+    const { streams } = await $fetch(`/api/stream/${projectId}`, {
       method: 'POST',
-      body: { deviceId: projectSlug },
+      body: { deviceId: projectId },
     })
     await startViewing(livekitUrl, streams[0].token, videoEl.value)
   } catch {
@@ -94,7 +94,7 @@ async function startStreaming(deviceId: string) {
   activeDeviceId.value = deviceId
   isCameraEnabled.value = true
 
-  const { streams } = await $fetch(`/api/stream/${projectSlug}`, {
+  const { streams } = await $fetch(`/api/stream/${projectId}`, {
     method: 'POST',
     body: { deviceId },
   })

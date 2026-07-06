@@ -18,7 +18,7 @@ function onSubmit() {
 </script>
 
 <template>
-  <div class="pointer-events-auto absolute z-40 flex -translate-x-1/2 -translate-y-full items-center gap-2" :style="{ left: `${x}%`, top: `${y}%` }" @click.stop>
+  <div class="pointer-events-auto absolute z-40 flex items-center gap-2" :style="{ left: `${x}%`, top: `${y}%` }" @click.stop>
     <div class="size-6 shrink-0 rounded-bl-none rounded-br-full rounded-tl-full rounded-tr-full bg-primary-500 shadow-2xl" />
 
     <!-- Dark Floating Pill Input -->
