@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.7.3
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.2...v0.7.3)
+
+### 💅 Refactors
+
+- Update sidebar and document viewer components for improved layout and responsiveness ([720793e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/720793e))
+
+### 🏡 Chore
+
+- Enhance document viewer and drive page functionality ([92e870c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/92e870c))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.2
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.1...v0.7.2)
