@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.3...v0.7.4)
+
+### 🚀 Enhancements
+
+- Add target icon and update project management features ([af0ad0c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/af0ad0c))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.2...v0.7.3)
