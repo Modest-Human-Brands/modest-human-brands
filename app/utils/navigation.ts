@@ -69,7 +69,7 @@ export const SECONDARY_NAVIGATION_TABS = [
   {
     id: 'project',
     title: 'Project',
-    icon: 'local:target-fill',
+    icon: 'local:target',
     description: 'Manage all your projects here',
     to: '/project',
   },

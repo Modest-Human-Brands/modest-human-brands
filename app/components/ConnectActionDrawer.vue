@@ -131,7 +131,7 @@ defineExpose({
           <button class="flex items-center justify-center text-light-500 transition-colors hover:text-white" @click="selectedTemplate = null">
             <NuxtIcon name="local:chevron-bold" class="scale-x text-lg" />
           </button>
-          <h3 class="text-xl font-semi-bold capitalize text-white">{{ selectedTemplate.id.replace(/-/g, ' ') }}</h3>
+          <h3 class="text-xl font-semi-bold capitalize text-white">{{ selectedTemplate.id?.replace(/-/g, ' ') }}</h3>
         </div>
 
         <template v-for="(type, key) in selectedTemplate.variables" :key="key">

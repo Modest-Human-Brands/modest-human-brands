@@ -1,5 +1,5 @@
+import { transformTemplate } from '~~/server/utils/mdoc-transform'
 import type { MDocTemplateResponse } from './[id].get'
-import { cleanTemplateVariables } from './[id].get'
 
 export default defineEventHandler(async () => {
   try {
@@ -9,9 +9,9 @@ export default defineEventHandler(async () => {
       baseURL: config.public.docUrl,
     })
 
-    const cleanedTemplates = response.map(cleanTemplateVariables)
+    const transformedTemplates = await Promise.all(response.map(async (r) => ({ ...r, variables: await transformTemplate(r.variables) })))
 
-    return cleanedTemplates
+    return transformedTemplates
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

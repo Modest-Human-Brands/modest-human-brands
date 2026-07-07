@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const stats = [
-  { label: 'Projects Delivered', value: 70, suffix: '+', icon: 'local:target-fill' },
+  { label: 'Projects Delivered', value: 70, suffix: '+', icon: 'local:target' },
   { label: 'Active Teams', value: 2, suffix: '+', icon: 'local:person' },
   { label: 'Media Files Managed', value: 1200, suffix: '+', icon: 'local:mountain' },
   { label: 'Hours Saved Monthly', value: 336, suffix: '+', icon: 'local:hour' },

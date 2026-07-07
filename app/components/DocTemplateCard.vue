@@ -16,7 +16,7 @@ defineProps<{
       <NuxtIcon name="local:document" class="text-2xl" />
     </div>
     <div>
-      <h2 class="text-lg font-semi-bold capitalize text-white">{{ template.label || template.id.replace(/-/g, ' ') }}</h2>
+      <h2 class="text-lg font-semi-bold capitalize text-white">{{ template.label || template.id?.replace(/-/g, ' ') }}</h2>
       <p class="mt-1 text-sm text-light-500">
         {{ template.description || 'Generate a new document using this template.' }}
       </p>

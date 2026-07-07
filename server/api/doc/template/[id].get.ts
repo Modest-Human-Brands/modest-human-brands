@@ -1,3 +1,5 @@
+import { transformTemplate } from '~~/server/utils/mdoc-transform'
+
 export interface MDocTemplateResponse {
   id: string
   variables: Record<string, string>
@@ -15,18 +17,6 @@ export interface MDocTemplateResponse {
   }[]
 }
 
-export function cleanTemplateVariables(template: MDocTemplateResponse) {
-  const vs = ['organization', 'accountDetails']
-  for (const v of vs) {
-    if (template.variables[v]) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete template.variables[v]
-    }
-  }
-
-  return template
-}
-
 export default defineEventHandler(async (event) => {
   try {
     const config = useRuntimeConfig()
@@ -36,9 +26,12 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.docUrl,
     })
 
-    const template = response.map(cleanTemplateVariables).filter((t) => t.id === id)[0]
+    const rawTemplate = response.find((t) => t.id === id)
+    if (!rawTemplate) throw createError({ statusCode: 404, statusMessage: 'Template not found' })
 
-    return template
+    const transformedTemplate = { ...rawTemplate, variables: await transformTemplate(rawTemplate.variables) }
+
+    return transformedTemplate
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

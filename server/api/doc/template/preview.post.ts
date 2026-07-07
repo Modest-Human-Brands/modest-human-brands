@@ -1,22 +1,21 @@
+import { retransformTemplate } from '~~/server/utils/mdoc-transform'
+
 export default defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-
-  const config = useRuntimeConfig()
-  const body = await readBody(event)
-
   try {
+    const { user } = await requireUserSession(event)
     const orgId = user.organizations[0]
-    const organization = await $fetch(`/api/organization/${orgId}`)
 
-    if (!body.data) body.data = {}
-    body.data.organization = organization
+    const config = useRuntimeConfig()
+    const body = await readBody(event)
+
+    const { mdocData } = await retransformTemplate({ ...body, orgId })
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,
       method: 'POST',
       body: {
         templateId: body.templateId,
-        variables: body.data,
+        variables: mdocData,
       },
     })
 

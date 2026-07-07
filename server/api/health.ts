@@ -6,11 +6,11 @@ export default defineEventHandler(() => {
 
     return { status: 'OK', ...config, node }
   } catch (error: unknown) {
+    console.error('API /health GET', error)
+
     if (error instanceof Error && 'statusCode' in error) {
       throw error
     }
-
-    console.error('API /health GET', error)
 
     throw createError({
       statusCode: 500,
