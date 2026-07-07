@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.5
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.4...v0.7.5)
+
+### 💅 Refactors
+
+- Update project properties and improve template structure ([65d3070](https://github.com/Modest-Human-Brands/modest-human-brands/commit/65d3070))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.4
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.3...v0.7.4)
