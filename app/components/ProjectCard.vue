@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import type { ProjectStatus } from '~~/types'
-
 interface FormattedProject {
   id: string
-  name: string
+  title: string
   slug: string
   status: ProjectStatus
-  quotation?: number
   budget?: number
-  address?: string
-  dateStart?: string
-  dateEnd?: string
+  quoteNumber?: number
+  shootLocation?: string
+  shootDate?: string
   coverUrl?: string
   iconUrl?: string
   assetCount: number
@@ -77,7 +74,7 @@ function formatDate(dateStr?: string) {
     <div class="relative z-10 flex flex-col gap-3 p-3.5 sm:gap-4 sm:p-5">
       <div class="flex items-start justify-between gap-3 sm:gap-4">
         <h3 class="line-clamp-2 text-base font-semi-bold leading-snug text-white transition-colors group-hover:text-primary-400 sm:text-lg">
-          {{ project.name }}
+          {{ project.title }}
         </h3>
       </div>
 
@@ -85,11 +82,11 @@ function formatDate(dateStr?: string) {
         <!-- Fluid text sizing prevents multi-line wrapping in narrow mobile columns -->
         <div class="flex items-center gap-2 text-xs font-regular text-light-500 sm:text-sm">
           <NuxtIcon name="local:calendar" class="shrink-0 text-sm opacity-60" />
-          <span class="truncate">{{ formatDate(project.dateStart) }}</span>
+          <span class="truncate">{{ formatDate(project.shootDate) }}</span>
         </div>
-        <div v-if="project.address" class="flex items-center gap-2 text-xs font-regular text-light-500 sm:text-sm">
+        <div v-if="project.shootLocation" class="flex items-center gap-2 text-xs font-regular text-light-500 sm:text-sm">
           <NuxtIcon name="local:map" class="shrink-0 text-sm opacity-60" />
-          <span class="truncate">{{ project.address }}</span>
+          <span class="truncate">{{ project.shootLocation }}</span>
         </div>
       </div>
     </div>
