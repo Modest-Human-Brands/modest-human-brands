@@ -24,7 +24,6 @@ export interface DetailedProject extends Project {
   contactName?: string
   budget?: number
   additional?: string
-  organizationName?: string
   deliverables?: ProjectDeliverable[]
 }
 
@@ -74,13 +73,19 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
       status: (props.Status?.status?.name as ProjectStatus) || 'Plan',
       segment: undefined,
       shootLocation: props.Address?.rich_text?.[0]?.text?.content,
-      shootDate: props.Date?.date?.start,
+      shootDate: props.Date?.date?.start.split('T')[0],
+      callTime: props.Date?.date?.start?.includes('T')
+        ? new Date(props.Date.date.start).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          })
+        : null,
       quoteNumber: props.Quotation?.number,
       duration: undefined,
       contactName: undefined,
       budget: props.Budget?.number,
       additional: undefined,
-      organizationName: undefined,
       deliverables,
     } as DetailedProject
   } catch (error) {
