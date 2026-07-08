@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.7.6
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.5...v0.7.6)
+
+### 🚀 Enhancements
+
+- Enhance document handling and compliance features ([23b0b4a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/23b0b4a))
+
+### 🩹 Fixes
+
+- Update DetailedProject interface and format shootDate and callTime ([de4af3a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/de4af3a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.5
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.4...v0.7.5)
