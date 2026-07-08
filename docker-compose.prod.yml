@@ -92,7 +92,6 @@ services:
       retries: 3
       start_period: 15s
     depends_on:
-      - connect-livekit
       - connect-livekit-redis
     deploy:
       replicas: 1
@@ -119,7 +118,6 @@ services:
     #   retries: 3
     #   start_period: 15s
     depends_on:
-      - connect-livekit
       - connect-livekit-redis
     deploy:
       replicas: 1

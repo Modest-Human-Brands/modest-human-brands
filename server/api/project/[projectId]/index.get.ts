@@ -75,7 +75,7 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
       shootLocation: props.Address?.rich_text?.[0]?.text?.content,
       shootDate: props.Date?.date?.start.split('T')[0],
       callTime: props.Date?.date?.start?.includes('T')
-        ? new Date(props.Date.date.start).toLocaleTimeString('en-US', {
+        ? new Date(props.Date.date.start).toLocaleTimeString('en-In', {
             hour: '2-digit',
             minute: '2-digit',
             hour12: true,

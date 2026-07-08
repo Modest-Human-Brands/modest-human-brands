@@ -41,7 +41,7 @@ const placeholderGradient = computed(() => {
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return 'No Date'
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return new Date(dateStr).toLocaleDateString('en-In', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
