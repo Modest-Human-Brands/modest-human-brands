@@ -43,7 +43,7 @@ const sidebarActions: readonly SidebarAction[] = [
 
       <div v-else class="flex flex-col gap-4">
         <div class="relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-md border border-white/10 bg-dark-500">
-          <NuxtImg v-if="document.previewUrl" :src="document.previewUrl" :alt="document.name" class="size-full object-contain" />
+          <NuxtImg v-if="document.previewUrl" :provider="undefined" :src="`${document.previewUrl}?type=image`" :alt="document.name" class="size-full object-cover" />
           <NuxtIcon v-else name="local:file-pdf" class="text-7xl text-light-500/40" />
         </div>
 

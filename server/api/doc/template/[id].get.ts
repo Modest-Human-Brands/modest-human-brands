@@ -1,7 +1,7 @@
-import { transformTemplate } from '~~/server/utils/mdoc-transform'
-
 export interface MDocTemplateResponse {
   id: string
+  label: string
+  description: string
   variables: Record<string, string>
   signerFields: {
     id: string
@@ -22,14 +22,11 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const id = getRouterParam(event, 'id')
 
-    const response = await $fetch<MDocTemplateResponse[]>('/api/document/template', {
+    const response = await $fetch<MDocTemplateResponse>(`/api/document/template/${id}`, {
       baseURL: config.public.docUrl,
     })
 
-    const rawTemplate = response.find((t) => t.id === id)
-    if (!rawTemplate) throw createError({ statusCode: 404, statusMessage: 'Template not found' })
-
-    const transformedTemplate = { ...rawTemplate, variables: await transformTemplate(rawTemplate.variables) }
+    const transformedTemplate = { ...response, variables: await transformTemplate(response.variables) }
 
     return transformedTemplate
   } catch (error: unknown) {

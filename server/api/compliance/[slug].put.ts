@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { ComplianceDocMeta } from './[slug].get'
+import type { NotionCompliance } from '~~/shared/types'
 
 const paramSchema = z.object({ slug: z.string().min(1) })
 const bodySchema = z.object({
@@ -13,29 +13,45 @@ export default defineEventHandler(async (event) => {
     const { slug } = await getValidatedRouterParams(event, paramSchema.parse)
     const { content } = await readValidatedBody(event, bodySchema.parse)
 
-    const metaStorage = useStorage<ComplianceDocMeta[]>('data:compliance')
-    const docStorage = useStorage<Record<string, unknown>>('data:compliance:content')
+    const metaStorage = useStorage<Resource<'compliance'>>('data:resource:compliance')
+    const docStorage = useStorage<Record<string, unknown>>('data:resource:compliance:content')
 
-    const metaList = (await metaStorage.getItem('meta')) ?? []
-    const docIndex = metaList.findIndex((m) => m.slug === slug)
+    const keys = await metaStorage.getKeys()
+    let targetRecord: NotionCompliance | null = null
 
-    if (docIndex === -1) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: `Cannot update: Compliance slug '${slug}' not found.`,
-      })
+    for (const key of keys) {
+      const item = await metaStorage.getItem(key)
+      if (item?.record?.properties?.Slug?.formula.string === slug) {
+        targetRecord = item.record
+        break
+      }
     }
 
-    const now = new Date().toISOString()
-
-    metaList[docIndex] = {
-      ...metaList[docIndex]!,
-      updatedAt: now,
+    if (!targetRecord) {
+      throw createError({ statusCode: 404, statusMessage: `Cannot update: slug '${slug}' not found.` })
     }
 
-    await Promise.all([docStorage.setItem(slug, content), metaStorage.setItem('meta', metaList)])
+    const oldBlocks = await notion.blocks.children.list({
+      block_id: targetRecord.id,
+    })
+    await Promise.all(oldBlocks.results.map((block) => notion.blocks.delete({ block_id: block.id })))
 
-    return { success: true, updatedAt: now }
+    const jsonString = JSON.stringify(content)
+    const chunks = jsonString.match(/.{1,2000}/g) || []
+    const newBlocks = chunks.map((chunk) => ({
+      object: 'block' as const,
+      type: 'paragraph' as const,
+      paragraph: { rich_text: [{ type: 'text' as const, text: { content: chunk } }] },
+    }))
+
+    await notion.blocks.children.append({
+      block_id: targetRecord.id,
+      children: newBlocks,
+    })
+
+    await docStorage.setItem(slug, content)
+
+    return { success: true, updatedAt: new Date().toISOString() }
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

@@ -27,7 +27,15 @@ const isEnum = computed(() => props.schemaType.startsWith('enum:'))
 
 const enumOptions = computed(() => {
   if (!isEnum.value) return []
-  return props.schemaType.split(':')[1]?.split(',') || []
+  const optsStr = props.schemaType.replace(/^enum:/i, '')
+  if (!optsStr) return []
+  return optsStr.split(',').map((opt) => {
+    const parts = opt.split('|')
+    if (parts.length > 1) {
+      return { value: parts[0], label: parts.slice(1).join('|'), hasLabel: true }
+    }
+    return { value: parts[0], label: formatKeyToLabel(parts[0]), hasLabel: false }
+  })
 })
 
 const hasNativePicker = computed(() => isDate.value || isTime.value || isDateTime.value)
@@ -92,6 +100,25 @@ function addBlueprintItem() {
   }
   newArray.push(newItem)
   emit('update:modelValue', newArray)
+}
+
+function getSelectValue(val: any) {
+  if (val && typeof val === 'object' && 'id' in val) {
+    return val.id
+  }
+  return val
+}
+
+function onEnumChange(event: Event) {
+  const target = event.target as HTMLSelectElement
+  const val = target.value
+  const opt = enumOptions.value.find((o) => o.value === val)
+
+  if (opt && opt.hasLabel) {
+    emit('update:modelValue', { id: opt.value, name: opt.label })
+  } else {
+    emit('update:modelValue', val)
+  }
 }
 
 function formatKeyToLabel(key: string): string {
@@ -188,7 +215,7 @@ function handleFileUpload(event: Event) {
           <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
         </label>
         <div v-else class="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-xl border border-success-500/30 bg-success-500/10">
-          <img :src="modelValue as string" class="h-full object-contain p-2" />
+          <NuxtImg :src="modelValue as string" class="h-full object-contain p-2" />
           <label class="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/50 text-xs font-semi-bold text-white opacity-0 transition-opacity hover:opacity-100">
             Change Signature
             <input type="file" class="hidden" accept="image/*" @change="handleFileUpload" />
@@ -198,13 +225,13 @@ function handleFileUpload(event: Event) {
 
       <div v-else-if="isEnum" class="relative w-full">
         <select
-          :value="modelValue"
+          :value="getSelectValue(modelValue)"
           class="w-full appearance-none rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 pr-10 text-sm text-white outline-none transition-colors focus:border-white focus:bg-dark-400"
           required
-          @change="onInput">
+          @change="onEnumChange">
           <option value="" disabled :selected="!modelValue">Select an option</option>
-          <option v-for="opt in enumOptions" :key="opt" :value="opt">
-            {{ formatKeyToLabel(opt) }}
+          <option v-for="opt in enumOptions" :key="opt.value" :value="opt.value">
+            {{ opt.label }}
           </option>
         </select>
         <NuxtIcon name="local:chevron-bold" class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-light-500" />

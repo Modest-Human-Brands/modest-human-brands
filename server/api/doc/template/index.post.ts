@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { organization, mdocData } = await retransformTemplate({ ...body, orgId })
+    const { organization, mdocData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
 
     const documentStorage = useStorage<Resource<'document'>>('data:resource:document')
     const documents = (await documentStorage.getItems(await documentStorage.getKeys()))

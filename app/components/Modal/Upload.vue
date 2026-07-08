@@ -52,7 +52,7 @@ const { pause: stopPolling, resume: startPolling } = useIntervalFn(
     if (!activeBatchId.value) return
     try {
       const res = await $fetch(`/api/drive/${props.projectId}/media/uploads/${activeBatchId.value}`)
-      const remoteUploads = res.uploads || res.data?.uploads || []
+      const remoteUploads = res.uploads || []
 
       let allDone = true
       for (const remote of remoteUploads) {
@@ -99,8 +99,8 @@ async function executeDispatch() {
 
     const initRes = await $fetch(`/api/drive/${props.projectId}/media/uploads`, { method: 'POST', body: payload })
 
-    activeBatchId.value = initRes.batchId || initRes.data?.batchId
-    const remoteUploads = initRes.uploads || initRes.data?.uploads || []
+    activeBatchId.value = initRes.batchId
+    const remoteUploads = initRes.uploads || []
 
     pendingFiles.forEach((local, index) => {
       const remote = remoteUploads[index]

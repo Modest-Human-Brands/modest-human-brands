@@ -73,12 +73,10 @@ interface MDocTemplateResponse {
 }
 
 const route = useRoute()
-const config = useRuntimeConfig()
 const projectId = route.params.projectId as string
 const docId = route.params.docId as string
 
 const { data: doc, refresh } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${docId}`)
-const pdfUrl = computed(() => (!doc.value ? '' : `${config.public.docUrl}${doc.value.previewUrl}`))
 
 const isDrawerOpen = ref(false)
 
@@ -186,7 +184,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 
 <template>
   <main v-if="doc" class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
-    <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }" class="flex-1">
+    <PdfDocumentViewer ref="viewerRef" :src="doc.previewUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }" class="flex-1">
       <template #toolbar-actions>
         <button type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="isDrawerOpen ? 'text-primary-500' : 'text-white'" @click="isDrawerOpen = true">
           <NuxtIcon name="local:signature" class="text-xl" />
@@ -248,14 +246,17 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 
         <div class="h-px w-full bg-white/10" />
 
-        <!-- Merged View: Signatures Section -->
         <div class="flex flex-col gap-4">
           <div class="flex items-center justify-between">
-            <h3 class="text-base font-semi-bold text-white">Signature Routing</h3>
+            <h3 class="text-base font-semi-bold text-white">Status</h3>
             <span
               v-if="doc?.routingQueue?.length"
               class="rounded-full px-2 py-0.5 text-[10px] font-semi-bold uppercase tracking-wider"
-              :class="doc.status === 'Completed' ? 'bg-success-500/20 text-success-500' : 'bg-primary-500/20 text-primary-500'">
+              :class="{
+                'bg-success-500/20 text-success-500': doc.status === 'Completed',
+                'bg-primary-500/20 text-primary-500': doc.status === 'Signed',
+                'bg-alert-500/20 text-alert-500': doc.status === 'Void',
+              }">
               {{ doc.status }}
             </span>
           </div>

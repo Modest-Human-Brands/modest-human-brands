@@ -1,4 +1,3 @@
-import { transformTemplate } from '~~/server/utils/mdoc-transform'
 import type { MDocTemplateResponse } from './[id].get'
 
 export default defineEventHandler(async () => {
@@ -9,9 +8,7 @@ export default defineEventHandler(async () => {
       baseURL: config.public.docUrl,
     })
 
-    const transformedTemplates = await Promise.all(response.map(async (r) => ({ ...r, variables: await transformTemplate(r.variables) })))
-
-    return transformedTemplates
+    return response
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

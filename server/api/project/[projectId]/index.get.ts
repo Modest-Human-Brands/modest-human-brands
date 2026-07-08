@@ -1,20 +1,31 @@
-export interface DetailedProject {
+export interface Project {
   id: string
   title: string
-  index?: number
   slug: string
   status: ProjectStatus
-  segment?: string
-  quotation?: number
+  shootLocation?: string
+  shootDate?: string
+  quoteNumber?: number
+}
+
+export interface ProjectDeliverable {
+  title: string
+  quantity?: number
+  rate?: number
   description?: string
-  address?: string
-  place?: string
+  points?: string[]
+}
+
+export interface DetailedProject extends Project {
+  index?: number
+  segment?: string
   date?: string
   duration?: string
   contactName?: string
   budget?: number
   additional?: string
   organizationName?: string
+  deliverables?: ProjectDeliverable[]
 }
 
 export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
@@ -36,22 +47,41 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
 
     const props = record.properties
 
+    const deliverableIds = props.Deliverables?.relation?.map((r: { id: string }) => notionNormalizeId(r.id) as string) || []
+    let deliverables: ProjectDeliverable[] = []
+
+    if (deliverableIds.length > 0) {
+      const deliverableStorage = useStorage<Resource<'deliverable'>>('data:resource:deliverable')
+      const items = (await Promise.all(deliverableIds.map((id: string) => deliverableStorage.getItem(id)))).filter((i) => !!i)
+
+      deliverables = items.map(
+        ({ record: { properties: props } }) =>
+          props && {
+            title: props.Title?.title?.[0]?.plain_text || 'Untitled Deliverable',
+            quantity: props.Quantity?.number ?? undefined,
+            rate: props.Rate?.number ?? undefined,
+            description: props.Description?.rich_text?.[0]?.text?.content || undefined,
+            points: props.Points?.multi_select?.map((p: { name: string }) => p.name) || undefined,
+          }
+      )
+    }
+
     return {
       id: record.id,
       title: props.Name?.title?.[0]?.plain_text || 'Untitled Project',
       index: props.Index?.number,
       slug: props.Slug?.formula?.string || record.id,
       status: (props.Status?.status?.name as ProjectStatus) || 'Plan',
-      segment: undefined, // Add if present in your Notion schema
-      description: undefined, // Add if present in your Notion schema
+      segment: undefined,
       shootLocation: props.Address?.rich_text?.[0]?.text?.content,
       shootDate: props.Date?.date?.start,
       quoteNumber: props.Quotation?.number,
-      duration: undefined, // Add if present in your Notion schema
-      contactName: undefined, // Usually requires an expansion query to the Contact relation
+      duration: undefined,
+      contactName: undefined,
       budget: props.Budget?.number,
-      additional: undefined, // Add if present in your Notion schema
-      organizationName: undefined, // Usually requires an expansion query to the Organization relation
+      additional: undefined,
+      organizationName: undefined,
+      deliverables,
     } as DetailedProject
   } catch (error) {
     if (error instanceof Error && 'statusCode' in error) throw error

@@ -45,7 +45,6 @@ interface MDocDocument {
 }
 
 const route = useRoute()
-const config = useRuntimeConfig()
 
 const projectId = route.params.projectId as string
 const envelopeId = route.params.envelopeId as string
@@ -78,7 +77,6 @@ if (verifyError.value) {
 isVerifying.value = false
 
 const { data: doc } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${envelopeId}`)
-const pdfUrl = computed(() => (doc.value?.previewUrl ? `${config.public.docUrl}${doc.value.previewUrl}` : ''))
 
 if (!doc.value || !doc.value?.templateId) {
   throw createError({ statusCode: 404, statusMessage: 'Template not found' })
@@ -145,14 +143,14 @@ async function submitSignature() {
     </div>
 
     <template v-else>
-      <PdfDocumentViewer ref="viewerRef" :src="pdfUrl" :doc="{ id: envelopeId, name: doc?.name, previewUrl: doc?.previewUrl }">
+      <PdfDocumentViewer ref="viewerRef" :src="doc.previewUrl" :doc="{ id: envelopeId, name: doc?.name, previewUrl: doc?.previewUrl }">
         <template #page-overlay="{ page, scale, viewportHeight, totalPages }">
           <div
             v-for="f in getFieldsForPage(page, totalPages)"
             :key="f.id"
             class="absolute z-10 flex items-center justify-center overflow-hidden border border-primary-500/50 bg-primary-500/10 text-black transition-colors"
             :style="{ top: `${(viewportHeight - f.y - f.height) * scale}px`, left: `${f.x * scale}px`, width: `${f.width * scale}px`, height: `${f.height * scale}px` }">
-            <img v-if="f.type === 'SIGNATURE' && masterSignature" :src="masterSignature" class="size-full object-contain p-1" />
+            <NuxtImg v-if="f.type === 'SIGNATURE' && masterSignature" :src="masterSignature" class="size-full object-contain p-1" />
             <span v-else-if="f.type !== 'SIGNATURE' && formData[f.id]" :style="{ fontSize: `${(f.fontSize || 12) * scale}px` }" class="px-2 text-center font-semi-bold tracking-wide">
               {{ formData[f.id] }}
             </span>

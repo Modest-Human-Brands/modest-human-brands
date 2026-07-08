@@ -18,7 +18,7 @@ watch(
   documents,
   (newDocs) => {
     if (newDocs && newDocs.length > 0 && !selectedDocId.value) {
-      selectedDocId.value = newDocs[0]!.id
+      selectedDocId.value = newDocs.at(-1)!.id
     }
   },
   { immediate: true }
@@ -74,38 +74,45 @@ function handleRowClick(docId: string) {
         <div v-else-if="!documents?.length" class="p-6 text-center text-sm text-light-500">No documents found in this workspace.</div>
 
         <template v-else>
-          <NuxtLink
-            v-for="doc in documents"
-            :key="doc.id"
-            :to="`/doc/${projectId}/${doc.id}`"
-            :class="[
-              'group grid cursor-pointer select-none grid-cols-[2.25rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 border-b border-white/5 px-4 py-3.5 text-sm transition-colors active:bg-white/5 md:grid-cols-[2.5rem_minmax(0,1fr)_9rem_6rem] md:gap-4 md:px-6',
-              selectedDocId === doc.id ? 'bg-primary-500/10 text-white' : 'text-light-400 hover:bg-white/[0.03]',
-            ]"
-            @click="handleRowClick(doc.id)">
-            <div class="flex size-7 items-center justify-start" @click.stop>
-              <input type="checkbox" :checked="selectedDocIds.has(doc.id)" class="size-4 cursor-pointer rounded border-white/10 bg-dark-500 accent-primary-500" @change="toggleRowSelection(doc.id)" />
-            </div>
-
-            <div class="flex min-w-0 items-center gap-3.5">
-              <div class="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded bg-white shadow-sm">
-                <img v-if="doc.previewUrl" :src="doc.previewUrl" class="size-full object-cover" />
-                <NuxtIcon v-else :name="getFileIcon(doc.extension)" class="text-2xl text-dark-500" />
+          <template v-for="document in documents" :key="document.id">
+            <NuxtLink
+              v-if="document"
+              :to="`/doc/${projectId}/${document.id}`"
+              :class="[
+                'group grid cursor-pointer select-none grid-cols-[2.25rem_minmax(0,1fr)_4.5rem] items-center gap-2.5 border-b border-white/5 px-4 py-3.5 text-sm transition-colors active:bg-white/5 md:grid-cols-[2.5rem_minmax(0,1fr)_9rem_6rem] md:gap-4 md:px-6',
+                selectedDocId === document.id ? 'bg-primary-500/10 text-white' : 'text-light-400 hover:bg-white/[0.03]',
+              ]"
+              @click="handleRowClick(document.id)">
+              <div class="flex size-7 items-center justify-start" @click.stop>
+                <input
+                  type="checkbox"
+                  :checked="selectedDocIds.has(document.id)"
+                  class="size-4 cursor-pointer rounded border-white/10 bg-dark-500 accent-primary-500"
+                  @change="toggleRowSelection(document.id)" />
               </div>
 
-              <div class="flex min-w-0 flex-col">
-                <div class="flex items-center gap-1.5">
-                  <span class="font-medium truncate text-white" :title="doc.name">{{ doc.name }}</span>
-                  <NuxtIcon name="local:star" class="shrink-0 text-base text-light-600 opacity-100 transition-opacity hover:text-warning-400 md:text-[20px] md:opacity-0 md:group-hover:opacity-100" />
+              <div class="flex min-w-0 items-center gap-3.5">
+                <div class="flex aspect-[3/4] w-9 shrink-0 items-center justify-center overflow-hidden rounded-sm shadow-sm">
+                  <NuxtImg v-if="document.previewUrl" :src="`${document.previewUrl}?type=image`" class="size-full object-cover" />
+                  <NuxtIcon v-else :name="getFileIcon(document.extension)" class="text-2xl text-dark-500" />
                 </div>
-                <span class="text-[10px] font-semi-bold uppercase tracking-wider text-light-500">{{ doc.extension }}</span>
+
+                <div class="flex min-w-0 flex-col">
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-medium truncate text-white" :title="document.name">{{ document.name }}</span>
+                    <NuxtIcon
+                      name="local:star"
+                      class="shrink-0 text-base text-light-600 opacity-100 transition-opacity hover:text-warning-400 md:text-[20px] md:opacity-0 md:group-hover:opacity-100" />
+                  </div>
+                  <span class="text-[10px] font-semi-bold uppercase tracking-wider text-light-500">{{ document.extension }}</span>
+                </div>
               </div>
-            </div>
 
-            <span class="hidden truncate text-xs text-light-500 md:block">{{ doc.openedAt || doc.uploadedAt }}</span>
+              <span class="hidden truncate text-xs text-light-500 md:block">{{ document.openedAt || document.uploadedAt }}</span>
 
-            <span class="font-mono text-right text-xs text-light-500">{{ formatBytes(doc.sizeBytes) }}</span>
-          </NuxtLink>
+              <span class="font-mono text-right text-xs text-light-500">{{ formatBytes(document.sizeBytes) }}</span>
+            </NuxtLink>
+          </template>
         </template>
       </div>
     </div>

@@ -15,26 +15,35 @@ export default defineEventHandler(async (event) => {
 
     const { title, slug } = await readValidatedBody(event, bodySchema.parse)
 
-    const metaStorage = useStorage<ComplianceDocMeta[]>('data:compliance')
-    const metaList = (await metaStorage.getItem('meta')) ?? []
+    const config = useRuntimeConfig()
+    const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-    if (metaList.some((m) => m.slug === slug)) {
-      throw createError({
-        statusCode: 409,
-        statusMessage: `Conflict: A compliance document with slug '${slug}' already exists.`,
-      })
+    const storage = useStorage<Resource<'compliance'>>('data:resource:compliance')
+    const keys = await storage.getKeys()
+
+    for (const key of keys) {
+      const item = await storage.getItem(key)
+      if (item?.record?.properties?.Slug?.formula.string === slug) {
+        throw createError({ statusCode: 409, statusMessage: `Conflict: Slug '${slug}' already exists.` })
+      }
     }
 
-    const now = new Date().toISOString()
+    const notionResponse = await notion.pages.create({
+      parent: { data_source_id: notionDbId.compliance },
+      properties: {
+        Name: { title: [{ text: { content: title } }] },
+        //       Slug: { rich_text: [{ text: { content: slug } }] },
+      },
+    })
+
     const newMeta: ComplianceDocMeta = {
-      id: slug,
+      id: notionResponse.id,
       slug,
       title,
-      updatedAt: now,
+      updatedAt: new Date().toISOString(),
     }
 
-    metaList.push(newMeta)
-    await metaStorage.setItem('meta', metaList)
+    await storage.setItem(notionNormalizeId(notionResponse.id)!, { type: 'compliance', notificationStatus: false, record: notionResponse })
 
     return { success: true, doc: newMeta }
   } catch (error: unknown) {

@@ -16,6 +16,8 @@ export default defineTask({
       user: (await notionQueryDb<NotionUser>(notion, notionDbId.user)).filter((a) => !!a),
       contact: (await notionQueryDb<NotionContact>(notion, notionDbId.contact)).filter((a) => !!a),
       project: (await notionQueryDb<NotionProject>(notion, notionDbId.project)).filter((a) => !!a),
+      deliverable: (await notionQueryDb<NotionDeliverable>(notion, notionDbId.deliverable)).filter((a) => !!a),
+      compliance: (await notionQueryDb<NotionCompliance>(notion, notionDbId.compliance)).filter((a) => !!a),
       document: (await notionQueryDb<NotionDocument>(notion, notionDbId.document)).filter((a) => !!a),
       stream: (await notionQueryDb<NotionStream>(notion, notionDbId.stream)).filter((a) => !!a),
       media: (await notionQueryDb<NotionMedia>(notion, notionDbId.media)).filter((a) => !!a),

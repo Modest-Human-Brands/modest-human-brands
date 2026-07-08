@@ -14,7 +14,7 @@ const initials = computed(() => props.conversation.name.charAt(0).toUpperCase())
     class="group flex cursor-pointer items-center gap-3 rounded-xl border p-2 transition-all md:p-3"
     :class="[isActive ? 'border-dark-600 bg-dark-500' : 'border-transparent bg-dark-400 hover:bg-dark-500']">
     <div class="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-lg font-semi-bold text-dark-500">
-      <img v-if="conversation.avatarUrl" :src="conversation.avatarUrl" class="h-full w-full object-cover" />
+      <NuxtImg v-if="conversation.avatarUrl" :src="conversation.avatarUrl" class="h-full w-full object-cover" />
       <span v-else>{{ initials }}</span>
     </div>
 

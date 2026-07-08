@@ -119,7 +119,7 @@ export interface VideoDetails extends Video {
 }
 
 /* Server Only */
-export const resourceTypes = ['organization', 'user', 'contact', 'project', 'document', 'stream', 'media'] as const
+export const resourceTypes = ['organization', 'user', 'contact', 'project', 'deliverable', 'compliance', 'document', 'stream', 'media'] as const
 
 export type ResourceType = (typeof resourceTypes)[number]
 
@@ -130,6 +130,8 @@ export interface ResourceRecordMap {
   user: NotionUser
   contact: NotionContact
   project: NotionProject
+  deliverable: NotionDeliverable
+  compliance: NotionCompliance
   document: NotionDocument
   stream: NotionStream
   media: NotionMedia
@@ -558,9 +560,90 @@ export interface NotionProject {
       relation: { id: string }[]
       has_more: boolean
     }
+    Deliverables: {
+      type: 'relation'
+      relation: { id: string }[]
+      has_more: boolean
+    }
   }
   url: string
   public_url: null
+}
+
+export interface NotionDeliverable {
+  id: string
+  created_time: string
+  last_edited_time: string
+  properties: {
+    Title: {
+      type: 'title'
+      title: {
+        plain_text: string
+      }[]
+    }
+    Description: {
+      type: 'rich_text'
+      rich_text: {
+        text: {
+          content: string
+        }
+      }[]
+    }
+    Points: {
+      type: 'multi_select'
+      multi_select: {
+        name: string
+      }[]
+    }
+    Quantity: {
+      type: 'number'
+      number: number | null
+    }
+    Rate: {
+      type: 'number'
+      number: number | null
+    }
+    Project: {
+      type: 'relation'
+      relation: { id: string }[]
+      has_more: boolean
+    }
+  }
+}
+
+export interface NotionCompliance {
+  id: string
+  created_time: string
+  last_edited_time: string
+  properties: {
+    Name: {
+      type: 'title'
+      title: {
+        plain_text: string
+      }[]
+    }
+    Slug: {
+      type: 'formula'
+      formula: { string: string }
+    }
+    Status: {
+      type: 'status'
+      status: {
+        name: 'Plan' | 'Draft' | 'Release' | 'Archive'
+      }
+    }
+    Type: {
+      type: 'select'
+      select: {
+        name: string
+      }
+    }
+    Organization: {
+      type: 'relation'
+      relation: { id: string }[]
+    }
+  }
+  url: string
 }
 
 export interface NotionDocument {

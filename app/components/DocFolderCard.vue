@@ -35,7 +35,7 @@ const formatStatus = (status: string) => {
       <div class="absolute bottom-2.5 left-2.5 flex items-center gap-2">
         <div
           class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black text-center text-2xs font-semi-bold leading-tight tracking-wide text-white ring-1 ring-white/10">
-          <img v-if="folder.contactAvatar" :src="folder.contactAvatar" class="size-full object-cover" />
+          <NuxtImg v-if="folder.contactAvatar" :src="folder.contactAvatar" class="size-full object-cover" />
           <span v-else>{{ folder.contactName.substring(0, 2).toUpperCase() }}</span>
         </div>
         <span class="text-sm font-semi-bold text-white/80">{{ folder.contactName }}</span>

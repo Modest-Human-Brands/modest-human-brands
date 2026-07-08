@@ -64,7 +64,11 @@ function formatDate(dateStr?: string) {
 
     <div class="relative z-10 p-1.5 pb-0 sm:p-2 sm:pb-0">
       <div class="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-dark-600 shadow-inner">
-        <img v-if="project.coverUrl" :src="project.coverUrl" :alt="project.name" class="size-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100" />
+        <NuxtImg
+          v-if="project.coverUrl"
+          :src="project.coverUrl"
+          :alt="project.name"
+          class="size-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100" />
         <div v-else class="size-full bg-gradient-to-br opacity-80 transition-transform duration-700 group-hover:scale-105" :class="placeholderGradient" />
 
         <div class="absolute inset-0 ring-1 ring-inset ring-black/20" />
