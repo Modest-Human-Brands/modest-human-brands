@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.7
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.6...v0.7.7)
+
+### 🩹 Fixes
+
+- Update date formatting to use 'en-IN' locale for consistency ([97fb493](https://github.com/Modest-Human-Brands/modest-human-brands/commit/97fb493))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.7.6
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.5...v0.7.6)
