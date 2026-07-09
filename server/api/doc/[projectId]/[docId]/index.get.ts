@@ -82,7 +82,7 @@ export default defineEventHandler(async (event) => {
         const formData = new FormData()
         formData.append('pdf', pdfBlob, doc.name)
 
-        verificationData = await $fetch<{ isIntact: boolean; signer: string; message: string }>(`/api/document/${docId}/verify-signature`, {
+        verificationData = await $fetch<{ isIntact: boolean; signer: string; message: string }>(`/api/document/${docId}/sign/verify`, {
           baseURL: config.public.docUrl,
           method: 'POST',
           body: formData,

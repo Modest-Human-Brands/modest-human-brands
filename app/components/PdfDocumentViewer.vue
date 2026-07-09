@@ -18,8 +18,6 @@ const props = withDefaults(
   }
 )
 
-const config = useRuntimeConfig()
-
 const VuePDF = defineAsyncComponent(() => import('@tato30/vue-pdf').then((m) => m.VuePDF))
 
 const pdf = shallowRef<PDFDocumentLoadingTask | undefined>(undefined)
@@ -122,7 +120,7 @@ function comment() {}
 async function download() {
   if (!props.doc?.previewUrl) return
 
-  const downloadUrl = `${config.public.docUrl}${props.doc?.previewUrl}?download=true`
+  const downloadUrl = `${props.doc?.previewUrl}?download=true`
 
   try {
     const response = await fetch(downloadUrl)

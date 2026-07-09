@@ -7,7 +7,7 @@ export interface MDocTemplateResponse {
     id: string
     type: string
     signerOrder: number
-    pageIndex: string
+    pageIndex: number | number[] | string
     x: number
     y: number
     width: number

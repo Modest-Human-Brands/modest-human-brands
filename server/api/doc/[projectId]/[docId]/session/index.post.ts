@@ -1,4 +1,4 @@
-import type { MDocDocument } from './index.get'
+import type { MDocDocument } from '../index.get'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -15,13 +15,13 @@ export default defineEventHandler(async (event) => {
     const sessionRes = await $fetch<{
       signer: string
       expiresAt: string
-      token: string
+      sessionToken: string
     }>(`/api/document/${docId}/session`, {
       baseURL: config.public.docUrl,
       method: 'POST',
-      body: { signerEmail, expiresIn: docDetails.rawData.expiresIn },
+      body: { signerEmail, expiresIn: docDetails.rawData?.expiresIn },
     })
-    const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.token}`
+    const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.sessionToken}`
 
     try {
       await $fetch('/api/connect/text/email/send', {
@@ -44,8 +44,8 @@ export default defineEventHandler(async (event) => {
           projectId: docDetails.projectId,
         },
       })
-    } catch (emailError) {
-      console.error('Automated MConnect Email Dispatch Failed:', emailError)
+    } catch (error) {
+      console.warn('Automated MConnect Email Dispatch Failed:', error)
     }
 
     return {

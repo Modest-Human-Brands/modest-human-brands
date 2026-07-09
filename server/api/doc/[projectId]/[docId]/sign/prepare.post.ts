@@ -12,39 +12,29 @@ interface SignerDetails {
 }
 
 export default defineEventHandler(async (event) => {
-  const docId = getRouterParam(event, 'docId')
-  if (!docId) {
-    throw createError({ statusCode: 400, statusMessage: 'Document/Envelope ID is strictly required' })
-  }
-
-  const orgId = ((await notion.pages.retrieve({ page_id: docId })) as unknown as NotionDocument).properties.Organization.relation[0]?.id
-
-  const body = await readBody(event)
-  const { sessionToken, fields, telemetry } = body
-
-  if (!sessionToken || !fields) {
-    throw createError({ statusCode: 400, statusMessage: 'Malformed signature execution payload' })
-  }
-
-  const config = useRuntimeConfig()
-
-  const clientIp = getRequestIP(event, { xForwardedFor: true })
-  const enrichedTelemetry = {
-    ...(telemetry || {}),
-    ipAddress: clientIp,
-  }
-
   try {
+    const docId = getRouterParam(event, 'docId')
+    if (!docId) {
+      throw createError({ statusCode: 400, statusMessage: 'Document/Envelope ID is strictly required' })
+    }
+
+    const orgId = ((await notion.pages.retrieve({ page_id: docId })) as unknown as NotionDocument).properties.Organization.relation[0]?.id
+
+    const config = useRuntimeConfig()
+    const body = await readBody(event)
+
+    const clientIp = getRequestIP(event, { xForwardedFor: true })
+    body.telemetry = {
+      ...(body.telemetry || {}),
+      ipAddress: clientIp,
+    }
+
     const response = await $fetch<{ id: string; documentStatus: 'Completed' | 'Partially Signed'; currentSigner: SignerDetails | null; nextSigner: SignerDetails | null }>(
-      `/api/document/${docId}/sign`,
+      `/api/document/${docId}/sign/prepare`,
       {
         baseURL: config.public.docUrl,
         method: 'POST',
-        body: {
-          sessionToken,
-          fields,
-          telemetry: enrichedTelemetry,
-        },
+        body,
       }
     )
     const isCompleted = response.documentStatus === 'Completed'
@@ -66,11 +56,11 @@ export default defineEventHandler(async (event) => {
 
     return response
   } catch (error: unknown) {
+    console.error(`API /doc/[projectId]/[docId]/sign POST`, error)
+
     if (error instanceof Error && 'statusCode' in error) {
       throw error
     }
-
-    console.error(`API /doc/[projectId]/[docId]/sign POST`, error)
 
     throw createError({
       statusCode: 500,

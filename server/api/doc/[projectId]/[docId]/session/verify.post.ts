@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
       role: string
       order: number
       status: string
-    }>(`/api/document/${docId}/verify-session`, {
+    }>(`/api/document/${docId}/session/verify`, {
       baseURL: config.public.docUrl,
       method: 'POST',
       body: {
