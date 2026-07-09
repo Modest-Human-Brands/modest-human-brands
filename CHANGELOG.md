@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.9.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.7...v0.9.0)
+
+### 🚀 Enhancements
+
+- **signing:** ⚠️ Implement client and server-side signing endpoints with session management ([5991b4c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5991b4c))
+
+### 🩹 Fixes
+
+- Update LOCAL_DSC_BRIDGE_URL and improve template formatting ([34fae6a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/34fae6a))
+
+### 📖 Documentation
+
+- Update MSync progress and calculation in README ([ce40707](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ce40707))
+
+### 🤖 CI
+
+- **release:** Update version ([2c04377](https://github.com/Modest-Human-Brands/modest-human-brands/commit/2c04377))
+- **release:** Update version ([98632d9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/98632d9))
+
+#### ⚠️ Breaking Changes
+
+- **signing:** ⚠️ Implement client and server-side signing endpoints with session management ([5991b4c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5991b4c))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+- Shba007 ([@shba007](https://github.com/shba007))
+
 ## v0.8.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.7...v0.8.0)
