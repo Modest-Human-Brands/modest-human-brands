@@ -71,7 +71,7 @@ interface DscCertificate {
   certificateChainDerHex: string
 }
 
-const LOCAL_DSC_BRIDGE_URL = 'http://127.0.0.1:8720'
+const LOCAL_DSC_BRIDGE_URL = 'http://localhost:8720'
 
 const route = useRoute()
 
