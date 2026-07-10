@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.0...v0.9.1)
+
+### 🩹 Fixes
+
+- Update LOCAL_DSC_BRIDGE_URL to use 'localhost' and streamline service worker routes ([4935ffd](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4935ffd))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.7.7...v0.9.0)
