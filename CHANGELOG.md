@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.9.2
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.1...v0.9.2)
+
+### 🩹 Fixes
+
+- Enhance AppSidebar visibility on mobile devices ([008adf0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/008adf0))
+
+### 🏡 Chore
+
+- Update dependencies to latest versions ([1859a8b](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1859a8b))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.1
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.0...v0.9.1)
