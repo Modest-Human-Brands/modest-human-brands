@@ -268,7 +268,7 @@ async function submitSignature() {
         </template>
       </PdfDocumentViewer>
 
-      <AppSidebar v-model:open="isSignDrawerOpen">
+      <AppSidebar v-model:open="isSignDrawerOpen" as-drawer-on-mobile :class="!isDrawerOpen ? 'md:hidden' : 'md:flex'">
         <template #header>
           <h2 class="text-xl font-semi-bold tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
         </template>
