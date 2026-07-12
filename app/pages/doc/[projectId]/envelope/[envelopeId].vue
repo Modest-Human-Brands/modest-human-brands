@@ -147,7 +147,7 @@ async function fetchDscCertificates() {
     }
   } catch (error) {
     console.error('Local DSC bridge error:', error)
-    dscError.value = 'Could not connect to DSC Bridge. Ensure the Windows service is running and USB stick is inserted.'
+    dscError.value = 'Could not connect to DSC. Ensure the MSync is running and DSC USB stick is inserted.'
   } finally {
     isFetchingCerts.value = false
   }

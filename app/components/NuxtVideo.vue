@@ -250,7 +250,7 @@ onMounted(() => {
   import('@videojs/html/video/minimal-skin.css')
   import('@videojs/html/video/player')
   import('@videojs/html/media/dash-video')
-  import('@videojs/html/media/hls-video')
+  import('@videojs/html/media/hlsjs-video')
 })
 
 const isDash = computed(() => {
