@@ -68,7 +68,7 @@ interface DscCertificate {
   subject: string
   issuer: string
   certificateDerHex: string
-  certificateChainDerHex: string
+  certificateChainDerHex: string[]
 }
 
 const LOCAL_DSC_BRIDGE_URL = 'http://localhost:8720'
@@ -181,18 +181,31 @@ async function submitSignature() {
   })
 
   try {
+    const prepareBody: {
+      sessionToken: string
+      certificateDerHex?: string
+      certificateChainDerHex?: string[]
+      fields: Record<string, string>
+      telemetry: {
+        userAgent: string
+      }
+    } = {
+      sessionToken: token,
+      fields: finalFields,
+      telemetry: { userAgent: navigator.userAgent },
+    }
+
+    if (signingMethod.value === 'dsc') {
+      prepareBody.certificateDerHex = dscCertificates.value[selectedCertIndex.value]!.certificateDerHex
+      prepareBody.certificateChainDerHex = dscCertificates.value[selectedCertIndex.value]!.certificateChainDerHex
+    }
+
     const { sessionId, digestHex } = await $fetch<{
       sessionId: string
       digestHex: string
     }>(`/api/doc/${projectId}/${envelopeId}/sign/prepare`, {
       method: 'POST',
-      body: {
-        sessionToken: token,
-        certificateDerHex: dscCertificates.value[selectedCertIndex.value]!.certificateDerHex,
-        certificateChainDerHex: dscCertificates.value[selectedCertIndex.value]!.certificateChainDerHex,
-        fields: finalFields,
-        telemetry: { userAgent: navigator.userAgent },
-      },
+      body: prepareBody,
     })
 
     if (signingMethod.value === 'server') {
@@ -268,7 +281,7 @@ async function submitSignature() {
         </template>
       </PdfDocumentViewer>
 
-      <AppSidebar v-model:open="isSignDrawerOpen" as-drawer-on-mobile :class="!isDrawerOpen ? 'md:hidden' : 'md:flex'">
+      <AppSidebar v-model:open="isSignDrawerOpen" as-drawer-on-mobile :class="!isSignDrawerOpen ? 'md:hidden' : 'md:flex'">
         <template #header>
           <h2 class="text-xl font-semi-bold tracking-tight text-white">{{ isSuccess ? 'Completed' : 'Complete Fields' }}</h2>
         </template>
