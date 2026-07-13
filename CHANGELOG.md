@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.9.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.3...v0.9.4)
+
+### 🩹 Fixes
+
+- Appsidebar and docprevewsidebar scroll issues fixed ([f867234](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f867234))
+- Update @dotenvx/dotenvx to version 2.6.0 ([a0ebe1c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/a0ebe1c))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.2...v0.9.3)
