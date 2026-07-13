@@ -192,7 +192,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
       </template>
     </PdfDocumentViewer>
 
-    <AppSidebar v-model:open="isDrawerOpen" as-drawer-on-mobile :class="!isDrawerOpen ? 'md:hidden' : 'md:flex'">
+    <AppSidebar v-model:open="isDrawerOpen" as-drawer-on-mobile>
       <template #header>
         <div class="flex items-start justify-between px-2 pb-4 pt-2">
           <div>

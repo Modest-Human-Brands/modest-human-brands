@@ -15,8 +15,6 @@ export interface DocumentDetail {
 
 defineProps<{ document: DocumentDetail | null }>()
 
-const isOpen = ref(false)
-
 interface SidebarAction {
   id: string
   label: string
@@ -34,7 +32,7 @@ const sidebarActions: readonly SidebarAction[] = [
 </script>
 
 <template>
-  <AppSidebar v-model:open="isOpen" as-drawer-on-mobile>
+  <AppSidebar class="hidden md:block">
     <div class="flex h-full flex-col p-4 md:p-2">
       <div v-if="!document" class="flex h-full flex-col items-center justify-center pb-10 text-white/40 md:pb-0">
         <NuxtIcon name="local:document" class="mb-4 text-4xl opacity-50" />
@@ -62,8 +60,7 @@ const sidebarActions: readonly SidebarAction[] = [
             v-for="action in sidebarActions"
             :key="action.id"
             type="button"
-            class="font-medium group flex w-full items-center gap-3.5 rounded-lg px-3 py-2.5 text-left text-sm text-light-400 transition-colors hover:bg-white/5 hover:text-white"
-            @click="isOpen = false">
+            class="font-medium group flex w-full items-center gap-3.5 rounded-lg px-3 py-2.5 text-left text-sm text-light-400 transition-colors hover:bg-white/5 hover:text-white">
             <NuxtIcon :name="action.icon" class="text-lg text-light-500 transition-colors group-hover:text-primary-400" />
             <span class="truncate">{{ action.label }}</span>
           </button>

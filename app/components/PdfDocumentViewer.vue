@@ -206,7 +206,7 @@ async function print() {
     <div class="relative flex size-full flex-1 flex-col overflow-hidden">
       <slot name="header" />
 
-      <div ref="viewerContainer" class="scrollbar-hidden relative grid size-full overflow-auto p-4 pb-28 md:p-6">
+      <div ref="viewerContainer" class="scrollbar-hidden relative grid size-full overflow-auto p-4 pb-20 md:p-6">
         <div v-if="isLoading || (!pdf && props.src)" class="m-auto flex flex-col items-center gap-4 text-light-500">
           <NuxtIcon name="local:loader" class="animate-spin text-4xl" />
           <span class="text-sm font-semi-bold uppercase tracking-widest">Loading Document...</span>
@@ -249,7 +249,7 @@ async function print() {
     <button
       v-if="pdf && pages && pages > 1 && showSidebar"
       type="button"
-      class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-white/10 bg-dark-400/80 text-white shadow-md backdrop-blur-md transition-transform active:scale-95 md:hidden"
+      class="absolute left-0 top-1/2 z-20 flex h-14 w-6 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-white/10 bg-light-600 shadow-md backdrop-blur-md transition-transform active:scale-95 dark:bg-dark-400 md:hidden"
       @click="isSidebarOpen = !isSidebarOpen">
       <NuxtIcon name="local:chevron-bold" class="text-xs" :class="{ 'scale-x-[-1]': !isSidebarOpen }" />
     </button>

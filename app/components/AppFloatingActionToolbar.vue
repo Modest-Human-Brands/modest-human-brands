@@ -37,13 +37,13 @@ const emit = defineEmits<{
 
 <template>
   <div
-    class="absolute bottom-28 left-1/2 z-20 flex -translate-x-1/2 select-none items-center gap-2.5 rounded-full border border-white/10 bg-dark-400/95 px-6 py-3 text-white shadow-2xl backdrop-blur-md md:bottom-6 md:gap-4">
+    class="absolute bottom-20 left-1/2 z-20 flex -translate-x-1/2 select-none items-center gap-2.5 rounded-full border border-white/10 bg-light-600 px-6 py-3 shadow-2xl backdrop-blur-md dark:bg-dark-400 md:bottom-6 md:gap-4">
     <template v-if="showPagination">
       <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('update:page', Math.max(1, page - 1))">
         <NuxtIcon name="local:chevron-bold" class="text-lg" />
       </button>
 
-      <span class="min-w-[40px] whitespace-nowrap text-center text-xs font-semi-bold text-light-400"> {{ page }} / {{ totalPages }} </span>
+      <span class="min-w-[40px] whitespace-nowrap text-center text-xs font-semi-bold"> {{ page }} / {{ totalPages }} </span>
 
       <button type="button" class="shrink-0 transition-colors hover:text-primary-500" @click="emit('update:page', Math.min(totalPages, page + 1))">
         <NuxtIcon name="local:chevron-bold" class="scale-x-[-1] text-lg" />

@@ -117,24 +117,6 @@ function handleRowClick(docId: string) {
       </div>
     </div>
 
-    <div class="hidden shrink-0 transition-all duration-300 md:block">
-      <DocPreviewSidebar :document="activeDocument" />
-    </div>
-
-    <Teleport to="body">
-      <div v-if="showMobileDrawer && activeDocument" class="backdrop-blur-xs fixed inset-0 z-50 flex flex-col justify-end bg-black/60 md:hidden" @click="showMobileDrawer = false">
-        <div class="max-h-[85vh] w-full overflow-hidden rounded-t-2xl border-t border-white/10 bg-dark-400 shadow-2xl transition-transform duration-300" @click.stop>
-          <div class="flex items-center justify-between border-b border-white/5 px-6 py-4">
-            <span class="text-xs font-semi-bold uppercase tracking-wider text-light-500">Document Actions</span>
-            <button type="button" class="rounded-lg p-1 text-light-500 hover:bg-white/5 hover:text-white" @click="showMobileDrawer = false">
-              <NuxtIcon name="local:cross" class="text-lg" />
-            </button>
-          </div>
-          <div class="max-h-[calc(85vh-3.5rem)] overflow-y-auto">
-            <DocPreviewSidebar :document="activeDocument" />
-          </div>
-        </div>
-      </div>
-    </Teleport>
+    <DocPreviewSidebar :document="activeDocument" />
   </main>
 </template>

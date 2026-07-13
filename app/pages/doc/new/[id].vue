@@ -151,7 +151,7 @@ function prevStep() {
   <main class="relative flex size-full flex-row overflow-hidden bg-dark-400">
     <PdfDocumentViewer ref="viewerRef" :src="pdfDataUri" :is-loading="isPreviewLoading" class="flex-1" />
 
-    <AppSidebar v-model:open="isDrawerOpen" as-drawer-on-mobile :class="!isDrawerOpen ? 'md:hidden' : 'md:flex'">
+    <AppSidebar v-model:open="isDrawerOpen" as-drawer-on-mobile>
       <template #header>
         <h1 class="text-xl font-semi-bold capitalize tracking-tight text-white">
           {{ templateId.replace(/-/g, ' ') }}
