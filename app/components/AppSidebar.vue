@@ -110,7 +110,7 @@ function onHandleKeydown(e: KeyboardEvent) {
       @keydown="onHandleKeydown">
       <div class="h-1.5 w-12 rounded-full bg-primary-500" />
     </div>
-    <div class="scrollbar-hidden flex-1" :class="isDesktop || !asDrawerOnMobile || isOpen ? 'overflow-y-auto' : 'overflow-hidden'">
+    <div class="scrollbar-hidden flex-1 p-2" :class="isDesktop || !asDrawerOnMobile || isOpen ? 'overflow-y-auto' : 'overflow-hidden'">
       <slot name="header" />
       <slot />
     </div>

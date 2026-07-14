@@ -116,27 +116,28 @@ export default defineNuxtConfig({
       docUrl: '',
       matrixUrl: '',
       driveUrl: '',
-      //
-      cdnUrl: '',
-      turnUrl: '',
-      livekitUrl: '',
-      llhlsUrl: '',
       vapidKey: '',
+      livekitUrl: '',
       scripts: {
         googleAnalytics: {
           id: '',
         },
       },
+      // old
+      cdnUrl: '',
+      turnUrl: '',
+      llhlsUrl: '',
     },
     private: {
       livekitApiKey: '',
       livekitApiSecret: '',
-      mediaUrl: '',
       notionDbId: '',
       vapidKey: '',
       vapidSubject: '',
       matrixAdminPassword: '',
       matrixAdminAccessToken: '',
+      // old
+      mediaUrl: '',
     },
   },
   icon: {

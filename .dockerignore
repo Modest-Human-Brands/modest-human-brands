@@ -38,3 +38,5 @@ src-tauri
 # Docker files
 .dockerignore
 Dockerfile
+
+config

@@ -40,7 +40,7 @@ services:
       timeout: 5s
       retries: 3
     depends_on:
-      - connect-livekit
+      - livekit
     deploy:
       replicas: 1
       restart_policy:
@@ -49,7 +49,7 @@ services:
         max_attempts: 3
         window: 120s
 
-  connect-livekit:
+  livekit:
     image: livekit/livekit-server:latest
     command: --config /etc/livekit.yaml
     # ports:
@@ -67,7 +67,7 @@ services:
       retries: 3
       start_period: 15s
     depends_on:
-      - connect-livekit-redis
+      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
@@ -76,7 +76,7 @@ services:
         max_attempts: 3
         window: 120s
 
-  connect-livekit-egress:
+  livekit-egress:
     image: livekit/egress:latest
     environment:
       - EGRESS_CONFIG_FILE=/etc/egress.yaml
@@ -92,7 +92,7 @@ services:
       retries: 3
       start_period: 15s
     depends_on:
-      - connect-livekit-redis
+      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
@@ -101,7 +101,7 @@ services:
         max_attempts: 3
         window: 120s
 
-  connect-livekit-sip:
+  livekit-sip:
     image: livekit/sip:latest
     ports:
       - '5060:5060/udp'
@@ -118,7 +118,7 @@ services:
     #   retries: 3
     #   start_period: 15s
     depends_on:
-      - connect-livekit-redis
+      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
@@ -127,7 +127,7 @@ services:
         max_attempts: 3
         window: 120s
 
-  connect-livekit-redis:
+  livekit-redis:
     image: redis:7-alpine
     networks:
       - internal

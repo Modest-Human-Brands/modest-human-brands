@@ -28,7 +28,7 @@ services:
         condition: on-failure
         max_attempts: 3
 
-  connect-livekit:
+  livekit:
     image: livekit/livekit-server:latest
     command: --config /etc/livekit.yaml
     # ports:
@@ -40,14 +40,14 @@ services:
     networks:
       - internal
     depends_on:
-      - connect-livekit-redis
+      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         max_attempts: 3
 
-  connect-livekit-egress:
+  livekit-egress:
     image: livekit/egress:latest
     environment:
       - EGRESS_CONFIG_FILE=/etc/egress.yaml
@@ -57,15 +57,15 @@ services:
     networks:
       - internal
     depends_on:
-      - connect-livekit
-      - connect-livekit-redis
+      - livekit
+      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         max_attempts: 3
 
-  connect-livekit-sip:
+  livekit-sip:
     image: livekit/sip:latest
     ports:
       - '5060:5060/udp'
@@ -76,15 +76,15 @@ services:
     networks:
       - internal
     depends_on:
-      - connect-livekit
-      - connect-livekit-redis
+      - livekit
+      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         max_attempts: 3
 
-  connect-livekit-redis:
+  livekit-redis:
     image: redis:7-alpine
     networks:
       - internal

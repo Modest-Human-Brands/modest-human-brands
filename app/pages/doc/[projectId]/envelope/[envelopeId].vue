@@ -248,7 +248,7 @@ async function submitSignature() {
 </script>
 
 <template>
-  <main class="relative flex size-full h-dvh flex-col overflow-hidden bg-dark-500 md:flex-row">
+  <main class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
     <div v-if="verificationError || !doc" class="animate-fade-in flex h-full w-full flex-col items-center justify-center p-6 text-center">
       <div class="mx-auto mb-6 flex size-24 items-center justify-center rounded-full bg-alert-500/20 text-alert-500">
         <NuxtIcon name="local:cross" class="text-5xl" />
@@ -322,7 +322,7 @@ async function submitSignature() {
                   class="flex flex-col items-center justify-center gap-1.5 rounded-xl border p-3 text-center transition-all"
                   :class="signingMethod === 'server' ? 'border-primary-500 bg-primary-500/10 text-white' : 'border-dark-400 bg-dark-500 text-light-500 hover:text-white'"
                   @click="signingMethod = 'server'">
-                  <NuxtIcon name="local:cloud" class="text-xl" />
+                  <NuxtIcon name="local:database" class="text-xl" />
                   <span class="text-xs font-semi-bold">Cloud Electronic</span>
                 </button>
 
