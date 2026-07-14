@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.5
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.4...v0.9.5)
+
+### 💅 Refactors
+
+- Rename connect-livekit services to livekit for consistency ([9c631d0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/9c631d0))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.4
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.3...v0.9.4)
