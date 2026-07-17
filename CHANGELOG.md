@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.6
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.5...v0.9.6)
+
+### 🏡 Chore
+
+- Update Docker actions and fix formatting in Vue components ([1007acb](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1007acb))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.5
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.4...v0.9.5)
