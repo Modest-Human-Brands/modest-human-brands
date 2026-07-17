@@ -1,17 +1,19 @@
 services:
   app:
-    image: ghcr.io/modest-human-brands/modest-human-brands:latest
+    build: .
     env_file:
       - .env
+    environment:
+      - NITRO_PUBLIC_DOC_URL=http://doc:3000
     volumes:
       - modest-human-brands_data:/app/.data
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         max_attempts: 3
+    ports:
+      - 3000:3000
 
   connect:
     image: ghcr.io/modest-human-brands/mconnect:latest
@@ -20,13 +22,13 @@ services:
     volumes:
       - mconnect-config:/app/config
       - mconnect-data:/app/.data
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         max_attempts: 3
+    ports:
+      - 5100:3000
 
   livekit:
     image: livekit/livekit-server:latest
@@ -37,8 +39,6 @@ services:
     #   - "50000-60000:50000-60000/udp"
     volumes:
       - /root/modest-human-brands/mconnect/config/livekit.yaml:/etc/livekit.yaml
-    networks:
-      - internal
     depends_on:
       - livekit-redis
     deploy:
@@ -54,8 +54,6 @@ services:
     volumes:
       - /root/modest-human-brands/mconnect/config/egress.yaml:/etc/egress.yaml
       - /root/modest-human-brands/mconnect/recordings:/recordings
-    networks:
-      - internal
     depends_on:
       - livekit
       - livekit-redis
@@ -73,8 +71,6 @@ services:
       - '10000-10100:10000-10100/udp'
     volumes:
       - /root/modest-human-brands/mconnect/config/sip.yaml:/sip/config.yaml
-    networks:
-      - internal
     depends_on:
       - livekit
       - livekit-redis
@@ -86,8 +82,6 @@ services:
 
   livekit-redis:
     image: redis:7-alpine
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
@@ -95,20 +89,20 @@ services:
         max_attempts: 3
 
   doc:
-    image: ghcr.io/modest-human-brands/mdoc:latest
+    build: ../code-doc
     env_file:
       - .env
     volumes:
       - mdoc-asset:/app/asset
       - mdoc-document:/app/document
       - mdoc-static:/app/static
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         max_attempts: 3
+    ports:
+      - 3002:3000
 
   drive:
     image: ghcr.io/modest-human-brands/mdrive:latest
@@ -117,8 +111,6 @@ services:
     volumes:
       - mdrive-data:/app/data
       - mdrive-static:/app/static
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
@@ -131,8 +123,6 @@ services:
       - .env
     volumes:
       - mdrive-static:/app/static
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
@@ -152,53 +142,49 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/.data
+      device: ./.data
 
   mconnect-config:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mconnect/config
+      device: ../mconnect/config
   mconnect-data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mconnect/.data
+      device: ../mconnect/.data
 
   mdoc-asset:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mdoc/asset
+      device: ../code-doc/asset
   mdoc-document:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mdoc/document
+      device: ../code-doc/document
   mdoc-static:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mdoc/static
+      device: ../code-doc/static
 
   mdrive-data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mdrive/data
+      device: ../mdrive/data
   mdrive-static:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /root/modest-human-brands/mdrive/static
-
-networks:
-  internal:
-    driver: overlay
+      device: ../mdrive/static

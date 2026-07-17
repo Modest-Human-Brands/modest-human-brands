@@ -292,9 +292,9 @@ async function submitSignature() {
           </button>
         </template>
 
-        <div v-if="isSuccess" class="animate-fade-in flex h-full flex-col justify-center gap-6 pb-20 text-center">
+        <div v-if="isSuccess" class="animate-fade-in flex h-full flex-col justify-center gap-6 text-center">
           <div class="mx-auto flex size-24 items-center justify-center rounded-full bg-success-500/20 text-success-500">
-            <NuxtIcon name="local:check-circle" class="text-6xl" />
+            <NuxtIcon name="local:check" class="text-2xl" />
           </div>
           <div>
             <h2 class="text-2xl font-semi-bold text-white">Document Signed!</h2>
