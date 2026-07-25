@@ -105,7 +105,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="space-y-4 pt-4">
+  <div class="space-y-4">
     <div class="scrollbar-hidden -ml-8 overflow-x-auto py-1 pl-8">
       <table class="w-full min-w-[640px] table-fixed border-collapse text-left">
         <thead>

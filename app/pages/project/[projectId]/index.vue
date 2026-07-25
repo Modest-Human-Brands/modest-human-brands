@@ -142,15 +142,15 @@ function formatDateDisplay(dateStr: string | undefined): string {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start overflow-hidden bg-dark-400 font-main text-white">
+  <div class="flex h-screen w-screen items-start justify-start overflow-hidden bg-dark-400 font-main">
     <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" active-key="project" hydrate-on-idle />
 
     <div class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
-      <header class="flex shrink-0 items-center justify-between border-b border-dark-600/40 px-4 py-4 md:px-8">
+      <header class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-4 py-4 md:px-8">
         <div class="flex items-center gap-4">
           <NuxtIcon name="local:target" class="text-4xl" />
           <div class="flex flex-col">
-            <span class="w-full bg-transparent text-2xl font-semi-bold tracking-tight text-white placeholder:text-light-500 focus:outline-none md:text-3xl">
+            <span class="d:text-2xl w-full whitespace-nowrap text-xl">
               {{ formData.title }}
             </span>
           </div>
@@ -172,7 +172,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
       </header>
 
       <div class="flex min-h-0 grow flex-col overflow-hidden lg:flex-row">
-        <main class="scrollbar-hidden flex-1 space-y-6 overflow-y-auto p-4 md:p-8">
+        <main class="scrollbar-hidden flex-1 space-y-4 overflow-y-auto p-4 md:space-y-6 md:p-8">
           <div v-if="pending" class="mx-auto max-w-4xl animate-pulse space-y-6">
             <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
               <div v-for="i in 8" :key="i" class="h-12 rounded-lg bg-dark-500" />
@@ -181,33 +181,33 @@ function formatDateDisplay(dateStr: string | undefined): string {
           </div>
 
           <div v-else class="mx-auto max-w-4xl space-y-6">
-            <div class="grid grid-cols-2 gap-6 pb-4 md:grid-cols-4">
+            <div class="grid grid-cols-2 gap-6 fill-light-500 text-light-500 md:grid-cols-4">
               <div class="flex flex-col gap-1">
-                <span class="flex items-center gap-2 text-sm font-regular text-light-500">
-                  <NuxtIcon name="local:grid" class="shrink-0 text-xl text-light-400" />
+                <span class="flex items-center gap-2 text-base">
+                  <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Index
                 </span>
-                <span class="pl-7 text-base font-semi-bold text-white">{{ formData.index || '0' }}</span>
+                <span class="pl-7 text-base font-semi-bold">{{ formData.index || '0' }}</span>
               </div>
 
               <div class="flex flex-col gap-1">
-                <span class="flex items-center gap-2 text-sm font-regular text-light-500">
-                  <NuxtIcon name="local:grid" class="shrink-0 text-xl text-light-400" />
+                <span class="flex items-center gap-2 text-base">
+                  <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Slug
                 </span>
-                <button type="button" class="truncate pl-7 text-left text-base font-semi-bold text-white hover:text-primary-400" @click="copy(formData.slug)">
+                <button type="button" class="truncate pl-7 text-left text-base font-semi-bold hover:text-primary-400" @click="copy(formData.slug)">
                   {{ formData.slug || 'untitled' }}
-                  <span v-if="copied" class="ml-1 text-sm text-success-500">(Copied)</span>
+                  <span v-if="copied" class="ml-1 text-base text-success-500">(Copied)</span>
                 </button>
               </div>
 
               <div class="flex flex-col gap-1">
-                <span class="flex items-center gap-2 text-sm font-regular text-light-500">
-                  <NuxtIcon name="local:grid" class="shrink-0 text-xl text-light-400" />
+                <span class="flex items-center gap-2 text-base">
+                  <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Status
                 </span>
                 <div class="pl-7">
-                  <span class="inline-flex items-center gap-2 rounded-full bg-dark-500 px-3 py-1 text-sm font-semi-bold text-white">
+                  <span class="inline-flex items-center gap-2 rounded-full bg-dark-500 px-3 py-1 text-base font-semi-bold">
                     <span class="size-2 rounded-full bg-primary-500" />
                     {{ formData.status }}
                   </span>
@@ -215,55 +215,53 @@ function formatDateDisplay(dateStr: string | undefined): string {
               </div>
 
               <div class="flex flex-col gap-1">
-                <span class="flex items-center gap-2 text-sm font-regular text-light-500">
-                  <NuxtIcon name="local:grid" class="shrink-0 text-xl text-light-400" />
+                <span class="flex items-center gap-2 text-base">
+                  <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Segment
                 </span>
-                <input v-model="formData.segment" type="text" class="w-full bg-transparent pl-7 text-base font-semi-bold text-white focus:text-primary-400 focus:outline-none" />
+                <input v-model="formData.segment" type="text" class="w-full bg-transparent pl-7 text-base font-semi-bold focus:text-primary-400 focus:outline-none" />
               </div>
             </div>
 
-            <div class="flex flex-col py-2">
+            <div class="flex flex-col fill-light-500 py-2 text-light-500">
               <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-                <span class="flex items-center gap-3 font-regular text-light-500">
-                  <NuxtIcon name="local:grid" class="shrink-0 text-2xl text-light-400" />
+                <span class="flex items-center gap-3">
+                  <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Address
                 </span>
-                <input v-model="formData.shootLocation" type="text" class="w-full truncate bg-transparent font-regular text-white focus:text-primary-400 focus:outline-none" />
+                <input v-model="formData.shootLocation" type="text" class="w-full truncate bg-transparent focus:text-primary-400 focus:outline-none" />
               </div>
 
               <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-                <span class="flex items-center gap-3 font-regular text-light-500">
-                  <NuxtIcon name="local:calendar" class="shrink-0 text-2xl text-light-400" />
+                <span class="flex items-center gap-3">
+                  <NuxtIcon name="local:calendar" class="shrink-0 text-[28px] md:text-[32px]" />
                   Date
                 </span>
-                <span class="font-regular text-white">{{ formatDateDisplay(formData.shootDate) }}</span>
+                <span class=" ">{{ formatDateDisplay(formData.shootDate) }}</span>
               </div>
 
               <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-                <span class="flex items-center gap-3 font-regular text-light-500">
-                  <NuxtIcon name="local:person" class="shrink-0 text-2xl text-light-400" />
+                <span class="flex items-center gap-3">
+                  <NuxtIcon name="local:person" class="shrink-0 text-[28px] md:text-[32px]" />
                   Client
                 </span>
-                <span class="cursor-pointer font-regular text-white underline decoration-white/20 underline-offset-4 hover:decoration-white">
+                <span class="cursor-pointer underline decoration-white/20 underline-offset-4 hover:decoration-white">
                   {{ formData.clientName }}
                 </span>
               </div>
 
               <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-                <span class="flex items-center gap-3 font-regular text-light-500">
-                  <NuxtIcon name="local:wallet" class="shrink-0 text-2xl text-light-400" />
+                <span class="flex items-center gap-3">
+                  <NuxtIcon name="local:wallet" class="shrink-0 text-[28px] md:text-[32px]" />
                   Budget
                 </span>
-                <span class="font-regular text-white">{{ formatCurrency(formData.budget) }}</span>
+                <span class=" ">{{ formatCurrency(formData.budget) }}</span>
               </div>
             </div>
 
             <ProjectScopeTable ref="scopeTableRef" v-model="formData.deliverables" :budget="formData.budget" />
 
-            <div class="pt-6">
-              <AppEditor v-model="formData.additional" class="w-full" />
-            </div>
+            <AppEditor v-model="formData.additional" class="w-full" />
           </div>
         </main>
       </div>
