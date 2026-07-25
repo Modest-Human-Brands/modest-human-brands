@@ -17,7 +17,7 @@ const { data: compliances, pending } = await useFetch('/api/compliance', { defau
         <CardComplianceRow v-for="compliance in compliances" :key="compliance.id" :item="compliance" />
       </div>
       <div v-else class="flex h-full flex-col items-center justify-center text-white/40">
-        <NuxtIcon name="local:court-hammer" class="mb-4 text-4xl opacity-50" />
+        <NuxtIcon name="local:gravel" class="mb-4 text-4xl opacity-50" />
         <p class="text-sm font-semi-bold">No complience found.</p>
       </div>
     </div>

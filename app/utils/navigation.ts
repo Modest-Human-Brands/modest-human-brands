@@ -83,7 +83,7 @@ export const SECONDARY_NAVIGATION_TABS = [
   {
     id: 'compliance',
     title: 'Compliance',
-    icon: 'local:court-hammer',
+    icon: 'local:gravel',
     description: 'Manage all your compliances here',
     to: '/compliance',
   },
