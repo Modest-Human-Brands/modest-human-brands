@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.9.7
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.6...v0.9.7)
+
+### 🚀 Enhancements
+
+- Enhance project page features and improve markdown conversion ([a0fc5c0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/a0fc5c0))
+
+### 🎨 Styles
+
+- Improve layout and spacing in ProjectScopeTable and project index page ([4ed8d70](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4ed8d70))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.6
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.5...v0.9.6)
