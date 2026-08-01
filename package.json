@@ -65,7 +65,7 @@
     "@tiptap/extensions": "^3.29.2",
     "@tiptap/suggestion": "^3.29.2",
     "@types/web-push": "^3.6.4",
-    "@unhead/vue": "^2.1.16",
+    "@unhead/vue": "^3.2.3",
     "@videojs/html": "^10.0.0-beta.25",
     "@vite-pwa/nuxt": "^1.1.1",
     "@vueuse/core": "^14.4.0",
