@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.9.8
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.7...v0.9.8)
+
+### 🏡 Chore
+
+- Update nuxt configuration and dependencies ([c98d172](https://github.com/Modest-Human-Brands/modest-human-brands/commit/c98d172))
+- Update @unhead/vue dependency to version 3.2.3 ([59a5118](https://github.com/Modest-Human-Brands/modest-human-brands/commit/59a5118))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.7
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.6...v0.9.7)
