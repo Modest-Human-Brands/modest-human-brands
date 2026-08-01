@@ -106,7 +106,7 @@ export default defineNuxtConfig({
     '/api/**': { cors: true },
   },
   runtimeConfig: {
-    app: {
+    meta: {
       version: '',
       buildTime: '',
     },
