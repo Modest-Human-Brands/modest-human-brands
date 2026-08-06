@@ -1,4 +1,4 @@
-FROM oven/bun:1-alpine AS builder
+FROM oven/bun:1-alpine@sha256:5acc90a93e91ff07bf72aa90a7c9f0fa189765aec90b47bdbf2152d2196383c0 AS builder
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ COPY . .
 
 RUN bun run build
 
-FROM oven/bun:1-alpine AS runner
+FROM oven/bun:1-alpine@sha256:5acc90a93e91ff07bf72aa90a7c9f0fa189765aec90b47bdbf2152d2196383c0 AS runner
 
 ARG VERSION
 ARG BUILD_TIME
