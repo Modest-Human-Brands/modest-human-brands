@@ -16,7 +16,7 @@ services:
       - 3000:3000
 
   connect:
-    image: ghcr.io/modest-human-brands/mconnect:latest
+    image: ghcr.io/modest-human-brands/mconnect:latest@sha256:2e40d9637f9efe709667e564d7a9d68782c477e94bfb520afe39a0df9b860537
     env_file:
       - .env
     volumes:
@@ -31,7 +31,7 @@ services:
       - 5100:3000
 
   livekit:
-    image: livekit/livekit-server:latest
+    image: livekit/livekit-server:latest@sha256:3497163e15c48fef6e7830c78716f9e9d5edc28abf7aa90b61c86e93bbc306b1
     command: --config /etc/livekit.yaml
     # ports:
     #   - "7881:7881/tcp"
@@ -48,7 +48,7 @@ services:
         max_attempts: 3
 
   livekit-egress:
-    image: livekit/egress:latest
+    image: livekit/egress:latest@sha256:14c1222a0d4a1e440e2cb7e3d53429a5c1a2c9277abae7ac79be336ea32fea25
     environment:
       - EGRESS_CONFIG_FILE=/etc/egress.yaml
     volumes:
@@ -64,7 +64,7 @@ services:
         max_attempts: 3
 
   livekit-sip:
-    image: livekit/sip:latest
+    image: livekit/sip:latest@sha256:a906ae85f8c5376d22d43fe87c98ed4d35fbf9a45b4e6ab652294615f17607e0
     ports:
       - '5060:5060/udp'
       - '5060:5060/tcp'
@@ -81,7 +81,7 @@ services:
         max_attempts: 3
 
   livekit-redis:
-    image: redis:7-alpine
+    image: redis:7-alpine@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2
     deploy:
       replicas: 1
       restart_policy:
@@ -105,7 +105,7 @@ services:
       - 3002:3000
 
   drive:
-    image: ghcr.io/modest-human-brands/mdrive:latest
+    image: ghcr.io/modest-human-brands/mdrive:latest@sha256:4498fc81e2fbabffb589f0b0c85ed5e4cf4d420f8bd56258dcb21cffb8e8d520
     env_file:
       - .env
     volumes:
@@ -118,7 +118,7 @@ services:
         max_attempts: 3
 
   media:
-    image: ghcr.io/modest-human-brands/mmedia:latest
+    image: ghcr.io/modest-human-brands/mmedia:latest@sha256:46adfeebe55fe47ce909be7ab7a9d3cee04b4f9b72e30100fb01023a71055338
     env_file:
       - .env
     volumes:
