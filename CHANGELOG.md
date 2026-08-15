@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.10.0
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.8...v0.10.0)
+
+### 🚀 Enhancements
+
+- ⚠️ Integrate nuxtjs-mcp-toolkit and add health tool ([4cf8c57](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4cf8c57))
+
+### 🏡 Chore
+
+- Update dependencies and add desktop capabilities ([bba53f6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/bba53f6))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️ Integrate nuxtjs-mcp-toolkit and add health tool ([4cf8c57](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4cf8c57))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.9.8
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.7...v0.9.8)
