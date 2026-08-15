@@ -27,7 +27,7 @@ const links = {
       <div class="grid gap-12 md:grid-cols-4">
         <div class="md:col-span-2">
           <div class="mb-4 text-xl font-semi-bold">Modest Human Brands</div>
-          <p class="mb-6 max-w-md text-sm text-white/60">Autonomous Next-Gen Media Operating System for creative teams</p>
+          <p class="mb-6 max-w-md text-sm text-white/60">The Project Management Software for creative teams</p>
           <div class="flex gap-4">
             <NuxtLink
               v-for="social in links.social"

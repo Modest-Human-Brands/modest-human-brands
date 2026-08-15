@@ -1,7 +1,7 @@
 {
   "name": "modest-human-brands",
   "version": "0.9.8",
-  "description": "Autonomous Next-Gen Media Operating System Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist",
+  "description": "The Project Management Software Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist",
   "author": "Shirsendu Bairagi <shirsendu2001@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -54,6 +54,7 @@
     "@regle/nuxt": "^1.29.1",
     "@tato30/vue-pdf": "^2.1.1",
     "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-updater": "~2",
     "@tiptap/extension-drag-handle-vue-3": "^3.30.1",
     "@tiptap/extension-history": "^3.30.1",
     "@tiptap/extension-table": "^3.30.1",

@@ -1,6 +1,6 @@
 # Modest Human Brands — Technical Design System & UI Specifications
 
-This document defines the formal design system, UI tokens, layout structures, component standards, and aesthetic guidelines for the **Modest Human Brands (MHB)** platform — an Autonomous Next-Gen Media Operating System integrating **MWap**, **MConnect**, **MDoc**, **MCoordinate**, **MSync**, **MMedia**, **MDrive**, and **MAssist**.
+This document defines the formal design system, UI tokens, layout structures, component standards, and aesthetic guidelines for the **Modest Human Brands (MHB)** platform — an Autonomous The Project Management Software integrating **MWap**, **MConnect**, **MDoc**, **MCoordinate**, **MSync**, **MMedia**, **MDrive**, and **MAssist**.
 
 ---
 

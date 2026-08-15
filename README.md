@@ -12,7 +12,7 @@
 
 ![Landing](public/previews/landing.webp)
 
-> Autonomous Next-Gen Media Operating System Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist
+> The Project Management Software Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist
 
 - 📦 SSR
 - 🖼️ OG Tags

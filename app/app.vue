@@ -2,7 +2,7 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
 const title = `Modest Human Brands`
-const description = `Autonomous Next-Gen Media Operating System`
+const description = `The Project Management Software`
 
 const {
   app: { buildTime },

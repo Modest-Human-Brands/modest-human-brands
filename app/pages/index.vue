@@ -6,7 +6,7 @@ if (loggedIn.value) {
 }
 
 const title = 'Modest Human Brands'
-const description = 'Autonomous Next-Gen Media Operating System'
+const description = 'The Project Management Software'
 
 const {
   public: { siteUrl },
