@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.1
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.0...v0.10.1)
+
+### 💅 Refactors
+
+- The landing page and added new waitlist page, styles also updated ([bf346bc](https://github.com/Modest-Human-Brands/modest-human-brands/commit/bf346bc))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.0
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.9.8...v0.10.0)
