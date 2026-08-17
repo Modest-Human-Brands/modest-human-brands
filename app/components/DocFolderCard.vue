@@ -16,7 +16,7 @@ const getStatusColor = (status: string) => {
     COMPLETED: 'bg-success-500',
     DELIVERED: 'bg-success-500',
     DRAFT: 'bg-warning-500',
-    SENT: 'bg-primary-500',
+    SENT: 'bg-accent-500',
     VOID: 'bg-alert-500',
   }
   return map[normalized] || 'bg-light-500'

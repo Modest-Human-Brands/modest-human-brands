@@ -47,7 +47,7 @@ async function handleCreatePolicy() {
             type="text"
             placeholder="e.g. Service Level Agreement"
             required
-            class="rounded-xl border border-white/10 bg-dark-500 px-4 py-2.5 text-sm text-white outline-none focus:border-primary-500"
+            class="rounded-xl border border-white/10 bg-dark-500 px-4 py-2.5 text-sm text-white outline-none focus:border-accent-500"
             @input="generateSlug(newTitle)" />
         </div>
 
@@ -59,12 +59,12 @@ async function handleCreatePolicy() {
             placeholder="service-level-agreement"
             required
             pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
-            class="font-mono rounded-xl border border-white/10 bg-dark-500 px-4 py-2 text-xs text-light-400 outline-none focus:border-primary-500" />
+            class="font-mono rounded-xl border border-white/10 bg-dark-500 px-4 py-2 text-xs text-light-400 outline-none focus:border-accent-500" />
         </div>
 
         <div class="mt-4 flex items-center justify-end gap-3">
           <button type="button" class="px-4 py-2 text-xs text-light-500 hover:text-white">Cancel</button>
-          <button type="submit" :disabled="isCreating" class="rounded-xl bg-primary-500 px-5 py-2.5 text-xs font-semi-bold text-white disabled:opacity-50">
+          <button type="submit" :disabled="isCreating" class="rounded-xl bg-accent-500 px-5 py-2.5 text-xs font-semi-bold text-white disabled:opacity-50">
             {{ isCreating ? 'Creating...' : 'Initialize Document' }}
           </button>
         </div>

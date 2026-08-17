@@ -186,7 +186,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   <main v-if="doc" class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
     <PdfDocumentViewer ref="viewerRef" :src="doc.previewUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }" class="flex-1">
       <template #toolbar-actions>
-        <button type="button" class="shrink-0 transition-colors hover:text-primary-500" :class="isDrawerOpen ? 'text-primary-500' : 'text-white'" @click="isDrawerOpen = true">
+        <button type="button" class="shrink-0 transition-colors hover:text-accent-500" :class="isDrawerOpen ? 'text-accent-500' : 'text-white'" @click="isDrawerOpen = true">
           <NuxtIcon name="local:signature" class="text-xl" />
         </button>
       </template>
@@ -254,7 +254,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
               class="rounded-full px-2 py-0.5 text-[10px] font-semi-bold uppercase tracking-wider"
               :class="{
                 'bg-success-500/20 text-success-500': doc.status === 'Completed',
-                'bg-primary-500/20 text-primary-500': doc.status === 'Signed',
+                'bg-accent-500/20 text-accent-500': doc.status === 'Signed',
                 'bg-alert-500/20 text-alert-500': doc.status === 'Void',
               }">
               {{ doc.status }}
@@ -282,7 +282,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                   <button
                     v-if="signer.status !== 'COMPLETED'"
                     :disabled="isGeneratingLink === signer.email"
-                    class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-semi-bold text-light-400 transition-colors hover:border-primary-500 hover:text-white disabled:opacity-50"
+                    class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-semi-bold text-light-400 transition-colors hover:border-accent-500 hover:text-white disabled:opacity-50"
                     @click="generateSessionLink(signer.name, signer.email, index !== doc.routingQueue.length - 1)">
                     <NuxtIcon v-if="isGeneratingLink === signer.email" name="local:loader" class="animate-spin text-sm" />
                     <NuxtIcon v-else name="local:node" class="text-sm" />
@@ -299,10 +299,10 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                 <input
                   readonly
                   :value="magicLink"
-                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
+                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-accent-500" />
                 <div class="flex items-center gap-3 pt-1">
                   <button
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-primary-500"
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-accent-500"
                     @click="copyLink">
                     <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
                     <span v-else>Copy Link</span>
@@ -311,7 +311,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                   <a
                     :href="magicLink"
                     target="_blank"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-accent-600 active:scale-95">
                     Open Link
                     <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
                   </a>
@@ -329,17 +329,17 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                     v-model="signer.name"
                     type="text"
                     placeholder="Full Name"
-                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-accent-500" />
                   <input
                     v-model="signer.email"
                     type="email"
                     placeholder="Email Address"
-                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-accent-500" />
                   <input
                     v-model="signer.role"
                     type="text"
                     placeholder="Role (e.g. Client, Contractor)"
-                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-primary-500" />
+                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-accent-500" />
                 </div>
               </div>
             </div>
@@ -351,10 +351,10 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                 <input
                   readonly
                   :value="magicLink"
-                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-primary-500" />
+                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-accent-500" />
                 <div class="flex items-center gap-3 pt-1">
                   <button
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-primary-500"
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-accent-500"
                     @click="copyLink">
                     <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
                     <span v-else>Copy Link</span>
@@ -363,7 +363,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                   <a
                     :href="magicLink"
                     target="_blank"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-primary-600 active:scale-95">
+                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-accent-600 active:scale-95">
                     Open Link
                     <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
                   </a>
@@ -391,7 +391,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
           <h3 class="text-sm font-semi-bold text-white">Timeline</h3>
           <div class="relative ml-2 mt-2 flex flex-col gap-8 border-l border-white/10 pb-4 pl-6">
             <div v-for="item in doc.timeline" :key="item.id" class="relative">
-              <div class="absolute -left-[30px] top-1 h-2.5 w-2.5 rounded-full bg-primary-500 ring-[6px] ring-dark-500" />
+              <div class="absolute -left-[30px] top-1 h-2.5 w-2.5 rounded-full bg-accent-500 ring-[6px] ring-dark-500" />
               <div class="mb-2 flex items-center justify-between text-xs text-light-500">
                 <span>{{ item.date }}</span>
                 <span>{{ item.time }}</span>

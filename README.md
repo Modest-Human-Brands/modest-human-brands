@@ -12,7 +12,7 @@
 
 ![Landing](public/previews/landing.webp)
 
-> The Project Management Software Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist
+> The collaborative workflow management app built for creatives.
 
 - 📦 SSR
 - 🖼️ OG Tags
@@ -123,7 +123,7 @@ dir public/pwa/screenshot
 
 ## Signing Config
 
-put upload-keystore.jks, keystore.properties into src-tauri/gen/android
+put release-keystore.jks, keystore.properties into src-tauri/gen/android
 
 add those files into the .gitignore on the same folder
 

@@ -19,7 +19,7 @@ function onSubmit() {
 
 <template>
   <div class="pointer-events-auto absolute z-40 flex items-center gap-2" :style="{ left: `${x}%`, top: `${y}%` }" @click.stop>
-    <div class="size-6 shrink-0 rounded-bl-none rounded-br-full rounded-tl-full rounded-tr-full bg-primary-500 shadow-2xl" />
+    <div class="size-6 shrink-0 rounded-bl-none rounded-br-full rounded-tl-full rounded-tr-full bg-accent-500 shadow-2xl" />
 
     <!-- Dark Floating Pill Input -->
     <form class="flex w-72 items-center gap-2 rounded-full border border-white/15 bg-dark-500/95 p-1.5 pl-4 shadow-2xl backdrop-blur-xl" @submit.prevent="onSubmit">

@@ -98,7 +98,7 @@ const isHeaderCollapsed = computed(() => y.value > 50)
         </div>
 
         <div class="flex items-center gap-3">
-          <button class="flex items-center gap-2 rounded-xl bg-primary-500/80 px-4 py-2 text-xs font-semi-bold text-white shadow-lg hover:bg-primary-500" @click="isUploadStudioOpen = true">
+          <button class="flex items-center gap-2 rounded-xl bg-accent-500/80 px-4 py-2 text-xs font-semi-bold text-white shadow-lg hover:bg-accent-500" @click="isUploadStudioOpen = true">
             <NuxtIcon name="local:upload" class="text-lg md:text-base" />
             <span class="hidden md:inline">Upload Assets</span>
           </button>
@@ -119,7 +119,7 @@ const isHeaderCollapsed = computed(() => y.value > 50)
           v-for="tab in tabs"
           :key="tab.id"
           class="shrink-0 rounded-full px-4 py-1.5 text-xs font-semi-bold transition-all"
-          :class="activeTab === tab.id ? 'bg-primary-500 text-white shadow-md' : 'text-light-500 hover:bg-white/5 hover:text-white'"
+          :class="activeTab === tab.id ? 'bg-accent-500 text-white shadow-md' : 'text-light-500 hover:bg-white/5 hover:text-white'"
           @click="
             () => {
               activeTab = tab.id
@@ -156,7 +156,7 @@ const isHeaderCollapsed = computed(() => y.value > 50)
           v-if="selectedIds.size"
           class="fixed bottom-4 left-1/2 z-50 flex w-[90vw] -translate-x-1/2 flex-wrap items-center justify-center gap-3 rounded-2xl border border-white/15 bg-dark-500/95 px-4 py-3.5 font-main text-xs text-white shadow-2xl backdrop-blur-xl md:bottom-8 md:w-auto md:flex-nowrap md:gap-4 md:px-6">
           <div class="flex items-center gap-2 font-semi-bold md:border-r md:border-white/10 md:pr-3">
-            <span class="flex size-5 items-center justify-center rounded-full bg-primary-500 text-[11px]">{{ selectedIds.size }}</span>
+            <span class="flex size-5 items-center justify-center rounded-full bg-accent-500 text-[11px]">{{ selectedIds.size }}</span>
             <span>Selected</span>
           </div>
 

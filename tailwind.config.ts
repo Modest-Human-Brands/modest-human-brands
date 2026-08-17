@@ -40,15 +40,20 @@ export default <Partial<Config>>{
         500: '#2B2B2B',
         600: '#3D3D3D',
       },
-      primary: {
-        400: '#6B9FFF',
-        500: '#4A85FF',
-        600: '#2E6BDF',
+      accent: {
+        400: '#6672FF',
+        500: '#5945EA',
+        600: '#4533CC',
+      },
+      info: {
+        400: '#66C1FF',
+        500: '#47A8EB',
+        600: '#338ECC',
       },
       success: {
-        400: '#6FFEC4',
-        500: '#48FEA7',
-        600: '#2DD985',
+        400: '#66FFB6',
+        500: '#47EB9C',
+        600: '#33CC83',
       },
       warning: {
         400: '#FFCF6B',
@@ -56,9 +61,9 @@ export default <Partial<Config>>{
         600: '#FF9F1A',
       },
       alert: {
-        400: '#FF6B6B',
-        500: '#FF4444',
-        600: '#E62E2E',
+        400: '#FF6680',
+        500: '#EB4864',
+        600: '#CC334D',
       },
     },
   },

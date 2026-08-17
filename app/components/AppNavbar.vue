@@ -38,8 +38,8 @@ const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TA
           replace>
           <NuxtIcon :name="item.icon" class="shrink-0 text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />
           <span class="hidden truncate md:block">{{ item.title }}</span>
-          <span v-if="item.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-primary-500 md:block" />
-          <span v-if="item.id === activeKey" class="absolute -right-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-primary-500 md:hidden" />
+          <span v-if="item.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-accent-500 md:block" />
+          <span v-if="item.id === activeKey" class="absolute -right-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-accent-500 md:hidden" />
         </NuxtLink>
       </div>
     </nav>
@@ -50,8 +50,8 @@ const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TA
       :class="settingsItem.id === activeKey ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'">
       <NuxtIcon :name="settingsItem.icon" class="shrink-0 text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />
       <span class="hidden truncate md:block">{{ settingsItem.title }}</span>
-      <span v-if="settingsItem.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-primary-500 md:block" />
-      <span v-if="settingsItem.id === activeKey" class="absolute -right-1 top-1/2 h-4 w-1 -translate-y-1/2 rounded-full bg-primary-500 md:hidden" />
+      <span v-if="settingsItem.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-accent-500 md:block" />
+      <span v-if="settingsItem.id === activeKey" class="absolute -right-1 top-1/2 h-4 w-1 -translate-y-1/2 rounded-full bg-accent-500 md:hidden" />
       <div
         class="pointer-events-none absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-dark-500 px-3 py-2 text-sm opacity-0  transition-opacity group-hover:opacity-100 md:hidden">
         {{ settingsItem.title }}

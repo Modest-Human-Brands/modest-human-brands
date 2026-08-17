@@ -48,7 +48,7 @@ const steps = reactive([
       <nav class="mb-12">
         <ol class="flex items-center justify-between">
           <li v-for="(step, index) in steps" :key="step.id" class="relative flex grow items-center gap-3">
-            <div class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semi-bold" :class="currentStep >= step.id ? 'bg-primary-500 text-white' : 'bg-dark-500 text-white'">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semi-bold" :class="currentStep >= step.id ? 'bg-accent-500 text-white' : 'bg-dark-500 text-white'">
               {{ step.id }}
             </div>
             <span class="text-sm font-semi-bold" :class="currentStep >= step.id ? 'text-white' : 'text-white'">
@@ -71,14 +71,14 @@ const steps = reactive([
               v-for="channel in channels"
               :key="channel.id"
               class="flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all"
-              :class="selectedChannelId === channel.id ? 'border-primary-500 bg-dark-500' : 'border-dark-600 bg-dark-400'"
+              :class="selectedChannelId === channel.id ? 'border-accent-500 bg-dark-500' : 'border-dark-600 bg-dark-400'"
               @click="selectedChannelId = channel.id">
               <div class="flex items-center gap-4">
-                <NuxtIcon :name="channel.icon" class="text-xl text-primary-500" />
+                <NuxtIcon :name="channel.icon" class="text-xl text-accent-500" />
                 <span class="text-sm font-semi-bold text-white">{{ channel.name }}</span>
               </div>
-              <div class="flex h-5 w-5 items-center justify-center rounded-full border" :class="selectedChannelId === channel.id ? 'border-primary-500' : 'border-dark-600'">
-                <div v-if="selectedChannelId === channel.id" class="h-2.5 w-2.5 rounded-full bg-primary-500" />
+              <div class="flex h-5 w-5 items-center justify-center rounded-full border" :class="selectedChannelId === channel.id ? 'border-accent-500' : 'border-dark-600'">
+                <div v-if="selectedChannelId === channel.id" class="h-2.5 w-2.5 rounded-full bg-accent-500" />
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ const steps = reactive([
                   v-model="searchQuery"
                   type="text"
                   placeholder="Search contacts by name or email"
-                  class="w-full rounded-lg border border-dark-600 bg-dark-400 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white focus:border-primary-500 focus:outline-none" />
+                  class="w-full rounded-lg border border-dark-600 bg-dark-400 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-white focus:border-accent-500 focus:outline-none" />
               </div>
               <button class="flex h-10 w-10 items-center justify-center rounded-lg border border-dark-600 bg-dark-400 text-white hover:bg-dark-500">
                 <NuxtIcon name="local:plus" />
@@ -112,7 +112,7 @@ const steps = reactive([
               v-for="person in recipients"
               :key="person.id"
               class="flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-all"
-              :class="selectedRecipientId === person.id ? 'border-primary-500 bg-dark-500' : 'border-dark-600 bg-dark-400'"
+              :class="selectedRecipientId === person.id ? 'border-accent-500 bg-dark-500' : 'border-dark-600 bg-dark-400'"
               @click="selectedRecipientId = person.id">
               <div class="flex items-center gap-4">
                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-dark-600 text-sm font-semi-bold uppercase text-white">
@@ -130,8 +130,8 @@ const steps = reactive([
               </div>
               <div class="flex items-center gap-4">
                 <span v-if="person.isExisting" class="rounded bg-success-600/10 px-2 py-0.5 text-sm font-semi-bold text-success-600"> Existing </span>
-                <div class="flex h-5 w-5 items-center justify-center rounded-full border" :class="selectedRecipientId === person.id ? 'border-primary-500' : 'border-dark-600'">
-                  <div v-if="selectedRecipientId === person.id" class="h-2.5 w-2.5 rounded-full bg-primary-500" />
+                <div class="flex h-5 w-5 items-center justify-center rounded-full border" :class="selectedRecipientId === person.id ? 'border-accent-500' : 'border-dark-600'">
+                  <div v-if="selectedRecipientId === person.id" class="h-2.5 w-2.5 rounded-full bg-accent-500" />
                 </div>
               </div>
             </div>

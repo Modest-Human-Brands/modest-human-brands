@@ -193,8 +193,8 @@ async function print() {
         <ClientOnly>
           <div class="flex w-full flex-col items-center">
             <div
-              :class="isActive ? 'border-primary-500 ring-2 ring-primary-500/20' : 'border-transparent'"
-              class="aspect-[3/4] w-full shrink-0 rounded border-2 bg-white transition-all hover:border-primary-500/50">
+              :class="isActive ? 'border-accent-500 ring-2 ring-accent-500/20' : 'border-transparent'"
+              class="aspect-[3/4] w-full shrink-0 rounded border-2 bg-white transition-all hover:border-accent-500/50">
               <VuePDF :pdf="pdf" :page="p" fit-parent />
             </div>
             <span class="mt-2 shrink-0 text-xs font-semi-bold text-light-500">{{ p }}</span>

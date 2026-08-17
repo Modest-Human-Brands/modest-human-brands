@@ -265,7 +265,7 @@ async function submitSignature() {
           <div
             v-for="f in getFieldsForPage(page, totalPages)"
             :key="f.id"
-            class="absolute z-10 flex items-center justify-center overflow-hidden border border-primary-500/50 bg-primary-500/10 text-black transition-colors"
+            class="absolute z-10 flex items-center justify-center overflow-hidden border border-accent-500/50 bg-accent-500/10 text-black transition-colors"
             :style="{ top: `${(viewportHeight - f.y - f.height) * scale}px`, left: `${f.x * scale}px`, width: `${f.width * scale}px`, height: `${f.height * scale}px` }">
             <NuxtImg v-if="f.type === 'SIGNATURE' && masterSignature" :src="masterSignature" class="size-full object-contain p-1" />
             <span
@@ -320,7 +320,7 @@ async function submitSignature() {
                 <button
                   type="button"
                   class="flex flex-col items-center justify-center gap-1.5 rounded-xl border p-3 text-center transition-all"
-                  :class="signingMethod === 'server' ? 'border-primary-500 bg-primary-500/10 text-white' : 'border-dark-400 bg-dark-500 text-light-500 hover:text-white'"
+                  :class="signingMethod === 'server' ? 'border-accent-500 bg-accent-500/10 text-white' : 'border-dark-400 bg-dark-500 text-light-500 hover:text-white'"
                   @click="signingMethod = 'server'">
                   <NuxtIcon name="local:database" class="text-xl" />
                   <span class="text-xs font-semi-bold">Cloud Electronic</span>
@@ -329,7 +329,7 @@ async function submitSignature() {
                 <button
                   type="button"
                   class="flex flex-col items-center justify-center gap-1.5 rounded-xl border p-3 text-center transition-all"
-                  :class="signingMethod === 'dsc' ? 'border-primary-500 bg-primary-500/10 text-white' : 'border-dark-400 bg-dark-500 text-light-500 hover:text-white'"
+                  :class="signingMethod === 'dsc' ? 'border-accent-500 bg-accent-500/10 text-white' : 'border-dark-400 bg-dark-500 text-light-500 hover:text-white'"
                   @click="signingMethod = 'dsc'">
                   <NuxtIcon name="local:usb" class="text-xl" />
                   <span class="text-xs font-semi-bold">USB DSC Token</span>
@@ -339,7 +339,7 @@ async function submitSignature() {
               <div v-if="signingMethod === 'dsc'" class="mt-2 flex flex-col gap-3 border-t border-dark-400 pt-3">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-regular text-light-400">USB Crypto Stick</span>
-                  <button type="button" class="hover:text-primary-300 flex items-center gap-1 text-xs font-semi-bold text-primary-400" @click="fetchDscCertificates">
+                  <button type="button" class="hover:text-accent-300 flex items-center gap-1 text-xs font-semi-bold text-accent-400" @click="fetchDscCertificates">
                     <NuxtIcon :name="isFetchingCerts ? 'local:loader' : 'local:refresh'" :class="{ 'animate-spin': isFetchingCerts }" />
                     {{ isFetchingCerts ? 'Detecting...' : 'Refresh Token' }}
                   </button>

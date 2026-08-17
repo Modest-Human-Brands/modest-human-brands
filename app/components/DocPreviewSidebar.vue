@@ -61,7 +61,7 @@ const sidebarActions: readonly SidebarAction[] = [
             :key="action.id"
             type="button"
             class="font-medium group flex w-full items-center gap-3.5 rounded-lg px-3 py-2.5 text-left text-sm text-light-400 transition-colors hover:bg-white/5 hover:text-white">
-            <NuxtIcon :name="action.icon" class="text-lg text-light-500 transition-colors group-hover:text-primary-400" />
+            <NuxtIcon :name="action.icon" class="text-lg text-light-500 transition-colors group-hover:text-accent-400" />
             <span class="truncate">{{ action.label }}</span>
           </button>
         </nav>

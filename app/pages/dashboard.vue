@@ -17,7 +17,7 @@ const greeting = computed(() => {
 })
 
 const metrics = [
-  { label: 'Active Contacts', value: '142', trend: '+12%', icon: 'local:person', color: 'text-primary-400' },
+  { label: 'Active Contacts', value: '142', trend: '+12%', icon: 'local:person', color: 'text-accent-400' },
   { label: 'Unread Messages', value: '8', trend: '-2', icon: 'local:chat', color: 'text-alert-500' },
   { label: 'Ongoing Projects', value: '12', trend: 'Steady', icon: 'local:kanban', color: 'text-success-500' },
 ]

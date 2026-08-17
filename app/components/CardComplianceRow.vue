@@ -16,7 +16,7 @@ defineProps<{
     :to="`/compliance/${item.slug}`"
     class="group grid grid-cols-[1fr_auto] items-center border-b border-white/5 px-6 py-4 text-sm transition-colors hover:bg-white/5 md:grid-cols-[2.5fr_1.5fr_1.5fr_1fr_60px]">
     <div class="flex items-center gap-2 truncate pr-4">
-      <NuxtIcon name="local:folder" class="shrink-0 text-[28px] text-light-500 transition-colors group-hover:text-primary-400" />
+      <NuxtIcon name="local:folder" class="shrink-0 text-[28px] text-light-500 transition-colors group-hover:text-accent-400" />
       <span class="truncate text-base font-semi-bold text-white group-hover:underline">{{ item.title }}</span>
     </div>
 

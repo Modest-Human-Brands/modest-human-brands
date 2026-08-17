@@ -155,14 +155,17 @@ export default defineNuxtConfig({
     },
   },
   image: {
-    provider: 'ipx',
-    ipx: {
-      baseURL: `${process.env.NUXT_PUBLIC_CDN_URL}/media/image`,
-      modifiers: {
-        format: 'auto',
-        quality: 80,
+    provider: 'cdn',
+    providers: {
+      cdn: {
+        provider: 'ipx',
+        options: {
+          baseURL: `${process.env.NUXT_PUBLIC_CDN_URL}/media/image`,
+        },
       },
     },
+    format: ['auto'],
+    quality: 80,
   },
   scripts: {
     registry: {
@@ -199,7 +202,7 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Modest Human Brands',
       short_name: 'MHB',
-      description: 'The Project Management Software Integrating MWap, MConnect, MDoc, MCoordinate, MSync, MMedia, MDrive, MAssist',
+      description: 'The collaborative workflow management app built for creatives.',
       theme_color: '#FFFFFF',
       background_color: '#FFFFFF',
       display: 'fullscreen',

@@ -1,17 +1,12 @@
 <template>
   <div class="relative flex min-h-screen w-screen items-center justify-start overflow-hidden">
-    <div class="pointer-events-none fixed inset-0 z-0">
-      <div
-        class="size-full"
-        style="
-          background-image: linear-gradient(to right, rgba(72, 254, 167, 0.1) 2px, transparent 2px), linear-gradient(to bottom, rgba(72, 254, 167, 0.1) 2px, transparent 2px);
-          background-size: 300px 300px;
-          background-position: center center;
-        " />
-      <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-      <div class="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black" />
+    <!-- Fixed background grid -->
+    <div class="pointer-events-none absolute left-0 right-0 top-56 z-10 flex justify-center opacity-40">
+      <img src="/images/bg-grid.svg" alt="" class="w-full max-w-[1080px] object-top" />
     </div>
-    <main class="relative isolate z-10 mx-auto w-full grow gap-4 overflow-hidden px-2 md:px-4">
+
+    <!-- Scrollable content -->
+    <main class="relative isolate z-20 mx-auto w-full grow gap-4 px-4 md:px-6">
       <slot />
     </main>
   </div>

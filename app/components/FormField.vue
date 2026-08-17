@@ -173,7 +173,7 @@ function handleFileUpload(event: Event) {
             <NuxtIcon name="local:cross" />
           </button>
         </div>
-        <button type="button" class="mt-1 flex w-fit items-center gap-2 text-sm font-semi-bold text-primary-400 transition-colors hover:text-primary-500" @click="addArrayItem">
+        <button type="button" class="mt-1 flex w-fit items-center gap-2 text-sm font-semi-bold text-accent-400 transition-colors hover:text-accent-500" @click="addArrayItem">
           <NuxtIcon name="local:plus" /> Add Item
         </button>
       </div>
@@ -194,7 +194,7 @@ function handleFileUpload(event: Event) {
             @update:model-value="updateObjectItem(index, String(subKey), $event)" />
         </div>
 
-        <button type="button" class="flex w-fit items-center gap-2 text-sm font-semi-bold text-primary-400 transition-colors hover:text-primary-500" @click="addBlueprintItem">
+        <button type="button" class="flex w-fit items-center gap-2 text-sm font-semi-bold text-accent-400 transition-colors hover:text-accent-500" @click="addBlueprintItem">
           <NuxtIcon name="local:plus" /> Add Item
         </button>
       </div>
@@ -207,7 +207,7 @@ function handleFileUpload(event: Event) {
       <div v-else-if="isSignature" class="flex w-full flex-col gap-2">
         <label
           v-if="!modelValue"
-          class="border-dark-300 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed bg-dark-500/30 text-light-500 transition-colors hover:border-primary-500 hover:bg-primary-500/10 hover:text-primary-400">
+          class="border-dark-300 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed bg-dark-500/30 text-light-500 transition-colors hover:border-accent-500 hover:bg-accent-500/10 hover:text-accent-400">
           <div class="flex items-center gap-2">
             <NuxtIcon name="local:upload" class="text-xl" />
             <span class="text-xs font-semi-bold uppercase tracking-wider">Upload Signature</span>

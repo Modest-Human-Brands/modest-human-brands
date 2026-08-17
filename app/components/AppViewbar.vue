@@ -53,8 +53,8 @@ const viewGroups: ViewItem[] = [
           @click="emit('select', group.id)">
           <NuxtIcon :name="group.icon" class="shrink-0 text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />
           <span class="truncate">{{ group.title }}</span>
-          <span v-if="group.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-primary-500 md:block" />
-          <span v-if="group.id === activeKey" class="absolute -left-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-primary-500 md:hidden" />
+          <span v-if="group.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-accent-500 md:block" />
+          <span v-if="group.id === activeKey" class="absolute -left-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-accent-500 md:hidden" />
         </button>
         <div v-if="group.children && group.children.length > 0" class="my-2 ml-4 flex flex-col gap-2 md:my-3 md:ml-5 md:gap-3">
           <button
@@ -66,8 +66,8 @@ const viewGroups: ViewItem[] = [
             @click="emit('select', subItem.id)">
             <NuxtIcon :name="subItem.icon" class="shrink-0 text-2xl transition-transform group-hover:scale-110 md:text-[26px]" />
             <span class="truncate">{{ subItem.title }}</span>
-            <span v-if="subItem.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-primary-500 md:block" />
-            <span v-if="subItem.id === activeKey" class="absolute -left-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-primary-500 md:hidden" />
+            <span v-if="subItem.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-accent-500 md:block" />
+            <span v-if="subItem.id === activeKey" class="absolute -left-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-accent-500 md:hidden" />
           </button>
         </div>
       </div>

@@ -22,13 +22,13 @@ const props = defineProps<{
 const statusConfig: Record<string, { dot: string; bg: string; text: string }> = {
   Plan: { dot: 'bg-light-500', bg: 'bg-white/5', text: 'text-light-500' },
   Quotation: { dot: 'bg-warning-500', bg: 'bg-warning-500/10', text: 'text-warning-500' },
-  Shoot: { dot: 'bg-primary-400', bg: 'bg-primary-500/10', text: 'text-primary-400' },
-  Edit: { dot: 'bg-primary-600', bg: 'bg-primary-600/10', text: 'text-primary-500' },
+  Shoot: { dot: 'bg-accent-400', bg: 'bg-accent-500/10', text: 'text-accent-400' },
+  Edit: { dot: 'bg-accent-600', bg: 'bg-accent-600/10', text: 'text-accent-500' },
   Delivered: { dot: 'bg-success-500', bg: 'bg-success-500/10', text: 'text-success-500' },
 }
 
 // Generates a consistent gradient placeholder based on the project ID
-const placeholderGradients = ['from-primary-600/40 to-dark-400', 'from-success-600/40 to-dark-400', 'from-warning-600/40 to-dark-400', 'from-alert-600/40 to-dark-400', 'from-light-500/30 to-dark-400']
+const placeholderGradients = ['from-accent-600/40 to-dark-400', 'from-success-600/40 to-dark-400', 'from-warning-600/40 to-dark-400', 'from-alert-600/40 to-dark-400', 'from-light-500/30 to-dark-400']
 
 const placeholderGradient = computed(() => {
   const id = props.project.id || ''
@@ -59,7 +59,7 @@ function formatDate(dateStr?: string) {
     </div>
 
     <div class="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-      <div class="absolute -top-12 left-1/2 h-32 w-3/4 -translate-x-1/2 rounded-full bg-primary-500/20 blur-[40px]" />
+      <div class="absolute -top-12 left-1/2 h-32 w-3/4 -translate-x-1/2 rounded-full bg-accent-500/20 blur-[40px]" />
     </div>
 
     <div class="relative z-10 p-1.5 pb-0 sm:p-2 sm:pb-0">
@@ -77,7 +77,7 @@ function formatDate(dateStr?: string) {
 
     <div class="relative z-10 flex flex-col gap-3 p-3.5 sm:gap-4 sm:p-5">
       <div class="flex items-start justify-between gap-3 sm:gap-4">
-        <h3 class="line-clamp-2 text-base font-semi-bold leading-snug text-white transition-colors group-hover:text-primary-400 sm:text-lg">
+        <h3 class="line-clamp-2 text-base font-semi-bold leading-snug text-white transition-colors group-hover:text-accent-400 sm:text-lg">
           {{ project.title }}
         </h3>
       </div>

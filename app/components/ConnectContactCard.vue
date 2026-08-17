@@ -43,7 +43,7 @@ function getChannelIcon(channel: ChannelType) {
         <NuxtIcon v-for="channel in contact.availableChannels" :key="channel" :name="getChannelIcon(channel)" class="text-[14px] text-white md:text-[16px]" />
       </div>
       <div class="flex justify-end">
-        <span v-if="contact.unreadCount" class="size-5 rounded-full bg-primary-500 p-1 text-center align-middle text-2xs text-white md:size-6 md:text-xs">
+        <span v-if="contact.unreadCount" class="size-5 rounded-full bg-accent-500 p-1 text-center align-middle text-2xs text-white md:size-6 md:text-xs">
           {{ contact.unreadCount }}
         </span>
       </div>

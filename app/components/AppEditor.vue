@@ -149,7 +149,7 @@ watch(
 }
 
 .tiptap ul[data-type='taskList'] input[type='checkbox'] {
-  @apply cursor-pointer accent-primary-500;
+  @apply cursor-pointer accent-accent-500;
 }
 
 .tiptap ul:not([data-type='taskList']) {
@@ -225,7 +225,7 @@ watch(
 }
 
 .tiptap blockquote {
-  @apply my-6 rounded-r border-l-4 border-primary-500 bg-light-600/10 px-4 py-3 italic text-dark-500 dark:bg-dark-600/40 dark:text-light-600;
+  @apply my-6 rounded-r border-l-4 border-accent-500 bg-light-600/10 px-4 py-3 italic text-dark-500 dark:bg-dark-600/40 dark:text-light-600;
 }
 
 .tiptap div[data-type='callout'] {
@@ -254,16 +254,16 @@ watch(
 }
 
 .tiptap .selectedCell:after {
-  @apply pointer-events-none absolute inset-0 z-10 bg-primary-400/20 content-[''];
+  @apply pointer-events-none absolute inset-0 z-10 bg-accent-400/20 content-[''];
 }
 
 .tiptap .column-resize-handle {
-  @apply pointer-events-none absolute bottom-0 right-[-2px] top-0 z-20 w-1 bg-primary-500;
+  @apply pointer-events-none absolute bottom-0 right-[-2px] top-0 z-20 w-1 bg-accent-500;
 }
 
 .tiptap code {
   /* font-mono */
-  @apply rounded-[0.4rem] bg-primary-400/20 px-[0.4em] py-[0.2em] text-[0.85rem] font-semi-bold text-primary-600 dark:text-primary-400;
+  @apply rounded-[0.4rem] bg-accent-400/20 px-[0.4em] py-[0.2em] text-[0.85rem] font-semi-bold text-accent-600 dark:text-accent-400;
 }
 
 .tiptap pre {

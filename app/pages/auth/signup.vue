@@ -100,7 +100,7 @@ async function onSubmit() {
               type="text"
               autocomplete="name"
               placeholder="Your full name"
-              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
               :aria-invalid="showError('name') ? 'true' : 'false'" />
             <p v-if="showError('name')" class="text-xs text-alert-500">{{ r$.name.$errors[0] }}</p>
           </div>
@@ -112,7 +112,7 @@ async function onSubmit() {
               v-model="r$.$value.dob"
               type="date"
               placeholder="YYYY-MM-DD"
-              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
               :aria-invalid="showError('dob') ? 'true' : 'false'" />
             <p v-if="showError('dob')" class="text-xs text-alert-500">{{ r$.dob.$errors[0] }}</p>
           </div>
@@ -144,7 +144,7 @@ async function onSubmit() {
               type="tel"
               inputmode="tel"
               placeholder="9876543210"
-              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+              class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
               :aria-invalid="showError('phone') ? 'true' : 'false'" />
             <p v-if="showError('phone')" class="text-xs text-alert-500">{{ r$.phone.$errors[0] }}</p>
           </div>
@@ -155,14 +155,14 @@ async function onSubmit() {
               <select
                 id="organization"
                 v-model="r$.$value.organizationId"
-                class="w-full appearance-none rounded-lg bg-dark-500 px-4 py-3 pr-10 text-light-600 ring-2 ring-dark-600 transition focus:outline-none focus:ring-2 focus:ring-primary-400"
+                class="w-full appearance-none rounded-lg bg-dark-500 px-4 py-3 pr-10 text-light-600 ring-2 ring-dark-600 transition focus:outline-none focus:ring-2 focus:ring-accent-400"
                 :class="showError('organizationId') ? 'ring-alert-500' : 'ring-dark-600'"
                 :aria-invalid="showError('organizationId') ? 'true' : 'false'">
                 <option value="" disabled class="bg-dark-500 text-white/60">Select an organization</option>
                 <option v-for="org in organizations" :key="org.id" :value="org.id" class="bg-dark-500 text-white">
                   {{ org.name }}
                 </option>
-                <option value="create-new" class="bg-dark-500 text-primary-400">+ Create new organization</option>
+                <option value="create-new" class="bg-dark-500 text-accent-400">+ Create new organization</option>
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <NuxtIcon name="local:chevron-bold" class="rotate-90 text-xl text-white/60" />
@@ -189,7 +189,7 @@ async function onSubmit() {
                   v-model="orgR$.$value.name"
                   type="text"
                   placeholder="Acme Corp"
-                  class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+                  class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
                   :aria-invalid="showOrgError('name') ? 'true' : 'false'" />
                 <p v-if="showOrgError('name')" class="text-xs text-alert-500">
                   {{ orgR$.name.$errors[0] }}
@@ -205,7 +205,7 @@ async function onSubmit() {
                   min="1900"
                   :max="new Date().getFullYear()"
                   placeholder="2020"
-                  class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+                  class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
                   :aria-invalid="showOrgError('foundedYear') ? 'true' : 'false'" />
                 <p v-if="showOrgError('foundedYear')" class="text-xs text-alert-500">
                   {{ orgR$.foundedYear.$errors[0] }}
@@ -224,11 +224,11 @@ async function onSubmit() {
                     v-model="inviteEmail"
                     type="email"
                     placeholder="colleague@example.com"
-                    class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+                    class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
                     @keydown.enter.prevent="addInvite" />
                   <button
                     type="button"
-                    class="font-medium rounded-lg bg-primary-400/10 px-4 py-2.5 text-sm text-primary-400 ring-2 ring-primary-400/30 transition hover:bg-primary-400/20"
+                    class="font-medium rounded-lg bg-accent-400/10 px-4 py-2.5 text-sm text-accent-400 ring-2 ring-accent-400/30 transition hover:bg-accent-400/20"
                     @click="addInvite">
                     Add
                   </button>
@@ -238,9 +238,9 @@ async function onSubmit() {
                   <div
                     v-for="(email, index) in orgR$.$value.invites"
                     :key="email"
-                    class="group flex items-center gap-2 rounded-lg bg-primary-400/10 px-3 py-1.5 text-sm text-primary-400 ring-1 ring-primary-400/30">
+                    class="group flex items-center gap-2 rounded-lg bg-accent-400/10 px-3 py-1.5 text-sm text-accent-400 ring-1 ring-accent-400/30">
                     <span>{{ email }}</span>
-                    <button type="button" class="text-primary-400/60 transition hover:text-alert-500" @click="removeInvite(index)">
+                    <button type="button" class="text-accent-400/60 transition hover:text-alert-500" @click="removeInvite(index)">
                       <NuxtIcon name="local:cross" class="text-base" />
                     </button>
                   </div>

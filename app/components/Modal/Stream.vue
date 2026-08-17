@@ -62,7 +62,7 @@ function onClose() {
         <!-- Input -->
         <div class="flex flex-col gap-2">
           <label class="text-xs font-semi-bold text-light-500">Source Name</label>
-          <div class="flex items-center gap-2 rounded-xl border border-dark-600 bg-dark-500 px-4 py-3 transition-colors focus-within:border-primary-500">
+          <div class="flex items-center gap-2 rounded-xl border border-dark-600 bg-dark-500 px-4 py-3 transition-colors focus-within:border-accent-500">
             <NuxtIcon name="local:camera" class="shrink-0 text-base text-light-500" />
             <input
               v-model="deviceId"
@@ -86,7 +86,7 @@ function onClose() {
               :class="activeVideoInputId === videoInput.deviceId ? 'border-dark-600 bg-dark-500 font-semi-bold text-white' : 'text-light-600'"
               @click="emit('update', 'video', videoInput.deviceId)">
               <span class="truncate">{{ videoInput.label || 'Unknown Camera' }}</span>
-              <span v-if="activeVideoInputId === videoInput.deviceId" class="text-xs text-primary-500">✓</span>
+              <span v-if="activeVideoInputId === videoInput.deviceId" class="text-xs text-accent-500">✓</span>
             </button>
           </div>
 
@@ -101,7 +101,7 @@ function onClose() {
               :class="activeAudioInputId === audioInput.deviceId ? 'border-dark-600 bg-dark-500 font-semi-bold text-white' : 'text-light-600'"
               @click="emit('update', 'audio', audioInput.deviceId)">
               <span class="truncate">{{ audioInput.label || 'Unknown Microphone' }}</span>
-              <span v-if="activeAudioInputId === audioInput.deviceId" class="text-xs text-primary-500">✓</span>
+              <span v-if="activeAudioInputId === audioInput.deviceId" class="text-xs text-accent-500">✓</span>
             </button>
           </div>
         </div>

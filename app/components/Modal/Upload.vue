@@ -150,7 +150,7 @@ function handleFileInput(e: Event) {
         <div
           ref="dropZone"
           class="relative flex items-center justify-center rounded-2xl border border-dashed transition-all duration-300"
-          :class="[fileQueue.length ? 'flex-row border-dark-600 bg-dark-500 p-6 hover:border-light-500' : 'flex-col border-light-600 bg-dark-400 p-16 hover:border-primary-500 hover:bg-dark-500']">
+          :class="[fileQueue.length ? 'flex-row border-dark-600 bg-dark-500 p-6 hover:border-light-500' : 'flex-col border-light-600 bg-dark-400 p-16 hover:border-accent-500 hover:bg-dark-500']">
           <div class="flex items-center gap-4" :class="{ 'flex-col text-center': !fileQueue.length }">
             <NuxtIcon name="local:upload" :class="fileQueue.length ? 'text-2xl text-light-500' : 'mb-2 text-4xl text-white'" />
             <div>
@@ -159,7 +159,7 @@ function handleFileInput(e: Event) {
               </p>
               <p class="mt-1 text-xs font-regular text-light-500">
                 or
-                <label class="cursor-pointer text-white underline decoration-light-500 transition-colors hover:text-primary-500 hover:decoration-primary-500"
+                <label class="cursor-pointer text-white underline decoration-light-500 transition-colors hover:text-accent-500 hover:decoration-accent-500"
                   >browse<input type="file" multiple class="hidden" @change="handleFileInput"
                 /></label>
               </p>
@@ -171,7 +171,7 @@ function handleFileInput(e: Event) {
         <div v-if="fileQueue.length" class="scrollbar-hidden flex max-h-[40vh] flex-col gap-2 overflow-y-auto pr-2">
           <div v-for="item in fileQueue" :key="item.file.name" class="relative overflow-hidden rounded-xl border border-dark-600 bg-dark-500 p-4 transition-colors hover:border-light-500">
             <!-- Embedded Background Progress Bar -->
-            <div class="absolute inset-0 z-0 bg-primary-600/10 transition-all duration-300 ease-out" :style="{ width: `${item.progress}%` }" />
+            <div class="absolute inset-0 z-0 bg-accent-600/10 transition-all duration-300 ease-out" :style="{ width: `${item.progress}%` }" />
 
             <!-- Content -->
             <div class="relative z-10 flex items-center justify-between gap-4">

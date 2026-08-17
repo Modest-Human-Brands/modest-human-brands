@@ -242,7 +242,7 @@ async function print() {
     <div class="relative z-10 flex size-full flex-col md:flex-row">
       <AppSidebarPreviewList v-model:drawer-open="isSidebarOpen" :items="mediaItems" :active-id="currentItem.id" item-key="id" @select="(item) => navigateToIndex(mediaItems.indexOf(item))">
         <template #item="{ item, isActive }">
-          <div class="block size-full overflow-hidden rounded transition-all duration-300" :class="isActive ? 'opacity-100 ring-[1.5px] ring-primary-500' : 'opacity-40 hover:opacity-70'">
+          <div class="block size-full overflow-hidden rounded transition-all duration-300" :class="isActive ? 'opacity-100 ring-[1.5px] ring-accent-500' : 'opacity-40 hover:opacity-70'">
             <NuxtImg :src="item.id" :alt="item.filename" width="128" height="128" class="w-full object-cover" loading="lazy" fit="cover" />
           </div>
         </template>
@@ -363,7 +363,7 @@ async function print() {
               </div>
               <div v-if="currentItem.status" class="col-span-2">
                 <h4 class="mb-1 text-sm uppercase tracking-wider text-light-500">Status</h4>
-                <span class="inline-flex rounded bg-primary-500/20 px-1.5 py-0.5 text-[9px] font-semi-bold uppercase tracking-wider text-primary-500">
+                <span class="inline-flex rounded bg-accent-500/20 px-1.5 py-0.5 text-[9px] font-semi-bold uppercase tracking-wider text-accent-500">
                   {{ currentItem.status }}
                 </span>
               </div>
@@ -389,11 +389,11 @@ async function print() {
                 v-for="thread in activeThreads"
                 :key="thread.commentId"
                 class="flex flex-col rounded-xl border border-white/5 bg-dark-500/40 p-4 transition-colors"
-                :class="{ 'border-primary-500/50 bg-dark-500/80': focusedCommentId === thread.commentId }"
+                :class="{ 'border-accent-500/50 bg-dark-500/80': focusedCommentId === thread.commentId }"
                 @click="focusedCommentId = thread.commentId">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
-                    <span class="flex size-5 items-center justify-center rounded-full bg-primary-500 text-[10px] font-semi-bold text-white">
+                    <span class="flex size-5 items-center justify-center rounded-full bg-accent-500 text-[10px] font-semi-bold text-white">
                       {{ thread.author.name[0] }}
                     </span>
                     <span class="text-sm font-semi-bold text-white">{{ thread.author.name }}</span>
@@ -421,11 +421,11 @@ async function print() {
                     v-model="replyText"
                     type="text"
                     placeholder="Reply to discussion..."
-                    class="grow rounded-lg border border-white/10 bg-dark-600 px-3 py-1.5 text-xs text-white placeholder:text-light-500 focus:border-primary-500 focus:outline-none" />
+                    class="grow rounded-lg border border-white/10 bg-dark-600 px-3 py-1.5 text-xs text-white placeholder:text-light-500 focus:border-accent-500 focus:outline-none" />
                   <button
                     type="submit"
                     :disabled="!replyText.trim() || isDispatchingReply"
-                    class="rounded-lg bg-primary-500 px-3 py-1.5 text-xs font-semi-bold text-white transition-transform active:scale-95 disabled:opacity-40">
+                    class="rounded-lg bg-accent-500 px-3 py-1.5 text-xs font-semi-bold text-white transition-transform active:scale-95 disabled:opacity-40">
                     {{ isDispatchingReply ? '...' : 'Send' }}
                   </button>
                 </form>

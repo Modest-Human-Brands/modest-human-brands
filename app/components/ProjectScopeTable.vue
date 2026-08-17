@@ -132,7 +132,7 @@ defineExpose({
                   v-model="item.title"
                   v-focus
                   type="text"
-                  class="h-[34px] w-full rounded bg-dark-400 px-2.5 font-semi-bold text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  class="h-[34px] w-full rounded bg-dark-400 px-2.5 font-semi-bold text-white focus:outline-none focus:ring-1 focus:ring-accent-500"
                   @keydown.enter="stopEditing()"
                   @blur="stopEditing()" />
               </div>
@@ -147,7 +147,7 @@ defineExpose({
                   v-focus
                   :value="getDescription(item)"
                   type="text"
-                  class="h-[34px] w-full rounded bg-dark-400 px-2.5 text-light-400 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  class="h-[34px] w-full rounded bg-dark-400 px-2.5 text-light-400 focus:outline-none focus:ring-1 focus:ring-accent-500"
                   @input="updateDescription(item, ($event.target as HTMLInputElement).value)"
                   @keydown.enter="stopEditing()"
                   @blur="stopEditing()" />
@@ -170,7 +170,7 @@ defineExpose({
                   v-model.number="item.rate"
                   v-focus
                   type="number"
-                  class="h-[34px] w-full rounded bg-dark-400 px-2 text-right font-regular text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  class="h-[34px] w-full rounded bg-dark-400 px-2 text-right font-regular text-white focus:outline-none focus:ring-1 focus:ring-accent-500"
                   @keydown.enter="stopEditing()"
                   @blur="stopEditing()" />
               </div>
@@ -185,7 +185,7 @@ defineExpose({
                   v-model.number="item.quantity"
                   v-focus
                   type="number"
-                  class="h-[34px] w-full rounded bg-dark-400 px-2 text-right font-regular text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  class="h-[34px] w-full rounded bg-dark-400 px-2 text-right font-regular text-white focus:outline-none focus:ring-1 focus:ring-accent-500"
                   @keydown.enter="stopEditing()"
                   @blur="stopEditing()" />
               </div>
@@ -202,7 +202,7 @@ defineExpose({
           <tr v-if="!isAddingService" class="group cursor-pointer transition-colors hover:bg-dark-500/30" @click="startAddingService()">
             <td colspan="5" class="h-[52px] py-3 font-semi-bold text-light-400 group-hover:text-white">
               <div class="flex h-[34px] items-center gap-2 rounded px-2">
-                <NuxtIcon name="local:plus" class="text-xl text-primary-400" />
+                <NuxtIcon name="local:plus" class="text-xl text-accent-400" />
                 <span>Add service</span>
               </div>
             </td>
@@ -214,7 +214,7 @@ defineExpose({
                 v-focus
                 type="text"
                 placeholder="Service name..."
-                class="h-[34px] w-full rounded bg-dark-400 px-2.5 font-semi-bold text-white placeholder:text-light-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                class="h-[34px] w-full rounded bg-dark-400 px-2.5 font-semi-bold text-white placeholder:text-light-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
                 @keydown.enter="commitNewService()"
                 @blur="commitNewService()" />
             </td>
@@ -223,7 +223,7 @@ defineExpose({
                 v-model="newService.description"
                 type="text"
                 placeholder="Add bullet point description..."
-                class="h-[34px] w-full rounded bg-dark-400 px-2.5 text-light-400 placeholder:text-light-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                class="h-[34px] w-full rounded bg-dark-400 px-2.5 text-light-400 placeholder:text-light-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
                 @keydown.enter="commitNewService()"
                 @blur="commitNewService()" />
             </td>
@@ -232,7 +232,7 @@ defineExpose({
                 v-model="newService.rate"
                 type="number"
                 placeholder="0"
-                class="h-[34px] w-full rounded bg-dark-400 px-2 text-right text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+                class="h-[34px] w-full rounded bg-dark-400 px-2 text-right text-white focus:outline-none focus:ring-1 focus:ring-accent-500"
                 @keydown.enter="commitNewService()"
                 @blur="commitNewService()" />
             </td>
@@ -241,7 +241,7 @@ defineExpose({
                 v-model="newService.quantity"
                 type="number"
                 placeholder="1"
-                class="h-[34px] w-full rounded bg-dark-400 px-2 text-right text-white focus:outline-none focus:ring-1 focus:ring-primary-500"
+                class="h-[34px] w-full rounded bg-dark-400 px-2 text-right text-white focus:outline-none focus:ring-1 focus:ring-accent-500"
                 @keydown.enter="commitNewService()"
                 @blur="commitNewService()" />
             </td>

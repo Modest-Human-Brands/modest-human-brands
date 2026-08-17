@@ -158,7 +158,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
 
         <div class="flex shrink-0 items-center gap-4">
           <div class="flex items-center gap-2 text-sm font-semi-bold">
-            <span v-if="isSaving" class="flex items-center gap-2 fill-primary-400 text-primary-400">
+            <span v-if="isSaving" class="flex items-center gap-2 fill-accent-400 text-accent-400">
               <NuxtIcon name="local:loader" class="text-lg" />
               Syncing...
             </span>
@@ -195,7 +195,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
                   <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Slug
                 </span>
-                <button type="button" class="truncate pl-7 text-left text-base font-semi-bold hover:text-primary-400" @click="copy(formData.slug)">
+                <button type="button" class="truncate pl-7 text-left text-base font-semi-bold hover:text-accent-400" @click="copy(formData.slug)">
                   {{ formData.slug || 'untitled' }}
                   <span v-if="copied" class="ml-1 text-base text-success-500">(Copied)</span>
                 </button>
@@ -208,7 +208,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
                 </span>
                 <div class="pl-7">
                   <span class="inline-flex items-center gap-2 rounded-full bg-dark-500 px-3 py-1 text-base font-semi-bold">
-                    <span class="size-2 rounded-full bg-primary-500" />
+                    <span class="size-2 rounded-full bg-accent-500" />
                     {{ formData.status }}
                   </span>
                 </div>
@@ -219,7 +219,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
                   <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Segment
                 </span>
-                <input v-model="formData.segment" type="text" class="w-full bg-transparent pl-7 text-base font-semi-bold focus:text-primary-400 focus:outline-none" />
+                <input v-model="formData.segment" type="text" class="w-full bg-transparent pl-7 text-base font-semi-bold focus:text-accent-400 focus:outline-none" />
               </div>
             </div>
 
@@ -229,7 +229,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
                   <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
                   Address
                 </span>
-                <input v-model="formData.shootLocation" type="text" class="w-full truncate bg-transparent focus:text-primary-400 focus:outline-none" />
+                <input v-model="formData.shootLocation" type="text" class="w-full truncate bg-transparent focus:text-accent-400 focus:outline-none" />
               </div>
 
               <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">

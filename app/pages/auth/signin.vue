@@ -82,7 +82,7 @@ async function onEmailSignIn() {
             autocomplete="email"
             placeholder="you@email.com"
             :disabled="isOTPSent"
-            class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+            class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
             :aria-invalid="r$.$invalid ? 'true' : 'false'" />
           <p v-if="showError('email')" class="text-xs text-alert-500">{{ r$.email.$errors[0] }}</p>
         </div>
@@ -93,7 +93,7 @@ async function onEmailSignIn() {
             id="otp"
             v-model="r$.$value.otp"
             type="text"
-            class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-0"
+            class="w-full rounded-lg bg-transparent px-4 py-3 text-light-600 ring-2 ring-dark-600 placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-0"
             :aria-invalid="r$.$invalid ? 'true' : 'false'" />
           <p v-if="showError('otp') || error" class="text-xs text-alert-500">
             {{ r$.otp?.$errors?.[0] || error?.message }}
