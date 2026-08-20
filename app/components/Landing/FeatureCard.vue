@@ -25,7 +25,7 @@ useIntersectionObserver(
 </script>
 
 <template>
-  <div ref="target" class="grid overflow-hidden border-b border-light-500 md:grid-cols-2">
+  <div ref="target" class="grid overflow-hidden border-b border-light-500/50 md:grid-cols-2">
     <div class="flex flex-col justify-center p-6 md:p-8">
       <span class="mb-4 text-sm font-semi-bold uppercase tracking-widest text-light-400">{{ label }}</span>
       <h2 class="mb-6 text-2xl font-semi-bold">{{ title }}</h2>

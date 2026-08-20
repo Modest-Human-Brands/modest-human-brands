@@ -135,12 +135,14 @@ const pricingCards = [
     title: 'For Solo Creators',
     description: 'For independent creators freelancers solo designers',
     price: '₹499',
-    buttonText: 'Get Started',
+    buttonText: 'Join List',
     features: [
       { text: '1 Core Workspace Owner', icon: 'local:person' },
       { text: 'Simple Project Sharing', icon: 'local:chat' },
       { text: 'Fixed Standard Pipeline', icon: 'local:flow' },
       { text: 'Self-Serve Onboarding', icon: 'local:briefcase' },
+      { text: '40GB Workspace', icon: 'local:database' },
+      { text: 'Dasboard, E-sign, Live stream, Drive, Automated Email', icon: 'local:shapes' },
     ],
     isRecommended: false,
   },
@@ -154,8 +156,9 @@ const pricingCards = [
       { text: 'Multi-Seat Core Team Access', icon: 'local:people' },
       { text: 'Detailed Project Sharing with Approvals', icon: 'local:approved' },
       { text: 'Fixed Standard Pipeline + Automated Integration', icon: 'local:branch' },
-      { text: 'Automated Integrations', icon: 'local:link' },
+      { text: '100GB Workspace', icon: 'local:database' },
       { text: 'Dedicated White-Glove Data Migration', icon: 'local:upload' },
+      { text: 'Every Service from Individual + Team Chat, Video Conference', icon: 'local:shapes' },
     ],
     isRecommended: true,
   },
@@ -171,8 +174,8 @@ const footerLinks = [
 
 <template>
   <div class="min-h-screen">
-    <main class="mx-auto flex min-h-screen w-full max-w-7xl flex-col border-x border-light-500">
-      <header class="sticky top-0 z-50 flex items-center justify-between border-b border-light-500 px-6 py-6 backdrop-blur-md md:px-12">
+    <main class="mx-auto flex min-h-screen w-full max-w-7xl flex-col border-x border-light-500/50">
+      <header class="sticky top-0 z-50 flex items-center justify-between border-b border-light-500/50 px-6 py-6 backdrop-blur-md md:px-12">
         <NuxtLink to="/" class="flex items-center gap-3" aria-label="Modest Human Brands Home">
           <NuxtIcon name="local:logo" class="text-[32px] md:text-[48px]" />
           <span class="hidden text-lg md:inline">Modest Human Brands</span>
@@ -192,7 +195,7 @@ const footerLinks = [
         </div>
       </header>
 
-      <section class="relative border-b border-light-500 pt-8 text-center md:pt-16">
+      <section class="relative border-b border-light-500/50 pt-8 text-center md:pt-16">
         <div class="relative z-10 flex flex-col items-center">
           <div class="mb-2 flex items-center justify-center">
             <NuxtIcon name="local:logo" class="text-[48px]" />
@@ -205,7 +208,7 @@ const footerLinks = [
 
           <p class="mb-8 w-4/5 text-base font-regular text-light-400 md:text-lg">Manage your projects, media assets, and client approvals with one tool.</p>
 
-          <NuxtLink to="/waitlist" class="rounded-lg border border-accent-500 px-5 py-2 text-base shadow-xl shadow-white/10 transition-transform hover:scale-105"> Get Started </NuxtLink>
+          <NuxtLink to="/waitlist" class="rounded-lg border border-accent-500 px-5 py-2 text-base shadow-xl shadow-white/10 transition-transform hover:scale-105"> Join Waitlist </NuxtLink>
 
           <div class="mt-8 aspect-video w-full overflow-hidden bg-transparent">
             <video :src="'/videos/hero.mp4'" class="h-full w-full object-cover" autoplay muted loop playsinline disablePictureInPicture />
@@ -213,11 +216,22 @@ const footerLinks = [
         </div>
       </section>
 
-      <section class="grid divide-y divide-light-500/10 border-b border-light-500 md:grid-cols-3 md:divide-x md:divide-y-0">
+      <section class="grid divide-y divide-light-500/10 border-b border-light-500/50 md:grid-cols-3 md:divide-x md:divide-y-0">
         <LandingSubHeroCard v-for="item in subHeroFeatures" :key="item.title" :title="item.title" :description="item.description" :image="item.image" />
       </section>
 
-      <section class="border-b border-light-500">
+      <section class="grid border-b border-light-500/50 md:grid-cols-3 md:divide-x md:divide-light-500/10">
+        <div class="hidden md:block" />
+        <NuxtLink
+          to="https://youtube.com/@modest_human_brands"
+          external
+          class="font-medium group flex w-full items-center justify-center gap-2.5 bg-accent-500 py-3.5 text-center text-sm uppercase text-white transition-colors hover:bg-accent-600 md:py-4">
+          <span>View Product Demo</span>
+        </NuxtLink>
+        <div class="hidden md:block" />
+      </section>
+
+      <section class="border-b border-light-500/50">
         <div class="aspect-video w-full overflow-hidden">
           <img src="/images/hero-image-1.webp" alt="" class="w-full object-cover" loading="lazy" />
         </div>
@@ -235,15 +249,15 @@ const footerLinks = [
           :mockup="feature.mockup" />
       </section>
 
-      <section class="border-b border-light-500 px-6 py-10 md:px-12">
-        <span class="text-md mx-auto mb-8 block w-fit rounded-full bg-dark-600 px-6 py-1.5 text-center"> Pricing </span>
+      <section class="border-b border-light-500/50 px-6 py-10 md:px-12">
+        <span class="text-md mx-auto mb-8 block w-fit rounded-lg bg-dark-500 px-6 py-1.5 text-center shadow-md shadow-accent-500/30"> Pricing </span>
 
         <div class="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
           <LandingPricingCard v-for="card in pricingCards" :key="card.label" v-bind="card" />
         </div>
       </section>
 
-      <section class="border-b border-light-500">
+      <section class="border-b border-light-500/50">
         <!-- <div class="relative flex min-h-96 flex-col items-center justify-center overflow-hidden text-center">
           <img src="/images/bg-texture-blue-purple.webp" class="absolute inset-0 h-full w-full object-cover" alt=""
             loading="lazy" />
@@ -256,14 +270,14 @@ const footerLinks = [
 
             <NuxtLink to="/waitlist"
               class="rounded-lg bg-white px-5 py-2 text-base text-black shadow-xl shadow-white/10 transition-transform hover:scale-105">
-              Get Started </NuxtLink>
+              Join Waitlist </NuxtLink>
           </div>
         </div> -->
         <div class="relative flex min-h-96 flex-col items-center justify-end overflow-hidden text-center">
-          <img src="/images/workflow-pipeline.png" class="absolute inset-0 h-full w-full object-cover" alt="" loading="lazy" />
-
+          <img src="/images/workflow-pipeline.webp" class="absolute inset-0 size-full object-cover" alt="" loading="lazy" />
+          <div class="to-tranparent absolute inset-0 size-full bg-gradient-to-t from-black/50 to-20%" />
           <div class="relative z-10 p-6 md:p-8">
-            <NuxtLink to="/waitlist" class="rounded-lg bg-accent-500 px-5 py-2 text-base text-white shadow shadow-black transition-transform hover:scale-105"> Get Started </NuxtLink>
+            <NuxtLink to="/waitlist" class="rounded-lg bg-accent-500 px-5 py-2 text-base text-white shadow shadow-black transition-transform hover:scale-105"> Join Waitlist </NuxtLink>
           </div>
         </div>
       </section>
@@ -275,7 +289,7 @@ const footerLinks = [
           </NuxtLink>
         </nav>
 
-        <div class="border-t border-light-500 pt-6">
+        <div class="border-t border-light-500/50 pt-6">
           <div class="px-6 text-sm font-light md:px-12">© 2026 Modest Human Brands LLP</div>
         </div>
       </footer>

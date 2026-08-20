@@ -76,6 +76,11 @@ const mins = computed(() =>
     .toString()
     .padStart(2, '0')
 )
+const secs = computed(() =>
+  Math.floor((timeRemaining.value / 1000) % 60)
+    .toString()
+    .padStart(2, '0')
+)
 
 const formattedTargetDate = computed(() => {
   return targetDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -85,6 +90,7 @@ const countdownUnits = computed(() => [
   { label: 'Days', value: days.value },
   { label: 'Hours', value: hours.value },
   { label: 'Min', value: mins.value },
+  { label: 'Sec', value: secs.value },
 ])
 
 const halfFields = [
@@ -113,7 +119,7 @@ const fullFields = [
         <NuxtIcon name="local:logo" class="text-[48px]" />
       </div>
       <h1 class="mb-4 text-3xl font-semi-bold tracking-tight md:text-5xl">Modest Human Brands</h1>
-      <p class="mb-6 max-w-lg text-lg font-regular leading-relaxed text-light-400">Annoncing upcoming release</p>
+      <p class="mb-6 max-w-lg text-lg font-regular leading-relaxed text-light-400">Enter the new era of project management</p>
 
       <div class="mb-4 flex items-center gap-4">
         <div
