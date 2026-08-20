@@ -42,7 +42,7 @@ useIntersectionObserver(
     <div class="relative row-start-1 aspect-[3/2] w-full overflow-hidden md:row-auto">
       <img :src="bg" class="absolute inset-0 h-full w-full object-cover" alt="" loading="lazy" />
       <div class="absolute inset-0 flex items-end justify-center overflow-hidden">
-        <img :src="mockup" class="w-full transition-transform duration-700 ease-out" :class="isVisible ? 'translate-y-0' : 'translate-y-1/2'" alt="" loading="lazy" />
+        <img :src="mockup" class="w-full scale-125 transition-transform duration-700 ease-out" :class="isVisible ? 'translate-y-0' : 'translate-y-1/2'" :alt="mockup" loading="lazy" />
       </div>
     </div>
   </div>

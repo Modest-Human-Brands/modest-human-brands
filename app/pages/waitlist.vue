@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useNow } from '@vueuse/core'
-import * as z from 'zod'
-
 const title = 'Waitlist | Modest Human Brands'
 const description = 'Join the waitlist for the upcoming release of Modest Human Brands.'
 
@@ -27,14 +23,6 @@ useSeoMeta({
 const isSubmitting = ref(false)
 const isSubmitted = ref(false)
 
-const waitlistSchema = z.object({
-  name: z.string().min(2, 'Name is required'),
-  phone: z.string().min(5, 'Valid phone number is required'),
-  email: z.string().email('Please enter a valid email address').min(1, 'Email is required'),
-  company: z.string().min(2, 'Company name is required'),
-  description: z.string().min(10, 'Please provide a brief description of your needs'),
-})
-
 const { r$ } = useRegleSchema(
   {
     name: '',
@@ -51,14 +39,23 @@ const onSubmit = async () => {
 
   if (isValid) {
     isSubmitting.value = true
-    setTimeout(() => {
-      isSubmitting.value = false
+
+    try {
+      await $fetch('/api/waitlist', {
+        method: 'POST',
+        body: r$.$value,
+      })
+
       isSubmitted.value = true
-    }, 800)
+    } catch (error) {
+      console.error('Failed to submit to waitlist:', error)
+    } finally {
+      isSubmitting.value = false
+    }
   }
 }
 
-const waitingQueueCount = ref(0)
+// const waitingQueueCount = ref(0)
 const targetDate = new Date('2026-09-01T00:00:00')
 const now = useNow()
 
@@ -100,11 +97,11 @@ const fullFields = [
   { id: 'company', type: 'text', placeholder: 'Company Name' },
 ] as const
 
-const avatarGradients = ['from-info-400 to-accent-500', 'from-success-400 to-info-500', 'from-warning-400 to-alert-500', 'from-accent-400 to-accent-600']
+// const avatarGradients = ['from-info-400 to-accent-500', 'from-success-400 to-info-500', 'from-warning-400 to-alert-500', 'from-accent-400 to-accent-600']
 </script>
 
 <template>
-  <div class="relative flex h-screen w-full flex-col items-center overflow-y-auto overflow-x-hidden bg-transparent py-16 font-main text-white selection:bg-accent-500 selection:text-white">
+  <div class="relative flex w-full flex-col items-center pt-16 selection:bg-accent-500">
     <div class="pointer-events-none absolute inset-0 z-0 flex justify-center opacity-10">
       <img src="/images/bg-grid.svg" alt="" class="w-full max-w-6xl object-cover object-top opacity-50" />
     </div>
@@ -186,21 +183,20 @@ const avatarGradients = ['from-info-400 to-accent-500', 'from-success-400 to-inf
               :disabled="isSubmitting"
               class="mt-2 flex w-full items-center justify-center rounded-xl bg-white py-4 text-base font-semi-bold text-black transition-all hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-70">
               <span v-if="!isSubmitting">Request Access</span>
-              <NuxtIcon v-else name="local:spinner" class="animate-spin text-xl text-black" />
+              <NuxtIcon v-else name="local:loader" class="animate-spin text-xl text-black" />
             </button>
           </form>
         </transition>
       </div>
 
-      <div class="mt-12 flex items-center gap-4">
+      <!-- <div class="mt-12 flex items-center gap-4">
         <div class="flex -space-x-2">
-          <div
-            v-for="gradient in avatarGradients.slice(0, Math.min(avatarGradients.length, waitingQueueCount))"
-            :key="gradient"
-            :class="['size-8 rounded-full border border-dark-400 bg-gradient-to-br', gradient]" />
+          <div v-for="gradient in avatarGradients.slice(0, Math.min(avatarGradients.length, waitingQueueCount))"
+            :key="gradient" :class="['size-8 rounded-full border border-dark-400 bg-gradient-to-br', gradient]" />
         </div>
         <span class="text-md font-regular text-light-400"> {{ waitingQueueCount }} waiting for release </span>
       </div>
+      -->
     </main>
   </div>
 </template>

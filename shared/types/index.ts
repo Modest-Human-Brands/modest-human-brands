@@ -119,7 +119,22 @@ export interface VideoDetails extends Video {
 }
 
 /* Server Only */
-export const resourceTypes = ['organization', 'user', 'contact', 'project', 'deliverable', 'compliance', 'document', 'stream', 'media'] as const
+export const resourceTypes = [
+  'organization',
+  'user',
+  'contact',
+  'project',
+  'deliverable',
+  'compliance',
+  'document',
+  'stream',
+  'media',
+  'waitlist',
+  'terms',
+  'privacy',
+  'cancellation',
+  'license',
+] as const
 
 export type ResourceType = (typeof resourceTypes)[number]
 
@@ -135,6 +150,7 @@ export interface ResourceRecordMap {
   document: NotionDocument
   stream: NotionStream
   media: NotionMedia
+  waitlist: string
   terms: string
   privacy: string
   cancellation: string
@@ -811,6 +827,51 @@ export interface NotionMedia {
     Organization: {
       type: 'relation'
       relation: { id: string }[]
+    }
+  }
+}
+
+export interface NotionWaitlist {
+  id: string
+  created_time: string
+  last_edited_time: string
+  cover: NotionImage | null
+  icon: NotionImage | null
+  properties: {
+    Name: {
+      type: 'title'
+      title: {
+        plain_text?: string
+        text?: {
+          content: string
+        }
+      }[]
+    }
+    Email: {
+      type: 'email'
+      email: string | null
+    }
+    Phone: {
+      type: 'phone_number'
+      phone_number: string | null
+    }
+    Company: {
+      type: 'rich_text'
+      rich_text: {
+        plain_text?: string
+        text: {
+          content: string
+        }
+      }[]
+    }
+    Description: {
+      type: 'rich_text'
+      rich_text: {
+        plain_text?: string
+        text: {
+          content: string
+        }
+      }[]
     }
   }
 }

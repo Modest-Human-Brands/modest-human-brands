@@ -58,6 +58,20 @@ const subHeroFeatures = [
 
 const features = [
   {
+    id: 'feature-0',
+    label: 'MHB • Dashboard',
+    title: 'Unified creative project pipeline',
+    description: 'Track multi-project timelines, control budgets, and streamline creative workflows from planning to post-production.',
+    bullets: [
+      'Multi-project schedule timeline and stage tracking across all active shoots.',
+      'Comprehensive budget scoping, service day rates, and deliverable breakdowns.',
+      'Integrated brand visual identities, mood direction, and color palette specs.',
+      'Seamless transition into crew roster, legal contracts, pre-production, and live sync.',
+    ],
+    bg: '/images/bg-texture-teal.webp',
+    mockup: '/images/mockup-dashboard.webp',
+  },
+  {
     id: 'feature-1',
     label: 'MHB • MDOC',
     title: 'Frictionless client agreements',
@@ -71,20 +85,20 @@ const features = [
     bg: '/images/bg-texture-purple.webp',
     mockup: '/images/mockup-document.webp',
   },
-  {
-    id: 'feature-2',
-    label: 'MHB • MCOORDINATE',
-    title: 'Real-time team & shoot coordination',
-    description: 'Eliminate WhatsApp chaos and scattered chat threads. Keep production crews, project managers, and internal teams connected on set or in the office.',
-    bullets: [
-      'Project-channeled chat and video calls for focused feedback',
-      'Live location tracking for on-set field crew logistics',
-      'Direct media streaming straight to MMedia workflows',
-      'Automated real-time file sync with MDrive storage',
-    ],
-    bg: '/images/bg-texture-teal.webp',
-    mockup: '/images/mockup-stream.webp',
-  },
+  // {
+  //   id: 'feature-2',
+  //   label: 'MHB • MCOORDINATE',
+  //   title: 'Real-time team & shoot coordination',
+  //   description: 'Eliminate WhatsApp chaos and scattered chat threads. Keep production crews, project managers, and internal teams connected on set or in the office.',
+  //   bullets: [
+  //     'Project-channeled chat and video calls for focused feedback',
+  //     'Live location tracking for on-set field crew logistics',
+  //     'Direct media streaming straight to MMedia workflows',
+  //     'Automated real-time file sync with MDrive storage',
+  //   ],
+  //   bg: '/images/bg-texture-teal.webp',
+  //   mockup: '/images/mockup-stream.webp',
+  // },
   {
     id: 'feature-3',
     label: 'MHB • MSYNC',
@@ -134,7 +148,7 @@ const pricingCards = [
     label: 'ENTERPRISE',
     title: 'For Studios',
     description: 'For agencies production houses and creative studios',
-    price: '₹3,999',
+    price: '₹999',
     buttonText: 'Upgrade to Enterprise',
     features: [
       { text: 'Multi-Seat Core Team Access', icon: 'local:people' },
@@ -193,8 +207,8 @@ const footerLinks = [
 
           <NuxtLink to="/waitlist" class="rounded-lg border border-accent-500 px-5 py-2 text-base shadow-xl shadow-white/10 transition-transform hover:scale-105"> Get Started </NuxtLink>
 
-          <div class="mt-8 aspect-video w-full overflow-hidden">
-            <img src="/images/hero-image-1.webp" alt="" class="w-full object-cover" preload />
+          <div class="mt-8 aspect-video w-full overflow-hidden bg-transparent">
+            <video :src="'/videos/hero.mp4'" class="h-full w-full object-cover" autoplay muted loop playsinline disablePictureInPicture />
           </div>
         </div>
       </section>
@@ -230,8 +244,9 @@ const footerLinks = [
       </section>
 
       <section class="border-b border-light-500">
-        <div class="relative flex min-h-96 flex-col items-center justify-center overflow-hidden text-center">
-          <img src="/images/bg-texture-blue-purple.webp" class="absolute inset-0 h-full w-full object-cover" alt="" loading="lazy" />
+        <!-- <div class="relative flex min-h-96 flex-col items-center justify-center overflow-hidden text-center">
+          <img src="/images/bg-texture-blue-purple.webp" class="absolute inset-0 h-full w-full object-cover" alt=""
+            loading="lazy" />
 
           <div class="relative z-10 p-6 md:p-8">
             <h2 class="mb-10 text-lg md:text-3xl">
@@ -239,7 +254,16 @@ const footerLinks = [
               level with Modest Human Brands
             </h2>
 
-            <NuxtLink to="/waitlist" class="rounded-lg bg-white px-5 py-2 text-base text-black shadow-xl shadow-white/10 transition-transform hover:scale-105"> Get Started </NuxtLink>
+            <NuxtLink to="/waitlist"
+              class="rounded-lg bg-white px-5 py-2 text-base text-black shadow-xl shadow-white/10 transition-transform hover:scale-105">
+              Get Started </NuxtLink>
+          </div>
+        </div> -->
+        <div class="relative flex min-h-96 flex-col items-center justify-end overflow-hidden text-center">
+          <img src="/images/workflow-pipeline.png" class="absolute inset-0 h-full w-full object-cover" alt="" loading="lazy" />
+
+          <div class="relative z-10 p-6 md:p-8">
+            <NuxtLink to="/waitlist" class="rounded-lg bg-accent-500 px-5 py-2 text-base text-white shadow shadow-black transition-transform hover:scale-105"> Get Started </NuxtLink>
           </div>
         </div>
       </section>

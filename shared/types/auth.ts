@@ -51,6 +51,14 @@ export const completeUserFormSchema = z
     }
   )
 
+export const waitlistSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  phone: z.string().min(5, 'Valid phone number is required'),
+  email: z.email('Please enter a valid email address').min(1, 'Email is required'),
+  company: z.string().min(2, 'Company name is required'),
+  description: z.string().min(10, 'Please provide a brief description of your needs'),
+})
+
 /* Types */
 export type EmailFormData = z.infer<typeof emailFormSchema>
 export type UserFormData = z.infer<typeof userFormSchema>

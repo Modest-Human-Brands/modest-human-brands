@@ -21,7 +21,7 @@ defineProps<{
 
     <div class="mb-8 flex items-end gap-2">
       <span class="text-3xl font-semi-bold leading-none tracking-tight md:text-5xl">{{ price }}</span>
-      <span class="pb-2 text-base font-regular text-light-400">{{ priceSuffix || '/ month' }}</span>
+      <span class="pb-2 text-base font-regular text-light-400">{{ priceSuffix || '/ user/ month' }}</span>
     </div>
 
     <NuxtLink
