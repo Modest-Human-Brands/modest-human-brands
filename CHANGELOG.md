@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.3
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.2...v0.10.3)
+
+### 🎨 Styles
+
+- Add SVG icon and update various components for improved styling and functionality ([1fb3347](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1fb3347))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.2
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.1...v0.10.2)
