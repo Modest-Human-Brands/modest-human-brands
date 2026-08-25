@@ -56,13 +56,6 @@ export interface User {
   avatar: string | undefined
 }
 
-export interface ProjectClient {
-  name: string
-  avatar?: string
-}
-
-export type ProjectStatus = 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'
-
 export type Orientation = 'portrait' | 'landscape'
 
 export interface Photo {

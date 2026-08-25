@@ -40,7 +40,7 @@ export interface ProjectContact {
   email: string | null
 }
 
-export interface Project {
+export interface DocumentProject {
   id: string
   name: string
   contact?: ProjectContact | null
@@ -52,7 +52,7 @@ export interface DocumentDetail {
   name: string
   formattedSize: string
   timeline: DocTimelineEvent[]
-  project?: Project | null
+  project?: DocumentProject | null
   templateId?: string
 }
 

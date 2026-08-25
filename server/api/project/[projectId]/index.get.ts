@@ -1,36 +1,3 @@
-export type ProjectStatus = 'Plan' | 'Quotation' | 'Shoot' | 'Edit' | 'Delivered'
-
-export interface Project {
-  id: string
-  title: string
-  slug: string
-  status: ProjectStatus
-  shootLocation?: string
-  shootDate?: string
-  quoteNumber?: number
-}
-
-export interface ProjectDeliverable {
-  id: string
-  title: string
-  quantity?: number
-  rate?: number
-  description?: string
-  points?: string[]
-}
-
-export interface DetailedProject extends Project {
-  index?: number
-  segment?: string
-  date?: string
-  duration?: string
-  contactName?: string
-  budget?: number
-  additional?: string | Record<string, unknown> | null
-  deliverables?: ProjectDeliverable[]
-  markdown?: string | null
-}
-
 interface TipTapNode {
   type?: string
   text?: string
