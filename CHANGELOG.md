@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.10.4
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.3...v0.10.4)
+
+### 🚀 Enhancements
+
+- Add new project and timeline components, refactor dashboard layout ([f5f0a14](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f5f0a14))
+- **connect:** Add new email template creation and preview functionality ([0f0afd1](https://github.com/Modest-Human-Brands/modest-human-brands/commit/0f0afd1))
+
+### 🏡 Chore
+
+- Deps updated ([20ed1da](https://github.com/Modest-Human-Brands/modest-human-brands/commit/20ed1da))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.3
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.2...v0.10.3)
