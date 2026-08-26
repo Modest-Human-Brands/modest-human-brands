@@ -1,51 +1,26 @@
-export interface MConnectContactResponse {
-  pagination: {
-    total: number
-    limit: number
-    offset: number
-  }
-  results: {
-    id: string
-    name: string
-    company: string
-    jobTitle: string
-    email: string | null
-    phone: string | null
-    instagram: string | null
-    status: string
-    lastActive: string
-    lastMessageSnippet: string
-    platforms: string[]
-    unreadCount: number
-  }[]
-}
-
 export default defineEventHandler(async (event) => {
   try {
-    // const { user } =
     await requireUserSession(event)
 
     const config = useRuntimeConfig()
 
-    const rawData = await $fetch<MConnectContactResponse>('/api/contacts', {
+    const rawData = await $fetch<
+      {
+        id: string
+        senderName: string
+        senderEmail: string
+        avatarUrl: string | undefined
+        isVerified: boolean
+        subject: string
+        preview: string
+        date: string
+        contentHtml: string
+      }[]
+    >('/api/interaction', {
       baseURL: config.public.connectUrl,
     })
 
-    return rawData.results
-      .map((contact) => {
-        return {
-          id: contact.id,
-          name: contact.name || 'Unknown',
-          initial: contact.name ? contact.name.charAt(0).toUpperCase() : 'U',
-          company: contact.company,
-          lastActive: contact.lastActive,
-          lastMessageSnippet: contact.lastMessageSnippet,
-          activeChannel: (contact.platforms[0] || 'email') as ChannelType,
-          availableChannels: contact.platforms as ChannelType[],
-          unreadCount: contact.unreadCount,
-        }
-      })
-      .toSorted((a, b) => new Date(b.lastActive).getTime() - new Date(a.lastActive).getTime())
+    return rawData.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } catch (error) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error
@@ -55,7 +30,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      statusMessage: 'Some Unknown Error Found',
+      statusMessage: 'Failed to fetch messages',
     })
   }
 })

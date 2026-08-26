@@ -1,4 +1,4 @@
-export interface MDocTemplateResponse {
+export interface MDocTemplate {
   id: string
   label: string
   description: string
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const id = getRouterParam(event, 'id')
 
-    const response = await $fetch<MDocTemplateResponse>(`/api/document/template/${id}`, {
+    const response = await $fetch<MDocTemplate>(`/api/document/template/${id}`, {
       baseURL: config.public.docUrl,
     })
 

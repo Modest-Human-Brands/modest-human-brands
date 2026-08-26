@@ -1,4 +1,4 @@
-import { retransformTemplate } from '~~/server/utils/mdoc-transform'
+import { retransformTemplate } from '~~/server/utils/transform-template'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,16 +8,16 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { organization, mdocData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
+    const { organization, templateData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
 
     const documentStorage = useStorage<Resource<'document'>>('data:resource:document')
     const documents = (await documentStorage.getItems(await documentStorage.getKeys()))
       .flatMap(({ value }) => value?.record || [])
       .filter((record) => record.properties.Organization.relation[0]?.id === orgId)
 
-    body.name = `${organization.name.replaceAll(' ', '-').toLowerCase()}-${body.template.toUpperCase()[0]}-${documents.length}-1`
+    body.name = `${organization!.name.replaceAll(' ', '-').toLowerCase()}-${body.template.toUpperCase()[0]}-${documents.length}-1`
     body.orgId = orgId
-    body.data = mdocData
+    body.data = templateData
 
     const response = await $fetch<{ id: string; templateId: string; name: string; sizeBytes: number }>('/api/document/template', {
       baseURL: config.public.docUrl,

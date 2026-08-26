@@ -14,19 +14,20 @@ export const PRIMARY_NAVIGATION_TABS = [
     description: 'Manage all your website/app here',
     to: '/dashboard',
   },
-  // {
-  //   id: 'website-app',
-  //   title: 'Website/App',
-  //   icon: 'local:app',
-  //   description: 'Manage all your website/app here',
-  //   to: '/website-app'
-  // },
+
   {
     id: 'connect',
     title: 'Connect',
     icon: 'local:network',
     description: 'Manage all your connections/campaigns here',
     to: '/connect',
+  },
+  {
+    id: 'calender',
+    title: 'Calender',
+    icon: 'local:calendar',
+    description: 'Manage all your events',
+    to: '/calender',
   },
   {
     id: 'doc',
@@ -59,13 +60,20 @@ export const PRIMARY_NAVIGATION_TABS = [
 ] as NavItem[]
 
 export const SECONDARY_NAVIGATION_TABS = [
-  // {
-  //   id: 'client',
-  //   title: 'Client',
-  //   icon: 'local:briefcase',
-  //   description: 'Manage all your clients here',
-  //   to: '/client'
-  // },
+  {
+    id: 'website-app',
+    title: 'Website/App',
+    icon: 'local:app',
+    description: 'Manage all your website/app here',
+    to: '/website-app',
+  },
+  {
+    id: 'client',
+    title: 'Client',
+    icon: 'local:briefcase',
+    description: 'Manage all your clients here',
+    to: '/client',
+  },
   /*   {
     id: 'project',
     title: 'Project',

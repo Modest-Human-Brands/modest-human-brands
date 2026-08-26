@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.sessionToken}`
 
     try {
-      await $fetch('/api/connect/text/email/send', {
+      await $fetch('/api/interaction/email/send', {
         baseURL: config.public.connectUrl,
         method: 'POST',
         body: {

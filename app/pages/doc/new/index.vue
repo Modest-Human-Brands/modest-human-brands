@@ -24,7 +24,7 @@ const { data: templates, pending } = await useFetch('/api/doc/template')
     </div>
 
     <div v-else class="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <DocTemplateCard v-for="template in templates" :key="template.id" :template="template" />
+      <TemplateCard v-for="template in templates" :id="template.id" :key="template.id" :label="template.label" :description="template.description" :link="`/doc/new/${template.id}`" />
     </div>
   </section>
 </template>

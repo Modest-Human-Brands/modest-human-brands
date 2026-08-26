@@ -1,4 +1,4 @@
-import { retransformTemplate } from '~~/server/utils/mdoc-transform'
+import { retransformTemplate } from '~~/server/utils/transform-template'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -8,14 +8,14 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { mdocData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
+    const { templateData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,
       method: 'POST',
       body: {
         templateId: body.templateId,
-        variables: mdocData,
+        variables: templateData,
       },
     })
 

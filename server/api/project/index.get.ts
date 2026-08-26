@@ -1,3 +1,25 @@
+const statusMap = {
+  Plan: 'Plan',
+  Crew: 'Crew',
+  Quotation: 'Document',
+  'Pre-Production': 'Pre-Production',
+  Shoot: 'Production',
+  Edit: 'Post-Production',
+  Delivered: 'Delivered',
+} as const
+
+type StatusKey = keyof typeof statusMap
+
+const statusIndexMap = Object.keys(statusMap).reduce(
+  (acc, key, index) => {
+    acc[key as StatusKey] = index
+    return acc
+  },
+  {} as Record<StatusKey, number>
+)
+
+const totalSteps = Object.keys(statusIndexMap).length
+
 export default defineEventHandler(async (_event) => {
   try {
     // await requireUserSession(event)
@@ -17,23 +39,16 @@ export default defineEventHandler(async (_event) => {
         const slug = props.Slug?.formula?.string || record.id
         const status = props.Status?.status?.name || 'Plan'
 
-        const statusMap = {
-          Plan: 'Plan',
-          Quotation: 'Document',
-          Shoot: 'Production',
-          Edit: 'Post-Production',
-          Delivered: 'Delivered',
-        } as const
-
         const startDate = props.Date?.date?.start ? new Date(props.Date.date.start) : new Date()
         const endDate = props.Date?.date?.end ? new Date(props.Date.date.end) : new Date(startDate.getTime() + 86400000)
 
         projects.push({
-          id: slug,
-          index: props.Index?.number || Math.floor(Math.random() * 100),
+          id: record.id,
+          index: props.Index?.number,
+          slug,
           title: name,
-          status: statusMap[status] || 'Plan',
-          progress: props.Index?.number ? Math.min(props.Index.number * 2, 100) : 45,
+          status: statusMap[status],
+          progress: Math.round(((statusIndexMap[status] + 1) / totalSteps) * 100),
           period: {
             start: startDate.toISOString(),
             end: endDate.toISOString(),

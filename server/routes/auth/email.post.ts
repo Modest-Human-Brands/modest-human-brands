@@ -24,7 +24,7 @@ export async function sendEmail<T extends keyof EmailTemplateData>(template: T, 
   await Promise.allSettled(
     payload.map(async (payloadData) => {
       try {
-        await $fetch('/api/connect/text/email/send', {
+        await $fetch('/api/interaction/email/send', {
           baseURL: config.public.connectUrl,
           method: 'POST',
           body: {

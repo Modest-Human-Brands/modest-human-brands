@@ -8,6 +8,7 @@ export interface ProjectClient {
 export interface Project {
   id: string
   index: number
+  slug: string
   title: string
   status: ProjectStatus
   progress: number

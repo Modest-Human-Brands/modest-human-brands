@@ -1,10 +1,10 @@
-import type { MDocTemplateResponse } from './[id].get'
+import type { MDocTemplate } from './[id].get'
 
 export default defineEventHandler(async () => {
   try {
     const config = useRuntimeConfig()
 
-    const response = await $fetch<MDocTemplateResponse[]>('/api/document/template', {
+    const response = await $fetch<MDocTemplate[]>('/api/document/template', {
       baseURL: config.public.docUrl,
     })
 
