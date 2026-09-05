@@ -81,7 +81,7 @@ services:
         max_attempts: 3
 
   livekit-redis:
-    image: redis:7-alpine
+    image: redis:8-alpine@sha256:becdda6c7f4b3fb42e42fd7f120bbf5c54c4caaaf16f26da24e4563d2c1f0576
     deploy:
       replicas: 1
       restart_policy:
