@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.6
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.5...v0.10.6)
+
+### 🩹 Fixes
+
+- Update target date for waitlist and improve template formatting ([22502b0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/22502b0))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.5
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.4...v0.10.5)
