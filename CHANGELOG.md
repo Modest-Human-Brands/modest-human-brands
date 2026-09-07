@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.7
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.6...v0.10.7)
+
+### 🎨 Styles
+
+- Add new dashboard and landing preview images ([16452a6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/16452a6))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.6
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.5...v0.10.6)
