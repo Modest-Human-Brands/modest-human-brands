@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.5
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.4...v0.10.5)
+
+### 💅 Refactors
+
+- Landing page layout and design elements ([2e1a9d4](https://github.com/Modest-Human-Brands/modest-human-brands/commit/2e1a9d4))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.4
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.3...v0.10.4)
