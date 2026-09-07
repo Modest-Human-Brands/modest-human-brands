@@ -49,7 +49,21 @@ services:
         max_attempts: 3
         window: 120s
 
-  livekit:
+  connect-ui:
+    image: ghcr.io/modest-human-brands/mconnect-web:latest
+    env_file:
+      - .env
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  connect-livekit:
     image: livekit/livekit-server:latest
     command: --config /etc/livekit.yaml
     # ports:
@@ -76,7 +90,7 @@ services:
         max_attempts: 3
         window: 120s
 
-  livekit-egress:
+  connect-livekit-egress:
     image: livekit/egress:latest
     environment:
       - EGRESS_CONFIG_FILE=/etc/egress.yaml
@@ -101,7 +115,7 @@ services:
         max_attempts: 3
         window: 120s
 
-  livekit-sip:
+  connect-livekit-sip:
     image: livekit/sip:latest
     ports:
       - '5060:5060/udp'
@@ -127,8 +141,8 @@ services:
         max_attempts: 3
         window: 120s
 
-  livekit-redis:
-    image: redis:7-alpine
+  connect-livekit-redis:
+    image: redis:8-alpine
     networks:
       - internal
     healthcheck:

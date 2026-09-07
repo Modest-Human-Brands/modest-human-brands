@@ -22,7 +22,7 @@ interface SidebarAction {
 }
 
 const sidebarActions: readonly SidebarAction[] = [
-  { id: 'comment', label: 'Add comments', icon: 'local:chat' },
+  { id: 'comment', label: 'Add comments', icon: 'local:message' },
   { id: 'sign', label: 'Fill & Sign', icon: 'local:signature' },
   { id: 'edit', label: 'Edit PDF', icon: 'local:pen' },
   { id: 'download', label: 'Download PDF', icon: 'local:download' },

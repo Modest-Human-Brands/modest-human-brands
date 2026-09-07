@@ -14,7 +14,7 @@ const props = defineProps<{
 
 defineEmits(['next', 'prev'])
 
-const actionIcons = ['local:star', 'local:print', 'local:trash', 'local:zoom-fit']
+const actionIcons = ['local:star', 'local:print', 'local:zoom-fit']
 
 const timeAgo = useTimeAgo(() => new Date(props.date))
 const formattedDate = useDateFormat(() => new Date(props.date), 'MMMM D, h:mm A')

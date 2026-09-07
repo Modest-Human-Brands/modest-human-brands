@@ -4,7 +4,7 @@ export const CONNECT_CHANNELS: { id: ChannelType; name: string; icon: string }[]
   { id: 'email', name: 'Email', icon: 'local:email' },
   { id: 'whatsapp', name: 'WhatsApp', icon: 'local:whatsapp' },
   { id: 'instagram', name: 'Instagram', icon: 'local:instagram' },
-  { id: 'sms', name: 'SMS', icon: 'local:chat' },
+  { id: 'sms', name: 'SMS', icon: 'local:message' },
   { id: 'phone', name: 'Phone', icon: 'local:phone' },
 ]
 

@@ -16,7 +16,7 @@ services:
       - 3000:3000
 
   connect:
-    image: ghcr.io/modest-human-brands/mconnect:latest
+    build: ../code-connect
     env_file:
       - .env
     volumes:
@@ -29,6 +29,16 @@ services:
         max_attempts: 3
     ports:
       - 5100:3000
+
+  connect-ui:
+    build: ../code-connect-app
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    ports:
+      - 5101:8080
 
   livekit:
     image: livekit/livekit-server:latest
@@ -81,7 +91,7 @@ services:
         max_attempts: 3
 
   livekit-redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     deploy:
       replicas: 1
       restart_policy:
@@ -149,13 +159,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../mconnect/config
+      device: ../code-connect/config
   mconnect-data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../mconnect/.data
+      device: ../code-connect/.data
 
   mdoc-asset:
     driver: local

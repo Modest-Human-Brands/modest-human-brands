@@ -57,7 +57,7 @@ const filteredConversations = computed(() => {
         " />
 
       <div v-if="filteredConversations.length === 0" class="mt-10 flex flex-col items-center text-light-500">
-        <NuxtIcon name="local:chat" class="mb-2 text-2xl opacity-50" />
+        <NuxtIcon name="local:message" class="mb-2 text-2xl opacity-50" />
         <span class="text-xs font-semi-bold">No {{ activeTab }} found</span>
       </div>
     </div>
