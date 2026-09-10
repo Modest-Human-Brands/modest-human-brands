@@ -1,22 +1,21 @@
-import { retransformTemplate } from '~~/server/utils/transform-template'
-
 export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
-    const orgId = user.organizations[0]
+    const cookieOrgId = getCookie(event, 'active-org-id')
+    const activeOrgId = user.organizations?.find((org) => org.orgId === cookieOrgId)?.orgId ?? user.organizations?.[0]?.orgId
 
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { organization, templateData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
+    const { organization, templateData } = await retransformTemplate({ ...body, orgId: activeOrgId, templateId: body.template })
 
     const documentStorage = useStorage<Resource<'document'>>('data:resource:document')
     const documents = (await documentStorage.getItems(await documentStorage.getKeys()))
       .flatMap(({ value }) => value?.record || [])
-      .filter((record) => record.properties.Organization.relation[0]?.id === orgId)
+      .filter((record) => record.properties.Organization.relation[0]?.id === activeOrgId)
 
     body.name = `${organization!.name.replaceAll(' ', '-').toLowerCase()}-${body.template.toUpperCase()[0]}-${documents.length}-1`
-    body.orgId = orgId
+    body.orgId = activeOrgId
     body.data = templateData
 
     const response = await $fetch<{ id: string; templateId: string; name: string; sizeBytes: number }>('/api/document/template', {
@@ -33,7 +32,7 @@ export default defineEventHandler(async (event) => {
         templateId: response.templateId,
         fileName: response.name,
       },
-      orgId
+      activeOrgId
     )
 
     return response

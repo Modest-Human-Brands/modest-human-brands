@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const { user } = useUserSession()
 
-const selectedOrg = ref(user.value?.organizations?.[0]?.orgId)
+const selectedOrg = useCookie<string | undefined>('active-org-id', {
+  default: () => user.value?.organizations?.[0]?.orgId,
+})
 const isDropdownOpen = ref(false)
 
 watch(

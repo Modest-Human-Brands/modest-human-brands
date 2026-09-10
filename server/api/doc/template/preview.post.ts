@@ -1,14 +1,13 @@
-import { retransformTemplate } from '~~/server/utils/transform-template'
-
 export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
-    const orgId = user.organizations[0]
+    const cookieOrgId = getCookie(event, 'active-org-id')
+    const activeOrgId = user.organizations?.find((org) => org.orgId === cookieOrgId)?.orgId ?? user.organizations?.[0]?.orgId
 
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { templateData } = await retransformTemplate({ ...body, orgId, templateId: body.templateId })
+    const { templateData } = await retransformTemplate({ ...body, orgId: activeOrgId, templateId: body.templateId })
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,

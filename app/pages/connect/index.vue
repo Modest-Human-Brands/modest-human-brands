@@ -70,7 +70,7 @@ const setPrevMessage = () => {
       </div>
     </aside>
 
-    <ConnectPreviewPanel v-if="activePreview" v-bind="activePreview" @next="setNextMessage" @prev="setPrevMessage" />
+    <ConnectPreviewPanel v-if="activePreview" v-bind="activePreview" class="rounded-t-2xl bg-dark-500" @next="setNextMessage" @prev="setPrevMessage" />
     <div v-else class="flex min-w-0 flex-1 flex-col overflow-hidden rounded-t-2xl bg-dark-500/20" />
   </div>
 </template>

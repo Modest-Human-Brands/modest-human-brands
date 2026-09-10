@@ -1,6 +1,8 @@
 export default defineEventHandler(async (event) => {
   try {
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
+    const cookieOrgId = getCookie(event, 'active-org-id')
+    const activeOrgId = user.organizations?.find((org) => org.orgId === cookieOrgId)?.orgId ?? user.organizations?.[0]?.orgId
 
     const config = useRuntimeConfig()
 
@@ -18,6 +20,9 @@ export default defineEventHandler(async (event) => {
       }[]
     >('/api/interaction', {
       baseURL: config.public.connectUrl,
+      headers: {
+        ...(activeOrgId ? { 'x-org-id': activeOrgId } : {}),
+      },
     })
 
     return rawData.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -27,7 +32,6 @@ export default defineEventHandler(async (event) => {
     }
 
     console.error('API connect/index GET', error)
-
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch messages',

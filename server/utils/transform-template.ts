@@ -1,11 +1,26 @@
-export async function transformTemplate(variables: Record<string, string>) {
+import type { H3Event } from 'h3'
+
+export async function transformTemplate(event: H3Event, variables: Record<string, string>) {
   if ('organization' in variables) {
     delete variables['organization']
+  }
+  if ('tracking' in variables) {
+    delete variables['tracking']
+  }
+
+  if ('recipient' in variables) {
+    try {
+      const contacts = await event.$fetch<{ id: string; name: string }[]>('/api/contact')
+      variables['recipient'] = `enum:${contacts.map((p) => `${p.id}|${p.name}`).join(',')}`
+    } catch (error) {
+      console.error('Failed to fetch recipient for enum transformation:', error)
+      variables['recipient'] = 'enum:'
+    }
   }
 
   if ('project' in variables) {
     try {
-      const projects = await $fetch<{ id: string; title: string }[]>('/api/project')
+      const projects = await event.$fetch<{ id: string; title: string }[]>('/api/project')
       variables['project'] = `enum:${projects.map((p) => `${p.id}|${p.title}`).join(',')}`
     } catch (error) {
       console.error('Failed to fetch projects for enum transformation:', error)
@@ -15,7 +30,7 @@ export async function transformTemplate(variables: Record<string, string>) {
 
   if ('terms' in variables) {
     try {
-      const terms = await $fetch<{ id: string; slug: string; title: string }[]>('/api/compliance')
+      const terms = await event.$fetch<{ id: string; slug: string; title: string }[]>('/api/compliance')
       variables['terms'] = `enum:${terms.map((t) => `${t.slug || t.id}|${t.title}`).join(',')}`
     } catch (error) {
       console.error('Failed to fetch terms for enum transformation:', error)
@@ -27,7 +42,7 @@ export async function transformTemplate(variables: Record<string, string>) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function retransformTemplate({ data, orgId }: { data: any; orgId: string }) {
+export async function retransformTemplate({ data, orgId }: { recipientId: string; orgId: string; data: any }) {
   let organization = null
   try {
     organization = await $fetch(`/api/organization/${orgId}`)
@@ -38,6 +53,9 @@ export async function retransformTemplate({ data, orgId }: { data: any; orgId: s
   const templateData = data || {}
 
   templateData.organization = organization
+
+  // Extract 'id' if the frontend submitted the rich object { id, name }
+  const recipientId = typeof templateData.recipient === 'object' ? templateData.recipient?.id : templateData.recipient
 
   // Extract 'id' if the frontend submitted the rich object { id, name }
   const targetTermsId = typeof templateData.terms === 'object' ? templateData.terms?.id : templateData.terms
@@ -71,5 +89,5 @@ export async function retransformTemplate({ data, orgId }: { data: any; orgId: s
     }
   }
 
-  return { organization, templateData }
+  return { recipientId, organization, templateData }
 }

@@ -115,9 +115,9 @@ function fitBy() {
 //   viewerState.rotation = (viewerState.rotation + 90) % 360
 // }
 
-function comment() {}
+function handleComment() {}
 
-async function download() {
+async function handleDownload() {
   if (!props.doc?.previewUrl) return
 
   const downloadUrl = `${props.doc?.previewUrl}?download=true`
@@ -144,7 +144,7 @@ async function download() {
   }
 }
 
-async function print() {
+async function handlePrint() {
   if (!props.src) return
   let blobUrl: string | null = null
 
@@ -237,9 +237,9 @@ async function print() {
         @zoom-in="zoomIn"
         @zoom-out="zoomOut"
         @fit-by="fitBy"
-        @comment="comment"
-        @download="download"
-        @print="print">
+        @comment="handleComment"
+        @download="handleDownload"
+        @print="handlePrint">
         <template #custom-actions>
           <slot name="toolbar-actions" />
         </template>

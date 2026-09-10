@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       baseURL: config.public.docUrl,
     })
 
-    const transformedTemplate = { ...response, variables: await transformTemplate(response.variables) }
+    const transformedTemplate = { ...response, variables: await transformTemplate(event, response.variables) }
 
     return transformedTemplate
   } catch (error: unknown) {

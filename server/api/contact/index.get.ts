@@ -4,27 +4,25 @@ export default defineEventHandler<Promise<User[]>>(async (event) => {
     const cookieOrgId = getCookie(event, 'active-org-id')
     const activeOrgId = user.organizations?.find((org) => org.orgId === cookieOrgId)?.orgId ?? user.organizations?.[0]?.orgId
 
+    console.log({ activeOrgId })
+
     if (!activeOrgId) return []
 
     const config = useRuntimeConfig()
     const notionDbId = config.private.notionDbId as unknown as NotionDB
 
-    const users = (
-      await notionQueryDb<NotionUser>(notion, notionDbId.user, {
+    const contacts = (
+      await notionQueryDb<NotionContact>(notion, notionDbId.contact, {
         filter: {
           property: 'Organization',
-          rollup: {
-            any: {
-              relation: {
-                contains: activeOrgId,
-              },
-            },
+          relation: {
+            contains: activeOrgId,
           },
         },
       })
     ).filter((a) => !!a)
 
-    return users.map((user) => ({
+    return contacts.map((user) => ({
       id: user.id,
       name: notionTextStringify(user.properties.Name.title),
       email: user.properties.Email.email,
@@ -35,7 +33,7 @@ export default defineEventHandler<Promise<User[]>>(async (event) => {
       throw error
     }
 
-    console.error('API /user GET', error)
+    console.error('API /contact GET', error)
 
     throw createError({
       statusCode: 500,

@@ -111,12 +111,12 @@ watch(
   { deep: true }
 )
 
-async function onGenerate() {
+async function onSend() {
   isGenerating.value = true
   const nestedPayload = unflattenPayload(formData.value)
 
   try {
-    const response = await $fetch('/api/connect/email/template', {
+    const response = await $fetch<{ dispatchId: string; emailId: string; success: boolean }>('/api/connect/email/template', {
       method: 'POST',
       body: {
         template: templateId,
@@ -124,7 +124,7 @@ async function onGenerate() {
       },
     })
 
-    if (response?.id) {
+    if (response?.dispatchId) {
       await navigateTo(`/connect`)
     }
   } catch (error: unknown) {
@@ -216,9 +216,9 @@ function prevStep() {
             <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
           </button>
 
-          <button v-else :disabled="isGenerating || isPreviewLoading" :class="uiStyles.btnPrimary" @click="onGenerate">
+          <button v-else :disabled="isGenerating || isPreviewLoading" :class="uiStyles.btnPrimary" @click="onSend">
             <NuxtIcon v-if="isGenerating" name="local:loader" class="animate-spin text-lg" />
-            {{ isGenerating ? 'Finalizing...' : 'Generate PDF' }}
+            {{ isGenerating ? 'Finalizing...' : 'Send Email' }}
           </button>
         </div>
       </div>

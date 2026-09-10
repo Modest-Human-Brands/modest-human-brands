@@ -1,14 +1,14 @@
 <script setup lang="ts">
 const props = defineProps<{
   id: string
-  currentIndex: number
-  totalCount: number
-  subject: string
-  senderName: string
-  senderEmail: string
+  currentIndex?: number
+  totalCount?: number
+  subject?: string
+  senderName?: string
+  senderEmail?: string
   senderAvatarUrl?: string
   isVerified?: boolean
-  date: string
+  date?: string
   contentHtml: string
 }>()
 
@@ -16,13 +16,13 @@ defineEmits(['next', 'prev'])
 
 const actionIcons = ['local:star', 'local:print', 'local:zoom-fit']
 
-const timeAgo = useTimeAgo(() => new Date(props.date))
-const formattedDate = useDateFormat(() => new Date(props.date), 'MMMM D, h:mm A')
+const timeAgo = props.date ? useTimeAgo(() => new Date(props.date)) : undefined
+const formattedDate = props.date ? useDateFormat(() => new Date(props.date), 'MMMM D, h:mm A') : undefined
 </script>
 
 <template>
-  <section class="flex min-w-0 flex-1 flex-col overflow-hidden rounded-t-2xl bg-dark-500">
-    <header class="flex flex-col gap-6 p-6 pb-5">
+  <section class="flex min-w-0 flex-1 flex-col overflow-hidden">
+    <header v-if="currentIndex && totalCount" class="flex flex-col gap-6 p-6 pb-5">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-5 text-xs">
           <span>{{ currentIndex }} of {{ totalCount }}</span>
@@ -48,12 +48,12 @@ const formattedDate = useDateFormat(() => new Date(props.date), 'MMMM D, h:mm A'
         </div>
       </div>
 
-      <h2 class="text-2xl font-semi-bold text-white">{{ subject }}</h2>
+      <h2 v-if="subject" class="text-2xl font-semi-bold text-white">{{ subject }}</h2>
 
-      <div class="flex items-start justify-between">
+      <div v-if="senderName" class="flex items-start justify-between">
         <div class="flex items-center gap-3">
           <img v-if="senderAvatarUrl" :src="senderAvatarUrl" alt="" class="size-10 rounded-full object-cover" loading="lazy" />
-          <div v-else class="text-3xs flex size-10 shrink-0 items-center justify-center rounded-full bg-white font-bold uppercase text-black">
+          <div class="text-3xs flex size-10 shrink-0 items-center justify-center rounded-full bg-white font-bold uppercase text-black">
             {{ senderName.charAt(0) }}
           </div>
           <div class="flex flex-col">
@@ -73,7 +73,7 @@ const formattedDate = useDateFormat(() => new Date(props.date), 'MMMM D, h:mm A'
     </header>
 
     <div class="scrollbar-hidden flex-1 overflow-y-auto px-6 pb-6">
-      <div class="emailHtmlContainer min-h-full w-full overflow-hidden rounded-lg p-6 [&_table]:border-separate [&_table]:border-spacing-0" v-html="contentHtml" />
+      <div class="emailHtmlContainer min-h-full w-full overflow-hidden p-6 [&_table]:border-separate [&_table]:border-spacing-0" v-html="contentHtml" />
     </div>
   </section>
 </template>
