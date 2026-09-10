@@ -129,6 +129,7 @@ export default defineNuxtConfig({
       llhlsUrl: '',
     },
     private: {
+      mhbOrgId: '',
       livekitApiKey: '',
       livekitApiSecret: '',
       notionDbId: '',

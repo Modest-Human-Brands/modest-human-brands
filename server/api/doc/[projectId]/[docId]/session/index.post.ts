@@ -26,6 +26,7 @@ export default defineEventHandler(async (event) => {
     try {
       await $fetch('/api/interaction/email/send', {
         baseURL: config.public.connectUrl,
+        headers: { 'x-org-id': config.private.mhbOrgId },
         method: 'POST',
         body: {
           contactId: docDetails.project?.contact?.id,

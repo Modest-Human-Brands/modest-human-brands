@@ -14,6 +14,7 @@ export async function sendEmail<T extends keyof EmailTemplateData>(template: T, 
       try {
         await $fetch('/api/interaction/email/send', {
           baseURL: config.public.connectUrl,
+          headers: { 'x-org-id': config.private.mhbOrgId },
           method: 'POST',
           body: {
             recipientEmail: payloadData.toEmail,
