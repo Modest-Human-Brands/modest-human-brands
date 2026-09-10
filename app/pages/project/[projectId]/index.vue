@@ -32,9 +32,6 @@ interface ProjectFormData {
 const route = useRoute()
 const projectId = route.params.projectId as string
 
-const { user } = useUserSession()
-const { data: organizationData } = await useFetch(`/api/organization/${user.value?.organizations?.[0]}`)
-const organization = computed(() => organizationData.value ?? { name: '', branding: { logo: '/logo.png' } })
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 const editedAt = ref('Jan 17')
 
@@ -143,7 +140,7 @@ function formatDateDisplay(dateStr: string | undefined): string {
 
 <template>
   <div class="flex h-screen w-screen items-start justify-start overflow-hidden bg-dark-400 font-main">
-    <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" active-key="project" hydrate-on-idle />
+    <LazyAppNavbar active-key="project" hydrate-on-idle />
 
     <div class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
       <header class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-4 py-4 md:px-8">

@@ -6,7 +6,11 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
   createdAt: string
   updatedAt: string
   isProfileComplete: boolean
-  organizations: string[]
+  organizations: {
+    orgId: string
+    orgName: string
+    orgLogo?: string
+  }[]
 }> {
   const config = useRuntimeConfig()
   const notionDbId = config.private.notionDbId as unknown as NotionDB
@@ -21,6 +25,20 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
   if (results.length > 0) {
     const data = results[0] as unknown as NotionUser
 
+    const organizations = await Promise.all(
+      data.properties.Organization.rollup.array.map(async ({ relation }) => {
+        const orgId = relation[0]!.id
+        const orgPage = (await notion.pages.retrieve({ page_id: orgId })) as unknown as NotionOrganization
+        const orgLogo = orgPage.icon?.type === 'external' ? orgPage.icon.external.url : orgPage.icon?.type === 'file' ? orgPage.icon.file.url : undefined
+
+        return {
+          orgId,
+          orgName: notionTextStringify(orgPage.properties.Name?.title),
+          orgLogo,
+        }
+      })
+    )
+
     return {
       id: data.id,
       name: notionTextStringify(data.properties.Name.title),
@@ -29,7 +47,7 @@ export async function findOrCreateNotionUser(authUser: { sub?: string; name?: st
       createdAt: data.created_time || new Date().toISOString(),
       updatedAt: data.last_edited_time || new Date().toISOString(),
       isProfileComplete: data.properties.Status.status.name !== 'Unfilled',
-      organizations: data.properties.Organization.rollup.array.map(({ relation }) => relation[0]!.id),
+      organizations,
     }
   }
 

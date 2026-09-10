@@ -1,8 +1,4 @@
 <script setup lang="ts">
-const { user } = useUserSession()
-const { data: organizationData } = await useFetch(`/api/organization/${user.value?.organizations[0]}`)
-
-const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
 const route = useRoute()
 const editedAt = 'Jan 17'
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
@@ -48,7 +44,7 @@ const dynamicBreadcrumbs = computed(() => {
 
 <template>
   <div class="flex h-screen w-screen items-start justify-start bg-dark-400">
-    <LazyAppNavbar :organization-name="organization.name" :organization-logo="organization.branding.logo" :active-key="activeTab.id" hydrate-on-idle />
+    <LazyAppNavbar :active-key="activeTab.id" hydrate-on-idle />
 
     <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
       <div class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-2 py-4 md:gap-6 md:px-4 md:py-6">
