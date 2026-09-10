@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.10.10
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.9...v0.10.10)
+
+### 🚀 Enhancements
+
+- Add SVG icons for Google and loader; enhance AppNavbar with organization selection ([f2a282e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f2a282e))
+- Enhance email interaction details and telemetry ([3b99f7e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/3b99f7e))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.9
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.8...v0.10.9)
