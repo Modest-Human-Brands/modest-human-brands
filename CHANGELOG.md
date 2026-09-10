@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.11
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.10...v0.10.11)
+
+### 🩹 Fixes
+
+- Add organization id header to email interaction requests ([2e0010c](https://github.com/Modest-Human-Brands/modest-human-brands/commit/2e0010c))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.10
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.9...v0.10.10)
