@@ -50,7 +50,7 @@ const props = withDefaults(
   defineProps<{
     media?: string
     multiOrientation?: boolean
-    aspectRatio?: string
+    aspectRatio?: number
     poster?: string
     preload?: 'none' | 'metadata' | 'auto'
     controls?: boolean
@@ -61,11 +61,13 @@ const props = withDefaults(
     playsinline?: boolean
     disablePictureInPicture?: boolean
     live?: boolean
+    objectFit?: 'auto' | 'cover' | 'contain' | 'fill'
+    cssClass: string
   }>(),
   {
     media: undefined,
     multiOrientation: false,
-    aspectRatio: '16:9',
+    aspectRatio: 16 / 9,
     poster: undefined,
     preload: 'auto',
     controls: false,
@@ -76,6 +78,8 @@ const props = withDefaults(
     playsinline: false,
     disablePictureInPicture: false,
     live: false,
+    objectFit: 'auto',
+    class: '',
   }
 )
 
@@ -112,9 +116,7 @@ const currentOrientation = computed<Orientation>(() => {
   if (hasMeasuredSize.value) {
     return width.value > height.value ? 'landscape' : 'portrait'
   }
-  const [w, h] = props.aspectRatio.split(':').map(Number)
-  if (w && h) return w >= h ? 'landscape' : 'portrait'
-  return 'landscape'
+  return props.aspectRatio ? 'landscape' : 'portrait'
 })
 
 const activeSource = computed(() => {
@@ -126,6 +128,7 @@ const videoUrl = computed(() => {
   if (!activeSource.value) return ''
   const base = baseUrl.value.replace(/\/+$/, '')
   const source = activeSource.value.replace(/^\/+/, '')
+
   return `${base}/${source}`
 })
 
@@ -154,6 +157,18 @@ const mediaTag = computed(() => {
     default:
       return 'video'
   }
+})
+
+const objectFitStyle = computed(() => {
+  const style: Record<string, string> = {
+    aspectRatio: props.aspectRatio.toString(),
+  }
+
+  if (props.objectFit !== 'auto') {
+    return { ...style, '--media-object-fit': props.objectFit, '--media-object-position': 'center' }
+  }
+
+  return style
 })
 
 watch(videoUrl, (newUrl, oldUrl) => {
@@ -370,7 +385,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="wrapperRef" class="group relative flex size-full items-center justify-center" :style="{ aspectRatio: calculateAspectRatio(aspectRatio) }" @click.self="showQualityMenu = false">
+  <div ref="wrapperRef" :class="`group relative flex size-full items-center justify-center ${cssClass}`" :style="objectFitStyle" @click.self="showQualityMenu = false">
     <ClientOnly>
       <video-player class="size-full" :class="{ shimmer: !isVideoLoaded }">
         <video-minimal-skin v-if="controls" class="size-full">

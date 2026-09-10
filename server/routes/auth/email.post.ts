@@ -1,14 +1,44 @@
 import { findOrCreateNotionUser } from '~~/server/routes/auth/google.get'
 
+// HARD CODED MBH ORG
 export const mhbOrg = {
   id: 'modest-human-brands',
   name: 'Modest Human Brands',
-  address: 'Abc Road, Near DEF, UIO - 1890',
+  legalName: 'Modest Human Brands LLP',
+  entityType: 'LLP',
+  tradeRelationship: 'Primary',
+  gstin: undefined,
+  pan: 'ABCDE0123F',
+  address: '17 NO, N S Road,harinavi Beltola, South 24 Parganas, West Bengal, India',
+  foundedYear: 2025,
+  accountDetails: {
+    accountName: 'Modest Human Brands LLP',
+    accountNumber: 1_234_567_890,
+    bankName: 'HDFC Bank',
+    ifscCode: 'HDFC0001234',
+  },
   website: 'https://modesthumanbrands.com',
+  contactEmail: 'contact@modesthumanbrands.com',
+  billingEmail: 'billing@modesthumanbrands.com',
+  primaryContactId: 'contact-1',
+  organizationMemberIds: ['member-1'],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   branding: {
     logo: 'https://modesthumanbrands.com/logo.svg',
-    color: { primary: '#2B2B2B', accent: '#4A85FF' },
+    color: {
+      primary: '#111827',
+      accent: '#5945EA',
+    },
     font: 'Exo2',
+  },
+  phone: '+919999999999',
+  whatsapp: '+919999999999',
+  socials: {
+    instagram: 'https://www.instagram.com/modesthumanbrands/',
+    facebook: 'https://facebook.com/modesthumanbrands',
+    linkedin: 'https://linkedin.com/company/modest-human-brands',
+    youtube: 'https://www.youtube.com/@modesthumanbrands',
   },
 }
 
