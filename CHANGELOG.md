@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.9
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.8...v0.10.9)
+
+### 🏡 Chore
+
+- Update dependencies to latest versions ([a142315](https://github.com/Modest-Human-Brands/modest-human-brands/commit/a142315))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.8
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.7...v0.10.8)
