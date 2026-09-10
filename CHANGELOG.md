@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.8
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.7...v0.10.8)
+
+### 🏡 Chore
+
+- Update package dependencies and improve organization details in email route ([6034a34](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6034a34))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.7
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.6...v0.10.7)
