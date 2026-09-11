@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.14
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.13...v0.10.14)
+
+### 🩹 Fixes
+
+- Update hero video file with new hash and size ([1b0ba80](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1b0ba80))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.13
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.12...v0.10.13)
