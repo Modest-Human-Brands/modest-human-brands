@@ -226,7 +226,7 @@ const footerLinks = [
           <NuxtVideo
             poster="/images/hero-image-1.webp"
             media="/videos/hero-video-1.mp4"
-            aspect-ratio="16:9"
+            :aspect-ratio="16 / 9"
             :disable-picture-in-picture="true"
             :controls="true"
             controls-list="nodownload"
@@ -242,8 +242,10 @@ const footerLinks = [
       <section class="grid border-b border-light-500/50 md:grid-cols-3 md:divide-x md:divide-light-500/10">
         <div class="hidden md:block" />
         <NuxtLink
-          to="https://youtube.com/@modest_human_brands"
+          to="https://youtu.be/76Of8_iaD58"
           external
+          target="_blank"
+          rel="noopener"
           class="font-medium group flex w-full items-center justify-center gap-2.5 bg-accent-500 py-3.5 text-center text-sm uppercase text-white transition-colors hover:bg-accent-600 md:py-4">
           <span>View Product Demo</span>
         </NuxtLink>
