@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.13
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.12...v0.10.13)
+
+### 🎨 Styles
+
+- Refactor template and improve code formatting in index.vue ([51212aa](https://github.com/Modest-Human-Brands/modest-human-brands/commit/51212aa))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.12
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.11...v0.10.12)
