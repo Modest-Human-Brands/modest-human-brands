@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.10.12
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.11...v0.10.12)
+
+### 🚀 Enhancements
+
+- Add client management features including client creation and listing ([9542120](https://github.com/Modest-Human-Brands/modest-human-brands/commit/9542120))
+
+### 🏡 Chore
+
+- Update tauri-plugin-updater to version 2.11 in Cargo.toml ([fd9f17a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/fd9f17a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.11
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.10...v0.10.11)
