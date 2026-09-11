@@ -1,12 +1,18 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-const props = defineProps<{
-  label: string
-  schemaType: string
-  modelValue: any
-  errorMessage?: string
-  schemaBlueprint?: Record<string, any>
-}>()
+const props = withDefaults(
+  defineProps<{
+    label: string
+    schemaType: string
+    modelValue: any
+    errorMessage?: string
+    schemaBlueprint?: Record<string, any>
+    required?: boolean
+  }>(),
+  {
+    required: true,
+  }
+)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
@@ -145,7 +151,7 @@ function handleFileUpload(event: Event) {
 
     <p v-if="isArray || isArrayOfObjects" class="mb-4 text-sm text-light-500">(Respondents can add multiple items)</p>
     <p v-else-if="isSignature" class="mb-4 text-sm text-light-500">(Please upload an image of your signature)</p>
-    <p v-else class="mb-4 text-sm text-light-500">(Required field)</p>
+    <p v-else class="mb-4 text-sm text-light-500">{{ required ? '(Required field)' : '(Optional)' }}</p>
 
     <div class="relative flex w-full">
       <textarea
@@ -154,7 +160,7 @@ function handleFileUpload(event: Event) {
         placeholder="Enter content..."
         rows="4"
         class="w-full rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-white focus:bg-dark-400"
-        required
+        :required="required"
         @input="onInput"></textarea>
 
       <div v-else-if="isArray" class="flex w-full flex-col gap-3">
@@ -164,7 +170,7 @@ function handleFileUpload(event: Event) {
             type="text"
             placeholder="Enter item..."
             class="w-full rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-white focus:bg-dark-400"
-            required
+            :required="required"
             @input="updateArrayItem(index, $event)" />
           <button
             type="button"
@@ -227,7 +233,7 @@ function handleFileUpload(event: Event) {
         <select
           :value="getSelectValue(modelValue)"
           class="w-full appearance-none rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 pr-10 text-sm text-white outline-none transition-colors focus:border-white focus:bg-dark-400"
-          required
+          :required="required"
           @change="onEnumChange">
           <option value="" disabled :selected="!modelValue">Select an option</option>
           <option v-for="opt in enumOptions" :key="opt.value" :value="opt.value">
@@ -243,7 +249,7 @@ function handleFileUpload(event: Event) {
         :value="modelValue"
         :placeholder="hasNativePicker ? '' : 'Enter data'"
         class="w-full rounded-xl border border-dark-400 bg-dark-500 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-white focus:bg-dark-400"
-        required
+        :required="required"
         @input="onInput" />
     </div>
 

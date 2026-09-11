@@ -4,8 +4,6 @@ export default defineEventHandler<Promise<User[]>>(async (event) => {
     const cookieOrgId = getCookie(event, 'active-org-id')
     const activeOrgId = user.organizations?.find((org) => org.orgId === cookieOrgId)?.orgId ?? user.organizations?.[0]?.orgId
 
-    console.log({ activeOrgId })
-
     if (!activeOrgId) return []
 
     const config = useRuntimeConfig()
