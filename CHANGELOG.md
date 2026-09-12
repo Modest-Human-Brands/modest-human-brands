@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.15
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.14...v0.10.15)
+
+### 💅 Refactors
+
+- Update layout and replace video formats for improved performance ([82c5c33](https://github.com/Modest-Human-Brands/modest-human-brands/commit/82c5c33))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.14
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.13...v0.10.14)
