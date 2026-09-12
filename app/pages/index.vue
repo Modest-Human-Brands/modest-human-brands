@@ -211,8 +211,7 @@ const footerLinks = [
           <NuxtLink to="/waitlist" class="rounded-lg border border-accent-500 px-5 py-2 text-base shadow-xl shadow-white/10 transition-transform hover:scale-105"> Join Waitlist </NuxtLink>
 
           <div class="mt-8 aspect-video w-full overflow-hidden bg-transparent">
-            <!-- Convert to Webp and replace video tag with img tag -->
-            <video :src="'/videos/poster-1.mp4'" class="size-full object-cover" autoplay muted loop playsinline disablePictureInPicture />
+            <img src="/images/poster-1.webp" alt="" class="w-full object-cover" preload />
           </div>
         </div>
       </section>
@@ -225,7 +224,7 @@ const footerLinks = [
         <div class="aspect-video w-full overflow-hidden">
           <NuxtVideo
             poster="/images/hero-image-1.webp"
-            media="/videos/hero-video-1.mp4"
+            media="/videos/hero-video-1.webm"
             :aspect-ratio="16 / 9"
             :disable-picture-in-picture="true"
             :controls="true"
