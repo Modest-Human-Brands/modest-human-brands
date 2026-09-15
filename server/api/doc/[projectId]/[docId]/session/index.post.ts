@@ -1,58 +1,23 @@
-import type { MDocDocument } from '../index.get'
-
 export default defineEventHandler(async (event) => {
   try {
     const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
 
+    if (!projectId || !docId) {
+      throw createError({ statusCode: 400, statusMessage: 'projectId and docId are strictly required' })
+    }
+
     const { signerName, signerEmail, signerIsContact } = await readBody<{ signerName: string; signerEmail: string; signerIsContact: boolean }>(event)
-    const config = useRuntimeConfig()
 
-    const docDetails = await $fetch<MDocDocument>(`/api/document/${docId}`, {
-      baseURL: config.public.docUrl,
+    const result = await createSignerSession({
+      projectId,
+      docId,
+      signerEmail,
+      signerName,
+      signerIsContact,
     })
 
-    const sessionRes = await $fetch<{
-      signer: string
-      expiresAt: string
-      sessionToken: string
-    }>(`/api/document/${docId}/session`, {
-      baseURL: config.public.docUrl,
-      method: 'POST',
-      body: { signerEmail, expiresIn: docDetails.rawData?.expiresIn },
-    })
-    const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.sessionToken}`
-
-    try {
-      await $fetch('/api/interaction/email/send', {
-        baseURL: config.public.connectUrl,
-        headers: { 'x-org-id': config.private.mhbOrgId },
-        method: 'POST',
-        body: {
-          contactId: docDetails.project?.contact?.id,
-          recipientEmail: signerEmail,
-          template: docDetails.templateId,
-          variables: {
-            ...docDetails.rawData,
-            recipient: {
-              name: signerName,
-              isContact: signerIsContact,
-              isSigned: false,
-            },
-            link: magicLink,
-          },
-          orgId: docDetails.organizationId,
-          projectId: docDetails.projectId,
-        },
-      })
-    } catch (error) {
-      console.warn('Automated MConnect Email Dispatch Failed:', error)
-    }
-
-    return {
-      ...sessionRes,
-      magicLink,
-    }
+    return result
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

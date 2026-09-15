@@ -55,66 +55,15 @@ interface MDocDocument {
   } | null
 }
 
-interface MDocTemplateResponse {
-  id: string
-  variables: Record<string, string>
-  signerFields: {
-    id: string
-    type: string
-    signerOrder: number
-    pageIndex: string
-    x: number
-    y: number
-    width: number
-    height: number
-    required: boolean
-    fontSize?: string
-  }[]
-}
-
 const route = useRoute()
 const projectId = route.params.projectId as string
 const docId = route.params.docId as string
 
-const { data: doc, refresh } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${docId}`)
+const { data: doc } = await useFetch<MDocDocument>(`/api/doc/${projectId}/${docId}`)
 
 const isDrawerOpen = ref(false)
 
-const isSendingEnvelope = ref(false)
-const magicLink = ref('')
-const isGeneratingLink = ref<string | null>(null)
-const isCopied = ref(false)
-
 if (!doc.value?.templateId) throw createError({ status: 404, message: 'Template not found' })
-
-const { data: template } = await useFetch<MDocTemplateResponse>(`/api/doc/template/${doc.value.templateId}`)
-
-const requiredSignerOrders = computed(() => {
-  if (!template.value) return [1]
-  if (!template.value?.signerFields) return [1]
-
-  const orders = new Set<number>()
-  template.value.signerFields.forEach((f) => orders.add(f.signerOrder))
-  return Array.from(orders).sort((a, b) => a - b)
-})
-
-const envelopeSigners = ref<{ order: number; name: string; email: string; role: string }[]>([])
-
-watchEffect(() => {
-  if (doc.value && requiredSignerOrders.value.length > 0 && envelopeSigners.value.length === 0) {
-    envelopeSigners.value = requiredSignerOrders.value.map((order, index) => {
-      if (index === 0 && doc.value?.project?.contact) {
-        return {
-          order,
-          name: doc.value.project.contact.name || '',
-          email: doc.value.project.contact.email || '',
-          role: 'Client',
-        }
-      }
-      return { order, name: '', email: '', role: 'Signer' }
-    })
-  }
-})
 
 function getInitials(name?: string) {
   if (!name) return 'C'
@@ -126,53 +75,31 @@ function getInitials(name?: string) {
     .toUpperCase()
 }
 
-const isEnvelopeValid = computed(() => {
-  return envelopeSigners.value.every((s) => s.name.trim() !== '' && s.email.trim() !== '' && s.email.includes('@'))
-})
+const resendState = ref<Record<string, 'sent' | false>>({})
 
-async function sendForSignature() {
-  isSendingEnvelope.value = true
-  try {
-    await $fetch(`/api/doc/${projectId}/${docId}/envelope`, {
-      method: 'POST',
-      body: {
-        expiresInDays: 7,
-        routingType: 'SEQUENTIAL',
-        signers: envelopeSigners.value,
-      },
-    })
-
-    await refresh()
-  } catch (error) {
-    console.error('Failed to create envelope:', error)
-  } finally {
-    isSendingEnvelope.value = false
-  }
+// Safe accessor — guards against a ref/value that isn't initialised so a
+// signer whose email never resolved can't throw during render.
+function getResendState(email: string) {
+  const value = resendState.value
+  return value ? value[email] || false : false
 }
 
-async function generateSessionLink(signerName: string, signerEmail: string, signerIsContact: boolean) {
-  isGeneratingLink.value = signerEmail
+async function resendSession(signer: { name: string; email: string }, isContact: boolean) {
   try {
-    const res = await $fetch(`/api/doc/${projectId}/${docId}/session`, {
+    await $fetch(`/api/doc/${projectId}/${docId}/session`, {
       method: 'POST',
-      body: { signerName, signerEmail, signerIsContact },
+      body: { signerName: signer.name, signerEmail: signer.email, signerIsContact: isContact },
     })
-
-    magicLink.value = res.magicLink
+    const value = resendState.value
+    if (value) {
+      value[signer.email] = 'sent'
+      setTimeout(() => {
+        value[signer.email] = false
+      }, 2500)
+    }
   } catch (error) {
-    console.error('Failed to generate session link:', error)
-  } finally {
-    isGeneratingLink.value = null
+    console.error('Resend session failed:', error)
   }
-}
-
-async function copyLink() {
-  if (!magicLink.value) return
-  await navigator.clipboard.writeText(magicLink.value)
-  isCopied.value = true
-  setTimeout(() => {
-    isCopied.value = false
-  }, 2000)
 }
 
 useEventListener('keydown', (e: KeyboardEvent) => {
@@ -278,108 +205,16 @@ useEventListener('keydown', (e: KeyboardEvent) => {
                   <span class="text-xs font-semi-bold uppercase tracking-wider" :class="signer.status === 'SIGNED' ? 'text-success-500' : 'text-alert-500'">
                     {{ signer.status }}
                   </span>
-
                   <button
-                    v-if="signer.status !== 'COMPLETED'"
-                    :disabled="isGeneratingLink === signer.email"
-                    class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-600 px-3 py-1.5 text-[10px] font-semi-bold text-light-400 transition-colors hover:border-accent-500 hover:text-white disabled:opacity-50"
-                    @click="generateSessionLink(signer.name, signer.email, index !== doc.routingQueue.length - 1)">
-                    <NuxtIcon v-if="isGeneratingLink === signer.email" name="local:loader" class="animate-spin text-sm" />
-                    <NuxtIcon v-else name="local:node" class="text-sm" />
-                    Get Link
+                    type="button"
+                    class="flex items-center gap-1.5 rounded-lg border border-dark-400 bg-dark-500/50 px-3 py-1.5 text-xs font-semi-bold text-light-500 transition-colors hover:text-white disabled:opacity-60"
+                    :disabled="getResendState(signer.email) === 'sent'"
+                    @click="resendSession(signer, index === 0)">
+                    <NuxtIcon :name="getResendState(signer.email) === 'sent' ? 'local:check' : 'local:refresh'" :class="getResendState(signer.email) === 'sent' ? 'text-success-500' : ''" />
+                    {{ getResendState(signer.email) === 'sent' ? 'Sent' : 'Resend' }}
                   </button>
                 </div>
               </div>
-            </div>
-
-            <div v-if="magicLink" class="animate-fade-in flex flex-col gap-2 pt-2">
-              <h3 class="text-sm font-semi-bold text-success-500">Magic Link Generated ✓</h3>
-              <div class="flex flex-col gap-3 rounded-xl border border-success-500/30 bg-success-500/10 p-4">
-                <p class="text-xs leading-relaxed text-light-400">Share this secure magic link with the signer. The link expires in 60 minutes.</p>
-                <input
-                  readonly
-                  :value="magicLink"
-                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-accent-500" />
-                <div class="flex items-center gap-3 pt-1">
-                  <button
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-accent-500"
-                    @click="copyLink">
-                    <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
-                    <span v-else>Copy Link</span>
-                  </button>
-
-                  <a
-                    :href="magicLink"
-                    target="_blank"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-accent-600 active:scale-95">
-                    Open Link
-                    <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-else class="flex flex-col gap-4">
-            <div v-if="!magicLink" class="flex flex-col gap-3">
-              <div v-for="signer in envelopeSigners" :key="signer.order" class="flex flex-col gap-3 rounded-xl border border-dark-400 bg-dark-500/50 p-4">
-                <h4 class="text-xs font-semi-bold uppercase tracking-wider text-light-500">Signer {{ signer.order }}</h4>
-                <div class="flex flex-col gap-2">
-                  <input
-                    v-model="signer.name"
-                    type="text"
-                    placeholder="Full Name"
-                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-accent-500" />
-                  <input
-                    v-model="signer.email"
-                    type="email"
-                    placeholder="Email Address"
-                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-accent-500" />
-                  <input
-                    v-model="signer.role"
-                    type="text"
-                    placeholder="Role (e.g. Client, Contractor)"
-                    class="w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-light-500/50 focus:border-accent-500" />
-                </div>
-              </div>
-            </div>
-
-            <div v-if="magicLink" class="animate-fade-in flex flex-col gap-2">
-              <h3 class="text-sm font-semi-bold text-success-500">Envelope Sent ✓</h3>
-              <div class="flex flex-col gap-3 rounded-xl border border-success-500/30 bg-success-500/10 p-4">
-                <p class="text-xs leading-relaxed text-light-400">Share this secure magic link with the signer. The link expires in 7 days.</p>
-                <input
-                  readonly
-                  :value="magicLink"
-                  class="font-mono w-full rounded-lg border border-dark-400 bg-dark-600 px-3 py-2 text-xs text-white outline-none transition-colors focus:border-accent-500" />
-                <div class="flex items-center gap-3 pt-1">
-                  <button
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg border border-dark-400 bg-dark-600 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-colors hover:border-accent-500"
-                    @click="copyLink">
-                    <span v-if="isCopied" class="text-success-500">✓ Copied!</span>
-                    <span v-else>Copy Link</span>
-                  </button>
-
-                  <a
-                    :href="magicLink"
-                    target="_blank"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-[11px] font-semi-bold uppercase tracking-wider text-white transition-transform hover:scale-105 hover:bg-accent-600 active:scale-95">
-                    Open Link
-                    <NuxtIcon name="local:chevron-bold" class="scale-x-[-1]" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-2 flex flex-col gap-3">
-              <button
-                v-if="!magicLink"
-                :disabled="isSendingEnvelope || !isEnvelopeValid"
-                class="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semi-bold text-dark-500 transition-colors hover:bg-light-400 disabled:cursor-not-allowed disabled:opacity-60"
-                @click="sendForSignature">
-                <NuxtIcon v-if="isSendingEnvelope" name="local:loader" class="animate-spin text-lg" />
-                {{ isSendingEnvelope ? 'Generating Envelope...' : 'Create Envelope & Get Link' }}
-              </button>
             </div>
           </div>
         </div>

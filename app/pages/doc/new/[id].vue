@@ -126,7 +126,7 @@ async function onGenerate() {
       },
     })
 
-    if (response?.id) {
+    if (response?.document?.id) {
       await navigateTo(`/doc`)
     }
   } catch (error: unknown) {

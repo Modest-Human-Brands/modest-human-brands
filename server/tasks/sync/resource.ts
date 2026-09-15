@@ -2,7 +2,7 @@ import pThrottle from 'p-throttle'
 import pRetry, { AbortError } from 'p-retry'
 
 const throttle = pThrottle({
-  limit: 3,
+  limit: 2,
   interval: 1000,
 })
 

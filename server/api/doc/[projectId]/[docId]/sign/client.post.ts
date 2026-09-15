@@ -17,6 +17,9 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
+    // This signature is the terminal one — hand the next signer their session.
+    void advanceSequentialSigner(docId!)
+
     return response
   } catch (error: unknown) {
     console.error(`API /doc/[projectId]/[docId]/client POST`, error)

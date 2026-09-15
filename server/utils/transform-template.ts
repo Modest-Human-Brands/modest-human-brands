@@ -54,8 +54,17 @@ export async function retransformTemplate({ data, orgId }: { recipientId: string
 
   templateData.organization = organization
 
-  // Extract 'id' if the frontend submitted the rich object { id, name }
-  const recipientId = typeof templateData.recipient === 'object' ? templateData.recipient?.id : templateData.recipient
+  const contactStorage = useStorage<Resource<'contact'>>('data:resource:contact')
+
+  const recipientId = templateData.recipient?.id
+  const recipient = await contactStorage.getItem<Resource<'contact'>>(notionNormalizeId(recipientId)!)
+
+  templateData.recipient = {
+    id: recipientId,
+    name: recipient?.record?.properties.Name.title?.[0]?.plain_text || '',
+    email: recipient?.record?.properties.Email.email || '',
+    phone: recipient?.record?.properties.Phone.phone_number || recipient?.record?.properties?.Whatsapp?.phone_number || '',
+  }
 
   // Extract 'id' if the frontend submitted the rich object { id, name }
   const targetTermsId = typeof templateData.terms === 'object' ? templateData.terms?.id : templateData.terms
