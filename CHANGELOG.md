@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.10.16
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.15...v0.10.16)
+
+### 🚀 Enhancements
+
+- Add p-retry, p-throttle deps; update sync schedule and enhance resource synchronization logic ([ac42414](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ac42414))
+
+### 💅 Refactors
+
+- Doc handling & session management;improve signer session creation and email dispatch ([99fe99a](https://github.com/Modest-Human-Brands/modest-human-brands/commit/99fe99a))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.15
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.14...v0.10.15)
