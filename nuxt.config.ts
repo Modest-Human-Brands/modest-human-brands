@@ -90,7 +90,7 @@ export default defineNuxtConfig({
       tasks: true,
     },
     scheduledTasks: {
-      '*/5 * * * *': ['sync:resource'],
+      '0,15,30,45 * * * *': ['sync:resource'], // Fires at :00, :15, :30, :45
     },
   },
   vue: {
