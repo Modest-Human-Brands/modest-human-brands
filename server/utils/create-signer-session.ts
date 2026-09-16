@@ -1,5 +1,5 @@
 export interface CreateSignerSessionParams {
-  projectId?: string
+  projectSlug?: string
   docId: string
   signerEmail: string
   signerName: string
@@ -12,7 +12,7 @@ interface SessionResponse {
   sessionToken: string
 }
 
-export default async function createSignerSession({ projectId, docId, signerEmail, signerName, signerIsContact }: CreateSignerSessionParams): Promise<SessionResponse & { magicLink: string }> {
+export default async function createSignerSession({ projectSlug, docId, signerEmail, signerName, signerIsContact }: CreateSignerSessionParams): Promise<SessionResponse & { magicLink: string }> {
   const config = useRuntimeConfig()
 
   const document = await $fetch<MDocDocument>(`/api/document/${docId}`, {
@@ -25,7 +25,7 @@ export default async function createSignerSession({ projectId, docId, signerEmai
     body: { signerEmail, expiresIn: document.rawData?.expiresIn },
   })
 
-  const magicLink = `${config.public.siteUrl}/doc/${projectId ?? 'misc'}/envelope/${docId}?token=${sessionRes.sessionToken}`
+  const magicLink = `${config.public.siteUrl}/doc/${projectSlug}/envelope/${docId}?token=${sessionRes.sessionToken}`
 
   try {
     await $fetch('/api/interaction/email/send', {
@@ -69,7 +69,7 @@ export async function advanceSequentialSigner(docId: string): Promise<void> {
       const isPending = signer.status !== 'COMPLETED' && signer.status !== 'SIGNED' && signer.status !== 'Void'
       if (isPending && predecessorSigned) {
         await createSignerSession({
-          projectId: document.project?.id || '',
+          projectSlug: document.project.slug,
           docId,
           signerEmail: signer.email,
           signerName: signer.name,
