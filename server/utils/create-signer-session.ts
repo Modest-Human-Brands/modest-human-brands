@@ -1,5 +1,5 @@
 export interface CreateSignerSessionParams {
-  projectId: string
+  projectId?: string
   docId: string
   signerEmail: string
   signerName: string
@@ -12,13 +12,7 @@ interface SessionResponse {
   sessionToken: string
 }
 
-/**
- * Creates a signing session for a single signer: builds the magic link and
- * dispatches the email, then resolves the session token. Email dispatch is
- * fire-and-forget — a failure is logged but never blocks session creation, so a
- * signer can always open the link even if the email bounces.
- */
-export async function createSignerSession({ projectId, docId, signerEmail, signerName, signerIsContact }: CreateSignerSessionParams): Promise<SessionResponse & { magicLink: string }> {
+export default async function createSignerSession({ projectId, docId, signerEmail, signerName, signerIsContact }: CreateSignerSessionParams): Promise<SessionResponse & { magicLink: string }> {
   const config = useRuntimeConfig()
 
   const document = await $fetch<MDocDocument>(`/api/document/${docId}`, {
@@ -31,7 +25,7 @@ export async function createSignerSession({ projectId, docId, signerEmail, signe
     body: { signerEmail, expiresIn: document.rawData?.expiresIn },
   })
 
-  const magicLink = `${config.public.siteUrl}/doc/${projectId}/envelope/${docId}?token=${sessionRes.sessionToken}`
+  const magicLink = `${config.public.siteUrl}/doc/${projectId ?? 'misc'}/envelope/${docId}?token=${sessionRes.sessionToken}`
 
   try {
     await $fetch('/api/interaction/email/send', {
@@ -62,14 +56,6 @@ export async function createSignerSession({ projectId, docId, signerEmail, signe
   return { ...sessionRes, magicLink }
 }
 
-/**
- * Triggered right after a signer completes their signature (in the sign
- * endpoints). Re-reads the sequential routing queue and hands a session to the
- * next due signer — the lowest-order signer that is still pending and whose
- * every predecessor has already signed. Sequential routing is driven by the
- * external service, so there is no "advance" endpoint to call; this is what
- * turns the external state change into a new magic link + email.
- */
 export async function advanceSequentialSigner(docId: string): Promise<void> {
   try {
     const config = useRuntimeConfig()
