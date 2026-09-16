@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.10.17
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.16...v0.10.17)
+
+### 💅 Refactors
+
+- Make projectId optional in CreateSignerSessionParams and improve magic link generation ([99aaab1](https://github.com/Modest-Human-Brands/modest-human-brands/commit/99aaab1))
+- Rename projectId to projectSlug in CreateSignerSessionParams and update related logic ([82bee96](https://github.com/Modest-Human-Brands/modest-human-brands/commit/82bee96))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.16
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.15...v0.10.16)
