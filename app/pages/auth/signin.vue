@@ -48,7 +48,7 @@ async function onEmailSignIn() {
 </script>
 
 <template>
-  <main class="flex min-h-screen w-full items-center justify-center p-5">
+  <main class="flex min-h-dvh w-full items-center justify-center p-5">
     <section class="flex w-full max-w-md flex-col gap-5 rounded-2xl bg-dark-500 p-5 shadow-xl ring-1 ring-dark-600" aria-labelledby="login-heading">
       <header>
         <h1 id="login-heading" class="text-lg text-white">Welcome to Modest Human Brands</h1>

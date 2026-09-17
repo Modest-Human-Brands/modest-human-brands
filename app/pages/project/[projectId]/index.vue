@@ -139,10 +139,10 @@ function formatDateDisplay(dateStr: string | undefined): string {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start overflow-hidden bg-dark-400 font-main">
+  <div class="flex h-dvh w-screen items-start justify-start overflow-hidden bg-dark-400 font-main">
     <LazyAppNavbar active-key="project" hydrate-on-idle />
 
-    <div class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
+    <div class="relative isolate mx-auto flex h-dvh w-full grow flex-col overflow-hidden">
       <header class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-4 py-4 md:px-8">
         <div class="flex items-center gap-4">
           <NuxtIcon name="local:target" class="text-4xl" />

@@ -83,7 +83,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <main class="flex min-h-screen w-full items-center justify-center p-5">
+  <main class="flex min-h-dvh w-full items-center justify-center p-5">
     <section class="flex w-full max-w-2xl flex-col gap-6 rounded-2xl bg-dark-500 p-6 shadow-xl ring-1 ring-dark-600" aria-labelledby="signup-heading">
       <header>
         <h1 id="signup-heading" class="text-xl text-white">Sign up</h1>

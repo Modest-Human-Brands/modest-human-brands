@@ -38,7 +38,7 @@ function selectOrg(orgId: string) {
 </script>
 
 <template>
-  <aside class="z-50 flex h-screen shrink-0 flex-col gap-4 border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
+  <aside class="z-50 flex h-dvh shrink-0 flex-col gap-4 border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
     <!-- Brand -->
     <div class="relative">
       <button type="button" class="flex w-full items-center gap-2 rounded-md p-1 text-left transition-colors hover:bg-white/5" @click="isDropdownOpen = !isDropdownOpen">

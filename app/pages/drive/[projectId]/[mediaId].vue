@@ -238,7 +238,7 @@ async function print() {
 </script>
 
 <template>
-  <section v-if="currentItem && currentItem.id" class="relative flex h-screen w-screen select-none overflow-hidden bg-dark-400">
+  <section v-if="currentItem && currentItem.id" class="relative flex h-dvh w-screen select-none overflow-hidden bg-dark-400">
     <div class="relative z-10 flex size-full flex-col md:flex-row">
       <AppSidebarPreviewList v-model:drawer-open="isSidebarOpen" :items="mediaItems" :active-id="currentItem.id" item-key="id" @select="(item) => navigateToIndex(mediaItems.indexOf(item))">
         <template #item="{ item, isActive }">

@@ -173,8 +173,8 @@ const footerLinks = [
 </script>
 
 <template>
-  <div class="min-h-screen">
-    <main class="mx-auto flex min-h-screen w-full max-w-7xl flex-col border-x border-light-500/50">
+  <div class="min-h-dvh">
+    <main class="mx-auto flex min-h-dvh w-full max-w-7xl flex-col border-x border-light-500/50">
       <header class="sticky top-0 z-50 flex items-center justify-between border-b border-light-500/50 px-6 py-6 backdrop-blur-md md:px-12">
         <NuxtLink to="/" class="flex items-center gap-3" aria-label="Modest Human Brands Home">
           <NuxtIcon name="local:logo" class="text-[32px] md:text-[48px]" />

@@ -82,7 +82,7 @@ const isHeaderCollapsed = computed(() => y.value > 50)
 </script>
 
 <template>
-  <div class="flex min-h-screen select-none flex-col bg-dark-400 pb-32 font-main text-white">
+  <div class="flex min-h-dvh select-none flex-col bg-dark-400 pb-32 font-main text-white">
     <div class="relative shrink-0 overflow-hidden border-b border-white/5 bg-dark-500/20 transition-all duration-500 ease-in-out" :class="isHeaderCollapsed ? 'h-16' : 'h-64'">
       <div class="absolute inset-0 z-10 bg-gradient-to-t from-dark-400 via-dark-400/40 to-transparent" />
 

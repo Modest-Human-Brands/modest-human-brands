@@ -110,7 +110,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <main v-if="doc" class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
+  <main v-if="doc" class="relative flex h-dvh w-screen flex-row overflow-hidden bg-dark-400">
     <PdfDocumentViewer ref="viewerRef" :src="doc.previewUrl" :doc="{ id: docId, name: doc.name, previewUrl: doc.previewUrl }" class="flex-1">
       <template #toolbar-actions>
         <button type="button" class="shrink-0 transition-colors hover:text-accent-500" :class="isDrawerOpen ? 'text-accent-500' : 'text-white'" @click="isDrawerOpen = true">

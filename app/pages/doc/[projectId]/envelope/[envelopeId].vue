@@ -248,7 +248,7 @@ async function submitSignature() {
 </script>
 
 <template>
-  <main class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
+  <main class="relative flex h-dvh w-screen flex-row overflow-hidden bg-dark-400">
     <div v-if="verificationError || !doc" class="animate-fade-in flex h-full w-full flex-col items-center justify-center p-6 text-center">
       <div class="mx-auto mb-6 flex size-24 items-center justify-center rounded-full bg-alert-500/20 text-alert-500">
         <NuxtIcon name="local:cross" class="text-5xl" />

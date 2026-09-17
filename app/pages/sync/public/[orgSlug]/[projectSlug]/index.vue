@@ -77,7 +77,7 @@ const streamDuration = computed(() => {
 
 <template>
   <CardOrganization :organization="organization" class="absolute right-4 top-16 z-20 md:right-1/2 md:top-4 md:translate-x-1/2" />
-  <div class="flex h-screen w-screen flex-col gap-2 overflow-hidden p-2 md:flex-row">
+  <div class="flex h-dvh w-screen flex-col gap-2 overflow-hidden p-2 md:flex-row">
     <div class="relative flex grow flex-col overflow-hidden bg-black">
       <video ref="videoEl" autoplay playsinline :controls="false" class="size-full rounded-md object-contain" />
 

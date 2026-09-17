@@ -11,10 +11,10 @@ const activeTab = computed(
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start bg-dark-400 text-white">
+  <div class="flex h-dvh w-screen items-start justify-start bg-dark-400 text-white">
     <LazyAppNavbar :active-key="activeTab.id" hydrate-on-idle />
 
-    <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
+    <main class="relative isolate mx-auto flex h-dvh w-full grow flex-col overflow-hidden">
       <div class="flex shrink-0 items-start justify-between px-2 pb-2 pt-6 md:gap-6 md:px-4">
         <div class="flex flex-col gap-2">
           <div class="flex items-center gap-4">

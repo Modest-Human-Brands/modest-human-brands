@@ -43,10 +43,10 @@ const dynamicBreadcrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-start justify-start bg-dark-400">
+  <div class="flex h-dvh w-screen items-start justify-start bg-dark-400">
     <LazyAppNavbar :active-key="activeTab.id" hydrate-on-idle />
 
-    <main class="relative isolate mx-auto flex h-screen w-full grow flex-col overflow-hidden">
+    <main class="relative isolate mx-auto flex h-dvh w-full grow flex-col overflow-hidden">
       <div class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-2 py-4 md:gap-6 md:px-4 md:py-6">
         <AppBreadcrumb :items="dynamicBreadcrumbs" />
         <div class="flex shrink-0 flex-col items-end gap-2 md:gap-3">

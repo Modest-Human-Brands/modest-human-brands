@@ -130,7 +130,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <main v-if="email" class="relative flex h-screen w-screen flex-row overflow-hidden bg-dark-400">
+  <main v-if="email" class="relative flex h-dvh w-screen flex-row overflow-hidden bg-dark-400">
     <!-- Close / Back Button -->
     <NuxtLink to="/connect" class="absolute left-5 top-5 z-30 flex size-9 items-center justify-center rounded-lg bg-dark-500/80 text-light-400 backdrop-blur transition-colors hover:text-white">
       <NuxtIcon name="local:cross" class="text-sm" />
