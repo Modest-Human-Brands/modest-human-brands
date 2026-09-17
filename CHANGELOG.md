@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.18
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.17...v0.10.18)
+
+### 💅 Refactors
+
+- Update layout classes for responsive design and improve code readability ([3e1efdc](https://github.com/Modest-Human-Brands/modest-human-brands/commit/3e1efdc))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.17
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.16...v0.10.17)
