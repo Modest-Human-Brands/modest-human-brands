@@ -1,10 +1,23 @@
-export type NavItem = {
-  id: string
-  title: string
-  icon: string
-  description: string
-  to: string
-}
+export type NavItem =
+  | {
+      id: string
+      title: string
+      icon: string
+      description?: string
+      disabled?: boolean
+      to: string
+      children?: never
+      external?: boolean
+    }
+  | {
+      id: string
+      title: string
+      icon: string
+      description?: string
+      disabled?: boolean
+      to: string
+      children: NavItem[]
+    }
 
 export const PRIMARY_NAVIGATION_TABS = [
   {

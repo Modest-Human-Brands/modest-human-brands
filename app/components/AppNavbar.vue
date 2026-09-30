@@ -1,4 +1,13 @@
 <script setup lang="ts">
+withDefaults(
+  defineProps<{
+    activeKey?: string
+  }>(),
+  {
+    activeKey: 'dashboard',
+  }
+)
+
 const { user } = useUserSession()
 
 const selectedOrg = useCookie<string | undefined>('active-org-id', {
@@ -17,15 +26,6 @@ watch(
 
 const { data: organizationData } = await useFetch(() => `/api/organization/${selectedOrg.value}`)
 const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
-
-withDefaults(
-  defineProps<{
-    activeKey?: string
-  }>(),
-  {
-    activeKey: 'dashboard',
-  }
-)
 
 const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TABS]
 

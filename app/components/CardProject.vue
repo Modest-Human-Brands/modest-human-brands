@@ -12,7 +12,7 @@ defineProps<{
 </script>
 
 <template>
-  <NuxtLink :to="`/project/${id}`" class="flex aspect-square flex-col overflow-hidden rounded-md bg-dark-500 md:rounded-xl">
+  <NuxtLink :to="`/project/${id}/plan`" class="flex aspect-square flex-col overflow-hidden rounded-md bg-dark-500 md:rounded-xl">
     <div class="relative aspect-[16/10] w-full overflow-hidden bg-dark-600">
       <span class="absolute left-1 top-1 z-10 rounded bg-dark-500 px-2 py-0.5 text-xs"> #{{ index }} </span>
       <div class="grid size-full grid-cols-2 grid-rows-2 gap-0.5">

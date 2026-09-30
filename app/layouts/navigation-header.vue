@@ -2,7 +2,7 @@
 const { emitAction } = useLayoutActions()
 const route = useRoute()
 
-const editedAt = ref('Jan 17')
+const editedAt = 'Jan 17'
 const { data: collaborators } = await useFetch('/api/user', { default: () => [] })
 
 const activeTab = computed(
