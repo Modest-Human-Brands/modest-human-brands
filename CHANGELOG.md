@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.10.19
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.18...v0.10.19)
+
+### 🚀 Enhancements
+
+- Restructure project pages and add new pre-production workflow ([6e82743](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6e82743))
+- Add post-production template to project page ([13e7ac9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/13e7ac9))
+- Add production page template ([adcb625](https://github.com/Modest-Human-Brands/modest-human-brands/commit/adcb625))
+
+### 🏡 Chore
+
+- Update tauri dependencies to latest versions ([f5a5fc5](https://github.com/Modest-Human-Brands/modest-human-brands/commit/f5a5fc5))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.18
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.17...v0.10.18)
