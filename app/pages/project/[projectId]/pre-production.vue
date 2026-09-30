@@ -38,10 +38,8 @@ export interface PreProductionColumn {
   label: string
 }
 
-// Fetch project data if available, with reactive fallback values
 const { data: project } = await useFetch<Record<string, string>>(`/api/project/${projectId}`)
 
-// Dynamic, editable project meta summary bar
 const projectMeta = ref({
   index: project.value?.index ?? 75,
   slug: project.value?.slug ?? 'mhb-ad-shoot-75',
@@ -49,7 +47,6 @@ const projectMeta = ref({
   segment: project.value?.segment ?? 'Ad Commercial',
 })
 
-// Column definitions
 const columns = ref<PreProductionColumn[]>([
   { id: 'script', label: 'Script' },
   { id: 'storyboard', label: 'Storyboard' },
@@ -57,9 +54,7 @@ const columns = ref<PreProductionColumn[]>([
   { id: 'setup', label: 'Setup' },
 ])
 
-// Dynamic, hard-coded placeholder items matching the screenshot
 const items = ref<PreProductionItem[]>([
-  // Script Column Items
   {
     id: 'script-1',
     columnId: 'script',
@@ -90,8 +85,6 @@ const items = ref<PreProductionItem[]>([
       },
     ],
   },
-
-  // Storyboard Column Items
   {
     id: 'storyboard-1',
     columnId: 'storyboard',
@@ -128,8 +121,6 @@ const items = ref<PreProductionItem[]>([
       },
     ],
   },
-
-  // Look Column Items
   {
     id: 'look-1',
     columnId: 'look',
