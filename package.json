@@ -13,7 +13,7 @@
   "engines": {
     "node": "^22.11.0 || ^24.14.0",
     "pnpm": "^9.15.0 || ^10.2.0",
-    "bun": "^1.2.9"
+    "bun": "^1.4.2"
   },
   "packageManager": "bun@1.4.2",
   "scripts": {
@@ -55,16 +55,16 @@
     "@tato30/vue-pdf": "^2.2.0",
     "@tauri-apps/api": "^2.12.0",
     "@tauri-apps/plugin-updater": "^2.13.1",
-    "@tiptap/extension-drag-handle-vue-3": "^3.31.3",
-    "@tiptap/extension-history": "^3.31.3",
-    "@tiptap/extension-table": "^3.31.3",
-    "@tiptap/extension-table-cell": "^3.31.3",
-    "@tiptap/extension-table-header": "^3.31.3",
-    "@tiptap/extension-table-row": "^3.31.3",
-    "@tiptap/extension-task-item": "^3.31.3",
-    "@tiptap/extension-task-list": "^3.31.3",
-    "@tiptap/extensions": "^3.31.3",
-    "@tiptap/suggestion": "^3.31.3",
+    "@tiptap/extension-drag-handle-vue-3": "^3.31.4",
+    "@tiptap/extension-history": "^3.31.4",
+    "@tiptap/extension-table": "^3.31.4",
+    "@tiptap/extension-table-cell": "^3.31.4",
+    "@tiptap/extension-table-header": "^3.31.4",
+    "@tiptap/extension-table-row": "^3.31.4",
+    "@tiptap/extension-task-item": "^3.31.4",
+    "@tiptap/extension-task-list": "^3.31.4",
+    "@tiptap/extensions": "^3.31.4",
+    "@tiptap/suggestion": "^3.31.4",
     "@types/web-push": "^3.6.4",
     "@unhead/vue": "^3.4.2",
     "@videojs/dash-video": "^10.0.0-rc.4",
@@ -104,7 +104,7 @@
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.3"
   },
   "trustedDependencies": [
     "@parcel/watcher",
