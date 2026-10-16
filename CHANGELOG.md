@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.10.20
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.19...v0.10.20)
+
+### 🚀 Enhancements
+
+- Update video player skin and component references ([ea6b254](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ea6b254))
+
+### 🏡 Chore
+
+- Update dependencies and rust edition in cargo files ([1648fe4](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1648fe4))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.19
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.18...v0.10.19)
