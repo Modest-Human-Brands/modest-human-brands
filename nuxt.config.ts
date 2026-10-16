@@ -173,6 +173,9 @@ export default defineNuxtConfig({
       googleAnalytics: true,
     },
   },
+  aiReady: {
+    database: false,
+  },
   colorMode: {
     preference: 'system',
     fallback: 'light',

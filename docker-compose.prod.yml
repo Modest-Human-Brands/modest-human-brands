@@ -12,11 +12,20 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    depends_on:
-      - connect
-      - doc
-      - drive
-      - media
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  connect-ui:
+    image: ghcr.io/modest-human-brands/mconnect-web:latest
+    env_file:
+      - .env
+    networks:
+      - internal
     deploy:
       replicas: 1
       restart_policy:
@@ -39,22 +48,6 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    depends_on:
-      - livekit
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-
-  connect-ui:
-    image: ghcr.io/modest-human-brands/mconnect-web:latest
-    env_file:
-      - .env
-    networks:
-      - internal
     deploy:
       replicas: 1
       restart_policy:
@@ -80,8 +73,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
-    depends_on:
-      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
@@ -105,8 +96,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
-    depends_on:
-      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
@@ -131,8 +120,6 @@ services:
     #   timeout: 5s
     #   retries: 3
     #   start_period: 15s
-    depends_on:
-      - livekit-redis
     deploy:
       replicas: 1
       restart_policy:
@@ -158,13 +145,26 @@ services:
         max_attempts: 3
         window: 120s
 
+  doc-ui:
+    image: ghcr.io/modest-human-brands/mdoc-web:latest
+    env_file:
+      - .env
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
   doc:
     image: ghcr.io/modest-human-brands/mdoc:latest
     env_file:
       - .env
     volumes:
       - mdoc-asset:/app/asset
-      - mdoc-document:/app/document
       - mdoc-static:/app/static
     networks:
       - internal
@@ -173,6 +173,20 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  design:
+    image: ghcr.io/modest-human-brands/mdesign:latest
+    env_file:
+      - .env
+    networks:
+      - internal
     deploy:
       replicas: 1
       restart_policy:
@@ -254,12 +268,6 @@ volumes:
       type: none
       o: bind
       device: /root/modest-human-brands/mdoc/asset
-  mdoc-document:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /root/modest-human-brands/mdoc/document
   mdoc-static:
     driver: local
     driver_opts:

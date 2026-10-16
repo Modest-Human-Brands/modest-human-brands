@@ -4,7 +4,8 @@ description = "The Project Management Software Integrating MWap, MConnect, MDoc,
 authors = ["Shirsendu Bairagi <shirsendu2001@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/Modest-Human-Brands/modest-human-brands.git"
-edition = "2021"
+edition = "2024"
+rust-version = "1.98.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -13,7 +14,7 @@ name = "app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.6", features = [] }
+tauri-build = { version = "2.7", features = [] }
 
 [dependencies]
 serde_json = "1.0"
@@ -23,4 +24,7 @@ tauri = { version = "2.12", features = [] }
 tauri-plugin-log = "2.10"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
-tauri-plugin-updater = "2.13"
+tauri-plugin-updater = "2.14"
+
+[patch.crates-io]
+zip = { git = "https://github.com/zip-rs/zip2.git", tag = "v4.6.1" }
