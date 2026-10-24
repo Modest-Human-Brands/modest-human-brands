@@ -26,3 +26,11 @@ logs
 
 config
 design/**.jpg
+
+# Local junctions to sibling repos' Postman collections (owned and committed by those repos)
+postman/collections/MConnect RESTful API
+postman/collections/MDoc RESTful API
+postman/collections/MDrive RESTful API
+postman/collections/MMedia RESTful API
+postman/collections/MStudio
+postman/collections/MWap API
