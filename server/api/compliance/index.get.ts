@@ -1,8 +1,8 @@
 import type { ComplianceDocMeta } from './[slug].get'
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async (event) => {
   try {
-    // await requireUserSession(event)
+    await requireUserSession(event)
 
     const storage = useStorage<Resource<'compliance'>>('data:resource:compliance')
     const keys = await storage.getKeys()

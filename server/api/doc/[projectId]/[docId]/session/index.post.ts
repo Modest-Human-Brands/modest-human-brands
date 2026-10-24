@@ -1,5 +1,7 @@
 export default defineEventHandler(async (event) => {
   try {
+    await requireUserSession(event)
+
     const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
 

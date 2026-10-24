@@ -20,9 +20,9 @@ const statusIndexMap = Object.keys(statusMap).reduce(
 
 const totalSteps = Object.keys(statusIndexMap).length
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async (event) => {
   try {
-    // await requireUserSession(event)
+    await requireUserSession(event)
 
     const projectStorage = useStorage<Resource<'project'>>('data:resource:project')
     const keys = await projectStorage.getKeys()

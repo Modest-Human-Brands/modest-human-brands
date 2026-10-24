@@ -8,6 +8,8 @@ interface TipTapNode {
 
 export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
   try {
+    await requireUserSession(event)
+
     const projectId = notionNormalizeId(getRouterParam(event, 'projectId'))
 
     if (!projectId) {

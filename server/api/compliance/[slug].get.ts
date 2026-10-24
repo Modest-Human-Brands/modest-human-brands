@@ -12,7 +12,7 @@ export interface ComplianceDocMeta {
 
 export default defineEventHandler(async (event) => {
   try {
-    // await requireUserSession(event)
+    await requireUserSession(event)
 
     const { slug } = await getValidatedRouterParams(event, paramSchema.parse)
 

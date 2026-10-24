@@ -5,7 +5,7 @@ export interface VoidDocumentResponse {
 
 export default defineEventHandler(async (event) => {
   // const { user } =
-  // await requireUserSession(event)
+  await requireUserSession(event)
 
   const docId = getRouterParam(event, 'docId')
 

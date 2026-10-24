@@ -4,6 +4,8 @@ const pathParamsSchema = z.object({ orgId: z.string() })
 
 export default defineEventHandler<Promise<Organization>>(async (event) => {
   try {
+    await requireUserSession(event)
+
     const { orgId } = await getValidatedRouterParams(event, pathParamsSchema.parse)
 
     const organizationData = (await notion.pages.retrieve({ page_id: orgId })) as unknown as NotionOrganization
