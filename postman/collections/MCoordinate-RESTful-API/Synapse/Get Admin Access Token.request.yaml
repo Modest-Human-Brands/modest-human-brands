@@ -1,0 +1,16 @@
+$kind: http-request
+url: https://synapse.modesthumanbrands.com/_matrix/client/v3/login
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "type": "m.login.password",
+        "identifier": { "type": "m.id.user", "user": "admin" },
+        "password": "M2x8q7Q6^*uVhSww"
+      }
+auth:
+  type: noauth
+order: 1000

@@ -1,0 +1,16 @@
+# Use this workspace to collaborate
+workspace:
+  id: 315d5def-948c-4c76-93a6-c29dd5aacc3d
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Modest Human Brands RESTful API: 5127fb43-fecf-4491-81d1-ea829981700b
+    ../postman/collections/MCoordinate RESTful API: 2197459d-5565-4821-bf62-3ffffd6dba3d
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

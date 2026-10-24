@@ -1,2 +1,2 @@
-.env.example:generic-api-key:12
-.env.example:generic-api-key:13
+.postman/resources.yaml:generic-api-key:9
+.postman/resources.yaml:generic-api-key:10

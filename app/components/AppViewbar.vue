@@ -47,7 +47,7 @@ const navGroups = computed<NavItem[]>(() => [
           <NuxtLink
             v-for="subItem in group.children"
             :key="subItem.id"
-            :to="group.to"
+            :to="subItem.to"
             class="group relative flex w-full items-center gap-3 rounded-xl p-2 text-left text-sm font-semi-bold transition-all md:w-48"
             :class="subItem.id === activeKey ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'">
             <NuxtIcon :name="subItem.icon" class="shrink-0 text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />

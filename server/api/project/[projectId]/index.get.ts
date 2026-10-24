@@ -82,6 +82,7 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
 
     return {
       id: record.id,
+      updatedAt: (record as { last_edited_time?: string }).last_edited_time,
       title: nameProp?.title?.[0]?.plain_text || 'Untitled Project',
       index: indexProp?.number,
       slug: slugProp?.formula?.string || record.id,

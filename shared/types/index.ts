@@ -122,6 +122,11 @@ export const resourceTypes = [
   'document',
   'stream',
   'media',
+  'shoot',
+  'script',
+  'storyboard',
+  'look',
+  'setup',
   'waitlist',
   'terms',
   'privacy',
@@ -143,6 +148,11 @@ export interface ResourceRecordMap {
   document: NotionDocument
   stream: NotionStream
   media: NotionMedia
+  shoot: NotionShoot
+  script: NotionScript
+  storyboard: NotionStoryboard
+  look: NotionLook
+  setup: NotionSetup
   waitlist: string
   terms: string
   privacy: string
@@ -717,6 +727,76 @@ export interface NotionStream {
   }
   url: string
   public_url: null
+}
+
+type NotionRelation = { type: 'relation'; relation: { id: string }[] }
+type NotionRichText = { type: 'rich_text'; rich_text: { plain_text: string }[] }
+type NotionItemStatus = { type: 'select'; select: { name: string } | null }
+
+interface NotionProjectItem {
+  id: string
+  created_time: string
+  last_edited_time: string
+  cover: NotionImage
+  icon: NotionImage
+  properties: {
+    Name: { type: 'title'; title: { plain_text: string }[] }
+    Index: { type: 'number'; number: number | null }
+    Project: NotionRelation
+    'Project Slug': { type: 'rollup'; rollup: { array: { formula: { string: string } }[] } }
+    Organization: NotionRelation
+  }
+}
+
+export interface NotionShoot extends NotionProjectItem {
+  properties: NotionProjectItem['properties'] & {
+    Date: { type: 'date'; date: { start: string; end: string | null } | null }
+    Location: NotionRichText
+    Status: NotionItemStatus
+  }
+}
+
+export interface NotionScript extends NotionProjectItem {
+  properties: NotionProjectItem['properties'] & {
+    Shoot: NotionRelation
+    Document: NotionRelation
+    Status: NotionItemStatus
+    Collaborators: NotionRelation
+  }
+}
+
+export interface NotionStoryboard extends NotionProjectItem {
+  properties: NotionProjectItem['properties'] & {
+    Shoot: NotionRelation
+    Script: NotionRelation
+    'Image ID': NotionRichText
+    Duration: NotionRichText
+    Tags: { type: 'multi_select'; multi_select: { name: string }[] }
+    Status: NotionItemStatus
+    Collaborators: NotionRelation
+  }
+}
+
+export interface NotionLook extends NotionProjectItem {
+  properties: NotionProjectItem['properties'] & {
+    Shoot: NotionRelation
+    'Image ID': NotionRichText
+    Tags: { type: 'multi_select'; multi_select: { name: string }[] }
+    Status: NotionItemStatus
+    Collaborators: NotionRelation
+  }
+}
+
+export interface NotionSetup extends NotionProjectItem {
+  properties: NotionProjectItem['properties'] & {
+    Shoot: NotionRelation
+    Kind: NotionItemStatus
+    'Image ID': NotionRichText
+    Specs: NotionRichText
+    Assigned: NotionRelation
+    Location: NotionRichText
+    Status: NotionItemStatus
+  }
 }
 
 export interface NotionMedia {

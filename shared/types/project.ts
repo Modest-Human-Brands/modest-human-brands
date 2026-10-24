@@ -23,6 +23,28 @@ export interface Project {
   quoteNumber?: number
 }
 
+export const projectItemKinds = ['shoot', 'script', 'storyboard', 'look', 'setup'] as const
+
+export type ProjectItemKind = (typeof projectItemKinds)[number]
+
+export interface ProjectItem {
+  id: string
+  index: number
+  title: string
+  status?: string
+  shootIds: string[]
+  imageId?: string
+  duration?: string
+  tags: string[]
+  documentId?: string
+  scriptId?: string
+  kind?: string
+  specs?: string
+  location?: string
+  date?: string
+  collaborators: { id: string; name: string; avatar?: string }[]
+}
+
 export interface ProjectDeliverable {
   id: string
   title: string
@@ -33,6 +55,7 @@ export interface ProjectDeliverable {
 }
 
 export interface DetailedProject extends Project {
+  updatedAt?: string
   segment?: string
   date?: string
   duration?: string

@@ -1,0 +1,6 @@
+$kind: http-request
+url: '{{base_url}}/api/connect/:id/timeline'
+method: GET
+pathVariables:
+  id: 382ee3b0-289a-8102-8aee-d32f5435adad
+order: 11000

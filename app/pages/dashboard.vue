@@ -8,7 +8,7 @@ const columns = [
   { id: 'Plan', title: 'Plan' },
   { id: 'Crew', title: 'Crew' },
   { id: 'Document', title: 'Document' },
-  { id: 'Pre-Prod', title: 'Pre-Production' },
+  { id: 'Pre-Production', title: 'Pre-Production' },
   { id: 'Production', title: 'Production' },
   { id: 'Post-Production', title: 'Post-Production' },
 ]

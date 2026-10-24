@@ -1,0 +1,4 @@
+$kind: http-request
+url: '{{base_url}}/api/doc/template'
+method: GET
+order: 8000

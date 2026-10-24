@@ -29,17 +29,24 @@ export default defineTask({
     const rawDbId = config.private.notionDbId
     const notionDbId: NotionDB = typeof rawDbId === 'string' ? JSON.parse(rawDbId) : (rawDbId as unknown as NotionDB)
 
-    const dbEntries = [
-      { type: 'organization', fn: () => notionQueryDb<NotionOrganization>(notion, notionDbId.organization) },
-      { type: 'user', fn: () => notionQueryDb<NotionUser>(notion, notionDbId.user) },
-      { type: 'contact', fn: () => notionQueryDb<NotionContact>(notion, notionDbId.contact) },
-      { type: 'project', fn: () => notionQueryDb<NotionProject>(notion, notionDbId.project) },
-      { type: 'deliverable', fn: () => notionQueryDb<NotionDeliverable>(notion, notionDbId.deliverable) },
-      { type: 'compliance', fn: () => notionQueryDb<NotionCompliance>(notion, notionDbId.compliance) },
-      { type: 'document', fn: () => notionQueryDb<NotionDocument>(notion, notionDbId.document) },
-      { type: 'stream', fn: () => notionQueryDb<NotionStream>(notion, notionDbId.stream) },
-      { type: 'media', fn: () => notionQueryDb<NotionMedia>(notion, notionDbId.media) },
-    ] as const
+    const dbEntries = (
+      [
+        { type: 'organization', fn: () => notionQueryDb<NotionOrganization>(notion, notionDbId.organization) },
+        { type: 'user', fn: () => notionQueryDb<NotionUser>(notion, notionDbId.user) },
+        { type: 'contact', fn: () => notionQueryDb<NotionContact>(notion, notionDbId.contact) },
+        { type: 'project', fn: () => notionQueryDb<NotionProject>(notion, notionDbId.project) },
+        { type: 'deliverable', fn: () => notionQueryDb<NotionDeliverable>(notion, notionDbId.deliverable) },
+        { type: 'compliance', fn: () => notionQueryDb<NotionCompliance>(notion, notionDbId.compliance) },
+        { type: 'document', fn: () => notionQueryDb<NotionDocument>(notion, notionDbId.document) },
+        { type: 'stream', fn: () => notionQueryDb<NotionStream>(notion, notionDbId.stream) },
+        { type: 'media', fn: () => notionQueryDb<NotionMedia>(notion, notionDbId.media) },
+        { type: 'shoot', fn: () => notionQueryDb<NotionShoot>(notion, notionDbId.shoot) },
+        { type: 'script', fn: () => notionQueryDb<NotionScript>(notion, notionDbId.script) },
+        { type: 'storyboard', fn: () => notionQueryDb<NotionStoryboard>(notion, notionDbId.storyboard) },
+        { type: 'look', fn: () => notionQueryDb<NotionLook>(notion, notionDbId.look) },
+        { type: 'setup', fn: () => notionQueryDb<NotionSetup>(notion, notionDbId.setup) },
+      ] as const
+    ).filter(({ type }) => notionDbId[type])
 
     const results = await Promise.allSettled(dbEntries.map(({ fn }) => throttledNotion(fn)))
 

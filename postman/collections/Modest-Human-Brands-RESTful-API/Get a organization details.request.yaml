@@ -1,0 +1,6 @@
+$kind: http-request
+url: '{{base_url}}/api/organization/:orgId'
+method: GET
+pathVariables:
+  orgId: 307ee3b0-289a-8116-afb0-f6a1795a27a0
+order: 7000

@@ -1,0 +1,7 @@
+$kind: http-request
+url: '{{base_url}}/api/doc/:projectId/:docId'
+method: GET
+pathVariables:
+  projectId: 37AEE3B0 289A-8064-B104-C0DFF8607196
+  docId: 385ee3b0-289a-8115-9961-f670cd638804
+order: 14000
