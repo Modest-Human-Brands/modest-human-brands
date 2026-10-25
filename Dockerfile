@@ -2,6 +2,9 @@ FROM oven/bun:1-alpine AS builder
 
 WORKDIR /app
 
+# Nuxt modules (nuxt-og-image) use node:module APIs Bun lacks, so the CLI must run on Node
+RUN apk add --no-cache nodejs
+
 COPY package.json bun.lock ./
 COPY nuxt.config.ts ./
 
