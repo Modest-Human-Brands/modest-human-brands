@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'project',
+  layout: 'project-detail',
   middleware: ['auth'],
 })
 </script>
