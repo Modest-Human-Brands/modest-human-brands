@@ -1,5 +1,30 @@
 # Changelog
 
+## v0.10.20
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.19...v0.10.20)
+
+### 🚀 Enhancements
+
+- Update video player skin and component references ([ea6b254](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ea6b254))
+- Enforce user session validation in API handlers ([ca84c67](https://github.com/Modest-Human-Brands/modest-human-brands/commit/ca84c67))
+- Add pre-production pages for project items (look, script, setup, storyboard) ([e856ef8](https://github.com/Modest-Human-Brands/modest-human-brands/commit/e856ef8))
+- Add Postman collections and requests for MCoordinate and Modest Human Brands APIs ([6e3a2d6](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6e3a2d6))
+- Implement active organization management with utility functions for user session ([2abd1e0](https://github.com/Modest-Human-Brands/modest-human-brands/commit/2abd1e0))
+- Enhance document and project organization handling ([dc39d42](https://github.com/Modest-Human-Brands/modest-human-brands/commit/dc39d42))
+
+### 💅 Refactors
+
+- Code structure for improved readability and maintainability ([40a157b](https://github.com/Modest-Human-Brands/modest-human-brands/commit/40a157b))
+
+### 🏡 Chore
+
+- Update dependencies and rust edition in cargo files ([1648fe4](https://github.com/Modest-Human-Brands/modest-human-brands/commit/1648fe4))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.19
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.18...v0.10.19)
