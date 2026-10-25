@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.10.21
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.20...v0.10.21)
+
+### 🚀 Enhancements
+
+- Implement site management features including site creation, editing, and template handling ([6871254](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6871254))
+- Enhance SiteEditor with content management and preview features ([377c3f9](https://github.com/Modest-Human-Brands/modest-human-brands/commit/377c3f9))
+- Add Node.js installation to Dockerfile for Nuxt module compatibility ([7503d66](https://github.com/Modest-Human-Brands/modest-human-brands/commit/7503d66))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.20
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.19...v0.10.20)
