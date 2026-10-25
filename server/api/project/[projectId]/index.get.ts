@@ -8,7 +8,7 @@ interface TipTapNode {
 
 export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
   try {
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
 
     const projectId = notionNormalizeId(getRouterParam(event, 'projectId'))
 
@@ -23,6 +23,8 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
     if (!record || !record.properties) {
       throw createError({ statusCode: 404, statusMessage: 'Project not found' })
     }
+
+    assertProjectInOrg(record, getActiveOrgId(event, user))
 
     const props = record.properties as Record<string, unknown>
     const deliverableRelation = (props.Deliverables as { relation?: { id: string }[] })?.relation || []

@@ -29,9 +29,15 @@ const organization = computed(() => organizationData.value ?? DEFAULT_ORG)
 
 const navGroups: NavItem[][] = [PRIMARY_NAVIGATION_TABS, SECONDARY_NAVIGATION_TABS]
 
-function selectOrg(orgId: string) {
+const route = useRoute()
+
+async function selectOrg(orgId: string) {
   selectedOrg.value = orgId
   isDropdownOpen.value = false
+
+  // A project belongs to one org, so leave it; any other page just reloads its data for the new org
+  if (route.path.startsWith('/project/')) await navigateTo('/dashboard')
+  else await refreshNuxtData()
 }
 
 // const settingsItem: NavItem = { id: 'settings', title: 'Settings', icon: 'local:gear', description: 'Manage all your account settings here', to: '/settings' }

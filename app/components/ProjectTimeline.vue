@@ -7,113 +7,154 @@ const props = defineProps<{
   }[]
 }>()
 
-const scrollContainer = ref<HTMLElement | null>(null)
-const { x: scrollX } = useScroll(scrollContainer)
-const { width: containerWidth } = useElementSize(scrollContainer)
+const HEADER_HEIGHT = 36
+const LANE_HEIGHT = 32
+const DAY_MS = 86400000
+// The axis is effectively endless: five years either side of today, with only the visible days rendered
+const DAYS_EACH_SIDE = 1825
 
-const TOTAL_DAYS = 20000
-const CENTER_INDEX = 10000
+const root = ref<HTMLElement | null>(null)
+const scroller = computed(() => containerProps.ref.value)
+
+// The frame has a fixed height and is measured once mounted, so nothing shifts while the data or width settles
+const width = ref(0)
+onMounted(() => {
+  width.value = root.value?.clientWidth ?? 0
+})
+useResizeObserver(root, ([entry]) => {
+  width.value = Math.round(entry?.contentRect.width ?? 0)
+})
+const ready = computed(() => width.value > 0)
 
 const colWidth = computed(() => {
-  if (!containerWidth.value) return 120
-  if (containerWidth.value < 768) return Math.max(100, containerWidth.value / 3.5)
-  if (containerWidth.value < 1024) return Math.max(110, containerWidth.value / 5)
-  return Math.max(120, containerWidth.value / 7)
+  if (width.value < 768) return Math.max(100, width.value / 3.5)
+  if (width.value < 1024) return Math.max(110, width.value / 5)
+  return Math.max(120, width.value / 7)
 })
 
-const EPOCH = new Date()
-EPOCH.setHours(12, 0, 0, 0)
-
-const getDayIndex = (isoString: string) => {
-  const d = new Date(isoString)
-  d.setHours(12, 0, 0, 0)
-  const diffDays = Math.round((d.getTime() - EPOCH.getTime()) / 86400000)
-  return CENTER_INDEX + diffDays
+const startOfDay = (value: string | Date) => {
+  const date = new Date(value)
+  date.setHours(0, 0, 0, 0)
+  return date
 }
 
-const isInitialized = ref(false)
+const today = startOfDay(new Date())
+const rangeStart = new Date(today.getTime() - DAYS_EACH_SIDE * DAY_MS)
+const todayIndex = DAYS_EACH_SIDE
 
-watchEffect(() => {
-  if (!isInitialized.value && containerWidth.value > 0 && scrollContainer.value) {
-    scrollContainer.value.scrollLeft = (CENTER_INDEX - 2) * colWidth.value
-    isInitialized.value = true
-  }
+const dayIndex = (date: Date) => Math.round((date.getTime() - rangeStart.getTime()) / DAY_MS)
+const labelFormat = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long' })
+const dayLabel = (index: number) => labelFormat.format(new Date(rangeStart.getTime() + index * DAY_MS))
+
+const days = Array.from({ length: DAYS_EACH_SIDE * 2 + 1 }, (_, index) => index)
+const { list: visibleDays, containerProps, wrapperProps, scrollTo } = useVirtualList(days, { itemWidth: () => colWidth.value, overscan: 5 })
+
+// Earliest start first; each project goes in the first lane that is free by then
+const bars = computed(() => {
+  const laneEnds: number[] = []
+
+  return props.projects
+    .map((project) => {
+      const from = dayIndex(startOfDay(project.period.start))
+      return { project, from, to: Math.max(from, dayIndex(startOfDay(project.period.end))) }
+    })
+    .sort((a, b) => a.from - b.from)
+    .map(({ project, from, to }) => {
+      let lane = laneEnds.findIndex((laneEnd) => laneEnd < from)
+      if (lane === -1) lane = laneEnds.length
+      laneEnds[lane] = to
+
+      return {
+        id: project.id,
+        title: project.title,
+        lane,
+        from,
+        to,
+        style: {
+          left: `${from * colWidth.value + 4}px`,
+          width: `${(to - from + 1) * colWidth.value - 8}px`,
+          top: `${HEADER_HEIGHT + lane * LANE_HEIGHT}px`,
+        },
+      }
+    })
 })
 
-const computedProjects = computed(() => {
-  const rows: number[] = []
-
-  const sorted = [...props.projects].sort((a, b) => getDayIndex(a.period.start) - getDayIndex(b.period.start))
-
-  return sorted.map((project) => {
-    const iStart = getDayIndex(project.period.start)
-    const iEnd = getDayIndex(project.period.end)
-
-    const left = (iStart + 0.5) * colWidth.value
-    const width = Math.max(1, iEnd - iStart + 1) * colWidth.value
-
-    let rowIndex = rows.findIndex((rowEnd) => rowEnd < iStart)
-    if (rowIndex === -1) {
-      rowIndex = rows.length
-      rows.push(iEnd)
-    } else {
-      rows[rowIndex] = iEnd
-    }
-
-    return {
-      ...project,
-      iStart,
-      iEnd,
-      computedStyle: {
-        left: `${left}px`,
-        width: `${width}px`,
-        top: `${rowIndex * 32 + 36}px`,
-      },
-    }
-  })
+// Only bars that touch the rendered day window are mounted
+const visibleBars = computed(() => {
+  const first = visibleDays.value[0]?.index ?? 0
+  const last = visibleDays.value.at(-1)?.index ?? 0
+  return bars.value.filter(({ from, to }) => to >= first && from <= last)
 })
 
-const containerHeight = computed(() => {
-  if (!computedProjects.value.length) return 96
-  return Math.max(96, Math.max(...computedProjects.value.map((p) => parseInt(p.computedStyle.top))) + 64)
-})
+const contentHeight = computed(() => HEADER_HEIGHT + Math.max(bars.value.length ? Math.max(...bars.value.map(({ lane }) => lane)) + 1 : 0, 3) * LANE_HEIGHT + 16)
 
-const visibleDays = computed(() => {
-  const start = Math.max(0, Math.floor(scrollX.value / colWidth.value) - 2)
-  const end = Math.min(TOTAL_DAYS, Math.ceil((scrollX.value + containerWidth.value) / colWidth.value) + 2)
+// Open on today, two columns in. This runs before the first paint, so the timeline never visibly jumps
+watch(
+  ready,
+  async (isReady) => {
+    if (!isReady) return
+    await nextTick()
+    scrollTo(todayIndex - 2)
+  },
+  { immediate: true }
+)
 
-  const days = []
-  for (let i = start; i <= end; i++) {
-    const d = new Date(EPOCH.getTime() + (i - CENTER_INDEX) * 86400000)
-    days.push({ index: i, label: useDateFormat(d, 'D MMMM').value })
-  }
-  return days
-})
+// Resizing changes the column width; keep the same day at the left edge instead of drifting
+watch(
+  colWidth,
+  (next, previous) => {
+    if (scroller.value && previous) scroller.value.scrollLeft = (scroller.value.scrollLeft / previous) * next
+  },
+  { flush: 'post' }
+)
 
-const visibleProjects = computed(() => {
-  const start = Math.floor(scrollX.value / colWidth.value) - 2
-  const end = Math.ceil((scrollX.value + containerWidth.value) / colWidth.value) + 2
+// A mouse wheel only moves vertically, so use it to scroll along the days unless the lanes themselves overflow
+function onWheel(event: WheelEvent) {
+  const element = scroller.value
+  if (!element || Math.abs(event.deltaY) <= Math.abs(event.deltaX) || element.scrollHeight > element.clientHeight) return
 
-  return computedProjects.value.filter((p) => p.iEnd >= start && p.iStart <= end)
-})
+  event.preventDefault()
+  element.scrollLeft += event.deltaY
+}
 </script>
 
 <template>
-  <section ref="scrollContainer" class="scrollbar-hidden flex max-h-80 flex-col overflow-auto scroll-smooth rounded-lg bg-dark-500 p-4 pb-6">
-    <div class="relative transition-all duration-300" :style="{ width: `${TOTAL_DAYS * colWidth}px`, height: `${containerHeight}px` }">
-      <div v-for="day in visibleDays" :key="day.index" class="absolute bottom-0 top-0" :style="{ left: `${day.index * colWidth}px`, width: `${colWidth}px` }">
-        <div class="text-center text-xs text-light-500 md:text-sm">{{ day.label }}</div>
-        <div class="absolute bottom-0 left-1/2 top-8 w-0.5 -translate-x-1/2 bg-white" />
-      </div>
+  <section ref="root" aria-label="Project timeline" class="relative h-60 overflow-hidden rounded-lg bg-dark-500">
+    <div v-if="ready" v-bind="containerProps" class="scrollbar-hidden size-full overflow-auto overscroll-x-contain" @wheel="onWheel">
+      <div class="relative" :style="{ width: `${days.length * colWidth}px`, height: `${contentHeight}px`, minHeight: '100%' }">
+        <!-- Day lines, one repeating background instead of an element per day -->
+        <div
+          class="absolute inset-x-0 bottom-0"
+          :style="{
+            top: `${HEADER_HEIGHT - 4}px`,
+            backgroundImage: 'linear-gradient(to right, transparent calc(50% - 1px), #fff calc(50% - 1px), #fff calc(50% + 1px), transparent calc(50% + 1px))',
+            backgroundSize: `${colWidth}px 100%`,
+          }" />
+        <div class="absolute bottom-0 w-1 bg-accent-500" :style="{ left: `${(todayIndex + 0.5) * colWidth - 2}px`, top: `${HEADER_HEIGHT - 4}px` }" />
 
-      <NuxtLink
-        v-for="project in visibleProjects"
-        :key="project.id"
-        :to="`/project/${project.id}`"
-        :style="project.computedStyle"
-        class="absolute z-10 flex h-7 items-center truncate rounded-l-sm rounded-r-full border-l-4 border-info-500 bg-dark-600 px-3 text-xs shadow-sm backdrop-blur-sm transition hover:bg-white/20 md:text-sm">
-        <span class="truncate text-white">{{ project.title }}</span>
-      </NuxtLink>
+        <!-- Date labels stay pinned to the top while the lanes scroll vertically -->
+        <div class="sticky top-0 z-20 bg-dark-500" :style="{ height: `${HEADER_HEIGHT - 4}px` }">
+          <div v-bind="wrapperProps">
+            <div
+              v-for="{ index } in visibleDays"
+              :key="index"
+              class="shrink-0 pt-3 text-center text-xs md:text-sm"
+              :class="index === todayIndex ? 'font-semi-bold text-white' : 'text-light-500'"
+              :style="{ width: `${colWidth}px` }">
+              {{ dayLabel(index) }}
+            </div>
+          </div>
+        </div>
+
+        <NuxtLink
+          v-for="bar in visibleBars"
+          :key="bar.id"
+          :to="`/project/${bar.id}`"
+          :style="bar.style"
+          class="absolute z-10 flex h-7 items-center truncate rounded-l-sm rounded-r-full border-l-4 border-info-500 bg-dark-600 px-3 text-xs shadow-sm transition-colors hover:bg-dark-400 md:text-sm">
+          <span class="truncate text-white">{{ bar.title }}</span>
+        </NuxtLink>
+      </div>
     </div>
   </section>
 </template>

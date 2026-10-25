@@ -28,8 +28,7 @@ interface MDocEnvelopeResponse {
 export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
-    const cookieOrgId = getCookie(event, 'active-org-id')
-    const activeOrgId = user.organizations?.find((org) => org.orgId === cookieOrgId)?.orgId ?? user.organizations?.[0]?.orgId
+    const activeOrgId = getActiveOrgId(event, user)
 
     const config = useRuntimeConfig()
     const body = await readBody(event)

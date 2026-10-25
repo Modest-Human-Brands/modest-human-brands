@@ -7,10 +7,13 @@ const paramsSchema = z.object({
 
 export default defineEventHandler<Promise<ProjectItem[]>>(async (event) => {
   try {
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
 
     const { projectId: rawProjectId, kind } = await getValidatedRouterParams(event, paramsSchema.parse)
     const projectId = notionNormalizeId(rawProjectId)
+
+    const projectItem = await useStorage<Resource<'project'>>('data:resource:project').getItem(projectId!)
+    assertProjectInOrg(projectItem?.record, getActiveOrgId(event, user))
 
     const storage = useStorage<Resource<ProjectItemKind>>(`data:resource:${kind}`)
     const keys = await storage.getKeys()

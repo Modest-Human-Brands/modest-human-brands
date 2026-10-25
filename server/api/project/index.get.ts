@@ -22,7 +22,8 @@ const totalSteps = Object.keys(statusIndexMap).length
 
 export default defineEventHandler(async (event) => {
   try {
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
+    const activeOrgId = getActiveOrgId(event, user)
 
     const projectStorage = useStorage<Resource<'project'>>('data:resource:project')
     const keys = await projectStorage.getKeys()
@@ -33,6 +34,7 @@ export default defineEventHandler(async (event) => {
       keys.map(async (key) => {
         const record = (await projectStorage.getItem(key))?.record
         if (!record || !record.properties) return
+        if (!hasActiveOrg(record, activeOrgId)) return
 
         const props = record.properties
         const name = props.Name?.title?.[0]?.plain_text || 'Untitled Project'
