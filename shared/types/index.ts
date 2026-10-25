@@ -982,3 +982,18 @@ export interface SiteTemplate {
   category: string
   description: string
 }
+
+export interface SiteTemplateDetail extends SiteTemplate {
+  /** JSON Schema of `data`: fixed slots, with min/max item counts on the card lists */
+  schema: SiteSchemaNode
+  /** A complete valid `data` payload, the starting content for a new site */
+  sample: Record<string, unknown>
+}
+
+/** The part of a JSON Schema the site editor reads: nesting and the card list limits */
+export interface SiteSchemaNode {
+  properties?: Record<string, SiteSchemaNode>
+  items?: SiteSchemaNode
+  minItems?: number
+  maxItems?: number
+}

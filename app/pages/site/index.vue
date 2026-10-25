@@ -15,7 +15,7 @@ const { data: sites, pending } = await useFetch('/api/site', { default: () => []
       </div>
 
       <div v-else-if="sites?.length" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <TemplateCard v-for="site in sites" :id="site.slug" :key="site.slug" :label="site.name" :description="`${site.slug} · ${site.templateId}`" :link="`/site/${site.slug}`" />
+        <CardSite v-for="site in sites" :key="site.slug" :site="site" />
       </div>
 
       <div v-else class="my-auto flex h-full flex-col items-center justify-center text-light-500/40">

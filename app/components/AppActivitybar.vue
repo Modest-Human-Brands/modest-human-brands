@@ -22,11 +22,11 @@ function getAvatar(avatar?: string, name?: string) {
 
 <template>
   <div class="flex items-center justify-end gap-1 text-white/70 md:gap-3">
-    <div class="flex items-center gap-1 p-1 text-xs md:gap-2 md:text-sm">
+    <div class="hidden items-center gap-1 p-1 text-xs sm:flex md:gap-2 md:text-sm">
       <span class="">Edited</span>
       <NuxtTime :datetime="editedAt" day="numeric" month="short" />
     </div>
-    <div class="-space-x-3">
+    <div class="hidden -space-x-3 sm:block">
       <NuxtImg
         v-for="{ id, avatar, name } in visibleCollaborators"
         :key="id"
@@ -34,7 +34,7 @@ function getAvatar(avatar?: string, name?: string) {
         :alt="name"
         class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
     </div>
-    <span v-if="extraCollaborators > 0" class="p-1 text-xs text-white"> +{{ extraCollaborators }} </span>
+    <span v-if="extraCollaborators > 0" class="hidden p-1 text-xs text-white sm:block"> +{{ extraCollaborators }} </span>
     <button type="button" class="hidden p-1 md:block">Share</button>
     <button type="button" class="rounded-full bg-white/0 p-1 text-white hover:bg-white/10" aria-label="Star">
       <NuxtIcon name="local:star" class="text-[24px]" />
