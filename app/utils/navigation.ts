@@ -29,6 +29,13 @@ export const PRIMARY_NAVIGATION_TABS = [
   },
 
   {
+    id: 'site',
+    title: 'Site',
+    icon: 'local:globe',
+    description: 'Manage all your websites here',
+    to: '/site',
+  },
+  {
     id: 'connect',
     title: 'Connect',
     icon: 'local:network',

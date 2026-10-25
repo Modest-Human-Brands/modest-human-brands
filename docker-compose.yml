@@ -28,7 +28,7 @@ services:
         condition: on-failure
         max_attempts: 3
     ports:
-      - 5100:3000
+      - 3002:3000
 
   wap:
     build: ../code-wap
@@ -42,7 +42,7 @@ services:
         condition: on-failure
         max_attempts: 3
     ports:
-      - 5102:3000
+      - 3001:3000
 
   connect-ui:
     build: ../code-connect-app
@@ -126,7 +126,7 @@ services:
         condition: on-failure
         max_attempts: 3
     ports:
-      - 3002:3000
+      - 3003:3000
 
   drive:
     image: ghcr.io/modest-human-brands/mdrive:latest
@@ -140,6 +140,8 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
+    ports:
+      - 3004:3000
 
   media:
     image: ghcr.io/modest-human-brands/mmedia:latest
@@ -159,6 +161,8 @@ services:
         reservations:
           cpus: '1'
           memory: 1024M
+    ports:
+      - 3005:3111
 
 volumes:
   modest-human-brands_data:

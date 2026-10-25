@@ -116,6 +116,7 @@ export default defineNuxtConfig({
       docUrl: '',
       matrixUrl: '',
       driveUrl: '',
+      wapUrl: '',
       vapidKey: '',
       livekitUrl: '',
       scripts: {
@@ -144,6 +145,7 @@ export default defineNuxtConfig({
       driveApiKey: '',
       connectApiKey: '',
       mediaApiKey: '',
+      wapApiKey: '',
     },
   },
   icon: {

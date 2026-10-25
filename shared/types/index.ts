@@ -949,3 +949,36 @@ export interface NotionWaitlist {
     }
   }
 }
+
+export interface SiteBrand {
+  name: string
+  logoUrl: string
+  faviconUrl: string
+  fontFamily: string
+  colors: { primary: string; secondary: string; accent: string; background: string; text: string }
+}
+
+export interface SiteSummary {
+  slug: string
+  orgId: string
+  templateId: string
+  name: string
+  updatedAt: string
+}
+
+export interface Site {
+  slug: string
+  orgId: string
+  templateId: string
+  brand: SiteBrand
+  domains?: string[]
+  data: Record<string, unknown>
+}
+
+export interface SiteTemplate {
+  id: string
+  label: string
+  shortLabel: string
+  category: string
+  description: string
+}
