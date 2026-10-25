@@ -14,6 +14,7 @@ export default defineEventHandler<Promise<Organization[]>>(async (event) => {
 
       return {
         id,
+        slug: notionTextStringify(properties.Id.rich_text),
         name: notionTextStringify(properties.Name.title),
         legalName: notionTextStringify(properties['Legal Name'].rich_text),
         entityType: properties['Entity Type'].select!.name,

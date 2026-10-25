@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
 
     return await $fetch(`/api/media/uploads/${batchId}`, {
       baseURL: config.public.driveUrl,
+      headers: serviceHeaders('drive'),
     })
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {

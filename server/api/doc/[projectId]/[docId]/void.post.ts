@@ -4,14 +4,15 @@ export interface VoidDocumentResponse {
 }
 
 export default defineEventHandler(async (event) => {
-  // const { user } =
-  await requireUserSession(event)
+  const { user } = await requireUserSession(event)
 
   const docId = getRouterParam(event, 'docId')
 
   if (!docId) {
     throw createError({ statusCode: 400, statusMessage: 'Missing document ID' })
   }
+
+  await assertDocInOrg(docId, getActiveOrgId(event, user))
 
   const body = await readBody<{ reason?: string }>(event)
   const reason = body?.reason?.trim()
@@ -28,6 +29,7 @@ export default defineEventHandler(async (event) => {
   try {
     const result = await $fetch<VoidDocumentResponse>(`/api/document/${docId}/void`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
       method: 'POST',
       body: { reason },
     })

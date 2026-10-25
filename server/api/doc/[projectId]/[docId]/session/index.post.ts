@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   try {
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
 
     const projectId = getRouterParam(event, 'projectId')
     const docId = getRouterParam(event, 'docId')
@@ -9,10 +9,12 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: 'projectId and docId are strictly required' })
     }
 
+    await assertDocInOrg(docId, getActiveOrgId(event, user))
+
     const { signerName, signerEmail, signerIsContact } = await readBody<{ signerName: string; signerEmail: string; signerIsContact: boolean }>(event)
 
     const result = await createSignerSession({
-      projectId,
+      projectSlug: projectId,
       docId,
       signerEmail,
       signerName,

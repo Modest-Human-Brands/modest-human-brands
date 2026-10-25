@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
       status: string
     }>(`/api/document/${docId}/session/verify`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
       method: 'POST',
       body: {
         sessionToken: body?.sessionToken,

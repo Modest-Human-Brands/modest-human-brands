@@ -139,6 +139,11 @@ export default defineNuxtConfig({
       matrixAdminAccessToken: '',
       // old
       mediaUrl: '',
+      // Shared secrets for the microservices, sent as x-api-key
+      docApiKey: '',
+      driveApiKey: '',
+      connectApiKey: '',
+      mediaApiKey: '',
     },
   },
   icon: {

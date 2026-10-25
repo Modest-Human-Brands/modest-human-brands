@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch(`/api/document/${docId}/sign/server`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
       method: 'POST',
       body,
     })

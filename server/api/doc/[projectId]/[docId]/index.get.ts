@@ -62,6 +62,7 @@ export default defineEventHandler(async (event) => {
   try {
     const doc = await $fetch<MDocDocument>(`/api/document/${docId}`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
     })
 
     const mimeToExt: Record<string, string> = {
@@ -78,12 +79,13 @@ export default defineEventHandler(async (event) => {
     let verificationData = null
     if (doc.status === 'Completed') {
       try {
-        const pdfBlob = await $fetch<Blob>(`/api/document/${docId}/content?download`, { baseURL: config.public.docUrl })
+        const pdfBlob = await $fetch<Blob>(`/api/document/${docId}/content?download`, { baseURL: config.public.docUrl, headers: serviceHeaders('doc') })
         const formData = new FormData()
         formData.append('pdf', pdfBlob, doc.name)
 
         verificationData = await $fetch<{ isIntact: boolean; signer: string; message: string }>(`/api/document/${docId}/sign/verify`, {
           baseURL: config.public.docUrl,
+          headers: serviceHeaders('doc'),
           method: 'POST',
           body: formData,
         })

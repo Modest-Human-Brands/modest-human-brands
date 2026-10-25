@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     return await $fetch('/api/media/comments', {
       method: 'POST',
       baseURL: config.public.driveUrl,
+      headers: serviceHeaders('drive'),
       body,
     })
   } catch (error) {

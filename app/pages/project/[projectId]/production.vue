@@ -8,7 +8,7 @@ const route = useRoute()
 const projectId = route.params.projectId as string
 
 // Same org slug the Sync page uses for share links
-const orgSlug = 'red-cat-pictures'
+const { orgSlug } = useActiveOrg()
 
 const { data: project } = await useFetch(`/api/project/${projectId}`)
 const { data: stream } = await useFetch<ProjectStreamCollection | null>(`/api/stream/${project.value?.slug}`, { default: () => null })

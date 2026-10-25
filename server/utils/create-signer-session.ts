@@ -17,10 +17,12 @@ export default async function createSignerSession({ projectSlug, docId, signerEm
 
   const document = await $fetch<MDocDocument>(`/api/document/${docId}`, {
     baseURL: config.public.docUrl,
+    headers: serviceHeaders('doc'),
   })
 
   const sessionRes = await $fetch<SessionResponse>(`/api/document/${docId}/session`, {
     baseURL: config.public.docUrl,
+    headers: serviceHeaders('doc'),
     method: 'POST',
     body: { signerEmail, expiresIn: document.rawData?.expiresIn },
   })
@@ -30,7 +32,7 @@ export default async function createSignerSession({ projectSlug, docId, signerEm
   try {
     await $fetch('/api/interaction/email/send', {
       baseURL: config.public.connectUrl,
-      headers: { 'x-org-id': config.private.mhbOrgId },
+      headers: serviceHeaders('connect', { 'x-org-id': await getOrgSlug(config.private.mhbOrgId) }),
       method: 'POST',
       body: {
         contactId: document.project?.contact?.id,
@@ -61,6 +63,7 @@ export async function advanceSequentialSigner(docId: string): Promise<void> {
     const config = useRuntimeConfig()
     const document = await $fetch<MDocDocument>(`/api/document/${docId}`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
     })
     const queue = (document.routingQueue || []).sort((a, b) => a.order - b.order)
 

@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch<MdriveProjectMediaResponse>(`/api/projects/${projectId}/media`, {
       baseURL: config.public.driveUrl,
+      headers: serviceHeaders('drive'),
       method: 'GET',
       query: {
         ...forwardedQuery,

@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch<MConnectTemplate>(`/api/interaction/${channel}/template/${id}`, {
       baseURL: config.public.connectUrl,
+      headers: serviceHeaders('connect'),
     })
 
     const transformedTemplate = { ...response, variables: await transformTemplate(event, response.variables) }

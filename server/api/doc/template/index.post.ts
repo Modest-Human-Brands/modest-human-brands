@@ -33,14 +33,15 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { recipientId, organization, templateData } = await retransformTemplate({ ...body, orgId: activeOrgId, templateId: body.template })
+    const { recipientId, templateData } = await retransformTemplate(event, { ...body, orgId: activeOrgId, templateId: body.template })
 
-    const documentStorage = useStorage<Resource<'document'>>('data:resource:document')
-    const documents = (await documentStorage.getItems(await documentStorage.getKeys()))
-      .flatMap(({ value }) => value?.record || [])
-      .filter((record) => record.properties.Organization.relation[0]?.id === activeOrgId)
+    const { number } = await $fetch<{ number: string }>('/api/document/numbering/next', {
+      baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc', { 'x-org-id': await getOrgSlug(activeOrgId) }),
+      query: { templateId: body.template },
+    })
 
-    body.name = `${organization!.name.replaceAll(' ', '-').toLowerCase()}-${body.template.toUpperCase()[0]}-${documents.length}-1`
+    body.name = number
     body.orgId = activeOrgId
     body.data = templateData
     body.userId = user.id
@@ -48,12 +49,14 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch<{ id: string; templateId: string; name: string; sizeBytes: number }>('/api/document/template', {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
       method: 'POST',
       body,
     })
 
     const document = await $fetch<MDocRawDocument>(`/api/document/${response.id}`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
     })
 
     const mimeToExt: Record<string, string> = {
@@ -72,6 +75,7 @@ export default defineEventHandler(async (event) => {
 
     const envelope = await $fetch<MDocEnvelopeResponse>(`/api/document/${response.id}/envelope`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
       method: 'POST',
       body: { expiresInDays: 7, routingType: 'SEQUENTIAL', signers },
     })
@@ -88,7 +92,7 @@ export default defineEventHandler(async (event) => {
     )
 
     await createSignerSession({
-      projectId: document.project?.id || '',
+      projectSlug: document.project?.slug || '',
       docId: response.id,
       signerEmail: signers[0]!.email,
       signerName: signers[0]!.name,

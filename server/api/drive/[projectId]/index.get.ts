@@ -54,7 +54,7 @@ export interface MDriveProjectSummaryResponse {
 
 export default defineEventHandler(async (event) => {
   try {
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
 
     const projectId = notionNormalizeId(getRouterParam(event, 'projectId')!)
 
@@ -62,10 +62,14 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: 'Missing target projectId parameter' })
     }
 
+    const project = await useStorage<Resource<'project'>>('data:resource:project').getItem(projectId)
+    assertProjectInOrg(project?.record, getActiveOrgId(event, user))
+
     const config = useRuntimeConfig()
 
     const response = await $fetch<MDriveProjectSummaryResponse>(`/api/projects/${projectId}`, {
       baseURL: config.public.driveUrl,
+      headers: serviceHeaders('drive'),
     })
 
     return response

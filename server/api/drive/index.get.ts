@@ -18,17 +18,21 @@ export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
 
-    const activeOrg = user.organizations[0]
+    const activeOrgId = getActiveOrgId(event, user)
 
-    if (!activeOrg) return []
+    if (!activeOrgId) return { data: [], totalItems: 0 }
 
     const config = useRuntimeConfig()
 
     const response = await $fetch<MDriveProjectResponse>('/api/projects', {
       baseURL: config.public.driveUrl,
+      headers: serviceHeaders('drive'),
     })
 
-    return response
+    const { ids } = await getOrgProjects(activeOrgId)
+    const data = response.data.filter((project) => ids.has(notionNormalizeId(project.id)!))
+
+    return { ...response, data, totalItems: data.length }
   } catch (error: unknown) {
     if (error instanceof Error && 'statusCode' in error) {
       throw error

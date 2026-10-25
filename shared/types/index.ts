@@ -23,6 +23,7 @@ export interface OrganizationSocials {
 
 export interface Organization {
   id: string
+  slug: string
   name: string
   legalName: string
   entityType: 'LLP' | 'Private Limited' | 'Proprietorship'

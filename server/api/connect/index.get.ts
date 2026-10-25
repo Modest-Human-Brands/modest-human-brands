@@ -2,6 +2,7 @@ export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
     const activeOrgId = getActiveOrgId(event, user)
+    const activeOrgSlug = await getOrgSlug(activeOrgId)
 
     const config = useRuntimeConfig()
 
@@ -19,9 +20,7 @@ export default defineEventHandler(async (event) => {
       }[]
     >('/api/interaction', {
       baseURL: config.public.connectUrl,
-      headers: {
-        ...(activeOrgId ? { 'x-org-id': activeOrgId } : {}),
-      },
+      headers: serviceHeaders('connect', { 'x-org-id': activeOrgSlug }),
     })
 
     return rawData.toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())

@@ -6,6 +6,7 @@ export default defineEventHandler(async () => {
 
     const response = await $fetch<MDocTemplate[]>('/api/document/template', {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
     })
 
     return response

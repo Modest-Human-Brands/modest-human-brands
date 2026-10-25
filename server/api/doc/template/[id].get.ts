@@ -24,6 +24,7 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch<MDocTemplate>(`/api/document/template/${id}`, {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
     })
 
     const transformedTemplate = { ...response, variables: await transformTemplate(event, response.variables) }

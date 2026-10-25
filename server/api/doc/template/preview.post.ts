@@ -6,10 +6,11 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { templateData } = await retransformTemplate({ ...body, orgId: activeOrgId, templateId: body.templateId })
+    const { templateData } = await retransformTemplate(event, { ...body, orgId: activeOrgId, templateId: body.templateId })
 
     const response = await $fetch<{ pdfBase64?: string; error?: string }>('/api/document/template/preview', {
       baseURL: config.public.docUrl,
+      headers: serviceHeaders('doc'),
       method: 'POST',
       body: {
         templateId: body.templateId,

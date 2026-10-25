@@ -4,8 +4,8 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-const { data: mediaCollections, pending } = await useFetch('/api/drive', { default: () => [] })
-const orgSlug = 'red-cat-pictures'
+const { data: mediaCollections, pending } = await useFetch('/api/drive', { default: () => ({ data: [], totalItems: 0 }) })
+const { orgSlug } = useActiveOrg()
 </script>
 
 <template>

@@ -21,19 +21,14 @@ export interface MDocDocumentListResponse {
 }
 
 export default defineEventHandler(async (event) => {
-  // const { user } =
-  await requireUserSession(event)
+  const { user } = await requireUserSession(event)
+  const activeOrgId = getActiveOrgId(event, user)
 
   const projectId = getRouterParam(event, 'projectId') || 'default'
 
-  const config = useRuntimeConfig()
-
   try {
-    const response = await $fetch<MDocDocumentListResponse>('/api/document', {
-      baseURL: config.public.docUrl,
-    })
-
-    const projectDocs = response.results.filter((doc) => (doc.project?.slug || 'unassigned') === projectId)
+    const orgProjects = await getOrgProjects(activeOrgId)
+    const projectDocs = (await listDocuments()).filter((doc) => (doc.project?.slug || 'unassigned') === projectId && isDocInOrg(doc, activeOrgId, orgProjects))
 
     return projectDocs.map((doc) => {
       const mimeToExt: Record<string, string> = {

@@ -5,10 +5,11 @@ export default defineEventHandler(async (event) => {
 
     const { user } = await requireUserSession(event)
     const activeOrgId = getActiveOrgId(event, user)
+    const activeOrgSlug = await getOrgSlug(activeOrgId)
 
     const config = useRuntimeConfig()
 
-    const { recipientId, organization, templateData } = await retransformTemplate({
+    const { recipientId, organization, templateData } = await retransformTemplate(event, {
       ...body,
       orgId: activeOrgId,
       templateId: body.template,
@@ -20,9 +21,7 @@ export default defineEventHandler(async (event) => {
       dispatchId?: string
     }>(`/api/interaction/${channel}/send`, {
       baseURL: config.public.connectUrl,
-      headers: {
-        ...(activeOrgId ? { 'x-org-id': activeOrgId } : {}),
-      },
+      headers: serviceHeaders('connect', { 'x-org-id': activeOrgSlug }),
       method: 'POST',
       body: {
         contactId: body?.contactId ?? recipientId,

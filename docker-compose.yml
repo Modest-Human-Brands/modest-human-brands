@@ -30,6 +30,20 @@ services:
     ports:
       - 5100:3000
 
+  wap:
+    build: ../code-wap
+    env_file:
+      - .env
+    volumes:
+      - mwap-data:/app/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    ports:
+      - 5102:3000
+
   connect-ui:
     build: ../code-connect-app
     deploy:
@@ -166,6 +180,13 @@ volumes:
       type: none
       o: bind
       device: ../code-connect/.data
+
+  mwap-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../code-wap/data
 
   mdoc-asset:
     driver: local

@@ -4,7 +4,7 @@ definePageMeta({
   middleware: ['auth'],
 })
 
-type MediaStatus = 'draft' | 'approved' | 'notApproved' | 'release'
+type MediaStatus = 'pending' | 'approved' | 'notApproved' | 'release'
 
 const PAGE_SIZE = 50
 
@@ -27,7 +27,7 @@ function getCategorySum(statusKey: MediaStatus) {
 }
 
 const tabs = computed(() => [
-  { id: 'draft' as const, label: 'Review', count: getCategorySum('draft') },
+  { id: 'pending' as const, label: 'Review', count: getCategorySum('pending') },
   { id: 'approved' as const, label: 'Approved', count: getCategorySum('approved') },
   { id: 'notApproved' as const, label: 'Not Approved', count: getCategorySum('notApproved') },
   { id: 'release' as const, label: 'Release', count: getCategorySum('release') },

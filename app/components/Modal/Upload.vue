@@ -82,13 +82,10 @@ async function executeDispatch() {
   isInitializing.value = true
 
   try {
-    const { user } = useUserSession()
-
     const pendingFiles = fileQueue.value.filter((f) => f.status === 'idle')
     if (!pendingFiles.length) return
 
     const payload = {
-      orgId: user.value?.organizations[0],
       projectId: props.projectId,
       files: pendingFiles.map((item) => ({
         filename: item.file.name,

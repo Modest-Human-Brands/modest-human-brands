@@ -45,6 +45,7 @@ export default defineEventHandler(async (event) => {
 
     const { user } = await requireUserSession(event)
     const activeOrgId = getActiveOrgId(event, user)
+    const activeOrgSlug = await getOrgSlug(activeOrgId)
 
     const config = useRuntimeConfig()
 
@@ -60,16 +61,12 @@ export default defineEventHandler(async (event) => {
         contentHtml: string
       }>(`/api/interaction/${channel}/${id}`, {
         baseURL: config.public.connectUrl,
-        headers: {
-          ...(activeOrgId ? { 'x-org-id': activeOrgId } : {}),
-        },
+        headers: serviceHeaders('connect', { 'x-org-id': activeOrgSlug }),
       }),
       channel === 'email'
         ? $fetch<EmailTelemetry>(`/api/interaction/email/${id}/telemetry`, {
             baseURL: config.public.connectUrl,
-            headers: {
-              ...(activeOrgId ? { 'x-org-id': activeOrgId } : {}),
-            },
+            headers: serviceHeaders('connect', { 'x-org-id': activeOrgSlug }),
           }).catch(() => null)
         : Promise.resolve(null),
     ])

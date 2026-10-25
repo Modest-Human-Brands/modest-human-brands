@@ -6,10 +6,11 @@ export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
     const body = await readBody(event)
 
-    const { templateData } = await retransformTemplate({ ...body, orgId: activeOrgId, templateId: body.templateId })
+    const { templateData } = await retransformTemplate(event, { ...body, orgId: activeOrgId, templateId: body.templateId })
 
     const response = await $fetch<{ contentHtml?: string; error?: string }>('/api/interaction/email/template/preview', {
       baseURL: config.public.connectUrl,
+      headers: serviceHeaders('connect'),
       method: 'POST',
       body: {
         templateId: body.templateId,

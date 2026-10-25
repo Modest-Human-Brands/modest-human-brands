@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
   try {
     const rawTimeline = await $fetch<MConnectTimelineResponse>(`/api/contacts/${clientId}/timeline`, {
       baseURL: config.public.connectUrl,
+      headers: serviceHeaders('connect'),
     })
 
     return rawTimeline.results.map((item) => ({

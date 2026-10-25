@@ -1,15 +1,10 @@
-import type { MDocDocumentListResponse } from './[projectId]/index.get'
-
 export default defineEventHandler(async (event) => {
   try {
-    // const { user } =
-    await requireUserSession(event)
+    const { user } = await requireUserSession(event)
+    const activeOrgId = getActiveOrgId(event, user)
 
-    const config = useRuntimeConfig()
-
-    const response = await $fetch<MDocDocumentListResponse>('/api/document', {
-      baseURL: config.public.docUrl,
-    })
+    const orgProjects = await getOrgProjects(activeOrgId)
+    const documents = (await listDocuments()).filter((doc) => isDocInOrg(doc, activeOrgId, orgProjects))
 
     const projectFolders = new Map<
       string,
@@ -23,7 +18,7 @@ export default defineEventHandler(async (event) => {
       }
     >()
 
-    response.results.forEach((doc) => {
+    documents.forEach((doc) => {
       const projectId = doc.project?.slug || 'unassigned'
       const contactName = doc.contact?.name || 'Unknown Contact'
 

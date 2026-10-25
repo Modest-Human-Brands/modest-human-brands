@@ -18,9 +18,8 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: 'Document/Envelope ID is strictly required' })
     }
 
-    const orgId = ((await notion.pages.retrieve({ page_id: docId })) as unknown as NotionDocument).properties.Organization.relation[0]?.id
-
     const config = useRuntimeConfig()
+    const { organizationId: orgId } = await $fetch<{ organizationId?: string | null }>(`/api/document/${docId}`, { baseURL: config.public.docUrl, headers: serviceHeaders('doc') })
     const body = await readBody(event)
 
     const clientIp = getRequestIP(event, { xForwardedFor: true })
@@ -33,6 +32,7 @@ export default defineEventHandler(async (event) => {
       `/api/document/${docId}/sign/prepare`,
       {
         baseURL: config.public.docUrl,
+        headers: serviceHeaders('doc'),
         method: 'POST',
         body,
       }

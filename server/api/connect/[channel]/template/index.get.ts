@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
 
     const response = await $fetch<MConnectTemplate[]>(`/api/interaction/${channel}/template`, {
       baseURL: config.public.connectUrl,
+      headers: serviceHeaders('connect'),
     })
 
     return response

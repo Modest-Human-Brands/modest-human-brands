@@ -5,7 +5,7 @@ definePageMeta({
 })
 
 const { data: streamCollections, pending } = await useFetch('/api/stream')
-const orgSlug = 'red-cat-pictures'
+const { orgSlug } = useActiveOrg()
 </script>
 
 <template>

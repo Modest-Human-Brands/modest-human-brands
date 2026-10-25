@@ -1,5 +1,6 @@
 export const DEFAULT_ORG = {
   id: 'modest-human-brands',
+  slug: 'modest-human-brands',
   name: 'Modest Human Brands',
   legalName: 'Modest Human Brands LLP',
   entityType: 'LLP',

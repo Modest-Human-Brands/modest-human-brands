@@ -42,10 +42,10 @@ export async function transformTemplate(event: H3Event, variables: Record<string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function retransformTemplate({ data, orgId }: { recipientId: string; orgId: string; data: any }) {
+export async function retransformTemplate(event: H3Event, { data, orgId }: { recipientId: string; orgId: string; data: any }) {
   let organization = null
   try {
-    organization = await $fetch(`/api/organization/${orgId}`)
+    organization = await event.$fetch(`/api/organization/${orgId}`)
   } catch (error) {
     console.error(`[retransformTemplate] Failed to fetch organization (${orgId}):`, error)
   }
@@ -70,7 +70,7 @@ export async function retransformTemplate({ data, orgId }: { recipientId: string
   const targetTermsId = typeof templateData.terms === 'object' ? templateData.terms?.id : templateData.terms
   if (targetTermsId && typeof targetTermsId === 'string') {
     try {
-      const terms = await $fetch<{
+      const terms = await event.$fetch<{
         id: string
         slug: string
         title: string
@@ -90,7 +90,7 @@ export async function retransformTemplate({ data, orgId }: { recipientId: string
   const targetProjectId = typeof templateData.project === 'object' ? templateData.project?.id : templateData.project
   if (targetProjectId && typeof targetProjectId === 'string') {
     try {
-      const project = await $fetch(`/api/project/${targetProjectId}`)
+      const project = await event.$fetch(`/api/project/${targetProjectId}`)
       templateData.project = project
     } catch (error) {
       console.error(`[retransformTemplate] Failed to fetch project (${targetProjectId}):`, error)
