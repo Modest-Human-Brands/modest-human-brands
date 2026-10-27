@@ -59,7 +59,7 @@ function onDrop(stage: string) {
       <div
         v-for="column in columns"
         :key="column.id"
-        class="flex w-full max-w-[200px] shrink-0 snap-center flex-col gap-6 rounded-xl transition-colors md:max-w-[265px]"
+        class="flex w-[82%] max-w-[300px] shrink-0 snap-center flex-col gap-4 rounded-xl transition-colors md:w-[265px] md:gap-6"
         :class="{ 'bg-white/5': overStage === column.id && draggedId }"
         @dragover.prevent="overStage = column.id"
         @dragleave.self="overStage = ''"

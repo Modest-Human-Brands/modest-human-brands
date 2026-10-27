@@ -19,7 +19,7 @@ defineProps<{
       :key="field.label"
       class="flex flex-col gap-1">
       <span class="flex items-center gap-1.5 text-xs text-light-400">
-        <NuxtIcon name="ph:dots-six-vertical" class="shrink-0 text-base" />
+        <NuxtIcon name="local:grip" class="shrink-0 text-base" />
         {{ field.label }}
       </span>
       <span class="pl-5 text-sm font-semi-bold text-white">{{ field.value ?? '—' }}</span>

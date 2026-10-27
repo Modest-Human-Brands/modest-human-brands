@@ -24,16 +24,8 @@ export const PRIMARY_NAVIGATION_TABS = [
     id: 'dashboard',
     title: 'Dashboard',
     icon: 'local:grid',
-    description: 'Manage all your website/app here',
+    description: 'Manage all your projects here',
     to: '/dashboard',
-  },
-
-  {
-    id: 'site',
-    title: 'Site',
-    icon: 'local:globe',
-    description: 'Manage all your websites here',
-    to: '/site',
   },
   {
     id: 'connect',
@@ -81,11 +73,11 @@ export const PRIMARY_NAVIGATION_TABS = [
 
 export const SECONDARY_NAVIGATION_TABS = [
   {
-    id: 'website-app',
-    title: 'Website/App',
+    id: 'site',
+    title: 'Site',
     icon: 'local:app',
-    description: 'Manage all your website/app here',
-    to: '/website-app',
+    description: 'Manage all your websites here',
+    to: '/site',
   },
   {
     id: 'client',

@@ -44,14 +44,14 @@ async function selectOrg(orgId: string) {
 </script>
 
 <template>
-  <aside class="z-50 flex h-dvh shrink-0 flex-col gap-4 border-r border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300">
+  <aside class="z-50 flex h-dvh shrink-0 flex-col gap-4 border-r-2 border-white/10 bg-dark-400 px-2 py-5 text-white transition-all duration-300 md:w-[290px] md:px-4">
     <!-- Brand -->
     <div class="relative">
       <button type="button" class="flex w-full items-center gap-2 rounded-md p-1 text-left transition-colors hover:bg-white/5" @click="isDropdownOpen = !isDropdownOpen">
         <div class="grid shrink-0 place-items-center rounded-full transition-transform hover:scale-110">
-          <NuxtImg :src="organization.branding.logo" :alt="organization.name" class="relative size-8 object-contain" />
+          <NuxtImg :src="organization.branding.logo" :alt="organization.name" class="relative size-8 object-contain md:size-12" />
         </div>
-        <div class="hidden min-w-0 flex-1 overflow-hidden truncate text-sm font-semi-bold md:block">
+        <div class="hidden min-w-0 flex-1 overflow-hidden truncate text-base md:block">
           {{ organization.name }}
         </div>
         <NuxtIcon name="local:chevron-bold" class="hidden size-4 shrink-0 -rotate-90 fill-white/50 transition-transform duration-200 md:block" :class="{ 'rotate-90': isDropdownOpen }" />
@@ -79,17 +79,17 @@ async function selectOrg(orgId: string) {
     </div>
     <!-- Navigation -->
     <nav class="grow overflow-y-auto">
-      <div v-for="(group, i) in navGroups" :key="i" class="space-y-2 border-t border-white/10 pt-3 md:space-y-3" :class="{ 'mt-6': i > 0 }">
+      <div v-for="(group, i) in navGroups" :key="i" class="space-y-2 pt-3 md:space-y-[11px]" :class="{ 'mt-4 md:mt-[27px]': i > 0 }">
         <NuxtLink
           v-for="item in group"
           :key="item.id"
           :to="item.to"
-          class="group relative flex items-center gap-3 rounded-xl p-2 text-base transition-all md:w-56"
-          :class="item.id === activeKey ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'"
+          class="group relative flex items-center gap-2 rounded-lg p-2 text-base transition-all md:w-full md:px-5 md:py-[6.5px]"
+          :class="item.id === activeKey ? 'bg-dark-500 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white'"
           replace>
           <NuxtIcon :name="item.icon" class="shrink-0 text-[28px] transition-transform group-hover:scale-110 md:text-[32px]" />
           <span class="hidden truncate md:block">{{ item.title }}</span>
-          <span v-if="item.id === activeKey" class="animate-slide-in ml-auto hidden h-4 w-1 rounded-full bg-accent-500 md:block" />
+          <span v-if="item.id === activeKey" class="animate-slide-in absolute left-2.5 top-1/2 hidden h-[13px] w-[3px] -translate-y-1/2 rounded-full bg-accent-400 md:block" />
           <span v-if="item.id === activeKey" class="absolute -right-1 top-1/2 ml-auto h-4 w-1 -translate-y-1/2 rounded-full bg-accent-500 md:hidden" />
         </NuxtLink>
       </div>

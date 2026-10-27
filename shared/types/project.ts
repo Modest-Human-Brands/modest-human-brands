@@ -12,6 +12,7 @@ export interface Project {
   title: string
   status: ProjectStatus
   progress: number
+  createdAt?: string
   period: {
     start: string
     end: string

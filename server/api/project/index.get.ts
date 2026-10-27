@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
           title: name,
           status,
           progress: projectProgress(status),
+          createdAt: record.created_time,
           period: {
             start: startDate.toISOString(),
             end: endDate.toISOString(),

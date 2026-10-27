@@ -32,47 +32,42 @@ async function handleShare(): Promise<void> {
 </script>
 
 <template>
-  <article class="overflow-hidden rounded-xl bg-dark-500">
-    <img v-if="document.previewUrl" :src="document.previewUrl" :alt="document.title" class="aspect-[2/1] w-full object-cover object-top" loading="lazy" />
+  <!-- Figma: Card/Document (256 wide, radius 4) -->
+  <article class="relative overflow-hidden rounded bg-dark-500">
+    <div class="relative aspect-[2/1] w-full bg-dark-600">
+      <img v-if="document.previewUrl" :src="document.previewUrl" :alt="document.title" class="size-full object-cover object-top" loading="lazy" />
+      <span class="absolute bottom-1 left-1 rounded bg-dark-500 px-2 pb-[3px] pt-0.5 text-2xs font-semi-bold uppercase">{{ document.fileType }}</span>
+    </div>
 
-    <div class="space-y-4 p-4">
-      <div class="flex items-start justify-between gap-2">
-        <h3 class="min-w-0 truncate text-base font-semi-bold capitalize text-white">{{ document.title }}</h3>
-        <span class="inline-flex shrink-0 items-center rounded-full bg-info-500/20 px-3 py-1 text-xs font-semi-bold capitalize text-info-400">
+    <div class="flex flex-col gap-2 pt-[10px]">
+      <div class="flex items-start justify-between gap-2 px-2">
+        <h3 class="min-w-0 truncate text-sm">{{ document.title }}</h3>
+        <span class="shrink-0 rounded bg-info-600 px-2 pb-[3px] pt-0.5 text-2xs font-semi-bold capitalize">
           {{ document.status.replace('-', ' ') }}
         </span>
       </div>
 
-      <div class="flex items-center gap-4 border-t border-dark-600 pt-3 text-xs text-light-500">
-        <span class="flex items-center gap-1.5">
-          <NuxtIcon name="ph:clock" class="shrink-0 text-base" />
+      <div class="flex items-center justify-between gap-[35px] border-y border-dark-600 px-3 py-2 text-2xs font-semi-bold">
+        <span class="flex items-center gap-1">
+          <NuxtIcon name="local:clock" class="shrink-0 text-base" />
           {{ updatedAgo }}
         </span>
-        <span class="flex items-center gap-1.5">
-          <NuxtIcon name="ph:file-text" class="shrink-0 text-base" />
-          {{ document.fileType }}
-        </span>
-        <span class="flex items-center gap-1.5">
-          <NuxtIcon name="ph:download-simple" class="shrink-0 text-base" />
+        <span class="flex items-center gap-1">
+          <NuxtIcon name="local:download" class="shrink-0 text-base" />
           {{ formatSize(document.sizeBytes) }}
         </span>
       </div>
 
-      <div class="flex items-center justify-between">
-        <div class="flex -space-x-2">
-          <span
-            v-if="document.contact"
-            class="flex size-7 items-center justify-center rounded-full border-2 border-dark-500 bg-dark-600 text-[10px] font-semi-bold text-white"
-            :title="document.contact.name">
-            {{ initials(document.contact.name) }}
-          </span>
-        </div>
-
-        <button type="button" class="flex items-center gap-1.5 rounded-full bg-accent-500 px-3 py-1.5 text-xs font-semi-bold text-white hover:bg-accent-600" @click="handleShare">
-          <NuxtIcon name="ph:link" class="shrink-0 text-sm" />
-          Share
-        </button>
+      <div class="flex h-12 items-end px-2 pb-2">
+        <span v-if="document.contact" class="flex size-6 items-center justify-center rounded-full bg-dark-600 text-2xs font-semi-bold text-white" :title="document.contact.name">
+          {{ initials(document.contact.name) }}
+        </span>
       </div>
     </div>
+
+    <button type="button" class="absolute bottom-0 right-0 flex items-center gap-1 rounded-tl-md bg-accent-500 px-2 py-1 text-2xs font-semi-bold text-white hover:bg-accent-600" @click="handleShare">
+      <NuxtIcon name="local:link" class="shrink-0 text-base" />
+      Share
+    </button>
   </article>
 </template>

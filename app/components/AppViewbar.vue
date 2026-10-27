@@ -31,7 +31,7 @@ const navGroups = computed<NavItem[]>(() => [
 </script>
 
 <template>
-  <aside class="z-50 flex h-full shrink-0 flex-col gap-4 overflow-y-auto border-t border-white/10 bg-dark-400 px-2 py-6 text-white transition-all duration-300 lg:border-l lg:border-t-0">
+  <aside class="z-50 flex h-full shrink-0 flex-col gap-4 overflow-y-auto bg-dark-400 px-2 py-6 text-white transition-all duration-300 lg:border-l lg:border-white/10">
     <nav class="flex grow flex-col gap-2 md:gap-3">
       <div v-for="group in navGroups" :key="group.id" class="">
         <NuxtLink

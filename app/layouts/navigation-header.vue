@@ -16,10 +16,10 @@ const activeTab = computed(
 
     <main class="relative isolate mx-auto flex h-dvh w-full grow flex-col overflow-hidden">
       <div class="flex shrink-0 items-start justify-between px-2 pb-2 pt-6 md:gap-6 md:px-4">
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center gap-4">
-            <NuxtIcon :name="activeTab.icon" class="text-4xl md:text-5xl" />
-            <h1 class="hidden text-3xl font-semi-bold tracking-tight md:inline">
+        <div class="flex min-w-0 flex-col gap-2">
+          <div class="flex items-center gap-2">
+            <NuxtIcon :name="activeTab.icon" class="text-4xl md:text-[64px]" />
+            <h1 class="hidden text-3xl font-regular md:inline">
               {{ activeTab.title }}
             </h1>
           </div>

@@ -73,7 +73,7 @@ async function copyShareLink(kind: PreProductionKind, item: ProjectItem): Promis
           <!-- Column Header Pill -->
           <div class="flex items-center justify-between rounded-full bg-dark-500 fill-light-500 px-2 py-1.5 text-light-500">
             <span class="flex items-center gap-2 pl-1">
-              <NuxtIcon name="ph:dots-six-vertical" class="shrink-0 text-lg" />
+              <NuxtIcon name="local:grip" class="shrink-0 text-lg" />
               <span class="inline-flex items-center gap-2 rounded-full bg-info-600/40 px-3 py-1 text-sm font-semi-bold text-info-400">
                 <span class="size-2 rounded-full bg-info-400" />
                 {{ column.label }}
@@ -138,7 +138,7 @@ async function copyShareLink(kind: PreProductionKind, item: ProjectItem): Promis
                   type="button"
                   class="flex items-center gap-1.5 rounded-full bg-accent-500 px-3 py-1.5 text-xs font-semi-bold text-white transition-colors hover:bg-accent-600"
                   @click="copyShareLink(column.id, item)">
-                  <NuxtIcon name="ph:link" class="shrink-0 text-sm" />
+                  <NuxtIcon name="local:link" class="shrink-0 text-sm" />
                   Share
                 </button>
               </div>

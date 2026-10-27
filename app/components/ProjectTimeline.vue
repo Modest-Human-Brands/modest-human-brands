@@ -7,8 +7,8 @@ const props = defineProps<{
   }[]
 }>()
 
-const HEADER_HEIGHT = 36
-const LANE_HEIGHT = 32
+const HEADER_HEIGHT = 64
+const LANE_HEIGHT = 37
 const DAY_MS = 86400000
 // The axis is effectively endless: five years either side of today, with only the visible days rendered
 const DAYS_EACH_SIDE = 1825
@@ -73,7 +73,7 @@ const bars = computed(() => {
         style: {
           left: `${from * colWidth.value + 4}px`,
           width: `${(to - from + 1) * colWidth.value - 8}px`,
-          top: `${HEADER_HEIGHT + lane * LANE_HEIGHT}px`,
+          top: `${HEADER_HEIGHT + 24 + lane * LANE_HEIGHT}px`,
         },
       }
     })
@@ -86,7 +86,7 @@ const visibleBars = computed(() => {
   return bars.value.filter(({ from, to }) => to >= first && from <= last)
 })
 
-const contentHeight = computed(() => HEADER_HEIGHT + Math.max(bars.value.length ? Math.max(...bars.value.map(({ lane }) => lane)) + 1 : 0, 3) * LANE_HEIGHT + 16)
+const contentHeight = computed(() => HEADER_HEIGHT + 24 + Math.max(bars.value.length ? Math.max(...bars.value.map(({ lane }) => lane)) + 1 : 0, 3) * LANE_HEIGHT + 16)
 
 // Open on today, two columns in. This runs before the first paint, so the timeline never visibly jumps
 watch(
@@ -119,26 +119,26 @@ function onWheel(event: WheelEvent) {
 </script>
 
 <template>
-  <section ref="root" aria-label="Project timeline" class="relative h-60 overflow-hidden rounded-lg bg-dark-500">
+  <section ref="root" aria-label="Project timeline" class="relative h-52 overflow-hidden rounded-lg bg-dark-500 md:h-[228px]">
     <div v-if="ready" v-bind="containerProps" class="scrollbar-hidden size-full overflow-auto overscroll-x-contain" @wheel="onWheel">
       <div class="relative" :style="{ width: `${days.length * colWidth}px`, height: `${contentHeight}px`, minHeight: '100%' }">
         <!-- Day lines, one repeating background instead of an element per day -->
         <div
           class="absolute inset-x-0 bottom-0"
           :style="{
-            top: `${HEADER_HEIGHT - 4}px`,
+            top: `${HEADER_HEIGHT - 1}px`,
             backgroundImage: 'linear-gradient(to right, transparent calc(50% - 1px), #fff calc(50% - 1px), #fff calc(50% + 1px), transparent calc(50% + 1px))',
             backgroundSize: `${colWidth}px 100%`,
           }" />
-        <div class="absolute bottom-0 w-1 bg-accent-500" :style="{ left: `${(todayIndex + 0.5) * colWidth - 2}px`, top: `${HEADER_HEIGHT - 4}px` }" />
+        <div class="absolute bottom-0 w-1 bg-accent-500" :style="{ left: `${(todayIndex + 0.5) * colWidth - 2}px`, top: `${HEADER_HEIGHT - 1}px` }" />
 
         <!-- Date labels stay pinned to the top while the lanes scroll vertically -->
-        <div class="sticky top-0 z-20 bg-dark-500" :style="{ height: `${HEADER_HEIGHT - 4}px` }">
+        <div class="sticky top-0 z-20 bg-dark-500" :style="{ height: `${HEADER_HEIGHT - 1}px` }">
           <div v-bind="wrapperProps">
             <div
               v-for="{ index } in visibleDays"
               :key="index"
-              class="shrink-0 pt-3 text-center text-xs md:text-sm"
+              class="shrink-0 pt-5 text-center text-sm"
               :class="index === todayIndex ? 'font-semi-bold text-white' : 'text-light-500'"
               :style="{ width: `${colWidth}px` }">
               {{ dayLabel(index) }}
@@ -151,7 +151,7 @@ function onWheel(event: WheelEvent) {
           :key="bar.id"
           :to="`/project/${bar.id}`"
           :style="bar.style"
-          class="absolute z-10 flex h-7 items-center truncate rounded-l-sm rounded-r-full border-l-4 border-info-500 bg-dark-600 px-3 text-xs shadow-sm transition-colors hover:bg-dark-400 md:text-sm">
+          class="absolute z-10 flex h-[21px] items-center truncate rounded-r-full border-l-4 border-info-500 bg-dark-600 px-2 text-sm transition-colors hover:bg-dark-400">
           <span class="truncate text-white">{{ bar.title }}</span>
         </NuxtLink>
       </div>
