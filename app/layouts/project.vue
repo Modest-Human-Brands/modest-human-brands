@@ -9,12 +9,20 @@ const { data: collaborators } = await useFetch('/api/user', { default: () => [] 
 
 // Project pages live under the dashboard tab; the viewbar highlights the current project step
 const activeTab = PRIMARY_NAVIGATION_TABS[0]!
-// Below lg the project steps live in a drawer behind a hamburger, so the page keeps the full width
+// Below lg the project steps live in a bottom drawer that peeks its handle, so the page keeps the full width
 const isNavOpen = ref(false)
 watch(
   () => route.fullPath,
   () => (isNavOpen.value = false)
 )
+
+const handleRef = useTemplateRef<HTMLElement>('handleRef')
+const { direction } = useSwipe(handleRef, {
+  onSwipeEnd() {
+    if (direction.value === 'up') isNavOpen.value = true
+    else if (direction.value === 'down') isNavOpen.value = false
+  },
+})
 
 const activeStep = computed(() => route.path.split('/').filter(Boolean).pop() ?? 'plan')
 </script>
@@ -24,7 +32,7 @@ const activeStep = computed(() => route.path.split('/').filter(Boolean).pop() ??
     <LazyAppNavbar :active-key="activeTab.id" hydrate-on-idle />
 
     <main class="relative isolate mx-auto flex h-dvh w-full grow overflow-hidden">
-      <div class="flex min-h-0 grow flex-col overflow-hidden">
+      <div class="flex min-h-0 grow flex-col overflow-hidden pb-6 lg:pb-0">
         <header class="scrollbar-hidden flex shrink-0 items-center justify-between overflow-x-auto px-4 py-4 md:px-8">
           <div class="flex min-w-0 items-center gap-3 md:gap-4">
             <NuxtIcon name="local:target" class="shrink-0 text-4xl" />
@@ -34,18 +42,9 @@ const activeStep = computed(() => route.path.split('/').filter(Boolean).pop() ??
               </span>
             </div>
           </div>
-          <!-- Star and more stay in the header next to the hamburger; from lg up they sit in the side column -->
+          <!-- Star and more stay in the header; from lg up they sit in the side column -->
           <div class="ml-4 flex shrink-0 items-center gap-1 lg:hidden">
             <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
-            <button
-              type="button"
-              class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-dark-500 text-white"
-              :aria-expanded="isNavOpen"
-              aria-controls="project-steps"
-              aria-label="Project steps"
-              @click="isNavOpen = !isNavOpen">
-              <NuxtIcon :name="isNavOpen ? 'local:cross' : 'local:menu'" class="text-2xl" />
-            </button>
           </div>
         </header>
         <div class="relative isolate mx-auto flex min-h-0 w-full grow flex-col overflow-hidden">
@@ -53,15 +52,33 @@ const activeStep = computed(() => route.path.split('/').filter(Boolean).pop() ??
         </div>
       </div>
 
-      <div v-if="isNavOpen" class="absolute inset-0 z-30 bg-black/50 lg:hidden" @click="isNavOpen = false" />
+      <!-- Below lg: bottom-up drawer, same look as AppSidebar's mobile drawer -->
+      <div
+        class="absolute inset-0 z-30 bg-black transition-opacity duration-300 lg:hidden"
+        :class="isNavOpen ? 'pointer-events-auto opacity-60' : 'pointer-events-none opacity-0'"
+        @click="isNavOpen = false" />
 
       <div
         id="project-steps"
-        class="scrollbar-hidden absolute inset-y-0 right-0 z-40 flex w-64 shrink-0 flex-col items-center justify-between overflow-x-auto bg-dark-400 px-2 py-4 shadow-2xl transition-transform duration-300 md:gap-6 md:px-4 md:py-6 lg:static lg:w-auto lg:translate-x-0 lg:shadow-none"
-        :class="isNavOpen ? 'translate-x-0' : 'translate-x-full'">
-        <div class="hidden lg:block">
-          <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
+        class="absolute inset-x-0 bottom-0 z-40 flex max-h-[70dvh] flex-col rounded-t-3xl border-t border-white/5 bg-dark-400 transition-transform duration-300 lg:hidden"
+        :class="isNavOpen ? 'translate-y-0' : 'translate-y-[calc(100%-24px)]'">
+        <button
+          ref="handleRef"
+          type="button"
+          class="flex h-6 w-full shrink-0 touch-none items-center justify-center"
+          :aria-expanded="isNavOpen"
+          aria-label="Project steps"
+          @click="isNavOpen = !isNavOpen">
+          <span class="h-1.5 w-12 rounded-full bg-accent-500" />
+        </button>
+        <div class="scrollbar-hidden min-h-0 flex-1 overflow-y-auto p-2">
+          <LazyAppViewbar :project-id="projectId" :active-key="activeStep" hydrate-on-idle />
         </div>
+      </div>
+
+      <!-- From lg up: the steps stay in the right-hand column -->
+      <div class="hidden shrink-0 flex-col items-center justify-between overflow-x-auto bg-dark-400 px-4 py-6 lg:flex lg:gap-6">
+        <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
         <LazyAppViewbar :project-id="projectId" :active-key="activeStep" hydrate-on-idle />
       </div>
     </main>

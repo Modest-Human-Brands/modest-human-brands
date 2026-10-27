@@ -6,22 +6,38 @@ definePageMeta({
 
 const { data: streamCollections, pending } = await useFetch('/api/stream')
 const { orgSlug } = useActiveOrg()
+
+// Figma: Scheduled / Live / Vod. Errored streams stay under Scheduled, where they can be restarted
+const columns: { id: string; label: string; statuses: StreamStatus[] }[] = [
+  { id: 'scheduled', label: 'Scheduled', statuses: [StreamStatus.Idle, StreamStatus.Starting, StreamStatus.Error] },
+  { id: 'live', label: 'Live', statuses: [StreamStatus.Live, StreamStatus.Paused, StreamStatus.Stopping] },
+  { id: 'vod', label: 'Vod', statuses: [StreamStatus.Stopped, StreamStatus.Processing, StreamStatus.Ready] },
+]
+
+const timestamp = (date?: string) => (date ? new Date(date).getTime() : 0)
+
+const collectionsByColumn = computed(() =>
+  columns.map((column) => ({
+    ...column,
+    items: (streamCollections.value ?? []).filter((stream) => column.statuses.includes(stream.status)).sort((a, b) => timestamp(b.date) - timestamp(a.date)),
+  }))
+)
 </script>
 
 <template>
-  <section class="my-1 h-full overflow-y-auto px-2 py-1 md:my-2 md:px-4 md:py-2">
-    <div v-if="pending" class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <div v-for="i in 4" :key="i" class="aspect-[4/5] animate-pulse rounded-sm bg-dark-500" />
-    </div>
-
-    <div v-else-if="!streamCollections?.length" class="flex min-h-[60vh] flex-col items-center justify-center text-center">
-      <p class="text-2xl font-light text-white">No Projects Found</p>
-      <p class="mt-3 text-sm uppercase tracking-widest text-white">Start Stream to get started</p>
-    </div>
+  <section class="scrollbar-hidden flex h-full gap-4 overflow-x-auto p-4 md:gap-6 md:p-8">
+    <template v-if="pending">
+      <div v-for="i in 3" :key="i" class="h-96 w-72 shrink-0 animate-pulse rounded-lg bg-dark-500 md:w-[352px]" />
+    </template>
 
     <template v-else>
-      <div class="flex grow flex-col items-center">
-        <CardStreamCollection v-for="stream in streamCollections" :key="stream.slug" :org-slug="orgSlug" :stream-collection="stream" />
+      <div v-for="column in collectionsByColumn" :key="column.id" class="flex min-h-0 w-72 shrink-0 flex-col gap-4 md:w-[352px] md:gap-6">
+        <KanbanHeader :title="column.label" />
+
+        <div class="scrollbar-hidden flex min-h-0 grow flex-col gap-6 overflow-y-auto pb-4">
+          <p v-if="!column.items.length" class="py-4 text-center text-xs text-light-500">Nothing here yet</p>
+          <CardStreamCollection v-for="stream in column.items" :key="stream.slug" :org-slug="orgSlug" :stream-collection="stream" />
+        </div>
       </div>
     </template>
   </section>
