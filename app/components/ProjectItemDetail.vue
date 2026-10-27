@@ -89,7 +89,7 @@ const pad = (value: number) => String(value).padStart(2, '0')
             <div class="flex items-start justify-between gap-4">
               <div class="flex min-w-0 flex-col gap-2">
                 <h2 class="truncate text-xl text-white">{{ selected?.title }}</h2>
-                <p v-if="selected?.tags.length" class="text-base text-white">{{ selected.tags.join(' • ') }}</p>
+                <p v-if="selected && itemLabels(selected, kind).length" class="text-base text-white">{{ itemLabels(selected, kind).join(' • ') }}</p>
               </div>
               <button type="button" class="shrink-0" aria-label="More">
                 <NuxtIcon name="local:dots" class="text-[24px]" />

@@ -43,6 +43,8 @@ export interface ProjectItem {
   specs?: string
   location?: string
   date?: string
+  // Looks only: descriptive chips, while tags hold the appearance list
+  keywords: string[]
   // Setup layouts list the equipment placed in them
   equipmentIds: string[]
   collaborators: { id: string; name: string; avatar?: string }[]

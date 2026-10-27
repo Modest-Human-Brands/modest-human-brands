@@ -44,6 +44,7 @@ export async function mapProjectItem(record: ResourceRecordMap[ProjectItemKind])
     specs: text(props.Specs?.rich_text),
     location: text(props.Location?.rich_text),
     date: props.Date?.date?.start,
+    keywords: props.Keywords?.multi_select?.map((keyword) => keyword.name) ?? [],
     equipmentIds: relationIds(props.Equipment?.relation),
     collaborators,
   }

@@ -4,8 +4,9 @@ const props = defineProps<{ orgSlug: string; streamCollection: ProjectStreamColl
 const now = useNow({ interval: 1000 })
 
 const views = '100k'
+const isLive = computed(() => props.streamCollection.status === StreamStatus.Live)
 const duration = computed(() => {
-  if (!props.streamCollection.date || props.streamCollection.status !== StreamStatus.Live) return null
+  if (!props.streamCollection.date || !isLive.value) return null
   const elapsed = Math.floor((now.value.getTime() - new Date(props.streamCollection.date).getTime()) / 1000)
   const h = Math.floor(elapsed / 3600)
   const m = Math.floor((elapsed % 3600) / 60)
@@ -33,67 +34,69 @@ const client = computed(() => ({
 </script>
 
 <template>
-  <div class="relative flex w-full max-w-[51rem] flex-col-reverse gap-3 pb-2 pr-6 md:flex-row md:justify-between md:gap-8 md:pb-8 md:pr-0">
-    <NuxtLink
-      :to="`/sync/${streamCollection.slug}`"
-      class="group grid w-full max-w-2xl grid-flow-col grid-cols-[auto_min-content] grid-rows-[repeat(5,min-content)] gap-1.5 rounded-xl border border-white/5 bg-dark-500 p-3 hover:border-white/15 md:gap-2 md:rounded-2xl">
-      <!-- Status -->
-      <span class="flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-sm transition" :class="[streamCollection.status === 'live' ? 'bg-alert-500' : 'bg-dark-400']">
-        <span v-if="streamCollection.status === 'live'" class="relative flex size-2">
-          <span class="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" />
-          <span class="relative inline-flex size-2 rounded-full bg-white" />
-        </span>
-        <span class="text-xs font-semi-bold uppercase tracking-wider text-white">{{ streamCollection.status }}</span>
+  <!-- Figma: Card/Stream (352 wide, 2:1-ish poster, Share flush bottom-right) -->
+  <NuxtLink :to="`/sync/${streamCollection.slug}`" class="relative block w-full max-w-[352px] shrink-0 overflow-hidden rounded bg-dark-500 pb-2 hover:bg-dark-600">
+    <div class="relative aspect-[352/166] w-full overflow-hidden bg-dark-600">
+      <NuxtImg :src="streamCollection.poster" :alt="streamCollection.title" width="704" height="332" class="size-full object-cover" />
+
+      <span class="absolute left-1 top-1 flex items-center gap-1 rounded bg-dark-500 px-2 pb-[3px] pt-0.5 text-xs capitalize">
+        <span v-if="isLive" class="size-2 rounded-full bg-alert-400" />
+        {{ streamCollection.status }}
       </span>
-      <!-- Status -->
-      <h3 class="text-base font-semi-bold capitalize text-white md:text-lg">
-        {{ streamCollection.title }}
-      </h3>
-      <span class="text-sm opacity-60 md:text-base">{{ streamCollection.slug }}</span>
-      <div class="flex items-center gap-2">
-        <NuxtImg :src="extractCdnId(client.avatar)" :alt="client.name" fit="cover" loading="lazy" class="size-6 rounded-full object-cover" />
-        <span class="text-sm opacity-60 md:text-base">{{ client.name }}</span>
+
+      <span class="absolute right-1 top-1 grid size-6 place-items-center" aria-hidden="true">
+        <NuxtIcon name="local:dots" class="rotate-90 text-base" />
+      </span>
+
+      <div v-if="duration" class="absolute bottom-1 left-1 flex items-center gap-2 rounded bg-dark-500 px-2 py-1 text-2xs">
+        <span class="flex items-center gap-1">
+          <NuxtIcon name="local:clock" class="text-sm" />
+          {{ duration }}
+        </span>
+        <span class="flex items-center gap-1">
+          <NuxtIcon name="local:eye" class="text-sm" />
+          {{ views }}
+        </span>
       </div>
-      <div class="flex gap-2 whitespace-nowrap">
+    </div>
+
+    <div class="flex flex-col gap-1 px-2 pt-2">
+      <div class="flex items-center justify-between gap-2">
+        <h3 class="min-w-0 truncate text-base text-white">{{ streamCollection.title }}</h3>
+        <span class="flex shrink-0 items-center gap-1 text-2xs">
+          <NuxtIcon name="local:camera" class="text-sm" />
+          {{ streamCollection.streams.length }}
+        </span>
+      </div>
+
+      <div class="flex items-center justify-between gap-2">
+        <span class="flex min-w-0 items-center gap-2">
+          <NuxtImg :src="extractCdnId(client.avatar)" :alt="client.name" fit="cover" loading="lazy" class="size-6 shrink-0 rounded-full object-cover" />
+          <span class="truncate text-sm text-white/60">{{ client.name }}</span>
+        </span>
+        <span class="flex shrink-0 items-center gap-1 text-2xs">
+          <NuxtIcon name="local:calendar" class="text-base" />
+          <span class="flex flex-col text-right">
+            <NuxtTime :datetime="streamCollection.date" month="long" day="numeric" year="numeric" />
+            <NuxtTime :datetime="streamCollection.date" hour="numeric" minute="2-digit" />
+          </span>
+        </span>
+      </div>
+
+      <div class="flex min-h-7 items-center justify-between">
         <div class="-space-x-3">
           <NuxtImg
             v-for="{ deviceId, poster } in streamCollection.streams"
             :key="deviceId"
             :src="poster"
             :alt="deviceId"
-            class="inline-block size-7 rounded-full border border-black bg-black object-cover" />
+            class="inline-block size-6 rounded-full border border-black bg-black object-cover" />
         </div>
-        <div class="flex items-center gap-2 text-sm text-dark-500 md:text-base">
-          <span class="flex items-center justify-center gap-1">
-            <NuxtIcon name="local:eye" class="text-[16px]" />
-            {{ views }}
-          </span>
-          <span class="flex items-center justify-center gap-1">
-            <NuxtIcon name="local:hour" class="text-[16px]" />
-            {{ duration }}
-          </span>
-        </div>
+        <button type="button" class="absolute bottom-0 right-0 flex items-center gap-1 rounded-tl-md bg-accent-500 px-2 py-1 text-2xs text-white hover:bg-accent-600" @click="shareStream">
+          <NuxtIcon name="local:link" class="text-base" />
+          Share
+        </button>
       </div>
-      <NuxtImg
-        :src="streamCollection.poster"
-        :alt="streamCollection.title"
-        width="160"
-        height="160"
-        class="col-start-2 row-span-4 row-start-1 aspect-square min-w-24 rounded-lg object-cover md:min-w-28" />
-
-      <button
-        v-if="streamCollection.status === 'live'"
-        type="button"
-        class="col-start-2 row-start-5 inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-dark-400 px-2 py-0.5 text-xs text-white/80 hover:bg-dark-600 md:px-4 md:py-1 md:text-sm"
-        @click="shareStream">
-        <NuxtIcon name="local:link" class="text-[16px] md:text-[24px]" />
-        Share
-      </button>
-    </NuxtLink>
-    <div class="absolute right-2 top-1 flex h-full flex-col items-center md:right-28">
-      <div
-        class="relative mt-1 h-full w-px border-l-2 border-dashed border-dark-500 before:absolute before:-left-px before:top-0 before:size-2.5 before:-translate-x-1/2 before:rounded-full before:bg-dark-500" />
     </div>
-    <NuxtTime :datetime="streamCollection.date" month="short" day="numeric" year="numeric" class="w-fit self-end md:w-[5.5rem] md:self-start" />
-  </div>
+  </NuxtLink>
 </template>

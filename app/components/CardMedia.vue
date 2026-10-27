@@ -65,7 +65,7 @@ async function onDownload(e: MouseEvent) {
       <div v-if="isPublic && status" class="flex size-5 items-center justify-center rounded-full fill-black md:size-6" :class="status === 'approved' ? 'bg-success-400' : 'bg-alert-400'">
         <NuxtIcon :name="status === 'approved' ? 'local:check' : 'local:cross'" class="size-2.5 text-dark-600 md:size-3" />
       </div>
-      <span v-else-if="!isPublic" class="rounded-full bg-black/50 px-2.5 py-0.5 text-xs font-semi-bold capitalize text-white backdrop-blur-sm">
+      <span v-else-if="!isPublic" class="rounded bg-dark-500 px-2 pb-[3px] pt-0.5 text-xs capitalize text-white">
         {{ media.type }}
       </span>
     </div>

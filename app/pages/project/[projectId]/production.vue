@@ -40,19 +40,25 @@ const rows = computed(() => {
 </script>
 
 <template>
-  <div class="scrollbar-hidden flex min-h-0 grow flex-col gap-6 overflow-y-auto px-4 pb-8 md:px-8">
-    <ProjectMetaRow :index="project?.index" :slug="project?.slug" :status="project?.status" :segment="project?.segment" class="-mx-4 md:-mx-8" />
+  <div class="scrollbar-hidden flex min-h-0 grow flex-col gap-6 overflow-y-auto pb-8">
+    <ProjectMetaRow :index="project?.index" :slug="project?.slug" :status="project?.status" :segment="project?.segment" class="shrink-0" />
 
-    <section>
+    <section class="px-4 md:px-8">
       <CardStreamCollection v-if="stream" :org-slug="orgSlug" :stream-collection="stream" />
-      <p v-else class="rounded-xl bg-dark-500 p-4 text-sm text-light-500">No live stream registered for this project.</p>
+      <p v-else class="rounded-lg bg-dark-500 p-4 text-sm text-light-500">No live stream registered for this project.</p>
     </section>
 
-    <section v-for="row in rows" :key="row.title" class="flex flex-col gap-3">
-      <h3 class="text-base font-semi-bold text-white">{{ row.title }}</h3>
-      <div class="scrollbar-hidden flex gap-3 overflow-x-auto pb-2">
+    <!-- Figma: each shoot is a vertical pill label with its cards in a row beside it -->
+    <section v-for="row in rows" :key="row.title" class="flex gap-4 px-4 md:px-8">
+      <div class="flex w-12 shrink-0 justify-center self-stretch rounded-full bg-dark-500 py-4">
+        <span class="flex rotate-180 items-center gap-1.5 whitespace-nowrap rounded-full bg-info-400/40 px-3 py-1 text-sm [text-orientation:mixed] [writing-mode:vertical-rl]">
+          <span class="size-3 rounded-full bg-info-500" />
+          {{ row.title }}
+        </span>
+      </div>
+      <div class="scrollbar-hidden flex gap-6 overflow-x-auto">
         <ProjectItemCard v-for="card in row.cards" :key="`${card.kind}-${card.item.id}`" :project-id="projectId" :kind="card.kind" :item="card.item" />
-        <p v-if="!row.cards.length" class="text-xs text-light-500">No script, storyboard or look assigned to this shoot yet.</p>
+        <p v-if="!row.cards.length" class="self-center text-xs text-light-500">No script, storyboard or look assigned to this shoot yet.</p>
       </div>
     </section>
 

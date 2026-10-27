@@ -102,8 +102,8 @@ async function copyShareLink(kind: PreProductionKind, item: ProjectItem): Promis
 
                   <p v-if="item.specs" class="line-clamp-3 text-xs text-white/60">{{ item.specs }}</p>
 
-                  <div v-if="item.tags.length" class="flex items-center gap-1.5 overflow-hidden pt-1">
-                    <span v-for="tag in item.tags" :key="tag" class="inline-flex shrink-0 items-center whitespace-nowrap rounded bg-dark-600 px-2 py-1 text-xs text-white">
+                  <div v-if="itemLabels(item, column.id).length" class="flex items-center gap-1.5 overflow-hidden pt-1">
+                    <span v-for="tag in itemLabels(item, column.id)" :key="tag" class="inline-flex shrink-0 items-center whitespace-nowrap rounded bg-dark-600 px-2 py-1 text-xs text-white">
                       {{ tag }}
                     </span>
                   </div>

@@ -14,6 +14,7 @@ const projectId = route.params.projectId as string
 const activeTab = ref<MediaStatus>('approved')
 const currentPage = ref(1)
 
+const { data: project } = await useFetch(`/api/project/${projectId}`)
 const { data: projectSummary } = await useFetch(`/api/drive/${projectId}`)
 
 const { data: mediaRegistry, pending } = await useFetch(`/api/drive/${projectId}/media`, {
@@ -43,14 +44,17 @@ function selectTab(id: MediaStatus) {
 
 <template>
   <div class="scrollbar-hidden flex min-h-0 grow flex-col overflow-y-auto">
-    <nav class="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-white/10 bg-dark-400/90 px-4 py-2 backdrop-blur-md md:px-8">
+    <ProjectMetaRow :index="project?.index" :slug="project?.slug" :status="project?.status" :segment="project?.segment" />
+
+    <!-- Figma: small filter chips, active one in info blue -->
+    <nav class="flex items-center justify-between gap-4 px-4 py-2 md:px-2">
       <div class="scrollbar-hidden flex gap-2 overflow-x-auto pr-4">
         <button
           v-for="tab in tabs"
           :key="tab.id"
           type="button"
-          class="shrink-0 rounded-full px-4 py-1.5 text-xs font-semi-bold transition-all"
-          :class="activeTab === tab.id ? 'bg-accent-500 text-white shadow-md' : 'text-light-500 hover:bg-white/5 hover:text-white'"
+          class="shrink-0 rounded-full px-3 py-1 text-xs transition-colors"
+          :class="activeTab === tab.id ? 'bg-info-500 text-white' : 'bg-dark-500 text-white hover:bg-dark-600'"
           @click="selectTab(tab.id)">
           {{ tab.label }} ({{ tab.count }})
         </button>
@@ -63,12 +67,12 @@ function selectTab(id: MediaStatus) {
       </div>
     </nav>
 
-    <main class="w-full grow pt-1">
-      <div v-if="pending" class="grid grid-cols-2 gap-1 md:grid-cols-4 lg:grid-cols-6">
+    <main class="w-full grow">
+      <div v-if="pending" class="grid grid-cols-2 gap-px md:grid-cols-3 2xl:grid-cols-4">
         <div v-for="i in 12" :key="i" class="aspect-square animate-pulse rounded-xl bg-white/5" />
       </div>
 
-      <div v-else-if="mediaRegistry?.data?.length" class="grid grid-cols-2 gap-1 md:grid-cols-4 lg:grid-cols-6">
+      <div v-else-if="mediaRegistry?.data?.length" class="grid grid-cols-2 gap-px md:grid-cols-3 2xl:grid-cols-4">
         <CardMedia v-for="item in mediaRegistry.data" :key="item.id" :project-id="projectId" :media="item" />
       </div>
 

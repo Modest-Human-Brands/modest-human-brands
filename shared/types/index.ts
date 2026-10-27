@@ -810,7 +810,10 @@ export interface NotionLook extends NotionProjectItem {
   properties: NotionProjectItem['properties'] & {
     Shoot: NotionRelation
     'Image ID': NotionRichText
+    // Tags are the appearance list (Outfit, Hairstyle, ...); Keywords are the descriptive chips
     Tags: { type: 'multi_select'; multi_select: { name: string }[] }
+    Keywords: { type: 'multi_select'; multi_select: { name: string }[] }
+    Specs: NotionRichText
     Status: NotionItemStatus
     Collaborators: NotionRelation
   }
