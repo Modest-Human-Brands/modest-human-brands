@@ -43,22 +43,25 @@ const rows = computed(() => {
   <div class="scrollbar-hidden flex min-h-0 grow flex-col gap-6 overflow-y-auto pb-8">
     <ProjectMetaRow :index="project?.index" :slug="project?.slug" :status="project?.status" :segment="project?.segment" class="shrink-0" />
 
-    <section class="px-4 md:px-8">
+    <section class="px-3 md:px-8">
       <CardStreamCollection v-if="stream" :org-slug="orgSlug" :stream-collection="stream" />
       <p v-else class="rounded-lg bg-dark-500 p-4 text-sm text-light-500">No live stream registered for this project.</p>
     </section>
 
     <!-- Figma: each shoot is a vertical pill label with its cards in a row beside it -->
-    <section v-for="row in rows" :key="row.title" class="flex gap-4 px-4 md:px-8">
-      <div class="flex w-12 shrink-0 justify-center self-stretch rounded-full bg-dark-500 py-4">
-        <span class="flex rotate-180 items-center gap-1.5 whitespace-nowrap rounded-full bg-info-400/40 px-3 py-1 text-sm [text-orientation:mixed] [writing-mode:vertical-rl]">
+    <section v-for="row in rows" :key="row.title" class="flex gap-3 px-3 md:gap-4 md:px-8">
+      <!-- Figma: Kaban-Header turned vertical, 48x265 pill with only the chip, 12px from the bottom -->
+      <div class="flex w-8 shrink-0 items-end justify-center self-stretch rounded-full bg-dark-500 py-3 md:min-h-[265px] md:w-12">
+        <!-- vertical writing mode: padding is physical, so px is the thin side and py runs along the label -->
+        <span
+          class="flex rotate-180 items-center gap-1.5 whitespace-nowrap rounded-full bg-info-400/40 px-0.5 py-2.5 text-xs [text-orientation:mixed] [writing-mode:vertical-rl] md:px-1 md:py-3 md:text-sm">
           <span class="size-3 rounded-full bg-info-500" />
           {{ row.title }}
         </span>
       </div>
-      <div class="scrollbar-hidden flex gap-6 overflow-x-auto">
+      <div class="scrollbar-hidden flex min-w-0 grow gap-3 overflow-x-auto md:gap-6">
         <ProjectItemCard v-for="card in row.cards" :key="`${card.kind}-${card.item.id}`" :project-id="projectId" :kind="card.kind" :item="card.item" />
-        <p v-if="!row.cards.length" class="self-center text-xs text-light-500">No script, storyboard or look assigned to this shoot yet.</p>
+        <p v-if="!row.cards.length" class="min-w-0 self-center text-xs text-light-500">No script, storyboard or look assigned to this shoot yet.</p>
       </div>
     </section>
 

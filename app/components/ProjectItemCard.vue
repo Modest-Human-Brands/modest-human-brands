@@ -25,7 +25,7 @@ async function share(): Promise<void> {
 
 <template>
   <!-- Figma: Card/Item, same 256 card as the Pre-Production board; the kind chip replaces the status -->
-  <article class="relative min-h-[256px] w-64 shrink-0 overflow-hidden rounded bg-dark-500">
+  <article class="relative min-h-[192px] w-48 shrink-0 overflow-hidden rounded bg-dark-500 md:min-h-[256px] md:w-64">
     <NuxtLink :to="path" class="block">
       <div class="relative aspect-[2/1] w-full overflow-hidden bg-dark-600">
         <NuxtImg v-if="item.imageId" :src="item.imageId" :alt="item.title" width="480" class="size-full object-cover object-top" />
@@ -36,10 +36,10 @@ async function share(): Promise<void> {
 
       <div class="flex flex-col gap-1 px-2 pb-9 pt-2">
         <div class="flex items-start justify-between gap-2">
-          <h3 class="min-w-0 truncate text-sm text-white">{{ item.title }}</h3>
+          <h3 class="min-w-0 truncate text-xs text-white md:text-sm">{{ item.title }}</h3>
           <span class="shrink-0 rounded bg-info-600 px-2 pb-[3px] pt-0.5 text-2xs capitalize">{{ kind }}</span>
         </div>
-        <p v-if="item.specs" class="line-clamp-3 text-xs text-white/60">{{ item.specs }}</p>
+        <p v-if="item.specs" class="line-clamp-3 text-2xs text-white/60 md:text-xs">{{ item.specs }}</p>
         <div v-if="itemLabels(item, kind).length" class="flex items-center gap-1.5 overflow-hidden pt-1">
           <span v-for="tag in itemLabels(item, kind)" :key="tag" class="inline-flex shrink-0 items-center whitespace-nowrap rounded bg-dark-600 px-2 py-1 text-xs text-white">{{ tag }}</span>
         </div>
