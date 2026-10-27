@@ -34,6 +34,7 @@ export default defineTask({
         { type: 'organization', fn: () => notionQueryDb<NotionOrganization>(notion, notionDbId.organization) },
         { type: 'user', fn: () => notionQueryDb<NotionUser>(notion, notionDbId.user) },
         { type: 'contact', fn: () => notionQueryDb<NotionContact>(notion, notionDbId.contact) },
+        { type: 'crew', fn: () => notionQueryDb<NotionCrew>(notion, notionDbId.crew) },
         { type: 'project', fn: () => notionQueryDb<NotionProject>(notion, notionDbId.project) },
         { type: 'deliverable', fn: () => notionQueryDb<NotionDeliverable>(notion, notionDbId.deliverable) },
         { type: 'compliance', fn: () => notionQueryDb<NotionCompliance>(notion, notionDbId.compliance) },

@@ -117,6 +117,7 @@ export const resourceTypes = [
   'organization',
   'user',
   'contact',
+  'crew',
   'project',
   'deliverable',
   'compliance',
@@ -143,6 +144,7 @@ export interface ResourceRecordMap {
   organization: NotionOrganization
   user: NotionUser
   contact: NotionContact
+  crew: NotionCrew
   project: NotionProject
   deliverable: NotionDeliverable
   compliance: NotionCompliance
@@ -382,6 +384,30 @@ export interface NotionUser {
       type: 'relation'
       relation: { id: string }[]
     }
+  }
+}
+
+export interface NotionCrew {
+  id: string
+  created_time: string
+  last_edited_time: string
+  cover: NotionImage | null
+  icon: NotionImage | null
+  url: string
+  properties: {
+    Name: { type: 'title'; title: { plain_text: string }[] }
+    Department: { type: 'select'; select: { name: string } | null }
+    Role: { type: 'multi_select'; multi_select: { name: string }[] }
+    Status: { type: 'status'; status: { name: string } | null }
+    Rate: { type: 'number'; number: number | null }
+    'Rate Type': { type: 'select'; select: { name: string } | null }
+    'Total Agreed Rate': { type: 'number'; number: number | null }
+    Email: { type: 'email'; email: string | null }
+    Phone: { type: 'phone_number'; phone_number: string | null }
+    'Portfolio / Reel Link': { type: 'url'; url: string | null }
+    Location: { type: 'rich_text'; rich_text: { plain_text: string }[] }
+    Notes: { type: 'rich_text'; rich_text: { plain_text: string }[] }
+    Project: { type: 'relation'; relation: { id: string }[]; has_more: boolean }
   }
 }
 

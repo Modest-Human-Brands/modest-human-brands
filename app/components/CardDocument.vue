@@ -1,44 +1,14 @@
 <script setup lang="ts">
-export type DocumentStatus = 'draft' | 'ready' | 'sent' | 'partially-signed' | 'completed' | 'void'
-
-export interface DocumentCollaborator {
-  id: string
-  name: string
-  avatar?: string
-}
-
-export interface DocumentItem {
-  id: string
-  docNumber: string
-  fileType: string
-  title: string
-  description: string
-  status: DocumentStatus
-  updatedAgo: string
-  pages: number
-  sizeMb: number
-  contractTitle: string
-  contractSubtitle: string
-  orgName: string
-  orgSubtitle: string
-  address: string
-  issuedDate: string
-  expiryDate: string
-  collaborators: DocumentCollaborator[]
-  previewUrl?: string
-  shareUrl?: string
-}
-
-interface Props {
-  document: DocumentItem
+const props = defineProps<{
+  document: ProjectDocument
   projectId?: string
-}
-
-const props = defineProps<Props>()
+}>()
 
 const emit = defineEmits<{
-  (e: 'share' | 'menu', document: DocumentItem): void
+  share: [document: ProjectDocument]
 }>()
+
+const updatedAgo = useTimeAgo(() => new Date(props.document.updatedAt))
 
 function initials(name: string): string {
   return name
@@ -49,57 +19,52 @@ function initials(name: string): string {
     .toUpperCase()
 }
 
-function formatSize(sizeMb: number): string {
-  return `${sizeMb.toFixed(1)} MB`
+function formatSize(sizeBytes: number): string {
+  return sizeBytes >= 1024 * 1024 ? `${(sizeBytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(sizeBytes / 1024))} KB`
 }
 
 async function handleShare(): Promise<void> {
   const { copy } = useClipboard()
-  const fallbackUrl = typeof window !== 'undefined' ? `${window.location.origin}/${props.projectId ?? ''}/document/${props.document.id}` : ''
 
-  await copy(props.document.shareUrl || fallbackUrl)
+  await copy(`${window.location.origin}/doc/${props.projectId ?? ''}/${props.document.id}`)
   emit('share', props.document)
 }
 </script>
 
 <template>
   <article class="overflow-hidden rounded-xl bg-dark-500">
-    <!-- Preview -->
-    <img v-if="document.previewUrl" :src="document.previewUrl" :alt="document.title" class="aspect-[2/1] w-full object-cover object-top" />
+    <img v-if="document.previewUrl" :src="document.previewUrl" :alt="document.title" class="aspect-[2/1] w-full object-cover object-top" loading="lazy" />
 
-    <!-- Body -->
     <div class="space-y-4 p-4">
       <div class="flex items-start justify-between gap-2">
-        <h3 class="text-base font-semi-bold text-white">{{ document.title }}</h3>
-        <span class="inline-flex shrink-0 items-center gap-2 rounded-full bg-info-500/20 px-3 py-1 text-xs font-semi-bold text-info-400">
-          {{ document.status }}
+        <h3 class="min-w-0 truncate text-base font-semi-bold capitalize text-white">{{ document.title }}</h3>
+        <span class="inline-flex shrink-0 items-center rounded-full bg-info-500/20 px-3 py-1 text-xs font-semi-bold capitalize text-info-400">
+          {{ document.status.replace('-', ' ') }}
         </span>
       </div>
-
-      <p class="text-sm text-light-500">{{ document.description }}</p>
 
       <div class="flex items-center gap-4 border-t border-dark-600 pt-3 text-xs text-light-500">
         <span class="flex items-center gap-1.5">
           <NuxtIcon name="ph:clock" class="shrink-0 text-base" />
-          {{ document.updatedAgo }}
+          {{ updatedAgo }}
         </span>
         <span class="flex items-center gap-1.5">
           <NuxtIcon name="ph:file-text" class="shrink-0 text-base" />
-          {{ document.pages }} Pages
+          {{ document.fileType }}
         </span>
         <span class="flex items-center gap-1.5">
           <NuxtIcon name="ph:download-simple" class="shrink-0 text-base" />
-          {{ formatSize(document.sizeMb) }}
+          {{ formatSize(document.sizeBytes) }}
         </span>
       </div>
 
       <div class="flex items-center justify-between">
         <div class="flex -space-x-2">
           <span
-            v-for="collaborator in document.collaborators"
-            :key="collaborator.id"
-            class="flex size-7 items-center justify-center rounded-full border-2 border-dark-500 bg-dark-600 text-[10px] font-semi-bold text-white">
-            {{ initials(collaborator.name) }}
+            v-if="document.contact"
+            class="flex size-7 items-center justify-center rounded-full border-2 border-dark-500 bg-dark-600 text-[10px] font-semi-bold text-white"
+            :title="document.contact.name">
+            {{ initials(document.contact.name) }}
           </span>
         </div>
 

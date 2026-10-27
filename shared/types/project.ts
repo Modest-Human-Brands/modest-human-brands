@@ -65,3 +65,34 @@ export interface DetailedProject extends Project {
   deliverables?: ProjectDeliverable[]
   markdown?: string | null
 }
+
+export interface ProjectCrewMember {
+  id: string
+  name: string
+  department: string
+  role: string
+  status: string
+  rate: number
+  rateType: string
+  totalAgreedRate: number
+  email: string
+  phone?: string
+  portfolioLink?: string
+  location?: string
+  notes?: string
+}
+
+export const projectDocumentStatuses = ['draft', 'ready', 'sent', 'partially-signed', 'completed', 'void'] as const
+
+export type ProjectDocumentStatus = (typeof projectDocumentStatuses)[number]
+
+export interface ProjectDocument {
+  id: string
+  title: string
+  fileType: string
+  status: ProjectDocumentStatus
+  updatedAt: string
+  sizeBytes: number
+  contact?: { name: string; avatar?: string }
+  previewUrl: string
+}

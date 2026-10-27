@@ -58,7 +58,7 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
     const nameProp = props.Name as { title?: { plain_text: string }[] }
     const indexProp = props.Index as { number?: number }
     const slugProp = props.Slug as { formula?: { string: string } }
-    const statusProp = props.Status as { status?: { name: ProjectStatus } }
+    const statusProp = props.Status as { status?: { name: string } }
     const addressProp = props.Address as { rich_text?: { text: { content: string } }[] }
     const dateProp = props.Date as { date?: { start: string } }
     const quoteProp = props.Quotation as { number?: number }
@@ -88,7 +88,7 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
       title: nameProp?.title?.[0]?.plain_text || 'Untitled Project',
       index: indexProp?.number,
       slug: slugProp?.formula?.string || record.id,
-      status: statusProp?.status?.name || 'Plan',
+      status: toProjectStage(statusProp?.status?.name),
       segment: undefined,
       shootLocation: addressProp?.rich_text?.[0]?.text?.content,
       shootDate: dateProp?.date?.start?.split('T')[0],

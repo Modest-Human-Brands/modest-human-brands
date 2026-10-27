@@ -1,5 +1,6 @@
 <script setup lang="ts">
 defineProps<{
+  stages?: string[]
   id: string
   index: number
   title: string
@@ -9,10 +10,14 @@ defineProps<{
   previews: string[]
   assignees: string[]
 }>()
+
+const emit = defineEmits<{
+  move: [stage: string]
+}>()
 </script>
 
 <template>
-  <NuxtLink :to="`/project/${id}/plan`" class="flex aspect-square flex-col overflow-hidden rounded-md bg-dark-500 md:rounded-xl">
+  <NuxtLink :to="`/project/${id}/plan`" draggable="true" class="flex aspect-square flex-col overflow-hidden rounded-md bg-dark-500 md:rounded-xl">
     <div class="relative aspect-[16/10] w-full overflow-hidden bg-dark-600">
       <span class="absolute left-1 top-1 z-10 rounded bg-dark-500 px-2 py-0.5 text-xs"> #{{ index }} </span>
       <div class="grid size-full grid-cols-2 grid-rows-2 gap-0.5">
@@ -22,9 +27,15 @@ defineProps<{
     <div class="flex flex-col gap-1 p-1.5 md:gap-2 md:p-2">
       <div class="flex items-start justify-between gap-2">
         <h3 class="truncate text-sm md:text-base">{{ title }}</h3>
-        <span class="shrink-0 rounded bg-info-600 px-1.5 pb-1 pt-0.5 text-2xs md:text-xs">
-          {{ status }}
-        </span>
+        <!-- Changing the stage works on touch too, where cards cannot be dragged between columns -->
+        <select
+          :value="status"
+          aria-label="Move to stage"
+          class="shrink-0 cursor-pointer appearance-none rounded bg-info-600 px-1.5 pb-1 pt-0.5 text-2xs outline-none md:text-xs"
+          @click.prevent.stop
+          @change="emit('move', ($event.target as HTMLSelectElement).value)">
+          <option v-for="stage in stages ?? [status]" :key="stage" :value="stage" class="bg-dark-500">{{ stage }}</option>
+        </select>
       </div>
       <span class="text-2xs opacity-60 md:text-xs"
         >Priod:

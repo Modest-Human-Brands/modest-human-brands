@@ -1,5 +1,3 @@
-import type { DetailedProject, ProjectStatus } from './index.get'
-
 export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
   try {
     const { user } = await requireUserSession(event)
@@ -36,8 +34,8 @@ export default defineEventHandler<Promise<DetailedProject>>(async (event) => {
       notionProperties.Index = { number: Number(body.index) || 0 }
     }
     if (body.status !== undefined) {
-      props.Status = { type: 'status', status: { name: body.status as ProjectStatus } }
-      notionProperties.Status = { status: { name: body.status as ProjectStatus } }
+      props.Status = { type: 'status', status: { name: toNotionStatus(body.status) } }
+      notionProperties.Status = { status: { name: toNotionStatus(body.status) } }
     }
     if (body.shootLocation !== undefined) {
       props.Address = { type: 'rich_text', rich_text: [{ text: { content: body.shootLocation } }] }

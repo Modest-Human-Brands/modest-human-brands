@@ -1,25 +1,3 @@
-const statusMap = {
-  Plan: 'Plan',
-  Crew: 'Crew',
-  Quotation: 'Document',
-  'Pre-Production': 'Pre-Production',
-  Shoot: 'Production',
-  Edit: 'Post-Production',
-  Delivered: 'Delivered',
-} as const
-
-type StatusKey = keyof typeof statusMap
-
-const statusIndexMap = Object.keys(statusMap).reduce(
-  (acc, key, index) => {
-    acc[key as StatusKey] = index
-    return acc
-  },
-  {} as Record<StatusKey, number>
-)
-
-const totalSteps = Object.keys(statusIndexMap).length
-
 export default defineEventHandler(async (event) => {
   try {
     const { user } = await requireUserSession(event)
@@ -39,7 +17,7 @@ export default defineEventHandler(async (event) => {
         const props = record.properties
         const name = props.Name?.title?.[0]?.plain_text || 'Untitled Project'
         const slug = props.Slug?.formula?.string || record.id
-        const status = props.Status?.status?.name || 'Plan'
+        const status = toProjectStage(props.Status?.status?.name)
 
         const startDate = props.Date?.date?.start ? new Date(props.Date.date.start) : new Date()
         const endDate = props.Date?.date?.end ? new Date(props.Date.date.end) : new Date(startDate.getTime() + 86400000)
@@ -49,8 +27,8 @@ export default defineEventHandler(async (event) => {
           index: props.Index?.number,
           slug,
           title: name,
-          status: statusMap[status],
-          progress: Math.round(((statusIndexMap[status] + 1) / totalSteps) * 100),
+          status,
+          progress: projectProgress(status),
           period: {
             start: startDate.toISOString(),
             end: endDate.toISOString(),
