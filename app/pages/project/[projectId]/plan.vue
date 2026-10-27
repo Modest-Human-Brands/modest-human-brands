@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watchDebounced, useClipboard } from '@vueuse/core'
+import { watchDebounced } from '@vueuse/core'
 
 definePageMeta({
   layout: 'project',
@@ -77,8 +77,6 @@ watch(
   { immediate: true }
 )
 
-const { copy, copied } = useClipboard()
-
 const scopeTableRef = ref<{ startAddingService: () => void } | null>(null)
 
 const isSaving = ref(false)
@@ -146,81 +144,41 @@ function formatDateDisplay(dateStr: string | undefined): string {
       </div>
 
       <div v-else class="mx-auto max-w-4xl space-y-6">
-        <div class="grid grid-cols-2 gap-6 fill-light-500 text-light-500 md:grid-cols-4">
-          <div class="flex flex-col gap-1">
-            <span class="flex items-center gap-2 text-base">
-              <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
-              Index
-            </span>
-            <span class="pl-7 text-base font-semi-bold">{{ formData.index || '0' }}</span>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="flex items-center gap-2 text-base">
-              <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
-              Slug
-            </span>
-            <button type="button" class="truncate pl-7 text-left text-base font-semi-bold hover:text-accent-400" @click="copy(formData.slug)">
-              {{ formData.slug || 'untitled' }}
-              <span v-if="copied" class="ml-1 text-base text-success-500">(Copied)</span>
-            </button>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="flex items-center gap-2 text-base">
-              <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
-              Status
-            </span>
-            <div class="pl-7">
-              <span class="inline-flex items-center gap-2 rounded-full bg-dark-500 px-3 py-1 text-base font-semi-bold">
-                <span class="size-2 rounded-full bg-accent-500" />
-                {{ formData.status }}
-              </span>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <span class="flex items-center gap-2 text-base">
-              <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
-              Segment
-            </span>
-            <input v-model="formData.segment" type="text" class="w-full bg-transparent pl-7 text-base font-semi-bold focus:text-accent-400 focus:outline-none" />
-          </div>
+        <div class="-mx-4 md:-mx-8">
+          <ProjectMetaRow :index="formData.index" :slug="formData.slug" :status="formData.status" :segment="formData.segment" />
         </div>
 
-        <div class="flex flex-col fill-light-500 py-2 text-light-500">
-          <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-            <span class="flex items-center gap-3">
-              <NuxtIcon name="local:grip" class="shrink-0 text-[28px] md:text-[32px]" />
+        <div class="flex flex-col fill-light-500 text-white">
+          <div class="grid grid-cols-[107px_1fr] items-center gap-4 py-2.5 text-base">
+            <span class="flex items-center gap-2">
+              <NuxtIcon name="local:grip" class="shrink-0 text-[24px]" />
               Address
             </span>
             <input v-model="formData.shootLocation" type="text" class="w-full truncate bg-transparent focus:text-accent-400 focus:outline-none" />
           </div>
 
-          <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-            <span class="flex items-center gap-3">
-              <NuxtIcon name="local:calendar" class="shrink-0 text-[28px] md:text-[32px]" />
+          <div class="grid grid-cols-[107px_1fr] items-center gap-4 py-2.5 text-base">
+            <span class="flex items-center gap-2">
+              <NuxtIcon name="local:calendar" class="shrink-0 text-[24px]" />
               Date
             </span>
-            <span class=" ">{{ formatDateDisplay(formData.shootDate) }}</span>
+            <span>{{ formatDateDisplay(formData.shootDate) }}</span>
           </div>
 
-          <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-            <span class="flex items-center gap-3">
-              <NuxtIcon name="local:person" class="shrink-0 text-[28px] md:text-[32px]" />
+          <div class="grid grid-cols-[107px_1fr] items-center gap-4 py-2.5 text-base">
+            <span class="flex items-center gap-2">
+              <NuxtIcon name="local:person" class="shrink-0 text-[24px]" />
               Client
             </span>
-            <span class="cursor-pointer underline decoration-white/20 underline-offset-4 hover:decoration-white">
-              {{ formData.clientName }}
-            </span>
+            <span>{{ formData.clientName }}</span>
           </div>
 
-          <div class="grid grid-cols-[140px_1fr] items-center gap-4 py-3 text-base md:grid-cols-[160px_1fr]">
-            <span class="flex items-center gap-3">
-              <NuxtIcon name="local:wallet" class="shrink-0 text-[28px] md:text-[32px]" />
+          <div class="grid grid-cols-[107px_1fr] items-center gap-4 py-2.5 text-base">
+            <span class="flex items-center gap-2">
+              <NuxtIcon name="local:wallet" class="shrink-0 text-[24px]" />
               Budget
             </span>
-            <span class=" ">{{ formatCurrency(formData.budget) }}</span>
+            <span>{{ formatCurrency(formData.budget) }}</span>
           </div>
         </div>
 

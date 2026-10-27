@@ -13,10 +13,10 @@ const { data: collaborators } = await useFetch('/api/user', { default: () => [] 
     <header class="flex shrink-0 items-center justify-between gap-4 px-4 py-4 md:px-8">
       <div class="flex items-center gap-4">
         <NuxtLink :to="`/project/${projectId}/pre-production`" aria-label="Close" class="rounded-full p-1 text-white hover:bg-white/10">
-          <NuxtIcon name="local:x" class="text-2xl" />
+          <NuxtIcon name="local:cross" class="text-2xl" />
         </NuxtLink>
-        <NuxtIcon name="local:target" class="text-4xl" />
-        <span class="d:text-2xl whitespace-nowrap text-xl">{{ project?.title }}</span>
+        <NuxtIcon name="local:target" class="text-4xl md:text-[48px]" />
+        <span class="whitespace-nowrap text-xl md:text-[40px]">{{ project?.title }}</span>
       </div>
       <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
     </header>

@@ -1,4 +1,6 @@
-type ItemProperties = Partial<NotionScript['properties'] & NotionStoryboard['properties'] & NotionLook['properties'] & NotionSetup['properties'] & NotionShoot['properties']>
+type ItemProperties = Partial<
+  NotionScript['properties'] & NotionStoryboard['properties'] & NotionLook['properties'] & NotionSetup['properties'] & NotionEquipment['properties'] & NotionShoot['properties']
+>
 
 const relationIds = (relation?: { id: string }[]) => (relation ?? []).map(({ id }) => notionNormalizeId(id)!)
 
@@ -42,6 +44,7 @@ export async function mapProjectItem(record: ResourceRecordMap[ProjectItemKind])
     specs: text(props.Specs?.rich_text),
     location: text(props.Location?.rich_text),
     date: props.Date?.date?.start,
+    equipmentIds: relationIds(props.Equipment?.relation),
     collaborators,
   }
 }

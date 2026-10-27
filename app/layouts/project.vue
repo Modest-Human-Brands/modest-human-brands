@@ -44,7 +44,7 @@ const activeStep = computed(() => route.path.split('/').filter(Boolean).pop() ??
               aria-controls="project-steps"
               aria-label="Project steps"
               @click="isNavOpen = !isNavOpen">
-              <NuxtIcon :name="isNavOpen ? 'local:x' : 'local:menu'" class="text-2xl" />
+              <NuxtIcon :name="isNavOpen ? 'local:cross' : 'local:menu'" class="text-2xl" />
             </button>
           </div>
         </header>

@@ -43,6 +43,7 @@ export default defineTask({
         { type: 'storyboard', fn: () => notionQueryDb<NotionStoryboard>(notion, notionDbId.storyboard) },
         { type: 'look', fn: () => notionQueryDb<NotionLook>(notion, notionDbId.look) },
         { type: 'setup', fn: () => notionQueryDb<NotionSetup>(notion, notionDbId.setup) },
+        { type: 'equipment', fn: () => notionQueryDb<NotionEquipment>(notion, notionDbId.equipment) },
       ] as const
     ).filter(({ type }) => notionDbId[type])
 

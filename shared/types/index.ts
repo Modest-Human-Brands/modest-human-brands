@@ -129,6 +129,7 @@ export const resourceTypes = [
   'storyboard',
   'look',
   'setup',
+  'equipment',
   'waitlist',
   'terms',
   'privacy',
@@ -156,6 +157,7 @@ export interface ResourceRecordMap {
   storyboard: NotionStoryboard
   look: NotionLook
   setup: NotionSetup
+  equipment: NotionEquipment
   waitlist: string
   terms: string
   privacy: string
@@ -817,6 +819,18 @@ export interface NotionLook extends NotionProjectItem {
 export interface NotionSetup extends NotionProjectItem {
   properties: NotionProjectItem['properties'] & {
     Shoot: NotionRelation
+    'Image ID': NotionRichText
+    Tags: { type: 'multi_select'; multi_select: { name: string }[] }
+    Status: NotionItemStatus
+    Collaborators: NotionRelation
+    Equipment: NotionRelation
+  }
+}
+
+export interface NotionEquipment extends NotionProjectItem {
+  properties: NotionProjectItem['properties'] & {
+    Shoot: NotionRelation
+    Setup?: NotionRelation
     Kind: NotionItemStatus
     'Image ID': NotionRichText
     Specs: NotionRichText

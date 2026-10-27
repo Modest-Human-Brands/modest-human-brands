@@ -109,7 +109,7 @@ defineExpose({
     <div class="scrollbar-hidden -ml-8 overflow-x-auto py-1 pl-8">
       <table class="w-full min-w-[640px] table-fixed border-collapse text-left">
         <thead>
-          <tr class="border-b border-dark-600 text-sm font-regular text-light-500">
+          <tr class="border-b border-white text-base font-regular text-white">
             <th class="w-[28%] pb-3 pr-4 text-left font-regular">Service</th>
             <th class="w-[40%] pb-3 pr-4 text-left font-regular">Description</th>
             <th class="w-[12%] pb-3 text-right font-regular">Day Rate</th>
@@ -117,7 +117,7 @@ defineExpose({
             <th class="w-[12%] pb-3 text-right font-regular">Amount</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-dark-600/60 text-sm md:text-base">
+        <tbody class="divide-y divide-white/20 text-base">
           <tr v-for="(item, idx) in modelValue" :key="idx" class="group">
             <td class="relative h-[52px] py-3 pr-4 align-middle font-semi-bold text-white">
               <button
@@ -250,14 +250,14 @@ defineExpose({
             </td>
           </tr>
 
-          <tr class="border-t border-dark-600">
-            <td colspan="4" class="py-4 pr-4 text-sm font-semi-bold text-white md:text-base">Subtotal</td>
-            <td class="py-4 text-right text-sm font-semi-bold text-white md:text-base">{{ formatCurrency(calculatedSubtotal) }}</td>
+          <tr class="border-t border-white/20">
+            <td colspan="4" class="py-2 pr-4 text-base text-white">Subtotal</td>
+            <td class="py-2 text-right text-base text-white/60">{{ formatCurrency(calculatedSubtotal) }}</td>
           </tr>
 
-          <tr class="border-t border-dark-600">
-            <td colspan="4" class="py-4 pr-4 text-sm font-semi-bold text-white md:text-base">Total</td>
-            <td class="py-4 text-right text-sm font-semi-bold text-white md:text-base">{{ formatCurrency(calculatedTotal) }}</td>
+          <tr class="border-t border-white">
+            <td colspan="4" class="py-2 pr-4 text-base text-white">Total</td>
+            <td class="py-2 text-right text-base text-white">{{ formatCurrency(calculatedTotal) }}</td>
           </tr>
         </tbody>
       </table>

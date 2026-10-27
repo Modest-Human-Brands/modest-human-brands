@@ -8,21 +8,23 @@ defineProps<{
 </script>
 
 <template>
-  <section class="scrollbar-hidden flex shrink-0 items-center gap-8 overflow-x-auto px-4 py-3 md:gap-14 md:px-8">
+  <!-- Figma: meta row, 16px label with grip, value indented under the label -->
+  <section class="scrollbar-hidden flex shrink-0 items-start gap-6 overflow-x-auto px-4 py-3 text-base font-regular md:px-8">
     <div
       v-for="field in [
-        { label: 'Index', value: index },
-        { label: 'Slug', value: slug },
-        { label: 'Status', value: status },
-        { label: 'Segment', value: segment },
+        { label: 'Index', value: index, width: 'min-w-[70px]' },
+        { label: 'Slug', value: slug, width: 'min-w-[236px]' },
+        { label: 'Status', value: status, width: 'min-w-[76px]' },
+        { label: 'Segment', value: segment, width: 'min-w-[100px]' },
       ]"
       :key="field.label"
-      class="flex flex-col gap-1">
-      <span class="flex items-center gap-1.5 text-xs text-light-400">
-        <NuxtIcon name="local:grip" class="shrink-0 text-base" />
+      class="flex shrink-0 flex-col gap-1"
+      :class="field.width">
+      <span class="flex items-center gap-1 fill-light-500 text-white">
+        <NuxtIcon name="local:grip" class="shrink-0 text-[24px]" />
         {{ field.label }}
       </span>
-      <span class="pl-5 text-sm font-semi-bold text-white">{{ field.value ?? '—' }}</span>
+      <span class="whitespace-nowrap pl-7 text-white">{{ field.value ?? '—' }}</span>
     </div>
   </section>
 </template>

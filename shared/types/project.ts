@@ -24,7 +24,7 @@ export interface Project {
   quoteNumber?: number
 }
 
-export const projectItemKinds = ['shoot', 'script', 'storyboard', 'look', 'setup'] as const
+export const projectItemKinds = ['shoot', 'script', 'storyboard', 'look', 'setup', 'equipment'] as const
 
 export type ProjectItemKind = (typeof projectItemKinds)[number]
 
@@ -43,6 +43,8 @@ export interface ProjectItem {
   specs?: string
   location?: string
   date?: string
+  // Setup layouts list the equipment placed in them
+  equipmentIds: string[]
   collaborators: { id: string; name: string; avatar?: string }[]
 }
 
