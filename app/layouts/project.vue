@@ -78,7 +78,11 @@ const activeStep = computed(() => route.path.split('/').filter(Boolean).pop() ??
 
       <!-- From lg up: the steps stay in the right-hand column -->
       <div class="hidden shrink-0 flex-col items-center justify-between overflow-x-auto bg-dark-400 px-4 py-6 lg:flex lg:gap-6">
-        <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
+        <!-- Figma: the activity bar and the page's action bar stack, right-aligned, above the viewbar -->
+        <div class="flex flex-col items-end gap-4">
+          <AppActivitybar :edited-at="editedAt" :collaborators="collaborators" />
+          <div id="project-actions" />
+        </div>
         <LazyAppViewbar :project-id="projectId" :active-key="activeStep" hydrate-on-idle />
       </div>
     </main>

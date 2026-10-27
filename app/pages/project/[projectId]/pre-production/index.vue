@@ -60,18 +60,23 @@ async function copyShareLink(kind: PreProductionKind, item: ProjectItem): Promis
 
 <template>
   <div class="flex min-h-0 grow flex-col overflow-hidden">
-    <!-- Figma: the action bar is right-aligned across the header edge, above the meta row -->
-    <AppActionbar class="relative z-10 -mt-3.5 shrink-0 px-4 md:px-8" />
+    <!-- Figma: from lg up the action bar sits in the layout's right column under the activity bar; below lg it is a right-aligned row above the meta row -->
+    <AppActionbar class="shrink-0 px-4 md:px-8 lg:hidden" />
+    <ClientOnly>
+      <Teleport defer to="#project-actions">
+        <AppActionbar class="hidden lg:flex" />
+      </Teleport>
+    </ClientOnly>
     <ProjectMetaRow :index="project?.index" :slug="project?.slug" :status="project?.status" :segment="project?.segment" />
 
     <!-- Kanban Columns Section -->
-    <section class="scrollbar-hidden flex min-h-0 grow gap-4 overflow-x-auto p-4 md:gap-6 md:p-8">
+    <section class="scrollbar-hidden flex min-h-0 grow gap-3 overflow-x-auto p-3 md:gap-6 md:p-8">
       <div v-if="pending" class="flex gap-4 md:gap-6">
-        <div v-for="i in 4" :key="i" class="h-96 w-72 shrink-0 animate-pulse rounded-lg bg-dark-500 md:w-[265px]" />
+        <div v-for="i in 4" :key="i" class="h-96 w-[200px] shrink-0 animate-pulse rounded-lg bg-dark-500 md:w-[265px]" />
       </div>
 
       <template v-else>
-        <div v-for="column in columns" :key="column.id" class="flex w-72 shrink-0 flex-col gap-4 md:w-[265px] md:gap-6">
+        <div v-for="column in columns" :key="column.id" class="flex w-[200px] shrink-0 flex-col gap-4 md:w-[265px]">
           <KanbanHeader :title="column.label" />
 
           <!-- Column Cards List -->
@@ -79,7 +84,7 @@ async function copyShareLink(kind: PreProductionKind, item: ProjectItem): Promis
             <p v-if="!itemsByKind[column.id].length" class="py-4 text-center text-xs text-light-500">Nothing here yet</p>
 
             <!-- Figma: Card/Item (256 wide, radius 4) -->
-            <article v-for="(item, position) in itemsByKind[column.id]" :key="item.id" class="relative min-h-[256px] overflow-hidden rounded bg-dark-500 md:w-64">
+            <article v-for="(item, position) in itemsByKind[column.id]" :key="item.id" class="relative min-h-[192px] w-48 overflow-hidden rounded bg-dark-500 md:min-h-[256px] md:w-64">
               <NuxtLink :to="detailPath(column.id, item)" class="block">
                 <div class="relative aspect-[2/1] w-full overflow-hidden bg-dark-600">
                   <NuxtImg v-if="item.imageId" :src="item.imageId" :alt="item.title" width="480" class="size-full object-cover object-top" />
@@ -94,13 +99,13 @@ async function copyShareLink(kind: PreProductionKind, item: ProjectItem): Promis
 
                 <div class="flex flex-col gap-1 px-2 pb-9 pt-2">
                   <div class="flex items-start justify-between gap-2">
-                    <h3 class="min-w-0 truncate text-sm text-white">{{ item.title }}</h3>
+                    <h3 class="min-w-0 truncate text-xs text-white md:text-sm">{{ item.title }}</h3>
                     <span v-if="item.status" class="inline-flex shrink-0 items-center rounded px-2 pb-[3px] pt-0.5 text-2xs" :class="statusStyles[item.status] ?? 'bg-dark-600 text-light-500'">
                       {{ item.status }}
                     </span>
                   </div>
 
-                  <p v-if="item.specs" class="line-clamp-3 text-xs text-white/60">{{ item.specs }}</p>
+                  <p v-if="item.specs" class="line-clamp-3 text-2xs text-white/60 md:text-xs">{{ item.specs }}</p>
 
                   <div v-if="itemLabels(item, column.id).length" class="flex items-center gap-1.5 overflow-hidden pt-1">
                     <span v-for="tag in itemLabels(item, column.id)" :key="tag" class="inline-flex shrink-0 items-center whitespace-nowrap rounded bg-dark-600 px-2 py-1 text-xs text-white">

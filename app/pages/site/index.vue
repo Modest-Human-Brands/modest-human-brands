@@ -19,7 +19,7 @@ const { data: sites, pending } = await useFetch('/api/site', { default: () => []
       </div>
 
       <div v-else class="my-auto flex h-full flex-col items-center justify-center text-light-500/40">
-        <NuxtIcon name="local:globe" class="mb-3 text-4xl" />
+        <NuxtIcon name="local:app" class="mb-3 text-4xl" />
         <p class="text-xs font-semi-bold">No sites yet.</p>
       </div>
     </div>

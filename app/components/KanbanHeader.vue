@@ -5,8 +5,8 @@ defineProps<{
 </script>
 
 <template>
-  <!-- Figma: Kanban Header (265x48, full radius) -->
-  <div class="flex h-12 items-center justify-between rounded-full bg-dark-500 pl-2 pr-2.5 text-white">
+  <!-- Figma: Kanban Header (265x48 on desktop, about 36 tall on mobile, full radius) -->
+  <div class="flex h-9 items-center justify-between rounded-full bg-dark-500 pl-2 pr-2.5 text-white md:h-12">
     <div class="flex items-center gap-1">
       <NuxtIcon name="local:grip" class="text-[24px]" />
       <div class="flex items-center gap-1.5 rounded-full bg-info-400/40 px-3 py-1 text-sm">
