@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.10.22
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.21...v0.10.22)
+
+### 🚀 Enhancements
+
+- **api:** Add crew and document endpoints for project management ([6c3fb77](https://github.com/Modest-Human-Brands/modest-human-brands/commit/6c3fb77))
+- Update navigation and project layouts with improved responsiveness and icon changes ([e352a91](https://github.com/Modest-Human-Brands/modest-human-brands/commit/e352a91))
+- Add equipment management to project details and enhance UI components ([4210f3e](https://github.com/Modest-Human-Brands/modest-human-brands/commit/4210f3e))
+- Enhance project item handling with new itemLabels utility and update UI components ([5fc2fdf](https://github.com/Modest-Human-Brands/modest-human-brands/commit/5fc2fdf))
+- Implement bottom drawer navigation for project steps and enhance stream collection display ([abcf7ed](https://github.com/Modest-Human-Brands/modest-human-brands/commit/abcf7ed))
+- Improve layout and responsiveness of ProjectItemCard and production page ([b12c362](https://github.com/Modest-Human-Brands/modest-human-brands/commit/b12c362))
+- Update KanbanHeader and project layouts for improved responsiveness and UI consistency ([771f58f](https://github.com/Modest-Human-Brands/modest-human-brands/commit/771f58f))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.21
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.20...v0.10.21)
