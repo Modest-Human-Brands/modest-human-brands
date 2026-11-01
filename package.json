@@ -76,7 +76,7 @@
     "defu": "^6.1.7",
     "livekit-client": "^2.23.0",
     "livekit-server-sdk": "^2.19.2",
-    "matrix-js-sdk": "^44.0.0",
+    "matrix-js-sdk": "^45.0.0",
     "nuxt": "^4.6.3",
     "nuxt-auth-utils": "^0.5.32",
     "nuxt-tiptap-editor": "3.4.0",
