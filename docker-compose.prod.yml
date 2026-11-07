@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/modest-human-brands/modest-human-brands:latest
+    image: ghcr.io/modest-human-brands/modest-human-brands:latest@sha256:cb42318836b96ad507872755ba4c67f13c9c3e29253752f607dc83bb845ac1bd
     env_file:
       - .env
     volumes:
@@ -21,7 +21,7 @@ services:
         window: 120s
 
   wap:
-    image: ghcr.io/modest-human-brands/mwap:latest
+    image: ghcr.io/modest-human-brands/mwap:latest@sha256:97de1c4dc03c84e0f004aa7b587d66af43ea44d09df75b2c5b29a063502d5365
     env_file:
       - .env
     volumes:
@@ -42,7 +42,7 @@ services:
         window: 120s
 
   connect-ui:
-    image: ghcr.io/modest-human-brands/mconnect-web:latest
+    image: ghcr.io/modest-human-brands/mconnect-web:latest@sha256:909c9a54d06d2d20e01872dd629b37a94b19d68a8aad50ce9470f3d9701da314
     env_file:
       - .env
     networks:
@@ -56,7 +56,7 @@ services:
         window: 120s
 
   connect:
-    image: ghcr.io/modest-human-brands/mconnect:latest
+    image: ghcr.io/modest-human-brands/mconnect:latest@sha256:d0321f0af622197e5c89586249dd13a80141ef0d8ce8e90368362c5c3632ea5d
     env_file:
       - .env
     volumes:
@@ -78,7 +78,7 @@ services:
         window: 120s
 
   connect-livekit:
-    image: livekit/livekit-server:latest
+    image: livekit/livekit-server:latest@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20
     command: --config /etc/livekit.yaml
     # ports:
     #   - "7881:7881/tcp"
@@ -103,7 +103,7 @@ services:
         window: 120s
 
   connect-livekit-egress:
-    image: livekit/egress:latest
+    image: livekit/egress:latest@sha256:ac244a40268ce1dd1510fbff6eb529609ec68aceff1602343f79be8ca08c355b
     environment:
       - EGRESS_CONFIG_FILE=/etc/egress.yaml
     volumes:
@@ -126,7 +126,7 @@ services:
         window: 120s
 
   connect-livekit-sip:
-    image: livekit/sip:latest
+    image: livekit/sip:latest@sha256:26b5e320482c48d999073dfaf830666b1a312ad0f97d35ae67bd499659b9834e
     ports:
       - '5060:5060/udp'
       - '5060:5060/tcp'
@@ -150,7 +150,7 @@ services:
         window: 120s
 
   connect-livekit-redis:
-    image: redis:8-alpine
+    image: redis:8-alpine@sha256:71885d8cc6e42f2bc0aa2eb853bfc4be200b5108a46ac50e117ae1df0531fb80
     networks:
       - internal
     healthcheck:
@@ -167,7 +167,7 @@ services:
         window: 120s
 
   doc-ui:
-    image: ghcr.io/modest-human-brands/mdoc-web:latest
+    image: ghcr.io/modest-human-brands/mdoc-web:latest@sha256:7d205845f487a22bfeb5c23733cd52d15e49bbf378f29f5869ddd0431605ec04
     env_file:
       - .env
     networks:
@@ -181,7 +181,7 @@ services:
         window: 120s
 
   doc:
-    image: ghcr.io/modest-human-brands/mdoc:latest
+    image: ghcr.io/modest-human-brands/mdoc:latest@sha256:1d4832f66add3b5947e9f3f4fa3fc7bc7fffc2d1816c15d1b0376d47cf1224dd
     env_file:
       - .env
     volumes:
@@ -203,7 +203,7 @@ services:
         window: 120s
 
   design:
-    image: ghcr.io/modest-human-brands/mdesign:latest
+    image: ghcr.io/modest-human-brands/mdesign:latest@sha256:bc0b6219426bc95260dd4e72da7804c4824a2698dbccbc4d072173113d48b63b
     env_file:
       - .env
     networks:
@@ -217,7 +217,7 @@ services:
         window: 120s
 
   drive:
-    image: ghcr.io/modest-human-brands/mdrive:latest
+    image: ghcr.io/modest-human-brands/mdrive:latest@sha256:8c0438ae976b421a59afd4024d53e199748498b7413d9b8080ebd4e1549e659b
     env_file:
       - .env
     volumes:
@@ -239,7 +239,7 @@ services:
         window: 120s
 
   media:
-    image: ghcr.io/modest-human-brands/mmedia:latest
+    image: ghcr.io/modest-human-brands/mmedia:latest@sha256:3366652f9920efbdd335f003a8033b7a2af43a0c60916053f99de13f539a8946
     env_file:
       - .env
     volumes:
