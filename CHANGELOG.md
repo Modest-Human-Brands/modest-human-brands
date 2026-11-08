@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.23
+
+[compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.22...v0.10.23)
+
+### 🚀 Enhancements
+
+- Update environment configuration and improve healthcheck commands in Docker Compose ([c4b6383](https://github.com/Modest-Human-Brands/modest-human-brands/commit/c4b6383))
+
+### ❤️ Contributors
+
+- Shirsendu Bairagi ([@shba007](https://github.com/shba007))
+
 ## v0.10.22
 
 [compare changes](https://github.com/Modest-Human-Brands/modest-human-brands/compare/v0.10.21...v0.10.22)
