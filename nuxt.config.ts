@@ -118,7 +118,7 @@ export default defineNuxtConfig({
       driveUrl: '',
       wapUrl: '',
       vapidKey: '',
-      livekitUrl: '',
+      livekitUrl: process.env.LIVEKIT_URL || '',
       scripts: {
         googleAnalytics: {
           id: '',
@@ -130,10 +130,10 @@ export default defineNuxtConfig({
       llhlsUrl: '',
     },
     private: {
-      mhbOrgId: '',
-      livekitApiKey: '',
-      livekitApiSecret: '',
-      notionDbId: '',
+      mhbOrgId: process.env.ORGANIZATION_ID || '',
+      livekitApiKey: process.env.LIVEKIT_API_KEY || '',
+      livekitApiSecret: process.env.LIVEKIT_API_SECRET || '',
+      notionDbId: process.env.NOTION_DB_ID || '',
       vapidKey: '',
       vapidSubject: '',
       matrixAdminPassword: '',

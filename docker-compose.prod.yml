@@ -20,6 +20,19 @@ services:
         max_attempts: 3
         window: 120s
 
+  wap-ui:
+    image: ghcr.io/modest-human-brands/mconnect-web:latest
+    env_file:
+      - .env
+    networks:
+      - internal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
   wap:
     image: ghcr.io/modest-human-brands/mwap:latest
     env_file:
